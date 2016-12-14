@@ -1,4 +1,6 @@
 # v-tooltip
+** Compatible with Vue 2.0+ **
+
 Easy tooltips with Vue 2.x with [tether-tooltip](https://github.com/HubSpot/tooltip)
 
 ```
