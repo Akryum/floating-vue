@@ -41,6 +41,11 @@ export default {
       classes: 'vue-tooltip-theme',
     })
   },
+  update (el, { value }) {
+    if (el._tooltip) {
+      el._tooltip.drop.content.innerHTML = value
+    }
+  },
   unbind (el) {
     destroyTooltip(el)
   },
