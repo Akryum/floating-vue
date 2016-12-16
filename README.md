@@ -3,6 +3,8 @@
 
 Easy tooltips with [tether-tooltip](https://github.com/HubSpot/tooltip)
 
+[Demo](https://akryum.github.io/vue-tooltip/)
+
 ```
 npm install --save v-tooltip
 ```
