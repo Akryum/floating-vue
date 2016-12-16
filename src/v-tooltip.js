@@ -15,6 +15,23 @@ const positions = [
   'top-center',
 ]
 
+function createTooltip (el, value, modifiers) {
+  let position = 'top-center'
+  for (const pos of positions) {
+    if (modifiers[pos]) {
+      position = pos
+    }
+  }
+  position = position.replace('-', ' ')
+
+  el._tooltip = new Tooltip({
+    target: el,
+    position,
+    content: value,
+    classes: 'vue-tooltip-theme',
+  })
+}
+
 function destroyTooltip (el) {
   if (el._tooltip) {
     el._tooltip.destroy()
@@ -25,25 +42,17 @@ function destroyTooltip (el) {
 export default {
   bind (el, { value, modifiers }) {
     destroyTooltip(el)
-
-    let position = 'top-center'
-    for (const pos of positions) {
-      if (modifiers[pos]) {
-        position = pos
-      }
+    if (value) {
+      createTooltip(el, value, modifiers)
     }
-    position = position.replace('-', ' ')
-
-    el._tooltip = new Tooltip({
-      target: el,
-      position,
-      content: value,
-      classes: 'vue-tooltip-theme',
-    })
   },
-  update (el, { value }) {
-    if (el._tooltip) {
+  update (el, { value, modifiers }) {
+    if (!value) {
+      destroyTooltip()
+    } else if (el._tooltip) {
       el._tooltip.drop.content.innerHTML = value
+    } else {
+      createTooltip(el, value, modifiers)
     }
   },
   unbind (el) {
