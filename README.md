@@ -1,5 +1,7 @@
 # v-tooltip
-**Compatible with Vue 2.0+**
+
+[![npm](https://img.shields.io/npm/v/v-tooltip.svg) ![npm](https://img.shields.io/npm/dm/v-tooltip.svg)](https://www.npmjs.com/package/v-tooltip)
+[![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
 Easy tooltips with [tether-tooltip](https://github.com/HubSpot/tooltip)
 
