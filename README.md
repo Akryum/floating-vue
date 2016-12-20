@@ -17,6 +17,8 @@ Easy tooltips with [tether-tooltip](https://github.com/HubSpot/tooltip)
 npm install --save v-tooltip
 ```
 
+Install the plugin into Vue:
+
 ```javascript
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
@@ -36,6 +38,8 @@ Vue.directive('my-tooltip', VTooltip)
 ## Browser
 
 Include [Tether](http://tether.io/), [Drop](http://github.hubspot.com/drop/), [Tooltip](http://github.hubspot.com/tooltip/) and [v-tooltip](/dist/v-tooltip.js) in the page.
+
+Install the plugin into Vue:
 
 ```javascript
 Vue.use(VTooltip)
