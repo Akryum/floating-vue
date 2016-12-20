@@ -7,25 +7,35 @@ Easy tooltips with [tether-tooltip](https://github.com/HubSpot/tooltip)
 
 [Demo](https://akryum.github.io/vue-tooltip/)
 
+[JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
+
+# Installation
+
+## Npm
+
 ```
 npm install --save v-tooltip
 ```
 
-Use the plugin:
-
 ```javascript
 import Vue from 'vue'
-import VTooltip from 'v-tooltip'
+import { VTooltip } from 'v-tooltip'
+```
 
+## Browser
+
+Include [Tether](http://tether.io/), [Drop](http://github.hubspot.com/drop/), [Tooltip](http://github.hubspot.com/tooltip/) and [v-tooltip](/dist/v-tooltip.js) in the page.
+
+# Usage
+
+
+```javascript
 Vue.use(VTooltip)
 ```
 
 Or use the directive directly:
 
 ```javascript
-import Vue from 'vue'
-import { VTooltip } from 'v-tooltip'
-
 Vue.directive('my-tooltip', VTooltip)
 ```
 
