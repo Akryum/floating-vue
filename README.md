@@ -19,15 +19,23 @@ npm install --save v-tooltip
 
 ```javascript
 import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip)
+```
+
+Or use the directive directly:
+
+```javascript
+import Vue from 'vue'
 import { VTooltip } from 'v-tooltip'
+
+Vue.directive('my-tooltip', VTooltip)
 ```
 
 ## Browser
 
 Include [Tether](http://tether.io/), [Drop](http://github.hubspot.com/drop/), [Tooltip](http://github.hubspot.com/tooltip/) and [v-tooltip](/dist/v-tooltip.js) in the page.
-
-# Usage
-
 
 ```javascript
 Vue.use(VTooltip)
@@ -36,8 +44,10 @@ Vue.use(VTooltip)
 Or use the directive directly:
 
 ```javascript
-Vue.directive('my-tooltip', VTooltip)
+Vue.directive('my-tooltip', VTooltip.VTooltip)
 ```
+
+# Usage
 
 In the template:
 
