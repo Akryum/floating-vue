@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --config config/webpack.dev.config.js --progress --watch",
     "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.config.js --progress --hide-modules",
-    "compile": "npm run build",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
