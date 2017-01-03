@@ -1,11 +1,5 @@
 module.exports = {
   entry: './src/index.js',
-  output: {
-    path: './dist',
-    filename: 'v-tooltip.js',
-    library: 'VTooltip',
-    libraryTarget: 'umd',
-  },
   module: {
     rules: [
       {
@@ -19,9 +13,5 @@ module.exports = {
         use: 'babel-loader',
       },
     ],
-  },
-  externals: {
-    'tether-drop': 'Drop',
-    'tether-tooltip': 'Tooltip',
   },
 }

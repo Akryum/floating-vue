@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "highlight.js": "^9.7.0",
-    "v-tooltip": "^1.0.2",
+    "v-tooltip": "^1.0.5",
     "vue": "^2.1.0"
   },
   "devDependencies": {

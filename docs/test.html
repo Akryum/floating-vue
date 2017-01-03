@@ -1,0 +1,57 @@
+<html>
+<head>
+  <style>
+  body {
+    font-family: sans-serif;
+    margin: 42px;
+  }
+
+  .tooltip {
+    display: none;
+    opacity: 0;
+    transition: opacity .15s;
+    pointer-events: none;
+    padding: 4px;
+    z-index: 10000;
+  }
+
+  .tooltip .tooltip-content {
+    background: black;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px 4px;
+  }
+
+  .tooltip.tooltip-open-transitionend {
+    display: block;
+  }
+
+  .tooltip.tooltip-after-open {
+    opacity: 1;
+  }
+  </style>
+</head>
+<body>
+  <script src="https://unpkg.com/tether"></script>
+  <script src="https://unpkg.com/tether-drop"></script>
+  <script src="https://unpkg.com/tether-tooltip"></script>
+  <script src="../dist/v-tooltip.browser.js"></script>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+  <div id="app">
+    <p><input v-model="message" placeholder="Message" /></p>
+    <p><span v-tooltip="message">{{ message }}</span></p>
+  </div>
+
+  <script>
+  Vue.use(VTooltip)
+
+  new Vue({
+    el: '#app',
+    data: {
+      message: 'Hello Vue.js!'
+    }
+  })
+  </script>
+</body>
+</html>

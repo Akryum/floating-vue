@@ -1,12 +1,14 @@
 {
   "name": "v-tooltip",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Easy tooltips with Vue 2.x",
-  "main": "dist/v-tooltip.js",
-  "module": "src/index.js",
+  "main": "dist/v-tooltip.common.js",
+  "unpkg": "dist/v-tooltip.browser.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --config config/webpack.dev.config.js --progress --watch",
-    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.config.js --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js --progress --watch",
+    "build": "npm run build:browser && npm run build:common",
+    "build:browser": "cross-env NODE_ENV=production webpack --config config/webpack.config.browser.js --progress --hide-modules",
+    "build:common": "cross-env NODE_ENV=production webpack --config config/webpack.config.common.js --progress --hide-modules",
     "prepublish": "npm run build"
   },
   "repository": {
