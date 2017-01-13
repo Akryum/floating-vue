@@ -48,7 +48,7 @@ export default {
   },
   update (el, { value, modifiers }) {
     if (!value) {
-      destroyTooltip()
+      destroyTooltip(el)
     } else if (el._tooltip) {
       el._tooltip.drop.content.innerHTML = value
     } else {
