@@ -53,10 +53,16 @@ Vue.directive('my-tooltip', VTooltip.VTooltip)
 
 # Usage
 
-In the template:
+In the template, use the `v-tooltip` directive:
 
 ```html
 <button v-tooltip="'You have ' + count + ' new messages.'">
+```
+
+Of course, you can use a reactive property:
+
+```html
+<button v-tooltip="tooltipContent">
 ```
 
 You can specify the tooltip position as a modifier:
@@ -66,6 +72,14 @@ You can specify the tooltip position as a modifier:
 ```
 
 See the available positions in the [tether-tooltip documentation](http://github.hubspot.com/tooltip/#changing-the-positioning).
+
+## Object notation
+
+You can use an object instead of a simple string:
+
+```html
+<button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
+```
 
 ## Dynamic CSS classes
 
@@ -95,7 +109,11 @@ The default global options are:
 
 ```javascript
 {
+  // Applied to the tooltip element
+  // (replaced by the `classes` option of the object notation)
   defaultClass: 'vue-tooltip-theme',
+
+  // Any valid tether option.
   tetherOptions: {
     constraints: [
       {
@@ -119,6 +137,8 @@ Or directly on the directive definition:
 ```javascript
 VTooltip.options.defaultClass = 'my-tooltip'
 ```
+
+See the [tether documentation](http://tether.io/) for more info on `tetherOptions`.
 
 # Example Style
 
