@@ -55,8 +55,6 @@ function createTooltip (el, value, modifiers) {
     classes,
     tetherOptions: directive.options.tetherOptions,
   })
-
-  console.log(el._tooltip)
 }
 
 function destroyTooltip (el) {
@@ -80,7 +78,6 @@ const directive = {
     if (!content) {
       destroyTooltip(el)
     } else if (el._tooltip) {
-      console.log(el._tooltip)
       const drop = el._tooltip.drop
 
       // Content
