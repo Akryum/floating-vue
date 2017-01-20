@@ -1,5 +1,7 @@
 import Tooltip from 'tether-tooltip'
 
+import { addClasses, removeClasses, replaceClasses } from './utils'
+
 const positions = [
   'top-left',
   'left-top',
@@ -15,6 +17,21 @@ const positions = [
   'top-center',
 ]
 
+export const defaultTetherOptions = {
+  constraints: [
+    {
+      to: 'window',
+      attachment: 'together',
+      pin: true,
+    },
+  ],
+}
+
+export const defaultOptions = {
+  tetherOptions: defaultTetherOptions,
+  defaultClass: 'vue-tooltip-theme',
+}
+
 function createTooltip (el, value, modifiers) {
   let position = 'top-center'
   for (const pos of positions) {
@@ -24,12 +41,22 @@ function createTooltip (el, value, modifiers) {
   }
   position = position.replace('-', ' ')
 
+  const content = value.content || value
+
+  let classes = directive.options.defaultClass
+  if (value.classes) {
+    classes = value.classes
+  }
+
   el._tooltip = new Tooltip({
     target: el,
     position,
-    content: value,
-    classes: 'vue-tooltip-theme',
+    content,
+    classes,
+    tetherOptions: directive.options.tetherOptions,
   })
+
+  console.log(el._tooltip)
 }
 
 function destroyTooltip (el) {
@@ -39,18 +66,37 @@ function destroyTooltip (el) {
   }
 }
 
-export default {
+const directive = {
+  options: defaultOptions,
   bind (el, { value, modifiers }) {
+    const content = value.content || value
     destroyTooltip(el)
-    if (value) {
+    if (content) {
       createTooltip(el, value, modifiers)
     }
   },
-  update (el, { value, modifiers }) {
-    if (!value) {
+  update (el, { value, oldValue, modifiers }) {
+    const content = value.content || value
+    if (!content) {
       destroyTooltip(el)
     } else if (el._tooltip) {
-      el._tooltip.drop.content.innerHTML = value
+      console.log(el._tooltip)
+      const drop = el._tooltip.drop
+
+      // Content
+      drop.content.innerHTML = content
+
+      // CSS classes
+      const oldClasses = oldValue && oldValue.classes
+      if (value && value.classes) {
+        if (oldClasses) {
+          replaceClasses(drop.drop, value.classes, oldClasses)
+        } else {
+          addClasses(drop.drop, value.classes)
+        }
+      } else if (oldClasses) {
+        removeClasses(drop.drop, oldClasses)
+      }
     } else {
       createTooltip(el, value, modifiers)
     }
@@ -59,3 +105,5 @@ export default {
     destroyTooltip(el)
   },
 }
+
+export default directive

@@ -67,6 +67,59 @@ You can specify the tooltip position as a modifier:
 
 See the available positions in the [tether-tooltip documentation](http://github.hubspot.com/tooltip/#changing-the-positioning).
 
+## Dynamic CSS classes
+
+You can set the tooltip css classes dynamically with the object notation:
+
+```html
+<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: ['a', 'b'] }">
+```
+
+This will replace the default CSS classe with 'a b' on the tooltip element.
+
+You can also use the standard class notation:
+
+```html
+<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: 'a b' }">
+```
+
+Or a reactive property:
+
+```html
+<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: tooltipClasses }">
+```
+
+## Global options
+
+The default global options are:
+
+```javascript
+{
+  defaultClass: 'vue-tooltip-theme',
+  tetherOptions: {
+    constraints: [
+      {
+        to: 'window',
+        attachment: 'together',
+        pin: true,
+      },
+    ],
+  },
+}
+```
+
+You can change the options during install with the arguments:
+
+```javascript
+Vue.use(VTooltip, options)
+```
+
+Or directly on the directive definition:
+
+```javascript
+VTooltip.options.defaultClass = 'my-tooltip'
+```
+
 # Example Style
 
 ## Sass / Less
