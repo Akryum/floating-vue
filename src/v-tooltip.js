@@ -67,14 +67,14 @@ function destroyTooltip (el) {
 const directive = {
   options: defaultOptions,
   bind (el, { value, modifiers }) {
-    const content = value.content || value
+    const content = value && value.content || value
     destroyTooltip(el)
     if (content) {
       createTooltip(el, value, modifiers)
     }
   },
   update (el, { value, oldValue, modifiers }) {
-    const content = value.content || value
+    const content = value && value.content || value
     if (!content) {
       destroyTooltip(el)
     } else if (el._tooltip) {
