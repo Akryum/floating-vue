@@ -1,6 +1,9 @@
 import vtooltip, { defaultOptions } from './v-tooltip'
 
 export function install (Vue, options) {
+  if (install.installed) return
+  install.installed = true
+
   options = Object.assign({}, defaultOptions, options || {})
   vtooltip.options = options
   Vue.directive('tooltip', vtooltip)
