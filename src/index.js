@@ -8,7 +8,7 @@ export function install (Vue, options) {
 
 export const VTooltip = vtooltip
 
-export default {
+const plugin = {
   install,
 }
 
@@ -20,5 +20,7 @@ if (typeof window !== 'undefined') {
   GlobalVue = global.Vue
 }
 if (GlobalVue) {
-  GlobalVue.use(install)
+  GlobalVue.use(plugin)
 }
+
+export default plugin
