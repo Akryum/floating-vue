@@ -5,7 +5,7 @@
 
 Easy tooltips with [tether-tooltip](https://github.com/HubSpot/tooltip)
 
-[Demo](https://akryum.github.io/vue-tooltip/)
+[Demo](https://akryum.github.io/v-tooltip/)
 
 [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
 
