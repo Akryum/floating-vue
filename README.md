@@ -37,7 +37,7 @@ Vue.directive('my-tooltip', VTooltip)
 
 ## Browser
 
-Include [Tether](http://tether.io/), [Drop](http://github.hubspot.com/drop/), [Tooltip](http://github.hubspot.com/tooltip/) and [v-tooltip](/dist/v-tooltip.browser.js) in the page.
+Include [popper.js & tooltip.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.browser.js) in the page.
 
 Install the plugin into Vue:
 
