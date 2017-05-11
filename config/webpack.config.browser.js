@@ -10,8 +10,8 @@ module.exports = merge(base, {
     libraryTarget: 'umd',
   },
   externals: {
-    'tether-drop': 'Drop',
-    'tether-tooltip': 'Tooltip',
+    'popper.js': 'Popper',
+    'tooltip.js': 'Tooltip',
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({

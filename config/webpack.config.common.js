@@ -8,8 +8,8 @@ module.exports = merge(base, {
     libraryTarget: 'commonjs2',
   },
   externals: {
-    'tether-drop': 'tether-drop',
-    'tether-tooltip': 'tether-tooltip',
+    'popper.js': 'popper.js',
+    'tooltip.js': 'tooltip.js',
   },
   target: 'node',
   devtool: '#inline-source-map',
