@@ -166,8 +166,6 @@ Or directly on the directive definition:
 VTooltip.options.defaultClass = 'my-tooltip'
 ```
 
-See the [tether documentation](http://tether.io/) for more info on `tetherOptions`.
-
 # Example Style
 
 ## Sass / Less
