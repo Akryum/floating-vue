@@ -139,16 +139,30 @@ class SuperTooltip extends Tooltip {
     }
   }
 
+  _create (...args) {
+    const result = super._create(...args)
+
+    if (this.options.trigger.indexOf('hover') !== -1) {
+      result.addEventListener('mouseenter', this.hide)
+    }
+
+    return result
+  }
+
   _dispose () {
+    if (this._tooltipNode) {
+      this._tooltipNode.removeEventListener('mouseenter', this.hide)
+    }
+
     this._events.forEach(({ func, event }) => {
       this.reference.removeEventListener(event, func)
     })
     this._events = []
-    super._dispose()
+    return super._dispose()
   }
 
   _show (...args) {
-    super._show(...args)
+    const result = super._show(...args)
 
     if (this._pendingClasses) {
       this.setClasses(this._pendingClasses)
@@ -159,6 +173,8 @@ class SuperTooltip extends Tooltip {
     setTimeout(() => {
       this.popperInstance.update()
     }, 0)
+
+    return result
   }
 }
 

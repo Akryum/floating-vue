@@ -173,7 +173,6 @@ VTooltip.options.defaultClass = 'my-tooltip'
 ```less
 .tooltip {
   display: block !important;
-  pointer-events: none;
   padding: 4px;
   z-index: 10000;
 
@@ -207,7 +206,6 @@ VTooltip.options.defaultClass = 'my-tooltip'
 ```css
 .tooltip {
   display: block !important;
-  pointer-events: none;
   padding: 4px;
   z-index: 10000;
 }
