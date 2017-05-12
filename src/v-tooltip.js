@@ -144,6 +144,7 @@ class SuperTooltip extends Tooltip {
 
     if (this.options.trigger.indexOf('hover') !== -1) {
       result.addEventListener('mouseenter', this.hide)
+      result.addEventListener('click', this.hide)
     }
 
     return result
@@ -152,6 +153,7 @@ class SuperTooltip extends Tooltip {
   _dispose () {
     if (this._tooltipNode) {
       this._tooltipNode.removeEventListener('mouseenter', this.hide)
+      this._tooltipNode.removeEventListener('click', this.hide)
     }
 
     this._events.forEach(({ func, event }) => {
