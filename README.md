@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/v-tooltip.svg) ![npm](https://img.shields.io/npm/dm/v-tooltip.svg)](https://www.npmjs.com/package/v-tooltip)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 
-Easy tooltips with [tooltip.js](https://github.com/HubSpot/tooltip)
+Easy tooltips with [Tooltip.js](https://github.com/FezVrasta/popper.js#tooltipjs)
 
 [Demo](https://akryum.github.io/v-tooltip/)
 
