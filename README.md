@@ -32,7 +32,7 @@ Or use the directive directly:
 import Vue from 'vue'
 import { VTooltip } from 'v-tooltip'
 
-Vue.directive('my-tooltip', VTooltip)
+Vue.directive('tooltip', VTooltip)
 ```
 
 ## Browser
@@ -48,7 +48,7 @@ Vue.use(VTooltip)
 Or use the directive directly:
 
 ```javascript
-Vue.directive('my-tooltip', VTooltip.VTooltip)
+Vue.directive('tooltip', VTooltip.VTooltip)
 ```
 
 # Usage
@@ -163,6 +163,7 @@ Vue.use(VTooltip, options)
 Or directly on the directive definition:
 
 ```javascript
+// Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
 ```
 
