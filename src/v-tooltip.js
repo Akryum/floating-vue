@@ -2,6 +2,10 @@ import Tooltip from 'tooltip.js'
 
 import { addClasses, removeClasses, replaceClasses } from './utils'
 
+export let state = {
+  enabled: true,
+}
+
 const positions = [
   'top',
   'top-start',
@@ -207,13 +211,13 @@ const directive = {
   bind (el, { value, modifiers }) {
     const content = value && value.content || value
     destroyTooltip(el)
-    if (content) {
+    if (content && state.enabled) {
       createTooltip(el, value, modifiers)
     }
   },
   update (el, { value, oldValue, modifiers }) {
     const content = value && value.content || value
-    if (!content) {
+    if (!content || !state.enabled) {
       destroyTooltip(el)
     } else if (el._tooltip) {
       const tooltip = el._tooltip

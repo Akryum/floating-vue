@@ -167,6 +167,14 @@ Or directly on the directive definition:
 VTooltip.options.defaultClass = 'my-tooltip'
 ```
 
+## Disabling tooltips
+
+On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
+
+```javascript
+VTooltip.enabled = window.innerWidth > 768
+```
+
 # Example Style
 
 ## Sass / Less

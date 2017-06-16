@@ -1,4 +1,4 @@
-import vtooltip, { defaultOptions } from './v-tooltip'
+import vtooltip, { defaultOptions, state } from './v-tooltip'
 
 export function install (Vue, options) {
   if (install.installed) return
@@ -13,6 +13,14 @@ export const VTooltip = vtooltip
 
 const plugin = {
   install,
+
+  get enabled () {
+    return state.enabled
+  },
+
+  set enabled (value) {
+    state.enabled = value
+  },
 }
 
 // Auto-install
