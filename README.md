@@ -129,6 +129,8 @@ Or a reactive property:
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event)
 - `offset` - Offset of the position (px)
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`)
+- `boundariesElement` - DOM element for the tooltip boundaries
+- `popperOptions` - Other Popper.js options
 
 ## Global options
 
@@ -151,6 +153,8 @@ The default global options are:
   defaultOffset: 0,
   // Default container where the tooltip will be appended
   defaultContainer: 'body',
+  defaultBoundariesElement: undefined,
+  defaultPopperOptions: {},
 }
 ```
 
