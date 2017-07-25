@@ -4,7 +4,6 @@ var base = require('./webpack.config.base')
 
 module.exports = merge(base, {
   output: {
-    path: './dist',
     filename: 'v-tooltip.browser.js',
     library: 'VTooltip',
     libraryTarget: 'umd',

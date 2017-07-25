@@ -1,6 +1,6 @@
 {
   "name": "v-tooltip",
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0-beta.6",
   "description": "Easy tooltips with Vue 2.x",
   "main": "dist/v-tooltip.common.js",
   "unpkg": "dist/v-tooltip.browser.js",
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/Akryum/vue-tooltip#readme",
   "dependencies": {
-    "tooltip.js": "^1.1.2"
+    "tooltip.js": "^1.1.4"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
