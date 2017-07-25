@@ -188,8 +188,6 @@ class SuperTooltip extends Tooltip {
   }
 }
 
-console.log('MEOW')
-
 function createTooltip (el, value, modifiers) {
   const content = value.content || value
   let classes = value.classes || directive.options.defaultClass
@@ -202,8 +200,6 @@ function createTooltip (el, value, modifiers) {
       placement: getPlacement(value, modifiers),
     }),
   }
-  window._tooltipOptions = opts
-  console.log('tooltip', opts)
   const tooltip = el._tooltip = new SuperTooltip(el, opts)
   tooltip.setClasses(classes)
 }
