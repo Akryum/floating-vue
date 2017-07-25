@@ -29,6 +29,8 @@ export const defaultOptions = {
   defaultTrigger: 'hover focus',
   defaultOffset: 0,
   defaultContainer: 'body',
+  defaultBoundariesElement: undefined,
+  defaultPopperOptions: {},
 }
 
 function getOptions (options) {
@@ -39,6 +41,8 @@ function getOptions (options) {
     trigger: options.trigger || directive.options.defaultTrigger,
     offset: options.offset || directive.options.defaultOffset,
     container: options.container || directive.options.defaultContainer,
+    boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
+    popperOptions: options.popperOptions || directive.options.defaultPopperOptions,
   }
 }
 
