@@ -187,26 +187,31 @@ input {
 }
 
 .tooltip {
-  display: none;
-  opacity: 0;
-  transition: opacity .15s;
-  pointer-events: none;
+  display: block !important;
   padding: 4px;
   z-index: 10000;
 
-  .tooltip-content {
+  .tooltip-inner {
     background: black;
     color: white;
     border-radius: 16px;
     padding: 5px 10px 4px;
   }
 
-  &.tooltip-open-transitionend {
-    display: block;
+  .tooltip-arrow {
+    display: none;
   }
 
-  &.tooltip-after-open {
+  &[aria-hidden='true'] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s;
+  }
+
+  &[aria-hidden='false'] {
+    visibility: visible;
     opacity: 1;
+    transition: opacity .15s;
   }
 }
 
