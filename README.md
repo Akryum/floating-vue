@@ -155,6 +155,7 @@ The default global options are:
   defaultContainer: 'body',
   defaultBoundariesElement: undefined,
   defaultPopperOptions: {},
+  autoHide: true,
 }
 ```
 
@@ -169,6 +170,14 @@ Or directly on the directive definition:
 ```javascript
 // Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
+```
+
+## Tooltip auto-hiding
+
+By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false`:
+
+```javascript
+VTooltip.options.autoHide = false
 ```
 
 ## Disabling tooltips

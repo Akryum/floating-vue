@@ -39,6 +39,7 @@ export const defaultOptions = {
   defaultContainer: 'body',
   defaultBoundariesElement: undefined,
   defaultPopperOptions: {},
+  autoHide: true,
 }
 
 function getOptions (options) {
@@ -158,7 +159,7 @@ class SuperTooltip extends Tooltip {
   _create (...args) {
     const result = super._create(...args)
 
-    if (this.options.trigger.indexOf('hover') !== -1) {
+    if (defaultOptions.autoHide && this.options.trigger.indexOf('hover') !== -1) {
       result.addEventListener('mouseenter', this.hide)
       result.addEventListener('click', this.hide)
     }
