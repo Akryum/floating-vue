@@ -197,10 +197,22 @@ class SuperTooltip extends Tooltip {
   }
 }
 
-function createTooltip (el, value, modifiers) {
-  const content = value.content || value
-  let classes = value.classes || directive.options.defaultClass
+function getContent (value) {
+  const type = typeof value
+  console.log('value', value, 'type', type)
+  if (type === 'string') {
+    return value
+  } else if (type === 'object') {
+    return value.content
+  } else {
+    return false
+  }
+}
 
+function createTooltip (el, value, modifiers) {
+  const content = getContent(value)
+  let classes = value.classes || directive.options.defaultClass
+  console.log('createTooltip', content)
   const opts = {
     title: content,
     html: true,
@@ -223,14 +235,15 @@ function destroyTooltip (el) {
 const directive = {
   options: defaultOptions,
   bind (el, { value, modifiers }) {
-    const content = value && value.content || value
+    const content = getContent(value)
+    console.log('content', content)
     destroyTooltip(el)
     if (content && state.enabled) {
       createTooltip(el, value, modifiers)
     }
   },
   update (el, { value, oldValue, modifiers }) {
-    const content = value && value.content || value
+    const content = getContent(value)
     if (!content || !state.enabled) {
       destroyTooltip(el)
     } else if (el._tooltip) {
