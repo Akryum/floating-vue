@@ -40,6 +40,8 @@ export const defaultOptions = {
   defaultBoundariesElement: undefined,
   defaultPopperOptions: {},
   autoHide: true,
+  // Auto destroy tooltip DOM nodes (ms)
+  disposeTimeout: 5000,
 }
 
 function getOptions (options) {
@@ -193,13 +195,30 @@ class SuperTooltip extends Tooltip {
       this.popperInstance.update()
     }, 0)
 
+    clearTimeout(this._disposeTimer)
+
+    return result
+  }
+
+  _hide (...args) {
+    const result = super._hide(...args)
+
+    clearTimeout(this._disposeTimer)
+    this._disposeTimer = setTimeout(() => {
+      if (this._tooltipNode) {
+        this._tooltipNode.removeEventListener('mouseenter', this.hide)
+        this._tooltipNode.removeEventListener('click', this.hide)
+        this._tooltipNode.parentNode.removeChild(this._tooltipNode)
+        this._tooltipNode = null
+      }
+    }, defaultOptions.disposeTimeout)
+
     return result
   }
 }
 
 function getContent (value) {
   const type = typeof value
-  console.log('value', value, 'type', type)
   if (type === 'string') {
     return value
   } else if (type === 'object') {
@@ -212,7 +231,6 @@ function getContent (value) {
 function createTooltip (el, value, modifiers) {
   const content = getContent(value)
   let classes = value.classes || directive.options.defaultClass
-  console.log('createTooltip', content)
   const opts = {
     title: content,
     html: true,
@@ -223,6 +241,7 @@ function createTooltip (el, value, modifiers) {
   }
   const tooltip = el._tooltip = new SuperTooltip(el, opts)
   tooltip.setClasses(classes)
+  tooltip._vueEl = el
 }
 
 function destroyTooltip (el) {
@@ -236,7 +255,6 @@ const directive = {
   options: defaultOptions,
   bind (el, { value, modifiers }) {
     const content = getContent(value)
-    console.log('content', content)
     destroyTooltip(el)
     if (content && state.enabled) {
       createTooltip(el, value, modifiers)

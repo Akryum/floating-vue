@@ -156,6 +156,8 @@ The default global options are:
   defaultBoundariesElement: undefined,
   defaultPopperOptions: {},
   autoHide: true,
+  // Auto destroy tooltip DOM nodes (ms)
+  disposeTimeout: 5000,
 }
 ```
 
