@@ -221,7 +221,7 @@ function getContent (value) {
   const type = typeof value
   if (type === 'string') {
     return value
-  } else if (type === 'object') {
+  } else if (value && type === 'object') {
     return value.content
   } else {
     return false

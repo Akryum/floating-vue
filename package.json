@@ -1,6 +1,6 @@
 {
   "name": "v-tooltip",
-  "version": "2.0.0-beta.11",
+  "version": "2.0.0-beta.12",
   "description": "Easy tooltips with Vue 2.x",
   "main": "dist/v-tooltip.common.js",
   "unpkg": "dist/v-tooltip.browser.js",
