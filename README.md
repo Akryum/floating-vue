@@ -241,7 +241,7 @@ VTooltip.enabled = window.innerWidth > 768
   padding: 5px 10px 4px;
 }
 
-.tooltip tooltip-arrow {
+.tooltip .tooltip-arrow {
   display: none;
 }
 
