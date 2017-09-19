@@ -182,8 +182,13 @@ class SuperTooltip extends Tooltip {
     return super._dispose()
   }
 
-  _show (...args) {
-    const result = super._show(...args)
+  _show (reference, options) {
+    if (options && typeof options.container === 'string') {
+      const container = document.querySelector(options.container)
+      if (!container) return
+    }
+
+    const result = super._show(reference, options)
 
     if (this._pendingClasses) {
       this.setClasses(this._pendingClasses)
@@ -192,7 +197,9 @@ class SuperTooltip extends Tooltip {
 
     // Fix position
     setTimeout(() => {
-      this.popperInstance.update()
+      if (this.popperInstance) {
+        this.popperInstance.update()
+      }
     }, 0)
 
     clearTimeout(this._disposeTimer)
