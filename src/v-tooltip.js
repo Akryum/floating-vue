@@ -170,14 +170,19 @@ class SuperTooltip extends Tooltip {
     return super._dispose()
   }
 
-  _show (...args) {
+  _show (reference, options, ...args) {
+    if (options && typeof options.container === 'string') {
+      const container = document.querySelector(options.container)
+      if (!container) return
+    }
+    
     let updateClasses = true
     if (this._tooltipNode) {
       addClasses(this._tooltipNode, this._classes)
       updateClasses = false
     }
 
-    const result = super._show(...args)
+    const result = super._show(reference, options, ...args)
 
     if (updateClasses && this._tooltipNode) {
       addClasses(this._tooltipNode, this._classes)
@@ -185,7 +190,9 @@ class SuperTooltip extends Tooltip {
 
     // Fix position
     setTimeout(() => {
-      this.popperInstance.update()
+      if (this.popperInstance) {
+        this.popperInstance.update()
+      }
     }, 0)
 
     clearTimeout(this._disposeTimer)
