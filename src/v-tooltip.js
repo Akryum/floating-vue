@@ -1,6 +1,6 @@
 import Tooltip from 'tooltip.js'
 
-import { addClasses, removeClasses, replaceClasses } from './utils'
+import { addClasses } from './utils'
 
 export let state = {
   enabled: true,
@@ -69,24 +69,6 @@ function getPlacement (value, modifiers) {
 
 class SuperTooltip extends Tooltip {
   setClasses (classes) {
-    const el = this._tooltipNode
-
-    if (el) {
-      const oldClasses = this._oldClasses
-      if (classes) {
-        if (oldClasses) {
-          replaceClasses(el, classes, oldClasses)
-        } else {
-          addClasses(el, classes)
-        }
-      } else if (oldClasses) {
-        removeClasses(el, oldClasses)
-      }
-      this._oldClasses = classes
-    } else {
-      this._pendingClasses = classes
-    }
-
     this._classes = classes
   }
 
@@ -108,6 +90,13 @@ class SuperTooltip extends Tooltip {
   }
 
   setOptions (options) {
+    let classesUpdated = false
+    const classes = (options && options.classes) || directive.options.defaultClass
+    if (this._classes !== classes) {
+      this.setClasses(classes)
+      classesUpdated = true
+    }
+
     options = getOptions(options)
 
     let needPopperUpdate = false
@@ -123,7 +112,8 @@ class SuperTooltip extends Tooltip {
     if (
       this.options.template !== options.template ||
       this.options.trigger !== options.trigger ||
-      this.options.container !== options.container
+      this.options.container !== options.container ||
+      classesUpdated
     ) {
       needRestart = true
     }
@@ -146,8 +136,6 @@ class SuperTooltip extends Tooltip {
             )
           : []
         this._setEventListeners(this.reference, events, this.options)
-
-        this.setClasses(this._classes)
 
         if (isOpen) {
           this.show()
@@ -182,17 +170,22 @@ class SuperTooltip extends Tooltip {
     return super._dispose()
   }
 
-  _show (reference, options) {
+  _show (reference, options, ...args) {
     if (options && typeof options.container === 'string') {
       const container = document.querySelector(options.container)
       if (!container) return
     }
+    
+    let updateClasses = true
+    if (this._tooltipNode) {
+      addClasses(this._tooltipNode, this._classes)
+      updateClasses = false
+    }
 
-    const result = super._show(reference, options)
+    const result = super._show(reference, options, ...args)
 
-    if (this._pendingClasses) {
-      this.setClasses(this._pendingClasses)
-      this._pendingClasses = null
+    if (updateClasses && this._tooltipNode) {
+      addClasses(this._tooltipNode, this._classes)
     }
 
     // Fix position
@@ -275,8 +268,6 @@ const directive = {
       const tooltip = el._tooltip
       // Content
       tooltip.setContent(content)
-      // CSS Classes
-      tooltip.setClasses((value && value.classes) || directive.options.defaultClass)
       // Options
       tooltip.setOptions({
         ...value,
