@@ -16,6 +16,7 @@
 
     <section class="demo">
       <div class="section-content">
+        <h2>Reactive content</h2>
         <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
 
         <button class="tooltip-target" v-tooltip.top-center="msg">Hover me</button>
@@ -23,12 +24,37 @@
     </section>
 
     <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="mainSnippet" lang="js"/>
+          <div class="plus">+</div>
+          <CodeSnippet class="snippet" :code="componentSnippet1" lang="html"/>
+          <div class="plus">+</div>
+          <CodeSnippet class="snippet" :code="styleSnippet1" lang="scss"/>
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="demo">
       <div class="section-content">
-        <code-snippet class="snippet" :code="mainSnippet" lang="js"></code-snippet>
-        <div class="plus">+</div>
-        <code-snippet class="snippet" :code="componentSnippet" lang="html"></code-snippet>
-        <div class="plus">+</div>
-        <code-snippet class="snippet" :code="styleSnippet" lang="scss"></code-snippet>
+        <h2>With dynamic classes</h2>
+        <button class="tooltip-target" v-tooltip="{ content: msg, position: 'top-center', classes: ['danger'] }">Hover me</button>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet2" lang="html"/>
+          <div class="plus">+</div>
+          <CodeSnippet class="snippet" :code="styleSnippet2" lang="scss"/>
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="more">
+      <div class="section-content">
+        And much <a href="https://github.com/Akryum/v-tooltip#usage">More</a>!
       </div>
     </section>
 
@@ -37,6 +63,7 @@
 
 <script>
 import CodeSnippet from './CodeSnippet.vue'
+import Collapse from './Collapse.vue'
 
 const mainSnippet = `
 import Vue from 'vue'
@@ -51,14 +78,13 @@ new Vue({
 })
 `
 
-const componentSnippet = `
+const componentSnippet1 = `
 <button v-tooltip.top-center="msg">Hover me</button>
 `
 
-const styleSnippet = `
+const styleSnippet1 = `
 .tooltip {
   display: block !important;
-  padding: 4px;
   z-index: 10000;
 
   .tooltip-inner {
@@ -69,7 +95,72 @@ const styleSnippet = `
   }
 
   .tooltip-arrow {
-    display: none;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: black;
+  }
+  
+  &[x-placement^="top"] {
+    margin-bottom: 5px;
+    
+    .tooltip-arrow {
+      border-width: 5px 5px 0 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  
+  &[x-placement^="bottom"] {
+    margin-top: 5px;
+    
+    .tooltip-arrow {
+      border-width: 0 5px 5px 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  
+  &[x-placement^="right"] {
+    margin-left: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 5px 5px 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &[x-placement^="left"] {
+    margin-right: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 
   &[aria-hidden='true'] {
@@ -86,17 +177,42 @@ const styleSnippet = `
 }
 `
 
+const componentSnippet2 = `
+<button v-tooltip="{
+  content: msg,
+  position: 'top-center',
+  classes: ['danger'],
+}">Hover me</button>`
+
+const styleSnippet2 = `
+.tooltip {
+  &.danger {
+    .tooltip-inner {
+      background: #ee8888;
+      color: black;
+    }
+
+    .tooltip-arrow {
+      border-color: #ee8888;
+    }
+  }
+}
+`
+
 export default {
   name: 'app',
   components: {
     CodeSnippet,
+    Collapse,
   },
   data () {
     return {
       msg: `This is a button.`,
       mainSnippet,
-      componentSnippet,
-      styleSnippet,
+      componentSnippet1,
+      styleSnippet1,
+      componentSnippet2,
+      styleSnippet2,
     }
   },
 }
@@ -124,10 +240,16 @@ header {
 
 section {
   .section-content {
-    max-width: 500px;
+    max-width: 560px;
     margin: auto;
     padding: 64px 0;
     box-sizing: border-box;
+  }
+}
+
+.collapse {
+  .section-content {
+    padding: 12px 0 64px 0;
   }
 }
 
@@ -136,6 +258,14 @@ h1 {
   font-weight: normal;
   text-align: center;
   margin: 0 0 32px;
+}
+
+h2 {
+  &:first-child {
+    margin-top: 0;
+  }
+
+  font-weight: normal;
 }
 
 a {
@@ -159,15 +289,16 @@ input {
 }
 
 button {
-  background: $primary-color;
-  color: white;
+  color: $md-grey;
+  background: white;
+  border: solid 2px $md-grey;
   cursor: pointer;
   display: inline-block;
   text-align: center;
   transition: background .3s;
 
   &:hover {
-    background: lighten($primary-color, 10%);
+    background: lighten($md-grey, 30%);
   }
 }
 
@@ -188,7 +319,6 @@ input {
 
 .tooltip {
   display: block !important;
-  padding: 4px;
   z-index: 10000;
 
   .tooltip-inner {
@@ -199,7 +329,72 @@ input {
   }
 
   .tooltip-arrow {
-    display: none;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+    border-color: black;
+  }
+  
+  &[x-placement^="top"] {
+    margin-bottom: 5px;
+    
+    .tooltip-arrow {
+      border-width: 5px 5px 0 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  
+  &[x-placement^="bottom"] {
+    margin-top: 5px;
+    
+    .tooltip-arrow {
+      border-width: 0 5px 5px 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  
+  &[x-placement^="right"] {
+    margin-left: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 5px 5px 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &[x-placement^="left"] {
+    margin-right: 5px;
+
+    .tooltip-arrow {
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 
   &[aria-hidden='true'] {
@@ -212,6 +407,17 @@ input {
     visibility: visible;
     opacity: 1;
     transition: opacity .15s;
+  }
+
+  &.danger {
+    .tooltip-inner {
+      background: #ee8888;
+      color: black;
+    }
+
+    .tooltip-arrow {
+      border-color: #ee8888;
+    }
   }
 }
 
@@ -262,6 +468,12 @@ input {
     font-size: 16px;
     transform: rotate(-12deg);
   }
+}
+
+.more {
+  font-size: 24px;
+  text-align: center;
+  background: lighten($primary-color, 45%);
 }
 
 </style>

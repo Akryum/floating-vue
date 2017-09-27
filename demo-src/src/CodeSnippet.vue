@@ -1,5 +1,6 @@
 <template>
   <div class="code-snippet">
+    <div class="language">{{ lang }}</div>
     <div class="line-numbers">
       <div class="line-number" v-for="n in lineCount">{{ n }}</div>
     </div>
@@ -47,10 +48,10 @@ export default {
   overflow: auto;
   border-bottom: solid 2px $md-grey-300;
   border-right: solid 1px $md-grey-100;
-  // box-shadow: 0 10px 30px rgba(black, .05);
+  position: relative;
 
   .line-numbers, .render {
-    padding: 12px;
+    padding: 32px 24px;
   }
 
   .line-numbers {
@@ -61,6 +62,16 @@ export default {
 
   .render {
     white-space: pre;
+  }
+
+  .language {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: $md-grey-200;
+    color: $md-grey-400;
+    padding: 4px 4px 6px 6px;
+    border-radius: 0 0 0 2px;
   }
 }
 </style>
