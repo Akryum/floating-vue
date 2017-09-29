@@ -71,7 +71,9 @@ Include [popper.js & tooltip.js](https://popper.js.org/) with [v-tooltip](/dist/
 <script src="https://unpkg.com/v-tooltip"></script>
 ```
 
-Install the plugin into Vue:
+**If Vue is detected in the Page, the plugin is installed automatically.**
+
+Manually install the plugin into Vue:
 
 ```javascript
 Vue.use(VTooltip)
