@@ -1,11 +1,16 @@
 # v-tooltip
 
-[![npm](https://img.shields.io/npm/v/v-tooltip.svg) ![npm](https://img.shields.io/npm/dm/v-tooltip.svg)](https://www.npmjs.com/package/v-tooltip)
-[![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
+<p align="center">
+<img src="v-tooltip.png" width="247" height="172" alt="Screenshot"/>
+</p>
 
-Easy tooltips with [Tooltip.js](https://github.com/FezVrasta/popper.js#tooltipjs)
+<p align="center">
+<a href="https://www.npmjs.com/package/v-tooltip"><img src="https://img.shields.io/npm/v/v-tooltip.svg"/> <img src="https://img.shields.io/npm/dm/v-tooltip.svg"/></a> <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.x-brightgreen.svg"/></a>
+</p>
 
-<div style="text-align:center"><img src="v-tooltip.png" width="247" height="172" alt="Screenshot"/></div>
+<p align="center">
+Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">Tooltip.js</a>
+</p>
 
 <br>
 
