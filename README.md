@@ -65,6 +65,12 @@ Vue.directive('tooltip', VTooltip)
 
 Include [popper.js & tooltip.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.browser.js) in the page.
 
+```html
+<script src="https://unpkg.com/popper.js"></script>
+<script src="https://unpkg.com/tooltip.js"></script>
+<script src="https://unpkg.com/v-tooltip"></script>
+```
+
 Install the plugin into Vue:
 
 ```javascript
