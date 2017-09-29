@@ -5,7 +5,11 @@
 
 Easy tooltips with [Tooltip.js](https://github.com/FezVrasta/popper.js#tooltipjs)
 
-[Demo](https://akryum.github.io/v-tooltip/)
+<div style="text-align:center"><img src="v-tooltip.png" width="247" height="172" alt="Screenshot"/></div>
+
+<br>
+
+[Live Demo](https://akryum.github.io/v-tooltip/)
 
 [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
 
