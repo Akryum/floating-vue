@@ -14,10 +14,12 @@ Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">To
 
 <br>
 
-**Links**
+**Useful Links**
 
 - [Live Demo](https://akryum.github.io/v-tooltip/)
 - [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
+
+<br>
 
 **Table of Contents**
 
@@ -30,6 +32,8 @@ Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">To
   - [Tooltip auto-hiding](#tooltip-auto-hiding)
   - [Disabling tooltips](#disabling-tooltips)
 - [Style Examples](#style-examples)
+
+<br>
 
 # Installation
 
