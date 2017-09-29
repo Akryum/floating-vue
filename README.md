@@ -12,11 +12,10 @@
 Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">Tooltip.js</a>
 </p>
 
-<br>
+# Useful links
 
-[Live Demo](https://akryum.github.io/v-tooltip/)
-
-[JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
+- [Live Demo](https://akryum.github.io/v-tooltip/)
+- [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
 
 # Installation
 
