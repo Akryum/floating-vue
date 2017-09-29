@@ -12,10 +12,24 @@
 Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">Tooltip.js</a>
 </p>
 
-# Useful links
+<br>
+
+**Links**
 
 - [Live Demo](https://akryum.github.io/v-tooltip/)
 - [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
+
+**Table of Contents**
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Object notation](#object-notation)
+  - [Dynamic CSS classes](#dynamic-css-classes)
+  - [Other options](#other-options)
+  - [Global options](#global-options)
+  - [Tooltip auto-hiding](#tooltip-auto-hiding)
+  - [Disabling tooltips](#disabling-tooltips)
+- [Style Examples](#style-examples)
 
 # Installation
 
@@ -198,7 +212,7 @@ On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
 VTooltip.enabled = window.innerWidth > 768
 ```
 
-# Example Style
+# Style Examples
 
 ## Sass / Less
 
