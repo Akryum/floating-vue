@@ -1,4 +1,4 @@
-# v-tooltip
+<h1 align="center">v-tooltip</h1>
 
 <p align="center">
 <img src="v-tooltip.png" width="247" height="172" alt="Screenshot"/>
