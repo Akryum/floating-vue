@@ -1,6 +1,6 @@
 {
   "name": "v-tooltip",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "Easy tooltips with Vue 2.x",
   "main": "dist/v-tooltip.umd.js",
   "module": "dist/v-tooltip.esm.js",
@@ -36,7 +36,7 @@
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-0": "^6.16.0",
-    "clean-css": "^4.1.8",    
+    "clean-css": "^4.1.8",
     "cross-env": "^5.0.5",
     "eslint": "^4.7.2",
     "eslint-config-standard": "^10.2.1",

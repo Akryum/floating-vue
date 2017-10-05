@@ -3219,326 +3219,348 @@ var possibleConstructorReturn = function (self, call) {
 };
 
 var state = {
-  enabled: true
+	enabled: true
 };
 
 var positions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
 
 var defaultOptions = {
-  // Default tooltip placement relative to target element
-  defaultPlacement: 'top',
-  // Default CSS classes applied to the tooltip element
-  defaultClass: 'vue-tooltip-theme',
-  // Default HTML template of the tooltip element
-  // It must include `tooltip` & `tooltip-inner` CSS classes
-  defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-  // Delay (ms)
-  defaultDelay: 0,
-  // Default events that trigger the tooltip
-  defaultTrigger: 'hover focus',
-  // Default position offset (px)
-  defaultOffset: 0,
-  // Default container where the tooltip will be appended
-  defaultContainer: 'body',
-  defaultBoundariesElement: undefined,
-  defaultPopperOptions: {},
-  autoHide: true,
-  // Auto destroy tooltip DOM nodes (ms)
-  disposeTimeout: 5000
+	// Default tooltip placement relative to target element
+	defaultPlacement: 'top',
+	// Default CSS classes applied to the tooltip element
+	defaultClass: 'vue-tooltip-theme',
+	// Default HTML template of the tooltip element
+	// It must include `tooltip` & `tooltip-inner` CSS classes
+	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	// Delay (ms)
+	defaultDelay: 0,
+	// Default events that trigger the tooltip
+	defaultTrigger: 'hover focus',
+	// Default position offset (px)
+	defaultOffset: 0,
+	// Default container where the tooltip will be appended
+	defaultContainer: 'body',
+	defaultBoundariesElement: undefined,
+	defaultPopperOptions: {},
+	autoHide: true,
+	// Auto destroy tooltip DOM nodes (ms)
+	disposeTimeout: 5000
 };
 
 function getOptions(options) {
-  return {
-    placement: options.placement || directive.options.defaultPlacement,
-    delay: options.delay || directive.options.defaultDelay,
-    template: options.template || directive.options.defaultTemplate,
-    trigger: options.trigger || directive.options.defaultTrigger,
-    offset: options.offset || directive.options.defaultOffset,
-    container: options.container || directive.options.defaultContainer,
-    boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
-    popperOptions: options.popperOptions || directive.options.defaultPopperOptions
-  };
+	var result = {
+		placement: options.placement || directive.options.defaultPlacement,
+		delay: options.delay || directive.options.defaultDelay,
+		template: options.template || directive.options.defaultTemplate,
+		trigger: options.trigger || directive.options.defaultTrigger,
+		offset: options.offset || directive.options.defaultOffset,
+		container: options.container || directive.options.defaultContainer,
+		boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
+		popperOptions: _extends$2({}, options.popperOptions || directive.options.defaultPopperOptions)
+	};
+
+	if (options.offset) {
+		var typeofOffset = _typeof(options.offset);
+		var offset = options.offset;
+
+		// One value -> switch
+		if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
+			offset = '0, ' + offset;
+		}
+
+		if (!result.popperOptions.modifiers) {
+			result.popperOptions.modifiers = {};
+		}
+		result.popperOptions.modifiers.offset = {
+			offset: offset
+		};
+	}
+
+	return result;
 }
 
 function getPlacement(value, modifiers) {
-  var placement = value.placement;
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+	var placement = value.placement;
+	var _iteratorNormalCompletion = true;
+	var _didIteratorError = false;
+	var _iteratorError = undefined;
 
-  try {
-    for (var _iterator = positions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var pos = _step.value;
+	try {
+		for (var _iterator = positions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+			var pos = _step.value;
 
-      if (modifiers[pos]) {
-        placement = pos;
-      }
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
+			if (modifiers[pos]) {
+				placement = pos;
+			}
+		}
+	} catch (err) {
+		_didIteratorError = true;
+		_iteratorError = err;
+	} finally {
+		try {
+			if (!_iteratorNormalCompletion && _iterator.return) {
+				_iterator.return();
+			}
+		} finally {
+			if (_didIteratorError) {
+				throw _iteratorError;
+			}
+		}
+	}
 
-  return placement;
+	return placement;
 }
 
 var SuperTooltip = function (_Tooltip) {
-  inherits(SuperTooltip, _Tooltip);
+	inherits(SuperTooltip, _Tooltip);
 
-  function SuperTooltip() {
-    classCallCheck$2(this, SuperTooltip);
-    return possibleConstructorReturn(this, (SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).apply(this, arguments));
-  }
+	function SuperTooltip() {
+		classCallCheck$2(this, SuperTooltip);
+		return possibleConstructorReturn(this, (SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).apply(this, arguments));
+	}
 
-  createClass$2(SuperTooltip, [{
-    key: 'setClasses',
-    value: function setClasses(classes) {
-      this._classes = classes;
-    }
-  }, {
-    key: 'setContent',
-    value: function setContent(content) {
-      this.options.title = content;
-      if (this._tooltipNode) {
-        var el = this._tooltipNode.querySelector(this.innerSelector);
+	createClass$2(SuperTooltip, [{
+		key: 'setClasses',
+		value: function setClasses(classes) {
+			this._classes = classes;
+		}
+	}, {
+		key: 'setContent',
+		value: function setContent(content) {
+			this.options.title = content;
+			if (this._tooltipNode) {
+				var el = this._tooltipNode.querySelector(this.innerSelector);
 
-        if (el) {
-          if (!content) {
-            el.innerHTML = '';
-          } else {
-            el.innerHTML = content;
-          }
+				if (el) {
+					if (!content) {
+						el.innerHTML = '';
+					} else {
+						el.innerHTML = content;
+					}
 
-          this.popperInstance.update();
-        }
-      }
-    }
-  }, {
-    key: 'setOptions',
-    value: function setOptions(options) {
-      var classesUpdated = false;
-      var classes = options && options.classes || directive.options.defaultClass;
-      if (this._classes !== classes) {
-        this.setClasses(classes);
-        classesUpdated = true;
-      }
+					this.popperInstance.update();
+				}
+			}
+		}
+	}, {
+		key: 'setOptions',
+		value: function setOptions(options) {
+			var classesUpdated = false;
+			var classes = options && options.classes || directive.options.defaultClass;
+			if (this._classes !== classes) {
+				this.setClasses(classes);
+				classesUpdated = true;
+			}
 
-      options = getOptions(options);
+			options = getOptions(options);
 
-      var needPopperUpdate = false;
-      var needRestart = false;
+			var needPopperUpdate = false;
+			var needRestart = false;
 
-      if (this.options.offset !== options.offset || this.options.placement !== options.placement) {
-        needPopperUpdate = true;
-      }
+			if (this.options.offset !== options.offset || this.options.placement !== options.placement) {
+				needPopperUpdate = true;
+			}
 
-      if (this.options.template !== options.template || this.options.trigger !== options.trigger || this.options.container !== options.container || classesUpdated) {
-        needRestart = true;
-      }
+			if (this.options.template !== options.template || this.options.trigger !== options.trigger || this.options.container !== options.container || classesUpdated) {
+				needRestart = true;
+			}
 
-      for (var key in options) {
-        this.options[key] = options[key];
-      }
+			for (var key in options) {
+				this.options[key] = options[key];
+			}
 
-      if (this._tooltipNode) {
-        if (needRestart) {
-          var isOpen = this._isOpen;
+			if (this._tooltipNode) {
+				if (needRestart) {
+					var isOpen = this._isOpen;
 
-          this.dispose();
+					this.dispose();
 
-          var events = typeof this.options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
-            return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-          }) : [];
-          this._setEventListeners(this.reference, events, this.options);
+					var events = typeof this.options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
+						return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
+					}) : [];
+					this._setEventListeners(this.reference, events, this.options);
 
-          if (isOpen) {
-            this.show();
-          }
-        } else if (needPopperUpdate) {
-          this.popperInstance.update();
-        }
-      }
-    }
-  }, {
-    key: '_create',
-    value: function _create() {
-      var _babelHelpers$get;
+					if (isOpen) {
+						this.show();
+					}
+				} else if (needPopperUpdate) {
+					this.popperInstance.update();
+				}
+			}
+		}
+	}, {
+		key: '_create',
+		value: function _create() {
+			var _babelHelpers$get;
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
 
-      var result = (_babelHelpers$get = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_create', this)).call.apply(_babelHelpers$get, [this].concat(args));
+			var result = (_babelHelpers$get = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_create', this)).call.apply(_babelHelpers$get, [this].concat(args));
 
-      if (defaultOptions.autoHide && this.options.trigger.indexOf('hover') !== -1) {
-        result.addEventListener('mouseenter', this.hide);
-        result.addEventListener('click', this.hide);
-      }
+			if (defaultOptions.autoHide && this.options.trigger.indexOf('hover') !== -1) {
+				result.addEventListener('mouseenter', this.hide);
+				result.addEventListener('click', this.hide);
+			}
 
-      return result;
-    }
-  }, {
-    key: '_dispose',
-    value: function _dispose() {
-      var _this2 = this;
+			return result;
+		}
+	}, {
+		key: '_dispose',
+		value: function _dispose() {
+			var _this2 = this;
 
-      if (this._tooltipNode) {
-        this._tooltipNode.removeEventListener('mouseenter', this.hide);
-        this._tooltipNode.removeEventListener('click', this.hide);
-      }
+			if (this._tooltipNode) {
+				this._tooltipNode.removeEventListener('mouseenter', this.hide);
+				this._tooltipNode.removeEventListener('click', this.hide);
+			}
 
-      this._events.forEach(function (_ref) {
-        var func = _ref.func,
-            event = _ref.event;
+			this._events.forEach(function (_ref) {
+				var func = _ref.func,
+				    event = _ref.event;
 
-        _this2.reference.removeEventListener(event, func);
-      });
-      this._events = [];
-      return get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_dispose', this).call(this);
-    }
-  }, {
-    key: '_show',
-    value: function _show(reference, options) {
-      var _babelHelpers$get2,
-          _this3 = this;
+				_this2.reference.removeEventListener(event, func);
+			});
+			this._events = [];
+			return get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_dispose', this).call(this);
+		}
+	}, {
+		key: '_show',
+		value: function _show(reference, options) {
+			var _babelHelpers$get2,
+			    _this3 = this;
 
-      if (options && typeof options.container === 'string') {
-        var container = document.querySelector(options.container);
-        if (!container) return;
-      }
+			if (options && typeof options.container === 'string') {
+				var container = document.querySelector(options.container);
+				if (!container) return;
+			}
 
-      var updateClasses = true;
-      if (this._tooltipNode) {
-        addClasses(this._tooltipNode, this._classes);
-        updateClasses = false;
-      }
+			options = Object.assign({}, options);
+			delete options.offset;
 
-      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-        args[_key2 - 2] = arguments[_key2];
-      }
+			var updateClasses = true;
+			if (this._tooltipNode) {
+				addClasses(this._tooltipNode, this._classes);
+				updateClasses = false;
+			}
 
-      var result = (_babelHelpers$get2 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_show', this)).call.apply(_babelHelpers$get2, [this, reference, options].concat(args));
+			for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+				args[_key2 - 2] = arguments[_key2];
+			}
 
-      if (updateClasses && this._tooltipNode) {
-        addClasses(this._tooltipNode, this._classes);
-      }
+			var result = (_babelHelpers$get2 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_show', this)).call.apply(_babelHelpers$get2, [this, reference, options].concat(args));
 
-      // Fix position
-      setTimeout(function () {
-        if (_this3.popperInstance) {
-          _this3.popperInstance.update();
-        }
-      }, 0);
+			if (updateClasses && this._tooltipNode) {
+				addClasses(this._tooltipNode, this._classes);
+			}
 
-      clearTimeout(this._disposeTimer);
+			// Fix position
+			setTimeout(function () {
+				if (_this3.popperInstance) {
+					_this3.popperInstance.update();
+				}
+			}, 0);
 
-      return result;
-    }
-  }, {
-    key: '_hide',
-    value: function _hide() {
-      var _babelHelpers$get3,
-          _this4 = this;
+			clearTimeout(this._disposeTimer);
 
-      for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
+			return result;
+		}
+	}, {
+		key: '_hide',
+		value: function _hide() {
+			var _babelHelpers$get3,
+			    _this4 = this;
 
-      var result = (_babelHelpers$get3 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_hide', this)).call.apply(_babelHelpers$get3, [this].concat(args));
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
+			}
 
-      clearTimeout(this._disposeTimer);
-      this._disposeTimer = setTimeout(function () {
-        if (_this4._tooltipNode) {
-          _this4._tooltipNode.removeEventListener('mouseenter', _this4.hide);
-          _this4._tooltipNode.removeEventListener('click', _this4.hide);
-          _this4._tooltipNode.parentNode.removeChild(_this4._tooltipNode);
-          _this4._tooltipNode = null;
-        }
-      }, defaultOptions.disposeTimeout);
+			var result = (_babelHelpers$get3 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_hide', this)).call.apply(_babelHelpers$get3, [this].concat(args));
 
-      return result;
-    }
-  }]);
-  return SuperTooltip;
+			clearTimeout(this._disposeTimer);
+			this._disposeTimer = setTimeout(function () {
+				if (_this4._tooltipNode) {
+					_this4._tooltipNode.removeEventListener('mouseenter', _this4.hide);
+					_this4._tooltipNode.removeEventListener('click', _this4.hide);
+					_this4._tooltipNode.parentNode.removeChild(_this4._tooltipNode);
+					_this4._tooltipNode = null;
+				}
+			}, directive.options.disposeTimeout || defaultOptions.disposeTimeout);
+
+			return result;
+		}
+	}]);
+	return SuperTooltip;
 }(Tooltip);
 
 function getContent(value) {
-  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-  if (type === 'string') {
-    return value;
-  } else if (value && type === 'object') {
-    return value.content;
-  } else {
-    return false;
-  }
+	var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	if (type === 'string') {
+		return value;
+	} else if (value && type === 'object') {
+		return value.content;
+	} else {
+		return false;
+	}
 }
 
 function createTooltip(el, value, modifiers) {
-  var content = getContent(value);
-  var classes = value.classes || directive.options.defaultClass;
-  var opts = _extends$2({
-    title: content,
-    html: true
-  }, getOptions(_extends$2({}, value, {
-    placement: getPlacement(value, modifiers)
-  })));
-  var tooltip = el._tooltip = new SuperTooltip(el, opts);
-  tooltip.setClasses(classes);
-  tooltip._vueEl = el;
+	var content = getContent(value);
+	var classes = value.classes || directive.options.defaultClass;
+	var opts = _extends$2({
+		title: content,
+		html: true
+	}, getOptions(_extends$2({}, value, {
+		placement: getPlacement(value, modifiers)
+	})));
+	var tooltip = el._tooltip = new SuperTooltip(el, opts);
+	tooltip.setClasses(classes);
+	tooltip._vueEl = el;
 }
 
 function destroyTooltip(el) {
-  if (el._tooltip) {
-    el._tooltip.dispose();
-    delete el._tooltip;
-  }
+	if (el._tooltip) {
+		el._tooltip.dispose();
+		delete el._tooltip;
+	}
 }
 
 var directive = {
-  options: defaultOptions,
-  bind: function bind(el, _ref2) {
-    var value = _ref2.value,
-        modifiers = _ref2.modifiers;
+	options: defaultOptions,
+	bind: function bind(el, _ref2) {
+		var value = _ref2.value,
+		    modifiers = _ref2.modifiers;
 
-    var content = getContent(value);
-    destroyTooltip(el);
-    if (content && state.enabled) {
-      createTooltip(el, value, modifiers);
-    }
-  },
-  update: function update(el, _ref3) {
-    var value = _ref3.value,
-        oldValue = _ref3.oldValue,
-        modifiers = _ref3.modifiers;
+		var content = getContent(value);
+		destroyTooltip(el);
+		if (content && state.enabled) {
+			createTooltip(el, value, modifiers);
+		}
+	},
+	update: function update(el, _ref3) {
+		var value = _ref3.value,
+		    oldValue = _ref3.oldValue,
+		    modifiers = _ref3.modifiers;
 
-    var content = getContent(value);
-    if (!content || !state.enabled) {
-      destroyTooltip(el);
-    } else if (el._tooltip) {
-      var tooltip = el._tooltip;
-      // Content
-      tooltip.setContent(content);
-      // Options
-      tooltip.setOptions(_extends$2({}, value, {
-        placement: getPlacement(value, modifiers)
-      }));
-    } else {
-      createTooltip(el, value, modifiers);
-    }
-  },
-  unbind: function unbind(el) {
-    destroyTooltip(el);
-  }
+		var content = getContent(value);
+		if (!content || !state.enabled) {
+			destroyTooltip(el);
+		} else if (el._tooltip) {
+			var tooltip = el._tooltip;
+			// Content
+			tooltip.setContent(content);
+			// Options
+			tooltip.setOptions(_extends$2({}, value, {
+				placement: getPlacement(value, modifiers)
+			}));
+		} else {
+			createTooltip(el, value, modifiers);
+		}
+	},
+	unbind: function unbind(el) {
+		destroyTooltip(el);
+	}
 };
 
 function install(Vue, options) {
