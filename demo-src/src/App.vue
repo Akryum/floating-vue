@@ -37,8 +37,13 @@
 
     <section class="demo">
       <div class="section-content">
-        <h2>With dynamic classes</h2>
-        <button class="tooltip-target" v-tooltip="{ content: msg, position: 'top-center', classes: ['danger'] }">Hover me</button>
+        <h2>Customize it!</h2>
+        <button class="tooltip-target b2" v-tooltip="{
+          content: 'You can change a lot of parameters: placement, classes, offset...',
+          placement: 'bottom-center',
+          classes: ['info'],
+          offset: 100,
+        }">Hover me</button>
       </div>
     </section>
 
@@ -102,10 +107,10 @@ const styleSnippet1 = `
     margin: 5px;
     border-color: black;
   }
-  
+
   &[x-placement^="top"] {
     margin-bottom: 5px;
-    
+
     .tooltip-arrow {
       border-width: 5px 5px 0 5px;
       border-left-color: transparent !important;
@@ -117,10 +122,10 @@ const styleSnippet1 = `
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="bottom"] {
     margin-top: 5px;
-    
+
     .tooltip-arrow {
       border-width: 0 5px 5px 5px;
       border-left-color: transparent !important;
@@ -132,7 +137,7 @@ const styleSnippet1 = `
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="right"] {
     margin-left: 5px;
 
@@ -180,20 +185,26 @@ const styleSnippet1 = `
 const componentSnippet2 = `
 <button v-tooltip="{
   content: msg,
-  position: 'top-center',
-  classes: ['danger'],
+  placement: 'bottom-center',
+  classes: ['info'],
+  offset: 100,
 }">Hover me</button>`
 
 const styleSnippet2 = `
 .tooltip {
-  &.danger {
+  &.info {
+    $color: rgba(#004499, .9);
+
     .tooltip-inner {
-      background: #ee8888;
-      color: black;
+      background: $color;
+      color: white;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
     }
 
     .tooltip-arrow {
-      border-color: #ee8888;
+      border-color: $color;
     }
   }
 }
@@ -336,10 +347,10 @@ input {
     margin: 5px;
     border-color: black;
   }
-  
+
   &[x-placement^="top"] {
     margin-bottom: 5px;
-    
+
     .tooltip-arrow {
       border-width: 5px 5px 0 5px;
       border-left-color: transparent !important;
@@ -351,10 +362,10 @@ input {
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="bottom"] {
     margin-top: 5px;
-    
+
     .tooltip-arrow {
       border-width: 0 5px 5px 5px;
       border-left-color: transparent !important;
@@ -366,7 +377,7 @@ input {
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="right"] {
     margin-left: 5px;
 
@@ -409,14 +420,19 @@ input {
     transition: opacity .15s;
   }
 
-  &.danger {
+  &.info {
+    $color: rgba(#004499, .9);
+
     .tooltip-inner {
-      background: #ee8888;
-      color: black;
+      background: $color;
+      color: white;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
     }
 
     .tooltip-arrow {
-      border-color: #ee8888;
+      border-color: $color;
     }
   }
 }
@@ -467,6 +483,10 @@ input {
     font-weight: bold;
     font-size: 16px;
     transform: rotate(-12deg);
+
+    &.b2 {
+      transform: rotate(30deg);
+    }
   }
 }
 

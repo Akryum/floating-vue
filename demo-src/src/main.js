@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VTooltip from '../../'
 
-Vue.use(VTooltip)
+Vue.use(VTooltip, {
+  disposeTimeout: 10000,
+})
 
 import App from './App.vue'
 
