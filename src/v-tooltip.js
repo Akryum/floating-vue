@@ -211,7 +211,7 @@ class SuperTooltip extends Tooltip {
         this._tooltipNode.parentNode.removeChild(this._tooltipNode)
         this._tooltipNode = null
       }
-    }, defaultOptions.disposeTimeout)
+  	}, directive.options.disposeTimeout || defaultOptions.disposeTimeout );
 
     return result
   }
