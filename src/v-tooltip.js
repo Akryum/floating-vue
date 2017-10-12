@@ -78,14 +78,15 @@ function getOptions (options) {
 	return result
 }
 
-function getPlacement (value, modifiers) {
-	let placement = value.placement
-	for (const pos of positions) {
-		if (modifiers[pos]) {
-			placement = pos
-		}
-	}
-	return placement
+function getPlacement(value, modifiers) {
+  var placement = value.placement
+  for (var i = 0; i < positions.length; i++) {
+    var pos = positions[i]
+    if (modifiers[pos]) {
+      placement = pos
+    }
+  }
+  return placement
 }
 
 class SuperTooltip extends Tooltip {
