@@ -205,6 +205,8 @@ class SuperTooltip extends Tooltip {
 
 		const result = super._show(reference, options, ...args)
 
+		this._tooltipNode && (this._tooltipNode.style.opacity = 0)
+
 		if (updateClasses && this._tooltipNode) {
 			addClasses(this._tooltipNode, this._classes)
 		}
@@ -213,6 +215,7 @@ class SuperTooltip extends Tooltip {
 		setTimeout(() => {
 			if (this.popperInstance) {
 				this.popperInstance.update()
+				this._tooltipNode && (this._tooltipNode.style.opacity = null)
 			}
 		}, 0)
 
