@@ -3,8 +3,6 @@ import resolve from 'rollup-plugin-node-resolve'
 import vue from 'rollup-plugin-vue'
 import cjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
-import fs from 'fs'
-import CleanCSS from 'clean-css'
 
 const config = require('../package.json')
 
@@ -17,10 +15,11 @@ export default {
 			main: true,
 			browser: true,
 		}),
-		cjs(),
+		cjs({
+			include: 'node_modules/**',
+		}),
 		vue({
 			css (style) {
-				// fs.writeFileSync('dist/v-tooltip.css', new CleanCSS().minify(style).styles)
 			},
 		}),
 		babel({
