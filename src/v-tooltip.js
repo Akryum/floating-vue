@@ -239,6 +239,41 @@ class SuperTooltip extends Tooltip {
 
 		return result
 	}
+
+	_scheduleShow (reference, delay, options /*, evt */) {
+		// defaults to 0
+		const computedDelay = (delay && delay.show) || delay || 0
+		clearTimeout(this._scheduleTimer)
+		this._scheduleTimer = window.setTimeout(() => this._show(reference, options), computedDelay)
+	}
+
+	_scheduleHide (reference, delay, options, evt) {
+		// defaults to 0
+		const computedDelay = (delay && delay.hide) || delay || 0
+		clearTimeout(this._scheduleTimer)
+		this._scheduleTimer = window.setTimeout(() => {
+			if (this._isOpen === false) {
+				return
+			}
+			if (!document.body.contains(this._tooltipNode)) {
+				return
+			}
+
+			// if we are hiding because of a mouseleave, we must check that the new
+			// reference isn't the tooltip, because in this case we don't want to hide it
+			if (evt.type === 'mouseleave') {
+				const isSet = this._setTooltipNodeEvent(evt, reference, delay, options)
+
+				// if we set the new event, don't hide the tooltip yet
+				// the new event will take care to hide it if necessary
+				if (isSet) {
+					return
+				}
+			}
+
+			this._hide(reference, options)
+		}, computedDelay)
+	}
 }
 
 function getContent (value) {
