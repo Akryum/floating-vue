@@ -275,32 +275,28 @@ function destroyTooltip (el) {
 	}
 }
 
+function bind (el, { value, oldValue, modifiers }) {
+	const content = getContent(value)
+	if (!content || !state.enabled) {
+		destroyTooltip(el)
+	} else if (el._tooltip) {
+		const tooltip = el._tooltip
+		// Content
+		tooltip.setContent(content)
+		// Options
+		tooltip.setOptions({
+			...value,
+			placement: getPlacement(value, modifiers),
+		})
+	} else {
+		createTooltip(el, value, modifiers)
+	}
+}
+
 const directive = {
 	options: defaultOptions,
-	bind (el, { value, modifiers }) {
-		const content = getContent(value)
-		destroyTooltip(el)
-		if (content && state.enabled) {
-			createTooltip(el, value, modifiers)
-		}
-	},
-	update (el, { value, oldValue, modifiers }) {
-		const content = getContent(value)
-		if (!content || !state.enabled) {
-			destroyTooltip(el)
-		} else if (el._tooltip) {
-			const tooltip = el._tooltip
-			// Content
-			tooltip.setContent(content)
-			// Options
-			tooltip.setOptions({
-				...value,
-				placement: getPlacement(value, modifiers),
-			})
-		} else {
-			createTooltip(el, value, modifiers)
-		}
-	},
+	bind,
+	update: bind,
 	unbind (el) {
 		destroyTooltip(el)
 	},
