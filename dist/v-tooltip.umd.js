@@ -2444,7 +2444,7 @@ Popper.Defaults = Defaults;
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.1.5
+ * @version 1.1.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -2757,24 +2757,26 @@ var Tooltip = function () {
     value: function _dispose() {
       var _this = this;
 
+      // remove event listeners first to prevent any unexpected behaviour
+      this._events.forEach(function (_ref) {
+        var func = _ref.func,
+            event = _ref.event;
+
+        _this.reference.removeEventListener(event, func);
+      });
+      this._events = [];
+
       if (this._tooltipNode) {
         this._hide();
 
         // destroy instance
         this.popperInstance.destroy();
 
-        // remove event listeners
-        this._events.forEach(function (_ref) {
-          var func = _ref.func,
-              event = _ref.event;
-
-          _this.reference.removeEventListener(event, func);
-        });
-        this._events = [];
-
-        // destroy tooltipNode
-        this._tooltipNode.parentNode.removeChild(this._tooltipNode);
-        this._tooltipNode = null;
+        // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+        if (!this.popperInstance.options.removeOnDestroy) {
+          this._tooltipNode.parentNode.removeChild(this._tooltipNode);
+          this._tooltipNode = null;
+        }
       }
       return this;
     }
@@ -3296,12 +3298,24 @@ function getPlacement(value, modifiers) {
 	return placement;
 }
 
+var uuid = 0;
+
 var SuperTooltip = function (_Tooltip) {
 	inherits(SuperTooltip, _Tooltip);
 
 	function SuperTooltip() {
+		var _ref;
+
 		classCallCheck$2(this, SuperTooltip);
-		return possibleConstructorReturn(this, (SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).apply(this, arguments));
+
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		var _this = possibleConstructorReturn(this, (_ref = SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).call.apply(_ref, [this].concat(args)));
+
+		_this.uuid = uuid++;
+		return _this;
 	}
 
 	createClass$2(SuperTooltip, [{
@@ -3378,8 +3392,8 @@ var SuperTooltip = function (_Tooltip) {
 		value: function _create() {
 			var _babelHelpers$get;
 
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
+			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				args[_key2] = arguments[_key2];
 			}
 
 			var result = (_babelHelpers$get = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_create', this)).call.apply(_babelHelpers$get, [this].concat(args));
@@ -3421,11 +3435,13 @@ var SuperTooltip = function (_Tooltip) {
 				updateClasses = false;
 			}
 
-			for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-				args[_key2 - 2] = arguments[_key2];
+			for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
+				args[_key3 - 2] = arguments[_key3];
 			}
 
 			var result = (_babelHelpers$get2 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_show', this)).call.apply(_babelHelpers$get2, [this, reference, options].concat(args));
+
+			this._tooltipNode && (this._tooltipNode.style.opacity = 0);
 
 			if (updateClasses && this._tooltipNode) {
 				addClasses(this._tooltipNode, this._classes);
@@ -3435,6 +3451,7 @@ var SuperTooltip = function (_Tooltip) {
 			setTimeout(function () {
 				if (_this2.popperInstance) {
 					_this2.popperInstance.update();
+					_this2._tooltipNode && (_this2._tooltipNode.style.opacity = null);
 				}
 			}, 0);
 
@@ -3448,8 +3465,8 @@ var SuperTooltip = function (_Tooltip) {
 			var _babelHelpers$get3,
 			    _this3 = this;
 
-			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				args[_key3] = arguments[_key3];
+			for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+				args[_key4] = arguments[_key4];
 			}
 
 			var result = (_babelHelpers$get3 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_hide', this)).call.apply(_babelHelpers$get3, [this].concat(args));
@@ -3502,38 +3519,31 @@ function destroyTooltip(el) {
 	}
 }
 
+function bind(el, _ref2) {
+	var value = _ref2.value,
+	    oldValue = _ref2.oldValue,
+	    modifiers = _ref2.modifiers;
+
+	var content = getContent(value);
+	if (!content || !state.enabled) {
+		destroyTooltip(el);
+	} else if (el._tooltip) {
+		var tooltip = el._tooltip;
+		// Content
+		tooltip.setContent(content);
+		// Options
+		tooltip.setOptions(_extends$2({}, value, {
+			placement: getPlacement(value, modifiers)
+		}));
+	} else {
+		createTooltip(el, value, modifiers);
+	}
+}
+
 var directive = {
 	options: defaultOptions,
-	bind: function bind(el, _ref) {
-		var value = _ref.value,
-		    modifiers = _ref.modifiers;
-
-		var content = getContent(value);
-		destroyTooltip(el);
-		if (content && state.enabled) {
-			createTooltip(el, value, modifiers);
-		}
-	},
-	update: function update(el, _ref2) {
-		var value = _ref2.value,
-		    oldValue = _ref2.oldValue,
-		    modifiers = _ref2.modifiers;
-
-		var content = getContent(value);
-		if (!content || !state.enabled) {
-			destroyTooltip(el);
-		} else if (el._tooltip) {
-			var tooltip = el._tooltip;
-			// Content
-			tooltip.setContent(content);
-			// Options
-			tooltip.setOptions(_extends$2({}, value, {
-				placement: getPlacement(value, modifiers)
-			}));
-		} else {
-			createTooltip(el, value, modifiers);
-		}
-	},
+	bind: bind,
+	update: bind,
 	unbind: function unbind(el) {
 		destroyTooltip(el);
 	}
