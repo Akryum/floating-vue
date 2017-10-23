@@ -185,10 +185,6 @@ class SuperTooltip extends Tooltip {
 			this._tooltipNode.removeEventListener('click', this.hide)
 		}
 
-		this._events.forEach(({ func, event }) => {
-			this.reference.removeEventListener(event, func)
-		})
-		this._events = []
 		return super._dispose()
 	}
 
