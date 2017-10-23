@@ -42,6 +42,7 @@ export const defaultOptions = {
 	autoHide: true,
 	// Auto destroy tooltip DOM nodes (ms)
 	disposeTimeout: 5000,
+	autoDispose: false,
 }
 
 function getOptions (options) {
@@ -78,15 +79,15 @@ function getOptions (options) {
 	return result
 }
 
-function getPlacement(value, modifiers) {
-  var placement = value.placement
-  for (var i = 0; i < positions.length; i++) {
-    var pos = positions[i]
-    if (modifiers[pos]) {
-      placement = pos
-    }
-  }
-  return placement
+function getPlacement (value, modifiers) {
+	var placement = value.placement
+	for (var i = 0; i < positions.length; i++) {
+		var pos = positions[i]
+		if (modifiers[pos]) {
+			placement = pos
+		}
+	}
+	return placement
 }
 
 class SuperTooltip extends Tooltip {
@@ -229,14 +230,16 @@ class SuperTooltip extends Tooltip {
 		const result = super._hide(...args)
 
 		clearTimeout(this._disposeTimer)
-		this._disposeTimer = setTimeout(() => {
-			if (this._tooltipNode) {
-				this._tooltipNode.removeEventListener('mouseenter', this.hide)
-				this._tooltipNode.removeEventListener('click', this.hide)
-				this._tooltipNode.parentNode.removeChild(this._tooltipNode)
-				this._tooltipNode = null
-			}
-		}, directive.options.disposeTimeout || defaultOptions.disposeTimeout)
+		if (directive.options.autoDispose) {
+			this._disposeTimer = setTimeout(() => {
+				if (this._tooltipNode) {
+					this._tooltipNode.removeEventListener('mouseenter', this.hide)
+					this._tooltipNode.removeEventListener('click', this.hide)
+					this._tooltipNode.parentNode.removeChild(this._tooltipNode)
+					this._tooltipNode = null
+				}
+			}, directive.options.disposeTimeout || defaultOptions.disposeTimeout)
+		}
 
 		return result
 	}
@@ -245,6 +248,8 @@ class SuperTooltip extends Tooltip {
 function getContent (value) {
 	const type = typeof value
 	if (type === 'string') {
+		return value
+	} else if (value && value instanceof HTMLElement) {
 		return value
 	} else if (value && type === 'object') {
 		return value.content
