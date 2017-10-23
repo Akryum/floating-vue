@@ -3292,24 +3292,12 @@ function getPlacement(value, modifiers) {
 	return placement;
 }
 
-var uuid = 0;
-
 var SuperTooltip = function (_Tooltip) {
 	inherits(SuperTooltip, _Tooltip);
 
 	function SuperTooltip() {
-		var _ref;
-
 		classCallCheck$2(this, SuperTooltip);
-
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
-
-		var _this = possibleConstructorReturn(this, (_ref = SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).call.apply(_ref, [this].concat(args)));
-
-		_this.uuid = uuid++;
-		return _this;
+		return possibleConstructorReturn(this, (SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).apply(this, arguments));
 	}
 
 	createClass$2(SuperTooltip, [{
@@ -3386,8 +3374,8 @@ var SuperTooltip = function (_Tooltip) {
 		value: function _create() {
 			var _babelHelpers$get;
 
-			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				args[_key2] = arguments[_key2];
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
 			}
 
 			var result = (_babelHelpers$get = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_create', this)).call.apply(_babelHelpers$get, [this].concat(args));
@@ -3429,8 +3417,8 @@ var SuperTooltip = function (_Tooltip) {
 				updateClasses = false;
 			}
 
-			for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-				args[_key3 - 2] = arguments[_key3];
+			for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+				args[_key2 - 2] = arguments[_key2];
 			}
 
 			var result = (_babelHelpers$get2 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_show', this)).call.apply(_babelHelpers$get2, [this, reference, options].concat(args));
@@ -3459,8 +3447,8 @@ var SuperTooltip = function (_Tooltip) {
 			var _babelHelpers$get3,
 			    _this3 = this;
 
-			for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-				args[_key4] = arguments[_key4];
+			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+				args[_key3] = arguments[_key3];
 			}
 
 			var result = (_babelHelpers$get3 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_hide', this)).call.apply(_babelHelpers$get3, [this].concat(args));
@@ -3476,6 +3464,49 @@ var SuperTooltip = function (_Tooltip) {
 			}, directive.options.disposeTimeout || defaultOptions.disposeTimeout);
 
 			return result;
+		}
+	}, {
+		key: '_scheduleShow',
+		value: function _scheduleShow(reference, delay, options /*, evt */) {
+			var _this4 = this;
+
+			// defaults to 0
+			var computedDelay = delay && delay.show || delay || 0;
+			clearTimeout(this._scheduleTimer);
+			this._scheduleTimer = window.setTimeout(function () {
+				return _this4._show(reference, options);
+			}, computedDelay);
+		}
+	}, {
+		key: '_scheduleHide',
+		value: function _scheduleHide(reference, delay, options, evt) {
+			var _this5 = this;
+
+			// defaults to 0
+			var computedDelay = delay && delay.hide || delay || 0;
+			clearTimeout(this._scheduleTimer);
+			this._scheduleTimer = window.setTimeout(function () {
+				if (_this5._isOpen === false) {
+					return;
+				}
+				if (!document.body.contains(_this5._tooltipNode)) {
+					return;
+				}
+
+				// if we are hiding because of a mouseleave, we must check that the new
+				// reference isn't the tooltip, because in this case we don't want to hide it
+				if (evt.type === 'mouseleave') {
+					var isSet = _this5._setTooltipNodeEvent(evt, reference, delay, options);
+
+					// if we set the new event, don't hide the tooltip yet
+					// the new event will take care to hide it if necessary
+					if (isSet) {
+						return;
+					}
+				}
+
+				_this5._hide(reference, options);
+			}, computedDelay);
 		}
 	}]);
 	return SuperTooltip;
@@ -3513,10 +3544,10 @@ function destroyTooltip(el) {
 	}
 }
 
-function bind(el, _ref2) {
-	var value = _ref2.value,
-	    oldValue = _ref2.oldValue,
-	    modifiers = _ref2.modifiers;
+function bind(el, _ref) {
+	var value = _ref.value,
+	    oldValue = _ref.oldValue,
+	    modifiers = _ref.modifiers;
 
 	var content = getContent(value);
 	if (!content || !state.enabled) {
