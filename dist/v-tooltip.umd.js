@@ -2701,6 +2701,8 @@ var Tooltip = function () {
 		// set initial state
 		this._isOpen = false;
 
+		this._isDisposed = false;
+
 		// set event listeners
 		this._setEventListeners(reference, events, options);
 	}
@@ -2954,13 +2956,19 @@ var Tooltip = function () {
 
 			// Fix position
 			requestAnimationFrame(function () {
-				if (_this.popperInstance) {
+				if (!_this._isDisposed && _this.popperInstance) {
 					_this.popperInstance.update();
 
 					// Show the tooltip
 					requestAnimationFrame(function () {
-						tooltipNode.setAttribute('aria-hidden', 'false');
+						if (!_this._isDisposed) {
+							tooltipNode.setAttribute('aria-hidden', 'false');
+						} else {
+							_this.dispose();
+						}
 					});
+				} else {
+					_this.dispose();
 				}
 			});
 
@@ -3002,6 +3010,8 @@ var Tooltip = function () {
 		key: '_dispose',
 		value: function _dispose() {
 			var _this3 = this;
+
+			this._isDisposed = true;
 
 			// remove event listeners first to prevent any unexpected behaviour
 			this._events.forEach(function (_ref) {
