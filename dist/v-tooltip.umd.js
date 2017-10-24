@@ -2911,6 +2911,7 @@ var Tooltip = function () {
 			if (this._tooltipNode) {
 				this._tooltipNode.style.display = '';
 				this._tooltipNode.setAttribute('aria-hidden', 'false');
+				this.popperInstance.enableEventListeners();
 				this.popperInstance.update();
 				return this;
 			}
@@ -2989,6 +2990,8 @@ var Tooltip = function () {
 			// hide tooltipNode
 			this._tooltipNode.style.display = 'none';
 			this._tooltipNode.setAttribute('aria-hidden', 'true');
+
+			this.popperInstance.disableEventListeners();
 
 			clearTimeout(this._disposeTimer);
 			var disposeTime = directive.options.disposeTimeout;
