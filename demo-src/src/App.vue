@@ -39,10 +39,14 @@
       <div class="section-content">
         <h2>Customize it!</h2>
         <button class="tooltip-target b2" v-tooltip="{
-          content: 'You can change a lot of parameters: placement, classes, offset...',
+          content: 'You can change a lot of parameters: placement, classes, offset, delay...',
           placement: 'bottom-center',
           classes: ['info'],
           offset: 100,
+          delay: {
+            show: 500,
+            hide: 0,
+          },
         }">Hover me</button>
       </div>
     </section>
@@ -188,6 +192,10 @@ const componentSnippet2 = `
   placement: 'bottom-center',
   classes: ['info'],
   offset: 100,
+  delay: {
+    show: 500,
+    hide: 0,
+  },
 }">Hover me</button>`
 
 const styleSnippet2 = `
