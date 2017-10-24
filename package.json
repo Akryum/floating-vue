@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Akryum/vue-tooltip#readme",
   "dependencies": {
-    "tooltip.js": "^1.1.4"
+    "popper.js": "^1.12.6"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

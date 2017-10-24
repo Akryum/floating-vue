@@ -1,6 +1,4 @@
-import Tooltip from 'tooltip.js'
-
-import { addClasses } from './utils'
+import Tooltip from './tooltip'
 
 export let state = {
 	enabled: true,
@@ -44,7 +42,7 @@ export const defaultOptions = {
 	disposeTimeout: 5000,
 }
 
-function getOptions (options) {
+export function getOptions (options) {
 	const result = {
 		placement: options.placement || directive.options.defaultPlacement,
 		delay: options.delay || directive.options.defaultDelay,
@@ -89,193 +87,6 @@ function getPlacement (value, modifiers) {
 	return placement
 }
 
-class SuperTooltip extends Tooltip {
-	setClasses (classes) {
-		this._classes = classes
-	}
-
-	setContent (content) {
-		this.options.title = content
-		if (this._tooltipNode) {
-			const el = this._tooltipNode.querySelector(this.innerSelector)
-
-			if (el) {
-				if (!content) {
-					el.innerHTML = ''
-				} else {
-					el.innerHTML = content
-				}
-
-				this.popperInstance.update()
-			}
-		}
-	}
-
-	setOptions (options) {
-		let classesUpdated = false
-		const classes = (options && options.classes) || directive.options.defaultClass
-		if (this._classes !== classes) {
-			this.setClasses(classes)
-			classesUpdated = true
-		}
-
-		options = getOptions(options)
-
-		let needPopperUpdate = false
-		let needRestart = false
-
-		if (
-			this.options.offset !== options.offset ||
-						this.options.placement !== options.placement
-		) {
-			needPopperUpdate = true
-		}
-
-		if (
-			this.options.template !== options.template ||
-			this.options.trigger !== options.trigger ||
-			this.options.container !== options.container ||
-			classesUpdated
-		) {
-			needRestart = true
-		}
-
-		for (const key in options) {
-			this.options[key] = options[key]
-		}
-
-		if (this._tooltipNode) {
-			if (needRestart) {
-				const isOpen = this._isOpen
-
-				this.dispose()
-
-				const events = typeof this.options.trigger === 'string'
-					? options.trigger
-						.split(' ')
-						.filter(
-							trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-						)
-					: []
-				this._setEventListeners(this.reference, events, this.options)
-
-				if (isOpen) {
-					this.show()
-				}
-			} else if (needPopperUpdate) {
-				this.popperInstance.update()
-			}
-		}
-	}
-
-	_create (...args) {
-		const result = super._create(...args)
-
-		if (defaultOptions.autoHide && this.options.trigger.indexOf('hover') !== -1) {
-			result.addEventListener('mouseenter', this.hide)
-			result.addEventListener('click', this.hide)
-		}
-
-		return result
-	}
-
-	_dispose () {
-		if (this._tooltipNode) {
-			this._tooltipNode.removeEventListener('mouseenter', this.hide)
-			this._tooltipNode.removeEventListener('click', this.hide)
-		}
-
-		return super._dispose()
-	}
-
-	_show (reference, options, ...args) {
-		if (options && typeof options.container === 'string') {
-			const container = document.querySelector(options.container)
-			if (!container) return
-		}
-
-		options = Object.assign({}, options)
-		delete options.offset
-
-		let updateClasses = true
-		if (this._tooltipNode) {
-			addClasses(this._tooltipNode, this._classes)
-			updateClasses = false
-		}
-
-		const result = super._show(reference, options, ...args)
-
-		this._tooltipNode && (this._tooltipNode.style.opacity = 0)
-
-		if (updateClasses && this._tooltipNode) {
-			addClasses(this._tooltipNode, this._classes)
-		}
-
-		// Fix position
-		setTimeout(() => {
-			if (this.popperInstance) {
-				this.popperInstance.update()
-				this._tooltipNode && (this._tooltipNode.style.opacity = null)
-			}
-		}, 0)
-
-		clearTimeout(this._disposeTimer)
-
-		return result
-	}
-
-	_hide (...args) {
-		const result = super._hide(...args)
-
-		clearTimeout(this._disposeTimer)
-		this._disposeTimer = setTimeout(() => {
-			if (this._tooltipNode) {
-				this._tooltipNode.removeEventListener('mouseenter', this.hide)
-				this._tooltipNode.removeEventListener('click', this.hide)
-				this._tooltipNode.parentNode.removeChild(this._tooltipNode)
-				this._tooltipNode = null
-			}
-		}, directive.options.disposeTimeout || defaultOptions.disposeTimeout)
-
-		return result
-	}
-
-	_scheduleShow (reference, delay, options /*, evt */) {
-		// defaults to 0
-		const computedDelay = (delay && delay.show) || delay || 0
-		clearTimeout(this._scheduleTimer)
-		this._scheduleTimer = window.setTimeout(() => this._show(reference, options), computedDelay)
-	}
-
-	_scheduleHide (reference, delay, options, evt) {
-		// defaults to 0
-		const computedDelay = (delay && delay.hide) || delay || 0
-		clearTimeout(this._scheduleTimer)
-		this._scheduleTimer = window.setTimeout(() => {
-			if (this._isOpen === false) {
-				return
-			}
-			if (!document.body.contains(this._tooltipNode)) {
-				return
-			}
-
-			// if we are hiding because of a mouseleave, we must check that the new
-			// reference isn't the tooltip, because in this case we don't want to hide it
-			if (evt.type === 'mouseleave') {
-				const isSet = this._setTooltipNodeEvent(evt, reference, delay, options)
-
-				// if we set the new event, don't hide the tooltip yet
-				// the new event will take care to hide it if necessary
-				if (isSet) {
-					return
-				}
-			}
-
-			this._hide(reference, options)
-		}, computedDelay)
-	}
-}
-
 function getContent (value) {
 	const type = typeof value
 	if (type === 'string') {
@@ -298,7 +109,7 @@ function createTooltip (el, value, modifiers) {
 			placement: getPlacement(value, modifiers),
 		}),
 	}
-	const tooltip = el._tooltip = new SuperTooltip(el, opts)
+	const tooltip = el._tooltip = new Tooltip(el, opts)
 	tooltip.setClasses(classes)
 	tooltip._vueEl = el
 }
@@ -328,7 +139,7 @@ function bind (el, { value, oldValue, modifiers }) {
 	}
 }
 
-const directive = {
+export const directive = {
 	options: defaultOptions,
 	bind,
 	update: bind,

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Easy tooltips with <a href="https://github.com/FezVrasta/popper.js#tooltipjs">Tooltip.js</a>
+Easy tooltips with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
 </p>
 
 <br>
@@ -63,11 +63,10 @@ Vue.directive('tooltip', VTooltip)
 
 ## Browser
 
-Include [popper.js & tooltip.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.browser.js) in the page.
+Include [popper.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.browser.js) in the page.
 
 ```html
 <script src="https://unpkg.com/popper.js"></script>
-<script src="https://unpkg.com/tooltip.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
 ```
 
@@ -158,7 +157,7 @@ Or a reactive property:
 
 - `content` - HTML text to be displayed in the tooltip
 - `classes` - *(see above)*
-- `delay` - Show/Hide delay (ms)
+- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms)
 - `placement` - *(see above)*
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event)
 - `offset` - Offset of the position (px)
@@ -190,7 +189,7 @@ The default global options are:
   defaultBoundariesElement: undefined,
   defaultPopperOptions: {},
   autoHide: true,
-  // Auto destroy tooltip DOM nodes (ms)
+  // Auto destroy tooltip DOM nodes (ms), set `null` to disable
   disposeTimeout: 5000,
 }
 ```
@@ -248,10 +247,10 @@ VTooltip.enabled = window.innerWidth > 768
     margin: 5px;
     border-color: black;
   }
-  
+
   &[x-placement^="top"] {
     margin-bottom: 5px;
-    
+
     .tooltip-arrow {
       border-width: 5px 5px 0 5px;
       border-left-color: transparent !important;
@@ -263,10 +262,10 @@ VTooltip.enabled = window.innerWidth > 768
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="bottom"] {
     margin-top: 5px;
-    
+
     .tooltip-arrow {
       border-width: 0 5px 5px 5px;
       border-left-color: transparent !important;
@@ -278,7 +277,7 @@ VTooltip.enabled = window.innerWidth > 768
       margin-bottom: 0;
     }
   }
-  
+
   &[x-placement^="right"] {
     margin-left: 5px;
 
