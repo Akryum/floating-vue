@@ -72,6 +72,8 @@ export default class Tooltip {
 		// set initial state
 		this._isOpen = false
 
+		this._isDisposed = false
+
 		// set event listeners
 		this._setEventListeners(reference, events, options)
 	}
@@ -349,13 +351,19 @@ export default class Tooltip {
 
 		// Fix position
 		requestAnimationFrame(() => {
-			if (this.popperInstance) {
+			if (!this._isDisposed && this.popperInstance) {
 				this.popperInstance.update()
 
 				// Show the tooltip
 				requestAnimationFrame(() => {
-					tooltipNode.setAttribute('aria-hidden', 'false')
+					if (!this._isDisposed) {
+						tooltipNode.setAttribute('aria-hidden', 'false')
+					} else {
+						this.dispose()
+					}
 				})
+			} else {
+				this.dispose()
 			}
 		})
 
@@ -392,6 +400,8 @@ export default class Tooltip {
 	}
 
 	_dispose () {
+		this._isDisposed = true
+
 		// remove event listeners first to prevent any unexpected behaviour
 		this._events.forEach(({ func, event }) => {
 			this.reference.removeEventListener(event, func)
