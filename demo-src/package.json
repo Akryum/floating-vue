@@ -11,7 +11,8 @@
   "dependencies": {
     "highlight.js": "^9.7.0",
     "v-tooltip": "^2.0.0-beta.9",
-    "vue": "^2.1.0"
+    "vue": "^2.1.0",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
