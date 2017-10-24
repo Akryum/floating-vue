@@ -6,7 +6,7 @@ import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
 
 Vue.use(VTooltip, {
-  disposeTimeout: 10000,
+  disposeTimeout: 5000,
 })
 
 Vue.use(VueRouter)
