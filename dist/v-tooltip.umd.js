@@ -6,7 +6,7 @@
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.5
+ * @version 1.12.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28,22 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var nativeHints = ['native code', '[object MutationObserverConstructor]'];
-
-/**
- * Determine if a function is implemented natively (as opposed to a polyfill).
- * @method
- * @memberof Popper.Utils
- * @argument {Function | undefined} fn the function to check
- * @returns {Boolean}
- */
-var isNative = (function (fn) {
-  return nativeHints.some(function (hint) {
-    return (fn || '').toString().indexOf(hint) > -1;
-  });
-});
-
-var isBrowser = typeof window !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -54,26 +39,16 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var scheduled = false;
-  var i = 0;
-  var elem = document.createElement('span');
-
-  // MutationObserver provides a mechanism for scheduling microtasks, which
-  // are scheduled *before* the next task. This gives us a way to debounce
-  // a function but ensure it's called *before* the next paint.
-  var observer = new MutationObserver(function () {
-    fn();
-    scheduled = false;
-  });
-
-  observer.observe(elem, { attributes: true });
-
+  var called = false;
   return function () {
-    if (!scheduled) {
-      scheduled = true;
-      elem.setAttribute('x-index', i);
-      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
+    if (called) {
+      return;
     }
+    called = true;
+    Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
   };
 }
 
@@ -90,11 +65,7 @@ function taskDebounce(fn) {
   };
 }
 
-// It's common for MutationObserver polyfills to be seen in the wild, however
-// these rely on Mutation Events which only occur when an element is connected
-// to the DOM. The algorithm used in this module does not use a connected element,
-// and so we must ensure that a *native* MutationObserver is available.
-var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
+var supportsMicroTasks = isBrowser && window.Promise;
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -105,7 +76,7 @@ var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserv
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -114,7 +85,7 @@ var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce
  * @argument {Any} functionToCheck - variable to check
  * @returns {Boolean} answer to: is a function?
  */
-function isFunction$1(functionToCheck) {
+function isFunction(functionToCheck) {
   var getType = {};
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
@@ -158,8 +129,16 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
+  if (!element) {
     return window.document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -189,6 +168,10 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    if (element) {
+      return element.ownerDocument.documentElement;
+    }
+
     return window.document.documentElement;
   }
 
@@ -284,8 +267,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = window.document.documentElement;
-    var scrollingElement = window.document.scrollingElement || html;
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -361,13 +344,13 @@ function getWindowSizes() {
   };
 }
 
-var classCallCheck$1 = function (instance, Constructor) {
+var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 };
 
-var createClass$1 = function () {
+var createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -404,7 +387,7 @@ var defineProperty = function (obj, key, value) {
   return obj;
 };
 
-var _extends$1 = Object.assign || function (target) {
+var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
 
@@ -426,7 +409,7 @@ var _extends$1 = Object.assign || function (target) {
  * @returns {Object} ClientRect like output
  */
 function getClientRect(offsets) {
-  return _extends$1({}, offsets, {
+  return _extends({}, offsets, {
     right: offsets.left + offsets.width,
     bottom: offsets.top + offsets.height
   });
@@ -534,7 +517,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = window.document.documentElement;
+  var html = element.ownerDocument.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -595,10 +578,10 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = popper.ownerDocument.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -675,7 +658,7 @@ function computeAutoPlacement(placement, refRect, popper, reference, boundariesE
   };
 
   var sortedAreas = Object.keys(rects).map(function (key) {
-    return _extends$1({
+    return _extends({
       key: key
     }, rects[key], {
       area: getArea(rects[key])
@@ -839,11 +822,12 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier.function) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier.function || modifier.fn;
-    if (modifier.enabled && isFunction$1(fn)) {
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
+    if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
       // mess with these values
@@ -969,9 +953,19 @@ function destroy() {
   return this;
 }
 
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? window : scrollParent;
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -989,7 +983,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -1020,7 +1014,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -1241,9 +1235,9 @@ function computeStyle(data, options) {
   };
 
   // Update `data` attributes, styles and arrowStyles
-  data.attributes = _extends$1({}, attributes, data.attributes);
-  data.styles = _extends$1({}, styles, data.styles);
-  data.arrowStyles = _extends$1({}, data.offsets.arrow, data.arrowStyles);
+  data.attributes = _extends({}, attributes, data.attributes);
+  data.styles = _extends({}, styles, data.styles);
+  data.arrowStyles = _extends({}, data.offsets.arrow, data.arrowStyles);
 
   return data;
 }
@@ -1513,7 +1507,7 @@ function flip(data, options) {
 
       // this object contains `position`, we want to preserve it along with
       // any additional property we may add in the future
-      data.offsets.popper = _extends$1({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
+      data.offsets.popper = _extends({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
 
       data = runModifiers(data.instance.modifiers, data, 'flip');
     }
@@ -1767,7 +1761,7 @@ function preventOverflow(data, options) {
 
   order.forEach(function (placement) {
     var side = ['left', 'top'].indexOf(placement) !== -1 ? 'primary' : 'secondary';
-    popper = _extends$1({}, popper, check[side](placement));
+    popper = _extends({}, popper, check[side](placement));
   });
 
   data.offsets.popper = popper;
@@ -1802,7 +1796,7 @@ function shift(data) {
       end: defineProperty({}, side, reference[side] + reference[measurement] - popper[measurement])
     };
 
-    data.offsets.popper = _extends$1({}, popper, shiftOffsets[shiftvariation]);
+    data.offsets.popper = _extends({}, popper, shiftOffsets[shiftvariation]);
   }
 
   return data;
@@ -2302,7 +2296,7 @@ var Popper = function () {
     var _this = this;
 
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    classCallCheck$1(this, Popper);
+    classCallCheck(this, Popper);
 
     this.scheduleUpdate = function () {
       return requestAnimationFrame(_this.update);
@@ -2312,7 +2306,7 @@ var Popper = function () {
     this.update = debounce(this.update.bind(this));
 
     // with {} we create a new object with the options inside it
-    this.options = _extends$1({}, Popper.Defaults, options);
+    this.options = _extends({}, Popper.Defaults, options);
 
     // init state
     this.state = {
@@ -2322,18 +2316,18 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference.jquery ? reference[0] : reference;
-    this.popper = popper.jquery ? popper[0] : popper;
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
-    Object.keys(_extends$1({}, Popper.Defaults.modifiers, options.modifiers)).forEach(function (name) {
-      _this.options.modifiers[name] = _extends$1({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
+    Object.keys(_extends({}, Popper.Defaults.modifiers, options.modifiers)).forEach(function (name) {
+      _this.options.modifiers[name] = _extends({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
     });
 
     // Refactoring modifiers' list (Object => Array)
     this.modifiers = Object.keys(this.options.modifiers).map(function (name) {
-      return _extends$1({
+      return _extends({
         name: name
       }, _this.options.modifiers[name]);
     })
@@ -2347,7 +2341,7 @@ var Popper = function () {
     // they could add new properties to their options configuration
     // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
     this.modifiers.forEach(function (modifierOptions) {
-      if (modifierOptions.enabled && isFunction$1(modifierOptions.onLoad)) {
+      if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
         modifierOptions.onLoad(_this.reference, _this.popper, _this.options, modifierOptions, _this.state);
       }
     });
@@ -2368,7 +2362,7 @@ var Popper = function () {
   // class prototype and break stuff like Sinon stubs
 
 
-  createClass$1(Popper, [{
+  createClass(Popper, [{
     key: 'update',
     value: function update$$1() {
       return update.call(this);
@@ -2441,535 +2435,6 @@ var Popper = function () {
 Popper.Utils = (typeof window !== 'undefined' ? window : global).PopperUtils;
 Popper.placements = placements;
 Popper.Defaults = Defaults;
-
-/**!
- * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.1.6
- * @license
- * Copyright (c) 2016 Federico Zivolo and contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-/**
- * Check if the given variable is a function
- * @method
- * @memberof Popper.Utils
- * @argument {Any} functionToCheck - variable to check
- * @returns {Boolean} answer to: is a function?
- */
-function isFunction(functionToCheck) {
-  var getType = {};
-  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-}
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-
-
-
-
-
-
-var _extends = Object.assign || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
-var DEFAULT_OPTIONS = {
-  container: false,
-  delay: 0,
-  html: false,
-  placement: 'top',
-  title: '',
-  template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-  trigger: 'hover focus',
-  offset: 0
-};
-
-var Tooltip = function () {
-  /**
-   * Create a new Tooltip.js instance
-   * @class Tooltip
-   * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
-   * @param {Object} options
-   * @param {String} options.placement=bottom
-   *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
-   *      left(-start, -end)`
-   * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
-   * @param {Number|Object} options.delay=0
-   *      Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
-   *      If a number is supplied, delay is applied to both hide/show.
-   *      Object structure is: `{ show: 500, hide: 100 }`
-   * @param {Boolean} options.html=false - Insert HTML into the tooltip. If false, the content will inserted with `innerText`.
-   * @param {String|PlacementFunction} options.placement='top' - One of the allowed placements, or a function returning one of them.
-   * @param {String} [options.template='<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>']
-   *      Base HTML to used when creating the tooltip.
-   *      The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.
-   *      `.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.
-   *      The outermost wrapper element should have the `.tooltip` class.
-   * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
-   * @param {String} [options.trigger='hover focus']
-   *      How tooltip is triggered - click, hover, focus, manual.
-   *      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
-   * @param {HTMLElement} options.boundariesElement
-   *      The element used as boundaries for the tooltip. For more information refer to Popper.js'
-   *      [boundariesElement docs](https://popper.js.org/popper-documentation.html)
-   * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
-   *      [offset docs](https://popper.js.org/popper-documentation.html)
-   * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
-   *      [options docs](https://popper.js.org/popper-documentation.html)
-   * @return {Object} instance - The generated tooltip instance
-   */
-  function Tooltip(reference, options) {
-    classCallCheck(this, Tooltip);
-
-    _initialiseProps.call(this);
-
-    // apply user options over default ones
-    options = _extends({}, DEFAULT_OPTIONS, options);
-
-    reference.jquery && (reference = reference[0]);
-
-    // cache reference and options
-    this.reference = reference;
-    this.options = options;
-
-    // get events list
-    var events = typeof options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
-      return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-    }) : [];
-
-    // set initial state
-    this._isOpen = false;
-
-    // set event listeners
-    this._setEventListeners(reference, events, options);
-  }
-
-  //
-  // Public methods
-  //
-
-  /**
-   * Reveals an element's tooltip. This is considered a "manual" triggering of the tooltip.
-   * Tooltips with zero-length titles are never displayed.
-   * @method Tooltip#show
-   * @memberof Tooltip
-   */
-
-
-  /**
-   * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-   * @method Tooltip#hide
-   * @memberof Tooltip
-   */
-
-
-  /**
-   * Hides and destroys an element’s tooltip.
-   * @method Tooltip#dispose
-   * @memberof Tooltip
-   */
-
-
-  /**
-   * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-   * @method Tooltip#toggle
-   * @memberof Tooltip
-   */
-
-
-  //
-  // Defaults
-  //
-
-
-  //
-  // Private methods
-  //
-
-  createClass(Tooltip, [{
-    key: '_create',
-
-
-    /**
-     * Creates a new tooltip node
-     * @memberof Tooltip
-     * @private
-     * @param {HTMLElement} reference
-     * @param {String} template
-     * @param {String|HTMLElement|TitleFunction} title
-     * @param {Boolean} allowHtml
-     * @return {HTMLelement} tooltipNode
-     */
-    value: function _create(reference, template, title, allowHtml) {
-      // create tooltip element
-      var tooltipGenerator = window.document.createElement('div');
-      tooltipGenerator.innerHTML = template.trim();
-      var tooltipNode = tooltipGenerator.childNodes[0];
-
-      // add unique ID to our tooltip (needed for accessibility reasons)
-      tooltipNode.id = 'tooltip_' + Math.random().toString(36).substr(2, 10);
-
-      // set initial `aria-hidden` state to `false` (it's visible!)
-      tooltipNode.setAttribute('aria-hidden', 'false');
-
-      // add title to tooltip
-      var titleNode = tooltipGenerator.querySelector(this.innerSelector);
-      if (title.nodeType === 1) {
-        // if title is a node, append it only if allowHtml is true
-        allowHtml && titleNode.appendChild(title);
-      } else if (isFunction(title)) {
-        // if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
-        var titleText = title.call(reference);
-        allowHtml ? titleNode.innerHTML = titleText : titleNode.innerText = titleText;
-      } else {
-        // if it's just a simple text, set innerText or innerHtml depending by `allowHtml` value
-        allowHtml ? titleNode.innerHTML = title : titleNode.innerText = title;
-      }
-
-      // return the generated tooltip node
-      return tooltipNode;
-    }
-  }, {
-    key: '_show',
-    value: function _show(reference, options) {
-      // don't show if it's already visible
-      if (this._isOpen) {
-        return this;
-      }
-      this._isOpen = true;
-
-      // if the tooltipNode already exists, just show it
-      if (this._tooltipNode) {
-        this._tooltipNode.style.display = '';
-        this._tooltipNode.setAttribute('aria-hidden', 'false');
-        this.popperInstance.update();
-        return this;
-      }
-
-      // get title
-      var title = reference.getAttribute('title') || options.title;
-
-      // don't show tooltip if no title is defined
-      if (!title) {
-        return this;
-      }
-
-      // create tooltip node
-      var tooltipNode = this._create(reference, options.template, title, options.html);
-
-      // Add `aria-describedby` to our reference element for accessibility reasons
-      reference.setAttribute('aria-describedby', tooltipNode.id);
-
-      // append tooltip to container
-      var container = this._findContainer(options.container, reference);
-
-      this._append(tooltipNode, container);
-
-      var popperOptions = _extends({}, options.popperOptions, {
-        placement: options.placement
-      });
-
-      popperOptions.modifiers = _extends({}, popperOptions.modifiers, {
-        arrow: {
-          element: this.arrowSelector
-        }
-      });
-
-      if (options.boundariesElement) {
-        popperOptions.modifiers.preventOverflow = {
-          boundariesElement: options.boundariesElement
-        };
-      }
-
-      this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
-
-      this._tooltipNode = tooltipNode;
-
-      return this;
-    }
-  }, {
-    key: '_hide',
-    value: function _hide() /*reference, options*/{
-      // don't hide if it's already hidden
-      if (!this._isOpen) {
-        return this;
-      }
-
-      this._isOpen = false;
-
-      // hide tooltipNode
-      this._tooltipNode.style.display = 'none';
-      this._tooltipNode.setAttribute('aria-hidden', 'true');
-
-      return this;
-    }
-  }, {
-    key: '_dispose',
-    value: function _dispose() {
-      var _this = this;
-
-      // remove event listeners first to prevent any unexpected behaviour
-      this._events.forEach(function (_ref) {
-        var func = _ref.func,
-            event = _ref.event;
-
-        _this.reference.removeEventListener(event, func);
-      });
-      this._events = [];
-
-      if (this._tooltipNode) {
-        this._hide();
-
-        // destroy instance
-        this.popperInstance.destroy();
-
-        // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-        if (!this.popperInstance.options.removeOnDestroy) {
-          this._tooltipNode.parentNode.removeChild(this._tooltipNode);
-          this._tooltipNode = null;
-        }
-      }
-      return this;
-    }
-  }, {
-    key: '_findContainer',
-    value: function _findContainer(container, reference) {
-      // if container is a query, get the relative element
-      if (typeof container === 'string') {
-        container = window.document.querySelector(container);
-      } else if (container === false) {
-        // if container is `false`, set it to reference parent
-        container = reference.parentNode;
-      }
-      return container;
-    }
-
-    /**
-     * Append tooltip to container
-     * @memberof Tooltip
-     * @private
-     * @param {HTMLElement} tooltip
-     * @param {HTMLElement|String|false} container
-     */
-
-  }, {
-    key: '_append',
-    value: function _append(tooltipNode, container) {
-      container.appendChild(tooltipNode);
-    }
-  }, {
-    key: '_setEventListeners',
-    value: function _setEventListeners(reference, events, options) {
-      var _this2 = this;
-
-      var directEvents = [];
-      var oppositeEvents = [];
-
-      events.forEach(function (event) {
-        switch (event) {
-          case 'hover':
-            directEvents.push('mouseenter');
-            oppositeEvents.push('mouseleave');
-            break;
-          case 'focus':
-            directEvents.push('focus');
-            oppositeEvents.push('blur');
-            break;
-          case 'click':
-            directEvents.push('click');
-            oppositeEvents.push('click');
-            break;
-        }
-      });
-
-      // schedule show tooltip
-      directEvents.forEach(function (event) {
-        var func = function func(evt) {
-          if (_this2._isOpen === true) {
-            return;
-          }
-          evt.usedByTooltip = true;
-          _this2._scheduleShow(reference, options.delay, options, evt);
-        };
-        _this2._events.push({ event: event, func: func });
-        reference.addEventListener(event, func);
-      });
-
-      // schedule hide tooltip
-      oppositeEvents.forEach(function (event) {
-        var func = function func(evt) {
-          if (evt.usedByTooltip === true) {
-            return;
-          }
-          _this2._scheduleHide(reference, options.delay, options, evt);
-        };
-        _this2._events.push({ event: event, func: func });
-        reference.addEventListener(event, func);
-      });
-    }
-  }, {
-    key: '_scheduleShow',
-    value: function _scheduleShow(reference, delay, options /*, evt */) {
-      var _this3 = this;
-
-      // defaults to 0
-      var computedDelay = delay && delay.show || delay || 0;
-      window.setTimeout(function () {
-        return _this3._show(reference, options);
-      }, computedDelay);
-    }
-  }, {
-    key: '_scheduleHide',
-    value: function _scheduleHide(reference, delay, options, evt) {
-      var _this4 = this;
-
-      // defaults to 0
-      var computedDelay = delay && delay.hide || delay || 0;
-      window.setTimeout(function () {
-        if (_this4._isOpen === false) {
-          return;
-        }
-        if (!document.body.contains(_this4._tooltipNode)) {
-          return;
-        }
-
-        // if we are hiding because of a mouseleave, we must check that the new
-        // reference isn't the tooltip, because in this case we don't want to hide it
-        if (evt.type === 'mouseleave') {
-          var isSet = _this4._setTooltipNodeEvent(evt, reference, delay, options);
-
-          // if we set the new event, don't hide the tooltip yet
-          // the new event will take care to hide it if necessary
-          if (isSet) {
-            return;
-          }
-        }
-
-        _this4._hide(reference, options);
-      }, computedDelay);
-    }
-  }]);
-  return Tooltip;
-}();
-
-/**
- * Placement function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback PlacementFunction
- * @param {HTMLElement} tooltip - tooltip DOM node.
- * @param {HTMLElement} reference - reference DOM node.
- * @return {String} placement - One of the allowed placement options.
- */
-
-/**
- * Title function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback TitleFunction
- * @return {String} placement - The desired title.
- */
-
-
-var _initialiseProps = function _initialiseProps() {
-  var _this5 = this;
-
-  this.show = function () {
-    return _this5._show(_this5.reference, _this5.options);
-  };
-
-  this.hide = function () {
-    return _this5._hide();
-  };
-
-  this.dispose = function () {
-    return _this5._dispose();
-  };
-
-  this.toggle = function () {
-    if (_this5._isOpen) {
-      return _this5.hide();
-    } else {
-      return _this5.show();
-    }
-  };
-
-  this.arrowSelector = '.tooltip-arrow, .tooltip__arrow';
-  this.innerSelector = '.tooltip-inner, .tooltip__inner';
-  this._events = [];
-
-  this._setTooltipNodeEvent = function (evt, reference, delay, options) {
-    var relatedreference = evt.relatedreference || evt.toElement;
-
-    var callback = function callback(evt2) {
-      var relatedreference2 = evt2.relatedreference || evt2.toElement;
-
-      // Remove event listener after call
-      _this5._tooltipNode.removeEventListener(evt.type, callback);
-
-      // If the new reference is not the reference element
-      if (!reference.contains(relatedreference2)) {
-        // Schedule to hide tooltip
-        _this5._scheduleHide(reference, options.delay, options, evt2);
-      }
-    };
-
-    if (_this5._tooltipNode.contains(relatedreference)) {
-      // listen to mouseleave on the tooltip element to be able to hide the tooltip
-      _this5._tooltipNode.addEventListener(evt.type, callback);
-      return true;
-    }
-
-    return false;
-  };
-};
 
 function convertToArray(value) {
   if (typeof value === 'string') {
@@ -3123,13 +2588,13 @@ var asyncGenerator = function () {
 
 
 
-var classCallCheck$2 = function (instance, Constructor) {
+var classCallCheck$1 = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 };
 
-var createClass$2 = function () {
+var createClass$1 = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -3153,7 +2618,7 @@ var createClass$2 = function () {
 
 
 
-var _extends$2 = Object.assign || function (target) {
+var _extends$1 = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
 
@@ -3167,146 +2632,113 @@ var _extends$2 = Object.assign || function (target) {
   return target;
 };
 
-var get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;
-  var desc = Object.getOwnPropertyDescriptor(object, property);
+/* Forked from https://github.com/FezVrasta/popper.js/blob/master/packages/tooltip/src/index.js */
 
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-
-    if (getter === undefined) {
-      return undefined;
-    }
-
-    return getter.call(receiver);
-  }
+var DEFAULT_OPTIONS = {
+	container: false,
+	delay: 0,
+	html: false,
+	placement: 'top',
+	title: '',
+	template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	trigger: 'hover focus',
+	offset: 0
 };
 
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
+var Tooltip = function () {
+	/**
+  * Create a new Tooltip.js instance
+  * @class Tooltip
+  * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
+  * @param {Object} options
+  * @param {String} options.placement=bottom
+  *			Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
+  *			left(-start, -end)`
+  * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
+  * @param {Number|Object} options.delay=0
+  *			Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
+  *			If a number is supplied, delay is applied to both hide/show.
+  *			Object structure is: `{ show: 500, hide: 100 }`
+  * @param {Boolean} options.html=false - Insert HTML into the tooltip. If false, the content will inserted with `innerText`.
+  * @param {String|PlacementFunction} options.placement='top' - One of the allowed placements, or a function returning one of them.
+  * @param {String} [options.template='<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>']
+  *			Base HTML to used when creating the tooltip.
+  *			The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.
+  *			`.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.
+  *			The outermost wrapper element should have the `.tooltip` class.
+  * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
+  * @param {String} [options.trigger='hover focus']
+  *			How tooltip is triggered - click, hover, focus, manual.
+  *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
+  * @param {HTMLElement} options.boundariesElement
+  *			The element used as boundaries for the tooltip. For more information refer to Popper.js'
+  *			[boundariesElement docs](https://popper.js.org/popper-documentation.html)
+  * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
+  *			[offset docs](https://popper.js.org/popper-documentation.html)
+  * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
+  *			[options docs](https://popper.js.org/popper-documentation.html)
+  * @return {Object} instance - The generated tooltip instance
+  */
+	function Tooltip(reference, options) {
+		classCallCheck$1(this, Tooltip);
 
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
+		_initialiseProps.call(this);
 
+		// apply user options over default ones
+		options = _extends$1({}, DEFAULT_OPTIONS, options);
 
+		reference.jquery && (reference = reference[0]);
 
+		// cache reference and options
+		this.reference = reference;
+		this.options = options;
 
+		// get events list
+		var events = typeof options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
+			return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
+		}) : [];
 
+		// set initial state
+		this._isOpen = false;
 
-
-
-
-
-
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
-
-var state = {
-	enabled: true
-};
-
-var positions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
-
-var defaultOptions = {
-	// Default tooltip placement relative to target element
-	defaultPlacement: 'top',
-	// Default CSS classes applied to the tooltip element
-	defaultClass: 'vue-tooltip-theme',
-	// Default HTML template of the tooltip element
-	// It must include `tooltip` & `tooltip-inner` CSS classes
-	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-	// Delay (ms)
-	defaultDelay: 0,
-	// Default events that trigger the tooltip
-	defaultTrigger: 'hover focus',
-	// Default position offset (px)
-	defaultOffset: 0,
-	// Default container where the tooltip will be appended
-	defaultContainer: 'body',
-	defaultBoundariesElement: undefined,
-	defaultPopperOptions: {},
-	autoHide: true,
-	// Auto destroy tooltip DOM nodes (ms)
-	disposeTimeout: 5000
-};
-
-function getOptions(options) {
-	var result = {
-		placement: options.placement || directive.options.defaultPlacement,
-		delay: options.delay || directive.options.defaultDelay,
-		template: options.template || directive.options.defaultTemplate,
-		trigger: options.trigger || directive.options.defaultTrigger,
-		offset: options.offset || directive.options.defaultOffset,
-		container: options.container || directive.options.defaultContainer,
-		boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
-		popperOptions: _extends$2({}, options.popperOptions || directive.options.defaultPopperOptions)
-	};
-
-	if (options.offset) {
-		var typeofOffset = _typeof(options.offset);
-		var offset = options.offset;
-
-		// One value -> switch
-		if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
-			offset = '0, ' + offset;
-		}
-
-		if (!result.popperOptions.modifiers) {
-			result.popperOptions.modifiers = {};
-		}
-		result.popperOptions.modifiers.offset = {
-			offset: offset
-		};
+		// set event listeners
+		this._setEventListeners(reference, events, options);
 	}
 
-	return result;
-}
+	//
+	// Public methods
+	//
 
-function getPlacement(value, modifiers) {
-	var placement = value.placement;
-	for (var i = 0; i < positions.length; i++) {
-		var pos = positions[i];
-		if (modifiers[pos]) {
-			placement = pos;
-		}
-	}
-	return placement;
-}
+	/**
+  * Reveals an element's tooltip. This is considered a "manual" triggering of the tooltip.
+  * Tooltips with zero-length titles are never displayed.
+  * @method Tooltip#show
+  * @memberof Tooltip
+  */
 
-var SuperTooltip = function (_Tooltip) {
-	inherits(SuperTooltip, _Tooltip);
 
-	function SuperTooltip() {
-		classCallCheck$2(this, SuperTooltip);
-		return possibleConstructorReturn(this, (SuperTooltip.__proto__ || Object.getPrototypeOf(SuperTooltip)).apply(this, arguments));
-	}
+	/**
+  * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+  * @method Tooltip#hide
+  * @memberof Tooltip
+  */
 
-	createClass$2(SuperTooltip, [{
+
+	/**
+  * Hides and destroys an element’s tooltip.
+  * @method Tooltip#dispose
+  * @memberof Tooltip
+  */
+
+
+	/**
+  * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+  * @method Tooltip#toggle
+  * @memberof Tooltip
+  */
+
+
+	createClass$1(Tooltip, [{
 		key: 'setClasses',
 		value: function setClasses(classes) {
 			this._classes = classes;
@@ -3375,44 +2807,75 @@ var SuperTooltip = function (_Tooltip) {
 				}
 			}
 		}
+
+		//
+		// Defaults
+		//
+
+
+		//
+		// Private methods
+		//
+
 	}, {
 		key: '_create',
-		value: function _create() {
-			var _babelHelpers$get;
 
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
+
+		/**
+   * Creates a new tooltip node
+   * @memberof Tooltip
+   * @private
+   * @param {HTMLElement} reference
+   * @param {String} template
+   * @param {String|HTMLElement|TitleFunction} title
+   * @param {Boolean} allowHtml
+   * @return {HTMLelement} tooltipNode
+   */
+		value: function _create(reference, template, title, allowHtml) {
+			// create tooltip element
+			var tooltipGenerator = window.document.createElement('div');
+			tooltipGenerator.innerHTML = template.trim();
+			var tooltipNode = tooltipGenerator.childNodes[0];
+
+			// add unique ID to our tooltip (needed for accessibility reasons)
+			tooltipNode.id = 'tooltip_' + Math.random().toString(36).substr(2, 10);
+
+			// Initially hide the tooltip
+			// The attribute will be switched in a next frame so
+			// CSS transitions can play
+			tooltipNode.setAttribute('aria-hidden', 'true');
+
+			// add title to tooltip
+			var titleNode = tooltipGenerator.querySelector(this.innerSelector);
+			if (title.nodeType === 1) {
+				// if title is a node, append it only if allowHtml is true
+				allowHtml && titleNode.appendChild(title);
+			} else if (typeof title === 'function') {
+				// if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
+				var titleText = title.call(reference);
+				allowHtml ? titleNode.innerHTML = titleText : titleNode.innerText = titleText;
+			} else {
+				// if it's just a simple text, set innerText or innerHtml depending by `allowHtml` value
+				allowHtml ? titleNode.innerHTML = title : titleNode.innerText = title;
 			}
 
-			var result = (_babelHelpers$get = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_create', this)).call.apply(_babelHelpers$get, [this].concat(args));
-
-			if (defaultOptions.autoHide && this.options.trigger.indexOf('hover') !== -1) {
-				result.addEventListener('mouseenter', this.hide);
-				result.addEventListener('click', this.hide);
+			if (directive.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
+				tooltipNode.addEventListener('mouseenter', this.hide);
+				tooltipNode.addEventListener('click', this.hide);
 			}
 
-			return result;
-		}
-	}, {
-		key: '_dispose',
-		value: function _dispose() {
-			if (this._tooltipNode) {
-				this._tooltipNode.removeEventListener('mouseenter', this.hide);
-				this._tooltipNode.removeEventListener('click', this.hide);
-			}
-
-			return get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_dispose', this).call(this);
+			// return the generated tooltip node
+			return tooltipNode;
 		}
 	}, {
 		key: '_show',
 		value: function _show(reference, options) {
-			var _babelHelpers$get2,
-			    _this2 = this;
-
 			if (options && typeof options.container === 'string') {
 				var container = document.querySelector(options.container);
 				if (!container) return;
 			}
+
+			clearTimeout(this._disposeTimer);
 
 			options = Object.assign({}, options);
 			delete options.offset;
@@ -3423,86 +2886,257 @@ var SuperTooltip = function (_Tooltip) {
 				updateClasses = false;
 			}
 
-			for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-				args[_key2 - 2] = arguments[_key2];
-			}
-
-			var result = (_babelHelpers$get2 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_show', this)).call.apply(_babelHelpers$get2, [this, reference, options].concat(args));
-
-			this._tooltipNode && (this._tooltipNode.style.opacity = 0);
+			var result = this._ensureShown(reference, options);
 
 			if (updateClasses && this._tooltipNode) {
 				addClasses(this._tooltipNode, this._classes);
 			}
 
-			// Fix position
-			setTimeout(function () {
-				if (_this2.popperInstance) {
-					_this2.popperInstance.update();
-					_this2._tooltipNode && (_this2._tooltipNode.style.opacity = null);
-				}
-			}, 0);
-
-			clearTimeout(this._disposeTimer);
-
 			return result;
 		}
 	}, {
-		key: '_hide',
-		value: function _hide() {
-			var _babelHelpers$get3,
-			    _this3 = this;
+		key: '_ensureShown',
+		value: function _ensureShown(reference, options) {
+			var _this = this;
 
-			for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-				args[_key3] = arguments[_key3];
+			// don't show if it's already visible
+			if (this._isOpen) {
+				return this;
+			}
+			this._isOpen = true;
+
+			// if the tooltipNode already exists, just show it
+			if (this._tooltipNode) {
+				this._tooltipNode.style.display = '';
+				this._tooltipNode.setAttribute('aria-hidden', 'false');
+				this.popperInstance.update();
+				return this;
 			}
 
-			var result = (_babelHelpers$get3 = get(SuperTooltip.prototype.__proto__ || Object.getPrototypeOf(SuperTooltip.prototype), '_hide', this)).call.apply(_babelHelpers$get3, [this].concat(args));
+			// get title
+			var title = reference.getAttribute('title') || options.title;
+
+			// don't show tooltip if no title is defined
+			if (!title) {
+				return this;
+			}
+
+			// create tooltip node
+			var tooltipNode = this._create(reference, options.template, title, options.html);
+
+			// Add `aria-describedby` to our reference element for accessibility reasons
+			reference.setAttribute('aria-describedby', tooltipNode.id);
+
+			// append tooltip to container
+			var container = this._findContainer(options.container, reference);
+
+			this._append(tooltipNode, container);
+
+			var popperOptions = _extends$1({}, options.popperOptions, {
+				placement: options.placement
+			});
+
+			popperOptions.modifiers = _extends$1({}, popperOptions.modifiers, {
+				arrow: {
+					element: this.arrowSelector
+				}
+			});
+
+			if (options.boundariesElement) {
+				popperOptions.modifiers.preventOverflow = {
+					boundariesElement: options.boundariesElement
+				};
+			}
+
+			this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
+
+			this._tooltipNode = tooltipNode;
+
+			// Fix position
+			requestAnimationFrame(function () {
+				if (_this.popperInstance) {
+					_this.popperInstance.update();
+
+					// Show the tooltip
+					requestAnimationFrame(function () {
+						tooltipNode.setAttribute('aria-hidden', 'false');
+					});
+				}
+			});
+
+			return this;
+		}
+	}, {
+		key: '_hide',
+		value: function _hide() /* reference, options */{
+			var _this2 = this;
+
+			// don't hide if it's already hidden
+			if (!this._isOpen) {
+				return this;
+			}
+
+			this._isOpen = false;
+
+			// hide tooltipNode
+			this._tooltipNode.style.display = 'none';
+			this._tooltipNode.setAttribute('aria-hidden', 'true');
 
 			clearTimeout(this._disposeTimer);
-			this._disposeTimer = setTimeout(function () {
-				if (_this3._tooltipNode) {
-					_this3._tooltipNode.removeEventListener('mouseenter', _this3.hide);
-					_this3._tooltipNode.removeEventListener('click', _this3.hide);
-					_this3._tooltipNode.parentNode.removeChild(_this3._tooltipNode);
-					_this3._tooltipNode = null;
-				}
-			}, directive.options.disposeTimeout || defaultOptions.disposeTimeout);
+			var disposeTime = directive.options.disposeTimeout;
+			if (disposeTime !== null) {
+				this._disposeTimer = setTimeout(function () {
+					if (_this2._tooltipNode) {
+						_this2._tooltipNode.removeEventListener('mouseenter', _this2.hide);
+						_this2._tooltipNode.removeEventListener('click', _this2.hide);
+						// Don't remove popper instance, just the HTML element
+						_this2._tooltipNode.parentNode.removeChild(_this2._tooltipNode);
+						_this2._tooltipNode = null;
+					}
+				}, disposeTime);
+			}
 
-			return result;
+			return this;
+		}
+	}, {
+		key: '_dispose',
+		value: function _dispose() {
+			var _this3 = this;
+
+			// remove event listeners first to prevent any unexpected behaviour
+			this._events.forEach(function (_ref) {
+				var func = _ref.func,
+				    event = _ref.event;
+
+				_this3.reference.removeEventListener(event, func);
+			});
+			this._events = [];
+
+			if (this._tooltipNode) {
+				this._hide();
+
+				this._tooltipNode.removeEventListener('mouseenter', this.hide);
+				this._tooltipNode.removeEventListener('click', this.hide);
+
+				// destroy instance
+				this.popperInstance.destroy();
+
+				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+				if (!this.popperInstance.options.removeOnDestroy) {
+					this._tooltipNode.parentNode.removeChild(this._tooltipNode);
+					this._tooltipNode = null;
+				}
+			}
+			return this;
+		}
+	}, {
+		key: '_findContainer',
+		value: function _findContainer(container, reference) {
+			// if container is a query, get the relative element
+			if (typeof container === 'string') {
+				container = window.document.querySelector(container);
+			} else if (container === false) {
+				// if container is `false`, set it to reference parent
+				container = reference.parentNode;
+			}
+			return container;
+		}
+
+		/**
+   * Append tooltip to container
+   * @memberof Tooltip
+   * @private
+   * @param {HTMLElement} tooltip
+   * @param {HTMLElement|String|false} container
+   */
+
+	}, {
+		key: '_append',
+		value: function _append(tooltipNode, container) {
+			container.appendChild(tooltipNode);
+		}
+	}, {
+		key: '_setEventListeners',
+		value: function _setEventListeners(reference, events, options) {
+			var _this4 = this;
+
+			var directEvents = [];
+			var oppositeEvents = [];
+
+			events.forEach(function (event) {
+				switch (event) {
+					case 'hover':
+						directEvents.push('mouseenter');
+						oppositeEvents.push('mouseleave');
+						break;
+					case 'focus':
+						directEvents.push('focus');
+						oppositeEvents.push('blur');
+						break;
+					case 'click':
+						directEvents.push('click');
+						oppositeEvents.push('click');
+						break;
+				}
+			});
+
+			// schedule show tooltip
+			directEvents.forEach(function (event) {
+				var func = function func(evt) {
+					if (_this4._isOpen === true) {
+						return;
+					}
+					evt.usedByTooltip = true;
+					_this4._scheduleShow(reference, options.delay, options, evt);
+				};
+				_this4._events.push({ event: event, func: func });
+				reference.addEventListener(event, func);
+			});
+
+			// schedule hide tooltip
+			oppositeEvents.forEach(function (event) {
+				var func = function func(evt) {
+					if (evt.usedByTooltip === true) {
+						return;
+					}
+					_this4._scheduleHide(reference, options.delay, options, evt);
+				};
+				_this4._events.push({ event: event, func: func });
+				reference.addEventListener(event, func);
+			});
 		}
 	}, {
 		key: '_scheduleShow',
 		value: function _scheduleShow(reference, delay, options /*, evt */) {
-			var _this4 = this;
+			var _this5 = this;
 
 			// defaults to 0
 			var computedDelay = delay && delay.show || delay || 0;
 			clearTimeout(this._scheduleTimer);
 			this._scheduleTimer = window.setTimeout(function () {
-				return _this4._show(reference, options);
+				return _this5._show(reference, options);
 			}, computedDelay);
 		}
 	}, {
 		key: '_scheduleHide',
 		value: function _scheduleHide(reference, delay, options, evt) {
-			var _this5 = this;
+			var _this6 = this;
 
 			// defaults to 0
 			var computedDelay = delay && delay.hide || delay || 0;
 			clearTimeout(this._scheduleTimer);
 			this._scheduleTimer = window.setTimeout(function () {
-				if (_this5._isOpen === false) {
+				if (_this6._isOpen === false) {
 					return;
 				}
-				if (!document.body.contains(_this5._tooltipNode)) {
+				if (!document.body.contains(_this6._tooltipNode)) {
 					return;
 				}
 
 				// if we are hiding because of a mouseleave, we must check that the new
 				// reference isn't the tooltip, because in this case we don't want to hide it
 				if (evt.type === 'mouseleave') {
-					var isSet = _this5._setTooltipNodeEvent(evt, reference, delay, options);
+					var isSet = _this6._setTooltipNodeEvent(evt, reference, delay, options);
 
 					// if we set the new event, don't hide the tooltip yet
 					// the new event will take care to hide it if necessary
@@ -3511,12 +3145,154 @@ var SuperTooltip = function (_Tooltip) {
 					}
 				}
 
-				_this5._hide(reference, options);
+				_this6._hide(reference, options);
 			}, computedDelay);
 		}
 	}]);
-	return SuperTooltip;
-}(Tooltip);
+	return Tooltip;
+}();
+
+/**
+ * Placement function, its context is the Tooltip instance.
+ * @memberof Tooltip
+ * @callback PlacementFunction
+ * @param {HTMLElement} tooltip - tooltip DOM node.
+ * @param {HTMLElement} reference - reference DOM node.
+ * @return {String} placement - One of the allowed placement options.
+ */
+
+/**
+ * Title function, its context is the Tooltip instance.
+ * @memberof Tooltip
+ * @callback TitleFunction
+ * @return {String} placement - The desired title.
+ */
+
+
+var _initialiseProps = function _initialiseProps() {
+	var _this7 = this;
+
+	this.show = function () {
+		_this7._show(_this7.reference, _this7.options);
+	};
+
+	this.hide = function () {
+		_this7._hide();
+	};
+
+	this.dispose = function () {
+		_this7._dispose();
+	};
+
+	this.toggle = function () {
+		if (_this7._isOpen) {
+			return _this7.hide();
+		} else {
+			return _this7.show();
+		}
+	};
+
+	this.arrowSelector = '.tooltip-arrow, .tooltip__arrow';
+	this.innerSelector = '.tooltip-inner, .tooltip__inner';
+	this._events = [];
+
+	this._setTooltipNodeEvent = function (evt, reference, delay, options) {
+		var relatedreference = evt.relatedreference || evt.toElement;
+
+		var callback = function callback(evt2) {
+			var relatedreference2 = evt2.relatedreference || evt2.toElement;
+
+			// Remove event listener after call
+			_this7._tooltipNode.removeEventListener(evt.type, callback);
+
+			// If the new reference is not the reference element
+			if (!reference.contains(relatedreference2)) {
+				// Schedule to hide tooltip
+				_this7._scheduleHide(reference, options.delay, options, evt2);
+			}
+		};
+
+		if (_this7._tooltipNode.contains(relatedreference)) {
+			// listen to mouseleave on the tooltip element to be able to hide the tooltip
+			_this7._tooltipNode.addEventListener(evt.type, callback);
+			return true;
+		}
+
+		return false;
+	};
+};
+
+var state = {
+	enabled: true
+};
+
+var positions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
+
+var defaultOptions = {
+	// Default tooltip placement relative to target element
+	defaultPlacement: 'top',
+	// Default CSS classes applied to the tooltip element
+	defaultClass: 'vue-tooltip-theme',
+	// Default HTML template of the tooltip element
+	// It must include `tooltip` & `tooltip-inner` CSS classes
+	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	// Delay (ms)
+	defaultDelay: 0,
+	// Default events that trigger the tooltip
+	defaultTrigger: 'hover focus',
+	// Default position offset (px)
+	defaultOffset: 0,
+	// Default container where the tooltip will be appended
+	defaultContainer: 'body',
+	defaultBoundariesElement: undefined,
+	defaultPopperOptions: {},
+	autoHide: true,
+	// Auto destroy tooltip DOM nodes (ms)
+	disposeTimeout: 5000
+};
+
+function getOptions(options) {
+	var result = {
+		placement: options.placement || directive.options.defaultPlacement,
+		delay: options.delay || directive.options.defaultDelay,
+		template: options.template || directive.options.defaultTemplate,
+		trigger: options.trigger || directive.options.defaultTrigger,
+		offset: options.offset || directive.options.defaultOffset,
+		container: options.container || directive.options.defaultContainer,
+		boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
+		popperOptions: _extends$1({}, options.popperOptions || directive.options.defaultPopperOptions)
+	};
+
+	if (options.offset) {
+		var typeofOffset = _typeof(options.offset);
+		var offset = options.offset;
+
+		// One value -> switch
+		if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
+			offset = '0, ' + offset;
+		}
+
+		if (!result.popperOptions.modifiers) {
+			result.popperOptions.modifiers = {};
+		}
+		result.popperOptions.modifiers.offset = {
+			offset: offset
+		};
+	}
+
+	return result;
+}
+
+function getPlacement(value, modifiers) {
+	var placement = value.placement;
+	for (var i = 0; i < positions.length; i++) {
+		var pos = positions[i];
+		if (modifiers[pos]) {
+			placement = pos;
+		}
+	}
+	return placement;
+}
 
 function getContent(value) {
 	var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
@@ -3532,13 +3308,13 @@ function getContent(value) {
 function createTooltip(el, value, modifiers) {
 	var content = getContent(value);
 	var classes = value.classes || directive.options.defaultClass;
-	var opts = _extends$2({
+	var opts = _extends$1({
 		title: content,
 		html: true
-	}, getOptions(_extends$2({}, value, {
+	}, getOptions(_extends$1({}, value, {
 		placement: getPlacement(value, modifiers)
 	})));
-	var tooltip = el._tooltip = new SuperTooltip(el, opts);
+	var tooltip = el._tooltip = new Tooltip(el, opts);
 	tooltip.setClasses(classes);
 	tooltip._vueEl = el;
 }
@@ -3563,7 +3339,7 @@ function bind(el, _ref) {
 		// Content
 		tooltip.setContent(content);
 		// Options
-		tooltip.setOptions(_extends$2({}, value, {
+		tooltip.setOptions(_extends$1({}, value, {
 			placement: getPlacement(value, modifiers)
 		}));
 	} else {
