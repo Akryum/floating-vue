@@ -16,15 +16,13 @@
     </section>
 
     <section class="snippets">
-      <Collapse title="Show code">
-        <div class="section-content">
-          <CodeSnippet class="snippet" :code="mainSnippet" lang="js"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="componentSnippet1" lang="html"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="styleSnippet1" lang="scss"/>
-        </div>
-      </Collapse>
+      <div class="section-content">
+        <CodeSnippet class="snippet" :code="mainSnippet" lang="js"/>
+        <div class="plus">+</div>
+        <CodeSnippet class="snippet" :code="componentSnippet1" lang="html"/>
+        <div class="plus">+</div>
+        <CodeSnippet class="snippet" :code="styleSnippet1" lang="scss"/>
+      </div>
     </section>
 
   </div>
