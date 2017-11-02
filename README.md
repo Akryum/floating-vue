@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Easy tooltips with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
+Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
 </p>
 
 <br>
@@ -28,6 +28,7 @@ Easy tooltips with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a
   - [Object notation](#object-notation)
   - [Dynamic CSS classes](#dynamic-css-classes)
   - [Other options](#other-options)
+  - [Popover and Dropdown](#popover)
   - [Global options](#global-options)
   - [Tooltip auto-hiding](#tooltip-auto-hiding)
   - [Disabling tooltips](#disabling-tooltips)
@@ -155,15 +156,87 @@ Or a reactive property:
 <button v-tooltip="options">
 ```
 
-- `content` - HTML text to be displayed in the tooltip
+- `content` - HTML text to be displayed in the tooltip.
 - `classes` - *(see above)*
-- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms)
+- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `placement` - *(see above)*
-- `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event)
-- `offset` - Offset of the position (px)
-- `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`)
-- `boundariesElement` - DOM element for the tooltip boundaries
-- `popperOptions` - Other Popper.js options
+- `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `offset` - Offset of the position (px).
+- `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
+- `boundariesElement` - DOM element for the tooltip boundaries.
+- `popperOptions` - Other Popper.js options.
+
+## Popover
+
+If you need to display components inside the tooltip (or popover/dropdown, technically it's the same :smile:), use the `v-popover` component:
+
+```html
+
+<v-popover
+  offset="16"
+>
+  <!-- This will be the popover target (for the events and position) -->
+  <button class="tooltip-target b3">Click me</button>
+
+  <!-- This will be the content of the popover -->
+  <template slot="popover">
+    <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+    <p>
+      {{ msg }}
+    </p>
+
+    <!-- You can put other components too -->
+    <ExampleComponent char="=" />
+  </template>
+</v-popover>
+```
+
+By default, the popover will have the `tooltip` and `popover` classes, so you can easily override [the style](#style-examples):
+
+```scss
+.tooltip {
+  // ...
+
+  &.popover {
+    $color: #f9f9f9;
+
+    .popover-inner {
+      background: $color;
+      color: black;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: $color;
+    }
+  }
+}
+```
+
+**Props:**
+
+- `open` - Boolean that shows or hide the popover.
+- `placement` - *(see above)*
+- `delay` - *(see above)*
+- `trigger` - *(see above)*
+- `offset` - *(see above)*
+- `container` - *(see above)*
+- `boundariesElement` - *(see above)*
+- `popperOptions` - *(see above)*
+- `popoverClass` - Classes applied to the popover element.
+- `autoHide` - Hide the popover if clicked outside.
+- `handleResize` - Automatically update the popover position if its size changes.
+
+**Events:**
+
+- `update:open(Boolean)` - This allow you to use the `.sync` modifier on the `open` prop.
+- `show`
+- `hide`
+- `dispose`
+- `auto-hide` - Emitted when the popover is closed if clicked outside.
+- `resize` - Emitted when the content size changes. You must set the `handleResize` prop to `true`.
 
 ## Global options
 
@@ -171,26 +244,42 @@ The default global options are:
 
 ```javascript
 {
-  // Default tooltip placement relative to target element
-  defaultPlacement: 'top',
-  // Default CSS classes applied to the tooltip element
-  defaultClass: 'vue-tooltip-theme',
-  // Default HTML template of the tooltip element
-  // It must include `tooltip` & `tooltip-inner` CSS classes
-  defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-  // Delay (ms)
-  defaultDelay: 0,
-  // Default events that trigger the tooltip
-  defaultTrigger: 'hover focus',
-  // Default position offset (px)
-  defaultOffset: 0,
-  // Default container where the tooltip will be appended
-  defaultContainer: 'body',
-  defaultBoundariesElement: undefined,
-  defaultPopperOptions: {},
-  autoHide: true,
-  // Auto destroy tooltip DOM nodes (ms), set `null` to disable
-  disposeTimeout: 5000,
+	// Default tooltip placement relative to target element
+	defaultPlacement: 'top',
+	// Default CSS classes applied to the tooltip element
+	defaultClass: 'vue-tooltip-theme',
+	// Default HTML template of the tooltip element
+	// It must include `tooltip` & `tooltip-inner` CSS classes
+	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	// Delay (ms)
+	defaultDelay: 0,
+	// Default events that trigger the tooltip
+	defaultTrigger: 'hover focus',
+	// Default position offset (px)
+	defaultOffset: 0,
+	// Default container where the tooltip will be appended
+	defaultContainer: 'body',
+	defaultBoundariesElement: undefined,
+	defaultPopperOptions: {},
+	// Hide on mouseover tooltip
+	autoHide: true,
+	// Auto destroy tooltip DOM nodes (ms)
+	disposeTimeout: 5000,
+	// Options for popover
+	popover: {
+		defaultPlacement: 'bottom',
+		defaultClass: 'vue-popover-theme',
+		defaultDelay: 0,
+		defaultTrigger: 'click',
+		defaultOffset: 0,
+		defaultContainer: 'body',
+		defaultBoundariesElement: undefined,
+		defaultPopperOptions: {},
+		// Hides if clicked outside of popover
+		defaultAutoHide: true,
+		// Update popper on content resize
+		defaultHandleResize: true,
+	},
 }
 ```
 
@@ -246,6 +335,7 @@ VTooltip.enabled = window.innerWidth > 768
     position: absolute;
     margin: 5px;
     border-color: black;
+    z-index: 1;
   }
 
   &[x-placement^="top"] {
