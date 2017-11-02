@@ -2431,10 +2431,10 @@ Popper.placements = placements;
 Popper.Defaults = Defaults;
 
 function convertToArray(value) {
-  if (typeof value === 'string') {
-    value = value.split(' ');
-  }
-  return value;
+	if (typeof value === 'string') {
+		value = value.split(' ');
+	}
+	return value;
 }
 
 /**
@@ -2445,14 +2445,14 @@ function convertToArray(value) {
  * @param {classes} string - List of space separated classes to be added to the element.
  */
 function addClasses(el, classes) {
-  var newClasses = convertToArray(classes);
-  var classList = convertToArray(el.className);
-  newClasses.forEach(function (newClass) {
-    if (classList.indexOf(newClass) === -1) {
-      classList.push(newClass);
-    }
-  });
-  el.className = classList.join(' ');
+	var newClasses = convertToArray(classes);
+	var classList = convertToArray(el.className);
+	newClasses.forEach(function (newClass) {
+		if (classList.indexOf(newClass) === -1) {
+			classList.push(newClass);
+		}
+	});
+	el.className = classList.join(' ');
 }
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -2687,18 +2687,10 @@ var Tooltip = function () {
 		this.reference = reference;
 		this.options = options;
 
-		// get events list
-		var events = typeof options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
-			return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-		}) : [];
-
 		// set initial state
 		this._isOpen = false;
 
-		this._isDisposed = false;
-
-		// set event listeners
-		this._setEventListeners(reference, events, options);
+		this._init();
 	}
 
 	//
@@ -2789,11 +2781,7 @@ var Tooltip = function () {
 					var isOpen = this._isOpen;
 
 					this.dispose();
-
-					var events = typeof this.options.trigger === 'string' ? options.trigger.split(' ').filter(function (trigger) {
-						return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-					}) : [];
-					this._setEventListeners(this.reference, events, this.options);
+					this._init();
 
 					if (isOpen) {
 						this.show();
@@ -2814,8 +2802,17 @@ var Tooltip = function () {
 		//
 
 	}, {
-		key: '_create',
+		key: '_init',
+		value: function _init() {
+			// get events list
+			var events = typeof this.options.trigger === 'string' ? this.options.trigger.split(' ').filter(function (trigger) {
+				return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
+			}) : [];
+			this._isDisposed = false;
 
+			// set event listeners
+			this._setEventListeners(this.reference, events, this.options);
+		}
 
 		/**
    * Creates a new tooltip node
@@ -2827,6 +2824,9 @@ var Tooltip = function () {
    * @param {Boolean} allowHtml
    * @return {HTMLelement} tooltipNode
    */
+
+	}, {
+		key: '_create',
 		value: function _create(reference, template, title, allowHtml) {
 			// create tooltip element
 			var tooltipGenerator = window.document.createElement('div');
