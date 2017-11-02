@@ -60,22 +60,10 @@ export default class Tooltip {
 		this.reference = reference
 		this.options = options
 
-		// get events list
-		const events = typeof options.trigger === 'string'
-			? options.trigger
-				.split(' ')
-				.filter(
-					trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-				)
-			: []
-
 		// set initial state
 		this._isOpen = false
 
-		this._isDisposed = false
-
-		// set event listeners
-		this._setEventListeners(reference, events, options)
+		this._init()
 	}
 
 	//
@@ -182,15 +170,7 @@ export default class Tooltip {
 				const isOpen = this._isOpen
 
 				this.dispose()
-
-				const events = typeof this.options.trigger === 'string'
-					? options.trigger
-						.split(' ')
-						.filter(
-							trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-						)
-					: []
-				this._setEventListeners(this.reference, events, this.options)
+				this._init()
 
 				if (isOpen) {
 					this.show()
@@ -212,6 +192,21 @@ export default class Tooltip {
 	//
 
 	_events = [];
+
+	_init () {
+		// get events list
+		const events = typeof this.options.trigger === 'string'
+			? this.options.trigger
+				.split(' ')
+				.filter(
+					trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+				)
+			: []
+		this._isDisposed = false
+
+		// set event listeners
+		this._setEventListeners(this.reference, events, this.options)
+	}
 
 	/**
 	 * Creates a new tooltip node
