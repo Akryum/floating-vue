@@ -11,7 +11,7 @@
         </a>
         <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.0-orange.svg" /></a>
       </nav>
-      <div class="description">Customizable &amp; reactive tooltips with smart positioning</div>
+      <div class="description">Customizable &amp; reactive tooltips/popovers/dropdowns with smart positioning</div>
     </header>
 
     <router-view />
