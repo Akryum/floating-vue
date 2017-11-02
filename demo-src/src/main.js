@@ -7,6 +7,10 @@ import PageInstall from './PageInstall.vue'
 
 Vue.use(VTooltip, {
   disposeTimeout: 5000,
+  defaultDelay: 500,
+  popover: {
+    defaultDelay: 0,
+  },
 })
 
 Vue.use(VueRouter)

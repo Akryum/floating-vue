@@ -30,7 +30,6 @@
 
 body {
   margin: 0;
-  background: #fcfcfc;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -62,7 +61,7 @@ section {
   &.nav {
     text-align: center;
     background: $primary-color;
-    padding: 8px;
+    padding: 24px;
     @include h-box;
     @include box-center;
 
@@ -172,6 +171,7 @@ input {
     position: absolute;
     margin: 5px;
     border-color: black;
+    z-index: 1;
   }
 
   &[x-placement^="top"] {
@@ -261,6 +261,22 @@ input {
       border-color: $color;
     }
   }
+
+  &.popover {
+    $color: #f9f9f9;
+
+    .popover-inner {
+      background: $color;
+      color: black;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: $color;
+    }
+  }
 }
 
 .command {
@@ -285,19 +301,32 @@ input {
   margin: 12px;
 }
 
+.demo,
 .snippets {
+  max-width: 700px;
+  margin: auto;
+}
 
+.snippets {
+  background: #f9f9f9;
+  margin-bottom: 42px;
+  border-radius: 0 0 3px 3px;
 }
 
 .demo {
   background: #eee;
+  margin-top: 42px;
+  border-radius: 3px 3px 0 0;
 
   .section-content {
     text-align: center;
   }
 
+  h2 {
+    margin-bottom: 24px;
+  }
+
   button {
-    margin-top: 24px;
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -308,10 +337,14 @@ input {
     justify-content: center;
     font-weight: bold;
     font-size: 16px;
-    transform: rotate(-12deg);
+    transform: rotate(-20deg);
 
     &.b2 {
       transform: rotate(30deg);
+    }
+
+    &.b3 {
+      transform: rotate(-5deg);
     }
   }
 }

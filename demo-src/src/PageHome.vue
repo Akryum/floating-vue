@@ -62,12 +62,43 @@
       </Collapse>
     </section>
 
+    <section class="demo">
+      <div class="section-content">
+        <h2>Use with components to create a popover</h2>
+        <v-popover
+          offset="16"
+        >
+          <button class="tooltip-target b3">Click me</button>
+
+          <template slot="popover">
+            <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+            <p>
+              {{ msg }}
+            </p>
+
+            <ExampleComponent char="=" />
+          </template>
+        </v-popover>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet3" lang="html"/>
+          <div class="plus">+</div>
+          <CodeSnippet class="snippet" :code="styleSnippet3" lang="scss"/>
+        </div>
+      </Collapse>
+    </section>
+
   </div>
 </template>
 
 <script>
 import CodeSnippet from './CodeSnippet.vue'
 import Collapse from './Collapse.vue'
+import ExampleComponent from './ExampleComponent.vue'
 
 const mainSnippet = `
 import Vue from 'vue'
@@ -105,6 +136,7 @@ const styleSnippet1 = `
     position: absolute;
     margin: 5px;
     border-color: black;
+    z-index: 1;
   }
 
   &[x-placement^="top"] {
@@ -195,6 +227,8 @@ const componentSnippet2 = `
 
 const styleSnippet2 = `
 .tooltip {
+  // ...
+
   &.info {
     $color: rgba(#004499, .9);
 
@@ -213,11 +247,51 @@ const styleSnippet2 = `
 }
 `
 
+const componentSnippet3 = `
+<v-popover
+  offset="16"
+>
+  <button class="tooltip-target b3">Click me</button>
+
+  <template slot="popover">
+    <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+    <p>
+      {{ msg }}
+    </p>
+
+    <ExampleComponent char="=" />
+  </template>
+</v-popover>
+`
+
+const styleSnippet3 = `
+.tooltip {
+  // ...
+
+  &.popover {
+    $color: #f9f9f9;
+
+    .popover-inner {
+      background: $color;
+      color: black;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: $color;
+    }
+  }
+}
+`
+
 export default {
   name: 'Home',
   components: {
     CodeSnippet,
     Collapse,
+    ExampleComponent,
   },
   data () {
     return {
@@ -227,6 +301,8 @@ export default {
       styleSnippet1,
       componentSnippet2,
       styleSnippet2,
+      componentSnippet3,
+      styleSnippet3,
     }
   },
 }
