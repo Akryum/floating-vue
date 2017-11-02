@@ -3792,13 +3792,15 @@ var Popover = { render: function render() {
 			this._isDisposed = true;
 			this._removeEventListeners();
 			this._removeGlobalEvents();
-			this.hide();
-			this.popperInstance.destroy();
+			if (this.popperInstance) {
+				this.hide();
+				this.popperInstance.destroy();
 
-			// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-			if (!this.popperInstance.options.removeOnDestroy) {
-				var popoverNode = this.$refs.popover;
-				popoverNode.parentNode.removeChild(popoverNode);
+				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+				if (!this.popperInstance.options.removeOnDestroy) {
+					var popoverNode = this.$refs.popover;
+					popoverNode.parentNode.removeChild(popoverNode);
+				}
 			}
 			this._mounted = false;
 
