@@ -1,9 +1,9 @@
 
 function convertToArray (value) {
-  if (typeof value === 'string') {
-    value = value.split(' ')
-  }
-  return value
+	if (typeof value === 'string') {
+		value = value.split(' ')
+	}
+	return value
 }
 
 /**
@@ -14,13 +14,12 @@ function convertToArray (value) {
  * @param {classes} string - List of space separated classes to be added to the element.
  */
 export function addClasses (el, classes) {
-  const newClasses = convertToArray(classes)
-  const classList = convertToArray(el.className)
-  newClasses.forEach((newClass) => {
-    if (classList.indexOf(newClass) === -1) {
-      classList.push(newClass)
-    }
-  })
-  el.className = classList.join(' ')
+	const newClasses = convertToArray(classes)
+	const classList = convertToArray(el.className)
+	newClasses.forEach((newClass) => {
+		if (classList.indexOf(newClass) === -1) {
+			classList.push(newClass)
+		}
+	})
+	el.className = classList.join(' ')
 }
-
