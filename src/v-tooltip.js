@@ -107,6 +107,8 @@ function getContent (value) {
 	const type = typeof value
 	if (type === 'string') {
 		return value
+	} else if (value && value instanceof HTMLElement) {
+		return value
 	} else if (value && type === 'object') {
 		return value.content
 	} else {

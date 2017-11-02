@@ -117,6 +117,12 @@ export default class Tooltip {
 
 	setContent (content) {
 		this.options.title = content
+
+		// If content is HTMLElement, not need do more actions
+		if (content instanceof HTMLElement) {
+			return
+		}
+
 		if (this._tooltipNode) {
 			const el = this._tooltipNode.querySelector(this.innerSelector)
 
