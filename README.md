@@ -25,13 +25,15 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Object notation](#object-notation)
-  - [Dynamic CSS classes](#dynamic-css-classes)
-  - [Other options](#other-options)
+  - [Tooltip directive](#tooltip-directive)
+    - [Object notation](#object-notation)
+    - [Dynamic CSS classes](#dynamic-css-classes)
+    - [Other options](#other-options)
+    - [Tooltip auto-hiding](#tooltip-auto-hiding)
+    - [Disabling tooltips](#disabling-tooltips)
   - [Popover and Dropdown](#popover)
+    - [Popover Component Reference](#popover-component-reference)
   - [Global options](#global-options)
-  - [Tooltip auto-hiding](#tooltip-auto-hiding)
-  - [Disabling tooltips](#disabling-tooltips)
 - [Style Examples](#style-examples)
 
 <br>
@@ -53,13 +55,14 @@ import VTooltip from 'v-tooltip'
 Vue.use(VTooltip)
 ```
 
-Or use the directive directly:
+Or use the directives and components directly:
 
 ```javascript
 import Vue from 'vue'
-import { VTooltip } from 'v-tooltip'
+import { VTooltip, VPopover } from 'v-tooltip'
 
 Vue.directive('tooltip', VTooltip)
+Vue.component('v-popover', VPopover)
 ```
 
 ## Browser
@@ -79,13 +82,16 @@ Manually install the plugin into Vue:
 Vue.use(VTooltip)
 ```
 
-Or use the directive directly:
+Or use the directives and components directly:
 
 ```javascript
 Vue.directive('tooltip', VTooltip.VTooltip)
+Vue.component('v-popover', VTooltip.VPopover)
 ```
 
 # Usage
+
+## Tooltip directive
 
 In the template, use the `v-tooltip` directive:
 
@@ -120,7 +126,7 @@ The available positions are:
  - `'left-start'`
  - `'left-end'`
 
-## Object notation
+### Object notation
 
 You can use an object instead of a simple string:
 
@@ -128,7 +134,7 @@ You can use an object instead of a simple string:
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
 ```
 
-## Dynamic CSS classes
+### Dynamic CSS classes
 
 You can set the tooltip css classes dynamically with the object notation:
 
@@ -150,7 +156,7 @@ Or a reactive property:
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: tooltipClasses }">
 ```
 
-## Other options
+### Other options
 
 ```html
 <button v-tooltip="options">
@@ -165,6 +171,22 @@ Or a reactive property:
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
 - `boundariesElement` - DOM element for the tooltip boundaries.
 - `popperOptions` - Other Popper.js options.
+
+### Tooltip auto-hiding
+
+By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false`:
+
+```javascript
+VTooltip.options.autoHide = false
+```
+
+### Disabling tooltips
+
+On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
+
+```javascript
+VTooltip.enabled = window.innerWidth > 768
+```
 
 ## Popover
 
@@ -214,6 +236,16 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
   }
 }
 ```
+
+**⚠️ Set the arrow element `z-index` CSS property:**
+
+```scss
+.tooltip-arrow {
+  z-index: 1;
+}
+```
+
+### Popover Component Reference
 
 **Props:**
 
@@ -294,22 +326,6 @@ Or directly on the directive definition:
 ```javascript
 // Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
-```
-
-## Tooltip auto-hiding
-
-By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false`:
-
-```javascript
-VTooltip.options.autoHide = false
-```
-
-## Disabling tooltips
-
-On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
-
-```javascript
-VTooltip.enabled = window.innerWidth > 768
 ```
 
 # Style Examples
@@ -398,6 +414,22 @@ VTooltip.enabled = window.innerWidth > 768
     }
   }
 
+  &.popover {
+    $color: #f9f9f9;
+
+    .popover-inner {
+      background: $color;
+      color: black;
+      padding: 24px;
+      border-radius: 5px;
+      box-shadow: 0 5px 30px rgba(black, .1);
+    }
+
+    .popover-arrow {
+      border-color: $color;
+    }
+  }
+
   &[aria-hidden='true'] {
     visibility: hidden;
     opacity: 0;
@@ -434,6 +466,7 @@ VTooltip.enabled = window.innerWidth > 768
   position: absolute;
   margin: 5px;
   border-color: black;
+  z-index: 1;
 }
 
 .tooltip[x-placement^="top"] {
@@ -494,6 +527,18 @@ VTooltip.enabled = window.innerWidth > 768
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
+}
+
+.tooltip.popover .popover-inner {
+  background: #f9f9f9;
+  color: black;
+  padding: 24px;
+  border-radius: 5px;
+  box-shadow: 0 5px 30px rgba(black, .1);
+}
+
+.tooltip.popover .popover-arrow {
+  border-color: #f9f9f9;
 }
 
 .tooltip[aria-hidden='true'] {
