@@ -37,9 +37,25 @@ export const defaultOptions = {
 	defaultContainer: 'body',
 	defaultBoundariesElement: undefined,
 	defaultPopperOptions: {},
+	// Hide on mouseover tooltip
 	autoHide: true,
 	// Auto destroy tooltip DOM nodes (ms)
 	disposeTimeout: 5000,
+	// Options for popover
+	popover: {
+		defaultPlacement: 'bottom',
+		defaultClass: 'vue-popover-theme',
+		defaultDelay: 0,
+		defaultTrigger: 'click',
+		defaultOffset: 0,
+		defaultContainer: 'body',
+		defaultBoundariesElement: undefined,
+		defaultPopperOptions: {},
+		// Hides if clicked outside of popover
+		defaultAutoHide: true,
+		// Update popper on content resize
+		defaultHandleResize: true,
+	},
 }
 
 export function getOptions (options) {
