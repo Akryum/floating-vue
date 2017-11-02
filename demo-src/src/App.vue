@@ -29,6 +29,7 @@
 @import "~style/imports";
 
 body {
+  background: white;
   margin: 0;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

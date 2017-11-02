@@ -13,6 +13,7 @@
       </router-link>
       <a href="https://github.com/Akryum/v-tooltip#usage">Documentation</a>
       <a href="https://github.com/Akryum/v-tooltip/issues">Report an issue</a>
+      <a @click="toggleFullscreen">Toggle fullscreen</a>
     </section>
 
     <section class="demo">
@@ -96,6 +97,8 @@
 </template>
 
 <script>
+import screenfull from 'screenfull'
+
 import CodeSnippet from './CodeSnippet.vue'
 import Collapse from './Collapse.vue'
 import ExampleComponent from './ExampleComponent.vue'
@@ -288,11 +291,13 @@ const styleSnippet3 = `
 
 export default {
   name: 'Home',
+
   components: {
     CodeSnippet,
     Collapse,
     ExampleComponent,
   },
+
   data () {
     return {
       msg: `This is a button.`,
@@ -304,6 +309,14 @@ export default {
       componentSnippet3,
       styleSnippet3,
     }
+  },
+
+  methods: {
+    toggleFullscreen (event) {
+      if (screenfull.enabled) {
+        screenfull.toggle(document.documentElement)
+      }
+    },
   },
 }
 </script>
