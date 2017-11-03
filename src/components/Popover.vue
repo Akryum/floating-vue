@@ -17,7 +17,7 @@
 			:style="{
 				display: isOpen ? '' : 'none',
 			}"
-			:aria-hidden="!isOpen"
+			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
 			<div ref="arrow" class="tooltip-arrow popover-arrow"></div>
 			<div
