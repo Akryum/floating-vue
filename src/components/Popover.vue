@@ -77,11 +77,11 @@ export default {
 			default: () => getDefault('defaultTrigger'),
 		},
 		container: {
-			type: [String, Object],
+			type: [String, Object, Element],
 			default: () => getDefault('defaultContainer'),
 		},
 		boundariesElement: {
-			type: [String, Object],
+			type: Element,
 			default: () => getDefault('defaultBoundariesElement'),
 		},
 		popperOptions: {
