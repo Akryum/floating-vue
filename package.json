@@ -1,6 +1,6 @@
 {
   "name": "v-tooltip",
-  "version": "2.0.0-rc.11",
+  "version": "2.0.0-rc.14",
   "description": "Easy tooltips with Vue 2.x",
   "main": "dist/v-tooltip.umd.js",
   "module": "dist/v-tooltip.esm.js",
