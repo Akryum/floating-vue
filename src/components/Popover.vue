@@ -29,7 +29,7 @@
 					<slot name="popover" />
 				</div>
 
-				<ResizeObserver v-if="handleResize" @notify="_handleResize" />
+				<ResizeObserver v-if="handleResize" @notify="$_handleResize" />
 			</div>
 		</div>
 	</div>
@@ -134,7 +134,7 @@ export default {
 			if (this.isOpen && this.popperInstance) {
 				const popoverNode = this.$refs.popover
 
-				const container = this._findContainer(this.container, reference)
+				const container = this.$_findContainer(this.container, reference)
 				if (!container) {
 					console.warn('No container for popover', this)
 					return
@@ -146,14 +146,14 @@ export default {
 		},
 
 		trigger (val) {
-			this._removeEventListeners()
-			this._addEventListeners()
+			this.$_removeEventListeners()
+			this.$_addEventListeners()
 		},
 
 		offset (val) {
-			this._updatePopper(() => {
+			this.$_updatePopper(() => {
 				if (val) {
-					const offset = this._getOffset()
+					const offset = this.$_getOffset()
 
 					this.popperInstance.options.modifiers.offset = {
 						offset,
@@ -165,30 +165,30 @@ export default {
 		},
 
 		placement (val) {
-			this._updatePopper(() => {
+			this.$_updatePopper(() => {
 				this.popperInstance.options.placement = val
 			})
 		},
 
-		boundariesElement: '_restartPopper',
+		boundariesElement: '$_restartPopper',
 
 		popperOptions: {
-			handler: '_restartPopper',
+			handler: '$_restartPopper',
 			deep: true,
 		},
 	},
 
 	created () {
-		this._isDisposed = false
-		this._mounted = false
-		this._events = []
+		this.$_isDisposed = false
+		this.$_mounted = false
+		this.$_events = []
 	},
 
 	mounted () {
 		const popoverNode = this.$refs.popover
 		popoverNode.parentNode.removeChild(popoverNode)
 
-		this._init()
+		this.$_init()
 	},
 
 	beforeDestroy () {
@@ -200,7 +200,7 @@ export default {
 			const reference = this.$refs.trigger
 			const popoverNode = this.$refs.popover
 
-			clearTimeout(this._disposeTimer)
+			clearTimeout(this.$_disposeTimer)
 
 			// Already open
 			if (this.isOpen) {
@@ -212,17 +212,17 @@ export default {
 				this.isOpen = true
 				this.popperInstance.enableEventListeners()
 				this.popperInstance.update()
-				this._addGlobalEvents()
+				this.$_addGlobalEvents()
 			}
 
-			if (!this._mounted) {
-				const container = this._findContainer(this.container, reference)
+			if (!this.$_mounted) {
+				const container = this.$_findContainer(this.container, reference)
 				if (!container) {
 					console.warn('No container for popover', this)
 					return
 				}
 				container.appendChild(popoverNode)
-				this._mounted = true
+				this.$_mounted = true
 			}
 
 			if (!this.popperInstance) {
@@ -239,7 +239,7 @@ export default {
 				}
 
 				if (this.offset) {
-					const offset = this._getOffset()
+					const offset = this.$_getOffset()
 
 					popperOptions.modifiers.offset = {
 						offset,
@@ -256,14 +256,14 @@ export default {
 
 				// Fix position
 				requestAnimationFrame(() => {
-					if (!this._isDisposed && this.popperInstance) {
+					if (!this.$_isDisposed && this.popperInstance) {
 						this.popperInstance.update()
 
 						// Show the tooltip
 						requestAnimationFrame(() => {
-							if (!this._isDisposed) {
+							if (!this.$_isDisposed) {
 								this.isOpen = true
-								this._addGlobalEvents()
+								this.$_addGlobalEvents()
 							} else {
 								this.dispose()
 							}
@@ -286,17 +286,17 @@ export default {
 
 			this.isOpen = false
 			this.popperInstance.disableEventListeners()
-			this._removeGlobalEvents()
+			this.$_removeGlobalEvents()
 
-			clearTimeout(this._disposeTimer)
+			clearTimeout(this.$_disposeTimer)
 			const disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout
 			if (disposeTime !== null) {
-				this._disposeTimer = setTimeout(() => {
+				this.$_disposeTimer = setTimeout(() => {
 					const popoverNode = this.$refs.popover
 					if (popoverNode) {
 						// Don't remove popper instance, just the HTML element
 						popoverNode.parentNode.removeChild(popoverNode)
-						this._mounted = false
+						this.$_mounted = false
 					}
 				}, disposeTime)
 			}
@@ -306,9 +306,9 @@ export default {
 		},
 
 		dispose () {
-			this._isDisposed = true
-			this._removeEventListeners()
-			this._removeGlobalEvents()
+			this.$_isDisposed = true
+			this.$_removeEventListeners()
+			this.$_removeGlobalEvents()
 			if (this.popperInstance) {
 				this.hide()
 				this.popperInstance.destroy()
@@ -319,18 +319,18 @@ export default {
 					popoverNode.parentNode.removeChild(popoverNode)
 				}
 			}
-			this._mounted = false
+			this.$_mounted = false
 
 			this.$emit('dispose')
 		},
 
-		_init () {
+		$_init () {
 			if (this.trigger.indexOf('manual') === -1) {
-				this._addEventListeners()
+				this.$_addEventListeners()
 			}
 		},
 
-		_findContainer (container, reference) {
+		$_findContainer (container, reference) {
 			// if container is a query, get the relative element
 			if (typeof container === 'string') {
 				container = window.document.querySelector(container)
@@ -341,7 +341,7 @@ export default {
 			return container
 		},
 
-		_getOffset () {
+		$_getOffset () {
 			const typeofOffset = typeof this.offset
 			let offset = this.offset
 
@@ -353,7 +353,7 @@ export default {
 			return offset
 		},
 
-		_addEventListeners () {
+		$_addEventListeners () {
 			const reference = this.$refs.trigger
 			const directEvents = []
 			const oppositeEvents = []
@@ -390,9 +390,9 @@ export default {
 						return
 					}
 					evt.usedByTooltip = true
-					this._scheduleShow(evt)
+					this.$_scheduleShow(evt)
 				}
-				this._events.push({ event, func })
+				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
 			})
 
@@ -402,25 +402,25 @@ export default {
 					if (evt.usedByTooltip) {
 						return
 					}
-					this._scheduleHide(evt)
+					this.$_scheduleHide(evt)
 				}
-				this._events.push({ event, func })
+				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
 			})
 		},
 
-		_scheduleShow (evt) {
+		$_scheduleShow (evt) {
 			// defaults to 0
 			const computedDelay = parseInt((this.delay && this.delay.show) || this.delay || 0)
-			clearTimeout(this._scheduleTimer)
-			this._scheduleTimer = setTimeout(this.show.bind(this), computedDelay)
+			clearTimeout(this.$_scheduleTimer)
+			this.$_scheduleTimer = setTimeout(this.show.bind(this), computedDelay)
 		},
 
-		_scheduleHide (evt) {
+		$_scheduleHide (evt) {
 			// defaults to 0
 			const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0)
-			clearTimeout(this._scheduleTimer)
-			this._scheduleTimer = setTimeout(() => {
+			clearTimeout(this.$_scheduleTimer)
+			this.$_scheduleTimer = setTimeout(() => {
 				if (!this.isOpen) {
 					return
 				}
@@ -428,7 +428,7 @@ export default {
 				// if we are hiding because of a mouseleave, we must check that the new
 				// reference isn't the tooltip, because in this case we don't want to hide it
 				if (evt.type === 'mouseleave') {
-					const isSet = this._setTooltipNodeEvent(evt)
+					const isSet = this.$_setTooltipNodeEvent(evt)
 
 					// if we set the new event, don't hide the tooltip yet
 					// the new event will take care to hide it if necessary
@@ -441,7 +441,7 @@ export default {
 			}, computedDelay)
 		},
 
-		_setTooltipNodeEvent (evt) {
+		$_setTooltipNodeEvent (evt) {
 			const reference = this.$refs.trigger
 			const popoverNode = this.$refs.popover
 
@@ -456,7 +456,7 @@ export default {
 				// If the new reference is not the reference element
 				if (!reference.contains(relatedreference2)) {
 					// Schedule to hide tooltip
-					this._scheduleHide(evt2)
+					this.$_scheduleHide(evt2)
 				}
 			}
 
@@ -469,52 +469,52 @@ export default {
 			return false
 		},
 
-		_removeEventListeners () {
+		$_removeEventListeners () {
 			const reference = this.$refs.trigger
-			this._events.forEach(({ func, event }) => {
+			this.$_events.forEach(({ func, event }) => {
 				reference.removeEventListener(event, func)
 			})
-			this._events = []
+			this.$_events = []
 		},
 
-		_addGlobalEvents () {
+		$_addGlobalEvents () {
 			if (this.autoHide) {
-				window.addEventListener('click', this._handleWindowClick)
+				window.addEventListener('click', this.$_handleWindowClick)
 			}
 		},
 
-		_removeGlobalEvents () {
-			window.removeEventListener('click', this._handleWindowClick)
+		$_removeGlobalEvents () {
+			window.removeEventListener('click', this.$_handleWindowClick)
 		},
 
-		_updatePopper (cb) {
+		$_updatePopper (cb) {
 			if (this.isOpen && this.popperInstance) {
 				cb()
 				this.popperInstance.updatd()
 			}
 		},
 
-		_restartPopper () {
+		$_restartPopper () {
 			if (this.popperInstance) {
 				const isOpen = this.isOpen
 				this.dispose()
-				this._init()
+				this.$_init()
 				if (isOpen) {
 					this.show()
 				}
 			}
 		},
 
-		_handleWindowClick (evt) {
+		$_handleWindowClick (evt) {
 			const popoverNode = this.$refs.popover
 
 			if (evt.closePopover || !popoverNode.contains(evt.target)) {
-				this._scheduleHide(evt)
+				this.$_scheduleHide(evt)
 				this.$emit('auto-hide')
 			}
 		},
 
-		_handleResize () {
+		$_handleResize () {
 			if (this.isOpen && this.popperInstance) {
 				this.popperInstance.update()
 				this.$emit('resize')
