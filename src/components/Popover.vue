@@ -191,6 +191,10 @@ export default {
 		popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 
 		this.$_init()
+
+		if (this.open) {
+			this.show()
+		}
 	},
 
 	beforeDestroy () {
