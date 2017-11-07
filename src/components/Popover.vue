@@ -19,17 +19,19 @@
 			}"
 			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
-			<div ref="arrow" class="tooltip-arrow popover-arrow"></div>
-			<div
-				ref="inner"
-				class="tooltip-inner popover-inner"
-				style="position: relative;"
-			>
-				<div>
-					<slot name="popover" />
-				</div>
+			<div class="wrapper">
+				<div ref="arrow" class="tooltip-arrow popover-arrow"></div>
+				<div
+					ref="inner"
+					class="tooltip-inner popover-inner"
+					style="position: relative;"
+				>
+					<div>
+						<slot name="popover" />
+					</div>
 
-				<ResizeObserver v-if="handleResize" @notify="$_handleResize" />
+					<ResizeObserver v-if="handleResize" @notify="$_handleResize" />
+				</div>
 			</div>
 		</div>
 	</div>
