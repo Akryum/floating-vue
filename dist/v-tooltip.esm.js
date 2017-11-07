@@ -3663,7 +3663,7 @@ var Popover = { render: function render() {
 	},
 	mounted: function mounted() {
 		var popoverNode = this.$refs.popover;
-		popoverNode.parentNode.removeChild(popoverNode);
+		popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
 
 		this.$_init();
 	},
@@ -3773,7 +3773,7 @@ var Popover = { render: function render() {
 					var popoverNode = _this4.$refs.popover;
 					if (popoverNode) {
 						// Don't remove popper instance, just the HTML element
-						popoverNode.parentNode.removeChild(popoverNode);
+						popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
 						_this4.$_mounted = false;
 					}
 				}, disposeTime);
@@ -3793,7 +3793,7 @@ var Popover = { render: function render() {
 				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
 				if (!this.popperInstance.options.removeOnDestroy) {
 					var popoverNode = this.$refs.popover;
-					popoverNode.parentNode.removeChild(popoverNode);
+					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
 				}
 			}
 			this.$_mounted = false;
