@@ -186,7 +186,7 @@ export default {
 
 	mounted () {
 		const popoverNode = this.$refs.popover
-		popoverNode.parentNode.removeChild(popoverNode)
+		popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 
 		this.$_init()
 	},
@@ -295,7 +295,7 @@ export default {
 					const popoverNode = this.$refs.popover
 					if (popoverNode) {
 						// Don't remove popper instance, just the HTML element
-						popoverNode.parentNode.removeChild(popoverNode)
+						popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 						this.$_mounted = false
 					}
 				}, disposeTime)
@@ -316,7 +316,7 @@ export default {
 				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
 				if (!this.popperInstance.options.removeOnDestroy) {
 					const popoverNode = this.$refs.popover
-					popoverNode.parentNode.removeChild(popoverNode)
+					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 				}
 			}
 			this.$_mounted = false
