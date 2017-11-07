@@ -154,6 +154,15 @@ input {
   }
 }
 
+label input {
+  display: inline-block;
+  width: auto;
+}
+
+.form {
+  margin-bottom: 12px;
+}
+
 .tooltip {
   display: block !important;
   z-index: 10000;

@@ -93,6 +93,47 @@
       </Collapse>
     </section>
 
+    <section class="demo">
+      <div class="section-content">
+        <h2>Manual mode</h2>
+
+        <div class="form">
+          <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+        </div>
+
+        <template v-if="isVisible">
+          <div class="form">
+            <label><input type="radio" name="open" v-model="isOpen" :value="true" /> Show</label>
+            <label><input type="radio" name="open" v-model="isOpen" :value="false" /> Hide</label>
+          </div>
+
+          <v-popover
+            trigger="manual"
+            :open="isOpen"
+            offset="16"
+            :auto-hide="false"
+          >
+            <button class="tooltip-target b1">A button</button>
+
+            <template slot="popover">
+              <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+              <p>
+                {{ msg }}
+              </p>
+            </template>
+          </v-popover>
+        </template>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet4" lang="html"/>
+        </div>
+      </Collapse>
+    </section>
+
   </div>
 </template>
 
@@ -289,6 +330,35 @@ const styleSnippet3 = `
 }
 `
 
+const componentSnippet4 = `
+<div class="form">
+  <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+</div>
+
+<template v-if="isVisible">
+  <div class="form">
+    <label><input type="radio" name="open" v-model="isOpen" :value="true" /> Show</label>
+    <label><input type="radio" name="open" v-model="isOpen" :value="false" /> Hide</label>
+  </div>
+
+  <v-popover
+    trigger="manual"
+    :open="isOpen"
+    offset="16"
+    :auto-hide="false"
+  >
+    <button class="tooltip-target b1">A button</button>
+
+    <template slot="popover">
+      <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+      <p>
+        {{ msg }}
+      </p>
+    </template>
+  </v-popover>
+</template>
+`
+
 export default {
   name: 'Home',
 
@@ -301,6 +371,8 @@ export default {
   data () {
     return {
       msg: `This is a button.`,
+      isVisible: true,
+      isOpen: false,
       mainSnippet,
       componentSnippet1,
       styleSnippet1,
@@ -308,6 +380,7 @@ export default {
       styleSnippet2,
       componentSnippet3,
       styleSnippet3,
+      componentSnippet4,
     }
   },
 
