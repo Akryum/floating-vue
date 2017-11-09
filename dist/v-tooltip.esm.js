@@ -2455,6 +2455,25 @@ function addClasses(el, classes) {
 	el.className = classList.join(' ');
 }
 
+/**
+ * Remove classes from an element.
+ * It uses el.className rather than classList in order to be IE friendly.
+ * @export
+ * @param {any} el The element to remove the classes from.
+ * @param {any} classes List of space separated classes to be removed from the element.
+ */
+function removeClasses(el, classes) {
+	var newClasses = convertToArray(classes);
+	var classList = convertToArray(el.className);
+	newClasses.forEach(function (newClass) {
+		var index = classList.indexOf(newClass);
+		if (index !== -1) {
+			classList.splice(index, 1);
+		}
+	});
+	el.className = classList.join(' ');
+}
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
@@ -3240,6 +3259,8 @@ var defaultOptions = {
 	defaultPlacement: 'top',
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
+	// Default CSS classes applied to the target element of the tooltip
+	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
 	// It must include `tooltip` & `tooltip-inner` CSS classes
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
@@ -3340,12 +3361,22 @@ function createTooltip(el, value, modifiers) {
 	var tooltip = el._tooltip = new Tooltip(el, opts);
 	tooltip.setClasses(classes);
 	tooltip._vueEl = el;
+
+	// Class on target
+	var targetClasses = typeof value.targetClasses !== 'undefined' ? value.targetClasses : directive.options.defaultTargetClass;
+	el._tooltipTargetClasses = targetClasses;
+	addClasses(el, targetClasses);
 }
 
 function destroyTooltip(el) {
 	if (el._tooltip) {
 		el._tooltip.dispose();
 		delete el._tooltip;
+	}
+
+	if (el._tooltipTargetClasses) {
+		removeClasses(el, el._tooltipTargetClasses);
+		delete el._tooltipTargetClasses;
 	}
 }
 
