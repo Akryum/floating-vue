@@ -62,3 +62,47 @@ describe('addClasses', () => {
 		expect(el.className).toBe('foo bar meow')
 	})
 })
+
+describe('removeClasses', () => {
+	test('one: remove one', () => {
+		const el = { className: 'foo' }
+		const text = 'foo'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('')
+	})
+
+	test('two: remove one', () => {
+		const el = { className: 'foo bar' }
+		const text = 'foo'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('bar')
+	})
+
+	test('two: remove two', () => {
+		const el = { className: 'foo bar' }
+		const text = 'foo bar'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('')
+	})
+
+	test('three: remove two', () => {
+		const el = { className: 'foo meow bar' }
+		const text = 'foo bar'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('meow')
+	})
+
+	test('empty', () => {
+		const el = { className: '' }
+		const text = 'foo bar'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('')
+	})
+
+	test('not present', () => {
+		const el = { className: 'foo bar' }
+		const text = 'meow'
+		Utils.removeClasses(el, text)
+		expect(el.className).toBe('foo bar')
+	})
+})

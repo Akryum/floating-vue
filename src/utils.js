@@ -23,3 +23,22 @@ export function addClasses (el, classes) {
 	})
 	el.className = classList.join(' ')
 }
+
+/**
+ * Remove classes from an element.
+ * It uses el.className rather than classList in order to be IE friendly.
+ * @export
+ * @param {any} el The element to remove the classes from.
+ * @param {any} classes List of space separated classes to be removed from the element.
+ */
+export function removeClasses (el, classes) {
+	const newClasses = convertToArray(classes)
+	const classList = convertToArray(el.className)
+	newClasses.forEach((newClass) => {
+		const index = classList.indexOf(newClass)
+		if (index !== -1) {
+			classList.splice(index, 1)
+		}
+	})
+	el.className = classList.join(' ')
+}
