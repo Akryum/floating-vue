@@ -277,44 +277,44 @@ The default global options are:
 
 ```javascript
 {
-	// Default tooltip placement relative to target element
-	defaultPlacement: 'top',
-	// Default CSS classes applied to the tooltip element
-	defaultClass: 'vue-tooltip-theme',
-	// Default CSS classes applied to the target element of the tooltip
-	defaultTargetClass: 'has-tooltip',
-	// Default HTML template of the tooltip element
-	// It must include `tooltip` & `tooltip-inner` CSS classes
-	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-	// Delay (ms)
-	defaultDelay: 0,
-	// Default events that trigger the tooltip
-	defaultTrigger: 'hover focus',
-	// Default position offset (px)
-	defaultOffset: 0,
-	// Default container where the tooltip will be appended
-	defaultContainer: 'body',
-	defaultBoundariesElement: undefined,
-	defaultPopperOptions: {},
-	// Hide on mouseover tooltip
-	autoHide: true,
-	// Auto destroy tooltip DOM nodes (ms)
-	disposeTimeout: 5000,
-	// Options for popover
-	popover: {
-		defaultPlacement: 'bottom',
-		defaultClass: 'vue-popover-theme',
-		defaultDelay: 0,
-		defaultTrigger: 'click',
-		defaultOffset: 0,
-		defaultContainer: 'body',
-		defaultBoundariesElement: undefined,
-		defaultPopperOptions: {},
-		// Hides if clicked outside of popover
-		defaultAutoHide: true,
-		// Update popper on content resize
-		defaultHandleResize: true,
-	},
+  // Default tooltip placement relative to target element
+  defaultPlacement: 'top',
+  // Default CSS classes applied to the tooltip element
+  defaultClass: 'vue-tooltip-theme',
+  // Default CSS classes applied to the target element of the tooltip
+  defaultTargetClass: 'has-tooltip',
+  // Default HTML template of the tooltip element
+  // It must include `tooltip` & `tooltip-inner` CSS classes
+  defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+  // Delay (ms)
+  defaultDelay: 0,
+  // Default events that trigger the tooltip
+  defaultTrigger: 'hover focus',
+  // Default position offset (px)
+  defaultOffset: 0,
+  // Default container where the tooltip will be appended
+  defaultContainer: 'body',
+  defaultBoundariesElement: undefined,
+  defaultPopperOptions: {},
+  // Hide on mouseover tooltip
+  autoHide: true,
+  // Auto destroy tooltip DOM nodes (ms)
+  disposeTimeout: 5000,
+  // Options for popover
+  popover: {
+    defaultPlacement: 'bottom',
+    defaultClass: 'vue-popover-theme',
+    defaultDelay: 0,
+    defaultTrigger: 'click',
+    defaultOffset: 0,
+    defaultContainer: 'body',
+    defaultBoundariesElement: undefined,
+    defaultPopperOptions: {},
+    // Hides if clicked outside of popover
+    defaultAutoHide: true,
+    // Update popper on content resize
+    defaultHandleResize: true,
+  },
 }
 ```
 
