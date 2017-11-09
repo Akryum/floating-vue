@@ -9,6 +9,7 @@ module.exports = {
   // required to lint *.vue files
   env: {
     browser: true,
+    jest: true,
   },
   // add your custom rules here
   'rules': {

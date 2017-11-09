@@ -26,4 +26,5 @@ module.exports = {
 		'<rootDir>/tests/unit/jest-setup',
 	],
 	notify: true,
+	collectCoverageFrom: ['**/*.{js,jsx,vue}'],
 }

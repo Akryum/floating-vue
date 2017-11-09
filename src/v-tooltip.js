@@ -92,7 +92,7 @@ export function getOptions (options) {
 	return result
 }
 
-function getPlacement (value, modifiers) {
+export function getPlacement (value, modifiers) {
 	var placement = value.placement
 	for (var i = 0; i < positions.length; i++) {
 		var pos = positions[i]
@@ -103,7 +103,7 @@ function getPlacement (value, modifiers) {
 	return placement
 }
 
-function getContent (value) {
+export function getContent (value) {
 	const type = typeof value
 	if (type === 'string') {
 		return value
@@ -114,7 +114,7 @@ function getContent (value) {
 	}
 }
 
-function createTooltip (el, value, modifiers) {
+export function createTooltip (el, value, modifiers) {
 	const content = getContent(value)
 	let classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass
 	const opts = {
@@ -130,14 +130,14 @@ function createTooltip (el, value, modifiers) {
 	tooltip._vueEl = el
 }
 
-function destroyTooltip (el) {
+export function destroyTooltip (el) {
 	if (el._tooltip) {
 		el._tooltip.dispose()
 		delete el._tooltip
 	}
 }
 
-function bind (el, { value, oldValue, modifiers }) {
+export function bind (el, { value, oldValue, modifiers }) {
 	const content = getContent(value)
 	if (!content || !state.enabled) {
 		destroyTooltip(el)

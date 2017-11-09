@@ -1,5 +1,5 @@
 
-function convertToArray (value) {
+export function convertToArray (value) {
 	if (typeof value === 'string') {
 		value = value.split(' ')
 	}
