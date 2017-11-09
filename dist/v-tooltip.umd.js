@@ -3282,19 +3282,19 @@ var defaultOptions = {
 
 function getOptions(options) {
 	var result = {
-		placement: options.placement || directive.options.defaultPlacement,
-		delay: options.delay || directive.options.defaultDelay,
-		template: options.template || directive.options.defaultTemplate,
-		trigger: options.trigger || directive.options.defaultTrigger,
-		offset: options.offset || directive.options.defaultOffset,
-		container: options.container || directive.options.defaultContainer,
-		boundariesElement: options.boundariesElement || directive.options.defaultBoundariesElement,
-		popperOptions: _extends$1({}, options.popperOptions || directive.options.defaultPopperOptions)
+		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
+		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
+		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
+		trigger: typeof options.trigger !== 'undefined' ? options.trigger : directive.options.defaultTrigger,
+		offset: typeof options.offset !== 'undefined' ? options.offset : directive.options.defaultOffset,
+		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
+		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
+		popperOptions: _extends$1({}, typeof options.popperOptions !== 'undefined' ? options.popperOptions : directive.options.defaultPopperOptions)
 	};
 
-	if (options.offset) {
-		var typeofOffset = _typeof(options.offset);
-		var offset = options.offset;
+	if (result.offset) {
+		var typeofOffset = _typeof(result.offset);
+		var offset = result.offset;
 
 		// One value -> switch
 		if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
@@ -3336,7 +3336,7 @@ function getContent(value) {
 
 function createTooltip(el, value, modifiers) {
 	var content = getContent(value);
-	var classes = value.classes || directive.options.defaultClass;
+	var classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass;
 	var opts = _extends$1({
 		title: content,
 		html: true
