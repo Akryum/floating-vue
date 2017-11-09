@@ -13,7 +13,7 @@
     "prepublish": "npm run test && npm run build",
     "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
     "test": "npm run test:unit",
-    "test:unit": "jest --config tests/unit/jest.config.js"
+    "test:unit": "jest --config tests/unit/jest.config.js --coverage"
   },
   "repository": {
     "type": "git",
