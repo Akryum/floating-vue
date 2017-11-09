@@ -164,6 +164,7 @@ Or a reactive property:
 
 - `content` - HTML text to be displayed in the tooltip.
 - `classes` - *(see above)*
+- `targetClasses` - CSS classes added to the target element of the tooltip.
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `placement` - *(see above)*
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
@@ -280,6 +281,8 @@ The default global options are:
 	defaultPlacement: 'top',
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
+	// Default CSS classes applied to the target element of the tooltip
+	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
 	// It must include `tooltip` & `tooltip-inner` CSS classes
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
