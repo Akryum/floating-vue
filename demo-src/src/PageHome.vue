@@ -44,6 +44,7 @@
           content: 'You can change a lot of parameters: placement, classes, offset, delay...',
           placement: 'bottom-center',
           classes: ['info'],
+          targetClasses: ['it-has-a-tooltip'],
           offset: 100,
           delay: {
             show: 500,
@@ -262,6 +263,7 @@ const componentSnippet2 = `
   content: msg,
   placement: 'bottom-center',
   classes: ['info'],
+  targetClasses: ['it-has-a-tooltip'],
   offset: 100,
   delay: {
     show: 500,
