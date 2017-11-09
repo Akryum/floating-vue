@@ -1,4 +1,5 @@
 import Tooltip from './tooltip'
+import { addClasses, removeClasses } from './utils'
 
 export let state = {
 	enabled: true,
@@ -24,6 +25,8 @@ export const defaultOptions = {
 	defaultPlacement: 'top',
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
+	// Default CSS classes applied to the target element of the tooltip
+	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
 	// It must include `tooltip` & `tooltip-inner` CSS classes
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
@@ -128,12 +131,22 @@ export function createTooltip (el, value, modifiers) {
 	const tooltip = el._tooltip = new Tooltip(el, opts)
 	tooltip.setClasses(classes)
 	tooltip._vueEl = el
+
+	// Class on target
+	const targetClasses = typeof value.targetClasses !== 'undefined' ? value.targetClasses : directive.options.defaultTargetClass
+	el._tooltipTargetClasses = targetClasses
+	addClasses(el, targetClasses)
 }
 
 export function destroyTooltip (el) {
 	if (el._tooltip) {
 		el._tooltip.dispose()
 		delete el._tooltip
+	}
+
+	if (el._tooltipTargetClasses) {
+		removeClasses(el, el._tooltipTargetClasses)
+		delete el._tooltipTargetClasses
 	}
 }
 
