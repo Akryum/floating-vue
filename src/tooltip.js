@@ -453,8 +453,8 @@ export default class Tooltip {
 		events.forEach(event => {
 			switch (event) {
 			case 'hover':
-				directEvents.push('mouseenter')
-				oppositeEvents.push('mouseleave')
+				directEvents.push('mouseover')
+				oppositeEvents.push('mouseout')
 				break
 			case 'focus':
 				directEvents.push('focus')
