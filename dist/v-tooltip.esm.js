@@ -2976,7 +2976,7 @@ var Tooltip = function () {
 					// Show the tooltip
 					requestAnimationFrame(function () {
 						if (!_this._isDisposed) {
-							tooltipNode.setAttribute('aria-hidden', 'false');
+							_this._isOpen && tooltipNode.setAttribute('aria-hidden', 'false');
 						} else {
 							_this.dispose();
 						}
@@ -3092,8 +3092,8 @@ var Tooltip = function () {
 			events.forEach(function (event) {
 				switch (event) {
 					case 'hover':
-						directEvents.push('mouseenter');
-						oppositeEvents.push('mouseleave');
+						directEvents.push('mouseover');
+						oppositeEvents.push('mouseout');
 						break;
 					case 'focus':
 						directEvents.push('focus');
@@ -3996,7 +3996,7 @@ var Popover = { render: function render() {
 		$_updatePopper: function $_updatePopper(cb) {
 			if (this.isOpen && this.popperInstance) {
 				cb();
-				this.popperInstance.updatd();
+				this.popperInstance.update();
 			}
 		},
 		$_restartPopper: function $_restartPopper() {
