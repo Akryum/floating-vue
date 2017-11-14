@@ -8,7 +8,7 @@ const config = Object.assign({}, base, {
 		file: 'dist/v-tooltip.min.js',
 		format: 'iife',
 	},
-	name: 'VueTooltip',
+	name: 'VTooltip',
 })
 
 config.plugins.push(uglify({}, minify))
