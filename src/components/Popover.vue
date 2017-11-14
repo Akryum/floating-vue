@@ -496,7 +496,7 @@ export default {
 		$_updatePopper (cb) {
 			if (this.isOpen && this.popperInstance) {
 				cb()
-				this.popperInstance.updatd()
+				this.popperInstance.update()
 			}
 		},
 
