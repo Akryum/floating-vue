@@ -353,7 +353,7 @@ export default class Tooltip {
 				// Show the tooltip
 				requestAnimationFrame(() => {
 					if (!this._isDisposed) {
-						tooltipNode.setAttribute('aria-hidden', 'false')
+						this._isOpen && tooltipNode.setAttribute('aria-hidden', 'false')
 					} else {
 						this.dispose()
 					}
