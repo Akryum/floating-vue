@@ -15,13 +15,22 @@ export function convertToArray (value) {
  */
 export function addClasses (el, classes) {
 	const newClasses = convertToArray(classes)
-	const classList = convertToArray(el.className)
+	let classList
+	if (classList instanceof SVGAnimatedString) {
+		classList = Array.from(classList)
+	} else {
+		classList = convertToArray(el.className)
+	}
 	newClasses.forEach((newClass) => {
 		if (classList.indexOf(newClass) === -1) {
 			classList.push(newClass)
 		}
 	})
-	el.className = classList.join(' ')
+	if (el instanceof SVGElement) {
+		el.setAttribute('class', classList.join(' '))
+	} else {
+		el.className = classList.join(' ')
+	}
 }
 
 /**
@@ -33,12 +42,21 @@ export function addClasses (el, classes) {
  */
 export function removeClasses (el, classes) {
 	const newClasses = convertToArray(classes)
-	const classList = convertToArray(el.className)
+	let classList
+	if (classList instanceof SVGAnimatedString) {
+		classList = Array.from(classList)
+	} else {
+		classList = convertToArray(el.className)
+	}
 	newClasses.forEach((newClass) => {
 		const index = classList.indexOf(newClass)
 		if (index !== -1) {
 			classList.splice(index, 1)
 		}
 	})
-	el.className = classList.join(' ')
+	if (el instanceof SVGElement) {
+		el.setAttribute('class', classList.join(' '))
+	} else {
+		el.className = classList.join(' ')
+	}
 }
