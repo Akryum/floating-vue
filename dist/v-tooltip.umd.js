@@ -2452,13 +2452,22 @@ function convertToArray(value) {
  */
 function addClasses(el, classes) {
 	var newClasses = convertToArray(classes);
-	var classList = convertToArray(el.className);
+	var classList = void 0;
+	if (classList instanceof SVGAnimatedString) {
+		classList = Array.from(classList);
+	} else {
+		classList = convertToArray(el.className);
+	}
 	newClasses.forEach(function (newClass) {
 		if (classList.indexOf(newClass) === -1) {
 			classList.push(newClass);
 		}
 	});
-	el.className = classList.join(' ');
+	if (el instanceof SVGElement) {
+		el.setAttribute('class', classList.join(' '));
+	} else {
+		el.className = classList.join(' ');
+	}
 }
 
 /**
@@ -2470,14 +2479,23 @@ function addClasses(el, classes) {
  */
 function removeClasses(el, classes) {
 	var newClasses = convertToArray(classes);
-	var classList = convertToArray(el.className);
+	var classList = void 0;
+	if (classList instanceof SVGAnimatedString) {
+		classList = Array.from(classList);
+	} else {
+		classList = convertToArray(el.className);
+	}
 	newClasses.forEach(function (newClass) {
 		var index = classList.indexOf(newClass);
 		if (index !== -1) {
 			classList.splice(index, 1);
 		}
 	});
-	el.className = classList.join(' ');
+	if (el instanceof SVGElement) {
+		el.setAttribute('class', classList.join(' '));
+	} else {
+		el.className = classList.join(' ');
+	}
 }
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
