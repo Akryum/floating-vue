@@ -2664,6 +2664,8 @@ var DEFAULT_OPTIONS = {
 	offset: 0
 };
 
+var openTooltips = [];
+
 var Tooltip = function () {
 	/**
   * Create a new Tooltip.js instance
@@ -2834,6 +2836,7 @@ var Tooltip = function () {
 				return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
 			}) : [];
 			this._isDisposed = false;
+			this._enableDocumentTouch = events.indexOf('manual') === -1;
 
 			// set event listeners
 			this._setEventListeners(this.reference, events, this.options);
@@ -2926,6 +2929,8 @@ var Tooltip = function () {
 			}
 			this._isOpen = true;
 
+			openTooltips.push(this);
+
 			// if the tooltipNode already exists, just show it
 			if (this._tooltipNode) {
 				this._tooltipNode.style.display = '';
@@ -2995,6 +3000,14 @@ var Tooltip = function () {
 			return this;
 		}
 	}, {
+		key: '_noLongerOpen',
+		value: function _noLongerOpen() {
+			var index = openTooltips.indexOf(this);
+			if (index !== -1) {
+				openTooltips.splice(index, 1);
+			}
+		}
+	}, {
 		key: '_hide',
 		value: function _hide() /* reference, options */{
 			var _this2 = this;
@@ -3005,6 +3018,7 @@ var Tooltip = function () {
 			}
 
 			this._isOpen = false;
+			this._noLongerOpen();
 
 			// hide tooltipNode
 			this._tooltipNode.style.display = 'none';
@@ -3058,6 +3072,8 @@ var Tooltip = function () {
 					this._tooltipNode.parentNode.removeChild(this._tooltipNode);
 					this._tooltipNode = null;
 				}
+			} else {
+				this._noLongerOpen();
 			}
 			return this;
 		}
@@ -3138,6 +3154,13 @@ var Tooltip = function () {
 			});
 		}
 	}, {
+		key: '_onDocumentTouch',
+		value: function _onDocumentTouch(event) {
+			if (this._enableDocumentTouch) {
+				this._scheduleHide(this.reference, this.options.delay, this.options, event);
+			}
+		}
+	}, {
 		key: '_scheduleShow',
 		value: function _scheduleShow(reference, delay, options /*, evt */) {
 			var _this5 = this;
@@ -3184,21 +3207,7 @@ var Tooltip = function () {
 	return Tooltip;
 }();
 
-/**
- * Placement function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback PlacementFunction
- * @param {HTMLElement} tooltip - tooltip DOM node.
- * @param {HTMLElement} reference - reference DOM node.
- * @return {String} placement - One of the allowed placement options.
- */
-
-/**
- * Title function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback TitleFunction
- * @return {String} placement - The desired title.
- */
+// Hide tooltips on touch devices
 
 
 var _initialiseProps = function _initialiseProps() {
@@ -3253,6 +3262,30 @@ var _initialiseProps = function _initialiseProps() {
 		return false;
 	};
 };
+
+if (typeof document !== 'undefined') {
+	document.addEventListener('touchstart', function (event) {
+		for (var i = 0; i < openTooltips.length; i++) {
+			openTooltips[i]._onDocumentTouch(event);
+		}
+	});
+}
+
+/**
+ * Placement function, its context is the Tooltip instance.
+ * @memberof Tooltip
+ * @callback PlacementFunction
+ * @param {HTMLElement} tooltip - tooltip DOM node.
+ * @param {HTMLElement} reference - reference DOM node.
+ * @return {String} placement - One of the allowed placement options.
+ */
+
+/**
+ * Title function, its context is the Tooltip instance.
+ * @memberof Tooltip
+ * @callback TitleFunction
+ * @return {String} placement - The desired title.
+ */
 
 var state = {
 	enabled: true
@@ -3536,6 +3569,11 @@ function getDefault(key) {
 		return directive.options[key];
 	}
 	return value;
+}
+
+var isIOS = false;
+if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+	isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
 
 var Popover = { render: function render() {
@@ -3993,11 +4031,19 @@ var Popover = { render: function render() {
 		},
 		$_addGlobalEvents: function $_addGlobalEvents() {
 			if (this.autoHide) {
-				window.addEventListener('click', this.$_handleWindowClick);
+				if (isIOS) {
+					document.addEventListener('touchstart', this.$_handleWindowClick);
+				} else {
+					window.addEventListener('click', this.$_handleWindowClick);
+				}
 			}
 		},
 		$_removeGlobalEvents: function $_removeGlobalEvents() {
-			window.removeEventListener('click', this.$_handleWindowClick);
+			if (isIOS) {
+				document.removeEventListener('touchstart', this.$_handleWindowClick);
+			} else {
+				window.removeEventListener('click', this.$_handleWindowClick);
+			}
 		},
 		$_updatePopper: function $_updatePopper(cb) {
 			if (this.isOpen && this.popperInstance) {
