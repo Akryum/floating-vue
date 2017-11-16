@@ -50,6 +50,11 @@ function getDefault (key) {
 	return value
 }
 
+let isIOS = false
+if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+	isIOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+}
+
 export default {
 	name: 'VPopover',
 
@@ -485,12 +490,20 @@ export default {
 
 		$_addGlobalEvents () {
 			if (this.autoHide) {
-				window.addEventListener('click', this.$_handleWindowClick)
+				if (isIOS) {
+					document.addEventListener('touchstart', this.$_handleWindowClick)
+				} else {
+					window.addEventListener('click', this.$_handleWindowClick)
+				}
 			}
 		},
 
 		$_removeGlobalEvents () {
-			window.removeEventListener('click', this.$_handleWindowClick)
+			if (isIOS) {
+				document.removeEventListener('touchstart', this.$_handleWindowClick)
+			} else {
+				window.removeEventListener('click', this.$_handleWindowClick)
+			}
 		},
 
 		$_updatePopper (cb) {

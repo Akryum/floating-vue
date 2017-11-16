@@ -16,6 +16,8 @@ const DEFAULT_OPTIONS = {
 	offset: 0,
 }
 
+const openTooltips = []
+
 export default class Tooltip {
 	/**
 	 * Create a new Tooltip.js instance
@@ -203,6 +205,7 @@ export default class Tooltip {
 				)
 			: []
 		this._isDisposed = false
+		this._enableDocumentTouch = events.indexOf('manual') === -1
 
 		// set event listeners
 		this._setEventListeners(this.reference, events, this.options)
@@ -290,6 +293,8 @@ export default class Tooltip {
 		}
 		this._isOpen = true
 
+		openTooltips.push(this)
+
 		// if the tooltipNode already exists, just show it
 		if (this._tooltipNode) {
 			this._tooltipNode.style.display = ''
@@ -366,6 +371,13 @@ export default class Tooltip {
 		return this
 	}
 
+	_noLongerOpen () {
+		const index = openTooltips.indexOf(this)
+		if (index !== -1) {
+			openTooltips.splice(index, 1)
+		}
+	}
+
 	_hide (/* reference, options */) {
 		// don't hide if it's already hidden
 		if (!this._isOpen) {
@@ -373,6 +385,7 @@ export default class Tooltip {
 		}
 
 		this._isOpen = false
+		this._noLongerOpen()
 
 		// hide tooltipNode
 		this._tooltipNode.style.display = 'none'
@@ -420,6 +433,8 @@ export default class Tooltip {
 				this._tooltipNode.parentNode.removeChild(this._tooltipNode)
 				this._tooltipNode = null
 			}
+		} else {
+			this._noLongerOpen()
 		}
 		return this
 	}
@@ -493,6 +508,12 @@ export default class Tooltip {
 		})
 	}
 
+	_onDocumentTouch (event) {
+		if (this._enableDocumentTouch) {
+			this._scheduleHide(this.reference, this.options.delay, this.options, event)
+		}
+	}
+
 	_scheduleShow (reference, delay, options /*, evt */) {
 		// defaults to 0
 		const computedDelay = (delay && delay.show) || delay || 0
@@ -552,6 +573,15 @@ export default class Tooltip {
 
 			return false
 		};
+}
+
+// Hide tooltips on touch devices
+if (typeof document !== 'undefined') {
+	document.addEventListener('touchstart', event => {
+		for (let i = 0; i < openTooltips.length; i++) {
+			openTooltips[i]._onDocumentTouch(event)
+		}
+	})
 }
 
 /**
