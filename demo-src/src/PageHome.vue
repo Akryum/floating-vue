@@ -79,6 +79,14 @@
             </p>
 
             <ExampleComponent char="=" />
+
+            <div class="close">
+              <a
+                class="btn"
+                @click="e => e.closePopover = true"
+                @touchstart="e => e.closePopover = true"
+              >Close</a>
+            </div>
           </template>
         </v-popover>
       </div>
@@ -306,6 +314,11 @@ const componentSnippet3 = `
     </p>
 
     <ExampleComponent char="=" />
+
+    <a
+      @click="e => e.closePopover = true"
+      @touchstart="e => e.closePopover = true"
+    >Close</a>
   </template>
 </v-popover>
 `
@@ -395,3 +408,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.close {
+  text-align: center;
+  margin-top: 12px;
+}
+</style>

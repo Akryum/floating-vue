@@ -139,6 +139,20 @@ button {
   }
 }
 
+.btn {
+  padding: 6px 12px;
+  display: inline-block;
+  background: $primary-color;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+
+  &:hover {
+    color: white;
+    background: lighten($primary-color, 10%);
+  }
+}
+
 input {
   background: white;
   display: block;
