@@ -2,7 +2,7 @@
 
 import Popper from 'popper.js'
 import { getOptions, directive } from './v-tooltip'
-import { addClasses } from './utils'
+import { addClasses, supportsPassive } from './utils'
 
 const DEFAULT_OPTIONS = {
 	container: false,
@@ -581,7 +581,9 @@ if (typeof document !== 'undefined') {
 		for (let i = 0; i < openTooltips.length; i++) {
 			openTooltips[i]._onDocumentTouch(event)
 		}
-	})
+	}, supportsPassive ? {
+		passive: true,
+	} : false)
 }
 
 /**

@@ -41,6 +41,7 @@
 import { directive } from '../v-tooltip'
 import Popper from 'popper.js'
 import { ResizeObserver } from 'vue-resize'
+import { supportsPassive } from '../utils'
 
 function getDefault (key) {
 	const value = directive.options.popover[key]
@@ -189,6 +190,7 @@ export default {
 		this.$_isDisposed = false
 		this.$_mounted = false
 		this.$_events = []
+		this.$_preventOpen = false
 	},
 
 	mounted () {
@@ -401,7 +403,7 @@ export default {
 						return
 					}
 					evt.usedByTooltip = true
-					this.$_scheduleShow(evt)
+					!this.$_preventOpen && this.$_scheduleShow(evt)
 				}
 				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
@@ -491,7 +493,9 @@ export default {
 		$_addGlobalEvents () {
 			if (this.autoHide) {
 				if (isIOS) {
-					document.addEventListener('touchstart', this.$_handleWindowClick)
+					document.addEventListener('touchstart', this.$_handleWindowTouchstart, supportsPassive ? {
+						passive: true,
+					} : false)
 				} else {
 					window.addEventListener('click', this.$_handleWindowClick)
 				}
@@ -500,7 +504,7 @@ export default {
 
 		$_removeGlobalEvents () {
 			if (isIOS) {
-				document.removeEventListener('touchstart', this.$_handleWindowClick)
+				document.removeEventListener('touchstart', this.$_handleWindowTouchstart)
 			} else {
 				window.removeEventListener('click', this.$_handleWindowClick)
 			}
@@ -524,13 +528,31 @@ export default {
 			}
 		},
 
-		$_handleWindowClick (evt) {
+		$_handleWindowClick (evt, touch = false) {
 			const popoverNode = this.$refs.popover
 
 			if (evt.closePopover || !popoverNode.contains(evt.target)) {
 				this.$_scheduleHide(evt)
 				this.$emit('auto-hide')
+
+				if (touch) {
+					this.$_preventOpen = true
+					document.addEventListener('touchend', this.$_handleWindowTouchend, supportsPassive ? {
+						passive: true,
+					} : false)
+				}
 			}
+		},
+
+		$_handleWindowTouchstart (evt) {
+			this.$_handleWindowClick(evt, true)
+		},
+
+		$_handleWindowTouchend (evt) {
+			document.removeEventListener('touchend', this.$_handleWindowTouchend)
+			setTimeout(() => {
+				this.$_preventOpen = false
+			}, 300)
 		},
 
 		$_handleResize () {
