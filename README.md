@@ -126,6 +126,8 @@ The available positions are:
  - `'left-start'`
  - `'left-end'`
 
+**:warning: You need to add style to the tooltips: [examples](#style-examples).**
+
 ### Object notation
 
 You can use an object instead of a simple string:
