@@ -67,7 +67,7 @@ Vue.component('v-popover', VPopover)
 
 ## Browser
 
-Include [popper.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.browser.js) in the page.
+Include [popper.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.min.js) in the page.
 
 ```html
 <script src="https://unpkg.com/popper.js"></script>
