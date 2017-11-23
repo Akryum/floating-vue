@@ -29,6 +29,7 @@ export const defaultOptions = {
 	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
 	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
+	// Change if the classes conflict with other libraries (for example bootstrap)
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
 	// Selector used to get the arrow element in the tooltip template
 	defaultArrowSelector: '.tooltip-arrow, .tooltip__arrow',
@@ -51,10 +52,15 @@ export const defaultOptions = {
 	// Options for popover
 	popover: {
 		defaultPlacement: 'bottom',
+		// Use the `popoverClass` prop for theming
 		defaultClass: 'vue-popover-theme',
+		// Base class (change if conflicts with other libraries)
 		defaultBaseClass: 'tooltip popover',
+		// Wrapper class (contains arrow and inner)
 		defaultWrapperClass: 'wrapper',
+		// Inner content class
 		defaultInnerClass: 'tooltip-inner popover-inner',
+		// Arrow class
 		defaultArrowClass: 'tooltip-arrow popover-arrow',
 		defaultDelay: 0,
 		defaultTrigger: 'click',
