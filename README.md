@@ -304,14 +304,14 @@ Use the `v-close-popover` directive on an element inside the popover to close it
 You can also set it to true or false to enable or disable the directive (enabled by default):
 
 ```html
-<a v-popover="false">Close</a>
-<a v-popover="true">Close</a>
+<a v-close-popover="false">Close</a>
+<a v-close-popover="true">Close</a>
 ```
 
 You can also use a property:
 
 ```html
-<a v-popover="myBooleanProp">Close</a>
+<a v-close-popover="myBooleanProp">Close</a>
 ```
 
 ```js
