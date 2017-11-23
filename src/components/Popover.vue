@@ -55,6 +55,8 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 	isIOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
+const openPopovers = []
+
 export default {
 	name: 'VPopover',
 
@@ -256,9 +258,8 @@ export default {
 		dispose () {
 			this.$_isDisposed = true
 			this.$_removeEventListeners()
-			this.$_removeGlobalEvents()
+			this.hide({ skipDelay: true })
 			if (this.popperInstance) {
-				this.hide()
 				this.popperInstance.destroy()
 
 				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
@@ -294,7 +295,6 @@ export default {
 				this.isOpen = true
 				this.popperInstance.enableEventListeners()
 				this.popperInstance.update()
-				this.$_addGlobalEvents()
 			}
 
 			if (!this.$_mounted) {
@@ -345,7 +345,6 @@ export default {
 						requestAnimationFrame(() => {
 							if (!this.$_isDisposed) {
 								this.isOpen = true
-								this.$_addGlobalEvents()
 							} else {
 								this.dispose()
 							}
@@ -355,6 +354,8 @@ export default {
 					}
 				})
 			}
+
+			openPopovers.push(this)
 		},
 
 		$_hide () {
@@ -363,9 +364,15 @@ export default {
 				return
 			}
 
+			const index = openPopovers.indexOf(this)
+			if (index !== -1) {
+				openPopovers.splice(index, 1)
+			}
+
 			this.isOpen = false
-			this.popperInstance.disableEventListeners()
-			this.$_removeGlobalEvents()
+			if (this.popperInstance) {
+				this.popperInstance.disableEventListeners()
+			}
 
 			clearTimeout(this.$_disposeTimer)
 			const disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout
@@ -536,26 +543,6 @@ export default {
 			this.$_events = []
 		},
 
-		$_addGlobalEvents () {
-			if (this.autoHide) {
-				if (isIOS) {
-					document.addEventListener('touchend', this.$_handleWindowTouchstart, supportsPassive ? {
-						passive: true,
-					} : false)
-				} else {
-					window.addEventListener('click', this.$_handleWindowClick)
-				}
-			}
-		},
-
-		$_removeGlobalEvents () {
-			if (isIOS) {
-				document.removeEventListener('touchend', this.$_handleWindowTouchstart)
-			} else {
-				window.removeEventListener('click', this.$_handleWindowClick)
-			}
-		},
-
 		$_updatePopper (cb) {
 			if (this.isOpen && this.popperInstance) {
 				cb()
@@ -574,12 +561,17 @@ export default {
 			}
 		},
 
-		$_handleWindowClick (event, touch = false) {
+		$_handleGlobalClose (event, touch = false) {
 			const popoverNode = this.$refs.popover
 
-			if (event.closePopover || !popoverNode.contains(event.target)) {
-				this.$_scheduleHide({ event: event })
-				this.$emit('auto-hide')
+			if (event.closePopover || (this.autoHide && !popoverNode.contains(event.target))) {
+				this.hide({ event: event })
+
+				if (event.closePopover) {
+					this.$emit('close-directive')
+				} else {
+					this.$emit('auto-hide')
+				}
 
 				if (touch) {
 					this.$_preventOpen = true
@@ -590,10 +582,6 @@ export default {
 			}
 		},
 
-		$_handleWindowTouchstart (event) {
-			this.$_handleWindowClick(event, true)
-		},
-
 		$_handleResize () {
 			if (this.isOpen && this.popperInstance) {
 				this.popperInstance.update()
@@ -601,5 +589,29 @@ export default {
 			}
 		},
 	},
+}
+
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+	if (isIOS) {
+		document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
+			passive: true,
+		} : false)
+	} else {
+		window.addEventListener('click', handleGlobalClick)
+	}
+}
+
+function handleGlobalClick (event) {
+	handleGlobalClose(event)
+}
+
+function handleGlobalTouchend (event) {
+	handleGlobalClose(event, true)
+}
+
+function handleGlobalClose (event, touch = false) {
+	for (let i = 0; i < openPopovers.length; i++) {
+		openPopovers[i].$_handleGlobalClose(event, touch)
+	}
 }
 </script>
