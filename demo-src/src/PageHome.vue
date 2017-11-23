@@ -67,8 +67,14 @@
     <section class="demo">
       <div class="section-content">
         <h2>Use with components to create a popover</h2>
+
+        <div class="form">
+          <label><input type="checkbox" name="enabled" v-model="isEnabled" /> Enable</label>
+        </div>
+
         <v-popover
           offset="16"
+          :disabled="!isEnabled"
         >
           <button class="tooltip-target b3">Click me</button>
 
@@ -304,6 +310,7 @@ const styleSnippet2 = `
 const componentSnippet3 = `
 <v-popover
   offset="16"
+  :disabled="!isEnabled"
 >
   <button class="tooltip-target b3">Click me</button>
 
@@ -386,6 +393,7 @@ export default {
   data () {
     return {
       msg: `This is a button.`,
+      isEnabled: true,
       isVisible: true,
       isOpen: false,
       mainSnippet,
