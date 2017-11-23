@@ -1,8 +1,8 @@
 /* Forked from https://github.com/FezVrasta/popper.js/blob/master/packages/tooltip/src/index.js */
 
 import Popper from 'popper.js'
-import { getOptions, directive } from './v-tooltip'
-import { addClasses, supportsPassive } from './utils'
+import { getOptions, directive } from '../directives/v-tooltip'
+import { addClasses, supportsPassive } from '../utils'
 
 const DEFAULT_OPTIONS = {
 	container: false,

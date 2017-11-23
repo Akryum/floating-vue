@@ -1,4 +1,4 @@
-import vtooltip, { defaultOptions, state } from './v-tooltip'
+import vtooltip, { defaultOptions, state } from './directives/v-tooltip'
 import Popover from './components/Popover.vue'
 import merge from 'lodash.merge'
 

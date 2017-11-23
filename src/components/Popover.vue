@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { directive } from '../v-tooltip'
+import { directive } from '../directives/v-tooltip'
 import Popper from 'popper.js'
 import { ResizeObserver } from 'vue-resize'
 import { supportsPassive } from '../utils'

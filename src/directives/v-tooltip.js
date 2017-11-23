@@ -1,5 +1,5 @@
-import Tooltip from './tooltip'
-import { addClasses, removeClasses } from './utils'
+import Tooltip from '../lib/tooltip'
+import { addClasses, removeClasses } from '../utils'
 
 export let state = {
 	enabled: true,
