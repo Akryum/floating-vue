@@ -173,7 +173,12 @@ Or a reactive property:
 - `offset` - Offset of the position (px).
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
 - `boundariesElement` - DOM element for the tooltip boundaries.
+- `template` - HTML template of the tooltip.
+- `arrowSelector` - CSS selector to get the arrow element in the tooltip template.
+- `innerSelector` - CSS selector to get the inner content element in the tooltip template.
 - `popperOptions` - Other Popper.js options.
+
+You can change the default values in the [Global options](#global-options).
 
 ### Tooltip auto-hiding
 
@@ -269,6 +274,8 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 - `autoHide` - Hide the popover if clicked outside.
 - `handleResize` - Automatically update the popover position if its size changes.
 
+You can change the default values in the [Global options](#global-options).
+
 **Events:**
 
 - `update:open(Boolean)` - This allow you to use the `.sync` modifier on the `open` prop.
@@ -342,12 +349,14 @@ The default global options are:
 You can change the options during install with the arguments:
 
 ```javascript
+import VTooltip from 'v-tooltip'
 Vue.use(VTooltip, options)
 ```
 
 Or directly on the directive definition:
 
 ```javascript
+import { VTooltip } from 'v-tooltip'
 // Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
 ```
