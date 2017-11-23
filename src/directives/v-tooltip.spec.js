@@ -1,6 +1,6 @@
 import * as VTooltip from './v-tooltip'
 
-jest.mock('./tooltip')
+jest.mock('../lib/tooltip')
 
 describe('getPlacement', () => {
 	test('object notation', () => {
