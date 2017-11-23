@@ -88,9 +88,8 @@
 
             <div class="close">
               <a
+                v-close-popover
                 class="btn"
-                @click="e => e.closePopover = true"
-                @touchstart="e => e.closePopover = true"
               >Close</a>
             </div>
           </template>
@@ -322,10 +321,7 @@ const componentSnippet3 = `
 
     <ExampleComponent char="=" />
 
-    <a
-      @click="e => e.closePopover = true"
-      @touchstart="e => e.closePopover = true"
-    >Close</a>
+    <a v-close-popover>Close</a>
   </template>
 </v-popover>
 `
