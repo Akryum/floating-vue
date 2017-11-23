@@ -53,8 +53,7 @@ header {
 
 section {
   .section-content {
-    max-width: 560px;
-    margin: auto;
+    margin: 0 42px;
     padding: 64px 0;
     box-sizing: border-box;
   }
@@ -327,8 +326,7 @@ label input {
 
 .demo,
 .snippets {
-  max-width: 700px;
-  margin: auto;
+  margin: 0 42px;
 }
 
 .snippets {
@@ -344,6 +342,8 @@ label input {
 
   .section-content {
     text-align: center;
+    max-width: 560px;
+    margin: auto;
   }
 
   h2 {

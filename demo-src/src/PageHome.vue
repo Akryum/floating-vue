@@ -128,7 +128,7 @@
             offset="16"
             :auto-hide="false"
           >
-            <button class="tooltip-target b1">A button</button>
+            <button class="tooltip-target b1">Target</button>
 
             <template slot="popover">
               <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
@@ -369,7 +369,7 @@ const componentSnippet4 = `
     offset="16"
     :auto-hide="false"
   >
-    <button class="tooltip-target b1">A button</button>
+    <button class="tooltip-target b1">Target</button>
 
     <template slot="popover">
       <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
