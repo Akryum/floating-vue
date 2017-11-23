@@ -3492,6 +3492,76 @@ var directive = {
 	}
 };
 
+function addListeners(el) {
+	el.addEventListener('click', onClick);
+	el.addEventListener('touchstart', onTouchStart, supportsPassive ? {
+		passive: true
+	} : false);
+}
+
+function removeListeners(el) {
+	el.removeEventListener('click', onClick);
+	el.removeEventListener('touchstart', onTouchStart);
+	el.removeEventListener('touchend', onTouchEnd);
+	el.removeEventListener('touchcancel', onTouchCancel);
+}
+
+function onClick(event) {
+	var el = event.currentTarget;
+	event.closePopover = !el.$_vclosepopover_touch;
+}
+
+function onTouchStart(event) {
+	if (event.changedTouches.length === 1) {
+		var el = event.currentTarget;
+		el.$_vclosepopover_touch = true;
+		var touch = event.changedTouches[0];
+		el.$_vclosepopover_touchPoint = touch;
+		el.addEventListener('touchend', onTouchEnd);
+		el.addEventListener('touchcancel', onTouchCancel);
+	}
+}
+
+function onTouchEnd(event) {
+	var el = event.currentTarget;
+	el.$_vclosepopover_touch = false;
+	if (event.changedTouches.length === 1) {
+		var touch = event.changedTouches[0];
+		var firstTouch = el.$_vclosepopover_touchPoint;
+		event.closePopover = Math.abs(touch.screenY - firstTouch.screenY) < 20 && Math.abs(touch.screenX - firstTouch.screenX) < 20;
+	}
+}
+
+function onTouchCancel(event) {
+	var el = event.currentTarget;
+	el.$_vclosepopover_touch = false;
+}
+
+var vclosepopover = {
+	bind: function bind(el, _ref) {
+		var value = _ref.value;
+
+		if (typeof value === 'undefined' || value) {
+			addListeners(el);
+		}
+	},
+	update: function update(el, _ref2) {
+		var value = _ref2.value,
+		    oldValue = _ref2.oldValue;
+
+		if (value !== oldValue) {
+			if (typeof value === 'undefined' || value) {
+				addListeners(el);
+			} else {
+				removeListeners(el);
+			}
+		}
+	},
+	unbind: function unbind(el) {
+		removeListeners(el);
+	}
+};
+
 function getInternetExplorerVersion() {
 	var ua = window.navigator.userAgent;
 
@@ -3618,6 +3688,8 @@ var isIOS = false;
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 	isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
+
+var openPopovers = [];
 
 var Popover = { render: function render() {
 		var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "v-popover", class: _vm.cssClass }, [_c('span', { ref: "trigger", staticClass: "trigger", staticStyle: { "display": "inline-block" }, attrs: { "aria-describedby": _vm.popoverId } }, [_vm._t("default")], 2), _vm._v(" "), _c('div', { ref: "popover", class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass], style: {
@@ -3859,9 +3931,8 @@ var Popover = { render: function render() {
 		dispose: function dispose() {
 			this.$_isDisposed = true;
 			this.$_removeEventListeners();
-			this.$_removeGlobalEvents();
+			this.hide({ skipDelay: true });
 			if (this.popperInstance) {
-				this.hide();
 				this.popperInstance.destroy();
 
 				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
@@ -3897,7 +3968,6 @@ var Popover = { render: function render() {
 				this.isOpen = true;
 				this.popperInstance.enableEventListeners();
 				this.popperInstance.update();
-				this.$_addGlobalEvents();
 			}
 
 			if (!this.$_mounted) {
@@ -3946,7 +4016,6 @@ var Popover = { render: function render() {
 						requestAnimationFrame(function () {
 							if (!_this3.$_isDisposed) {
 								_this3.isOpen = true;
-								_this3.$_addGlobalEvents();
 							} else {
 								_this3.dispose();
 							}
@@ -3956,6 +4025,8 @@ var Popover = { render: function render() {
 					}
 				});
 			}
+
+			openPopovers.push(this);
 		},
 		$_hide: function $_hide() {
 			var _this4 = this;
@@ -3965,9 +4036,15 @@ var Popover = { render: function render() {
 				return;
 			}
 
+			var index = openPopovers.indexOf(this);
+			if (index !== -1) {
+				openPopovers.splice(index, 1);
+			}
+
 			this.isOpen = false;
-			this.popperInstance.disableEventListeners();
-			this.$_removeGlobalEvents();
+			if (this.popperInstance) {
+				this.popperInstance.disableEventListeners();
+			}
 
 			clearTimeout(this.$_disposeTimer);
 			var disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout;
@@ -4140,24 +4217,6 @@ var Popover = { render: function render() {
 			});
 			this.$_events = [];
 		},
-		$_addGlobalEvents: function $_addGlobalEvents() {
-			if (this.autoHide) {
-				if (isIOS) {
-					document.addEventListener('touchstart', this.$_handleWindowTouchstart, supportsPassive ? {
-						passive: true
-					} : false);
-				} else {
-					window.addEventListener('click', this.$_handleWindowClick);
-				}
-			}
-		},
-		$_removeGlobalEvents: function $_removeGlobalEvents() {
-			if (isIOS) {
-				document.removeEventListener('touchstart', this.$_handleWindowTouchstart);
-			} else {
-				window.removeEventListener('click', this.$_handleWindowClick);
-			}
-		},
 		$_updatePopper: function $_updatePopper(cb) {
 			if (this.isOpen && this.popperInstance) {
 				cb();
@@ -4174,33 +4233,29 @@ var Popover = { render: function render() {
 				}
 			}
 		},
-		$_handleWindowClick: function $_handleWindowClick(event) {
+		$_handleGlobalClose: function $_handleGlobalClose(event) {
+			var _this8 = this;
+
 			var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 			var popoverNode = this.$refs.popover;
 
-			if (event.closePopover || !popoverNode.contains(event.target)) {
-				this.$_scheduleHide({ event: event });
-				this.$emit('auto-hide');
+			if (event.closePopover || this.autoHide && !popoverNode.contains(event.target)) {
+				this.hide({ event: event });
+
+				if (event.closePopover) {
+					this.$emit('close-directive');
+				} else {
+					this.$emit('auto-hide');
+				}
 
 				if (touch) {
 					this.$_preventOpen = true;
-					document.addEventListener('touchend', this.$_handleWindowTouchend, supportsPassive ? {
-						passive: true
-					} : false);
+					setTimeout(function () {
+						_this8.$_preventOpen = false;
+					}, 300);
 				}
 			}
-		},
-		$_handleWindowTouchstart: function $_handleWindowTouchstart(event) {
-			this.$_handleWindowClick(event, true);
-		},
-		$_handleWindowTouchend: function $_handleWindowTouchend(event) {
-			var _this8 = this;
-
-			document.removeEventListener('touchend', this.$_handleWindowTouchend);
-			setTimeout(function () {
-				_this8.$_preventOpen = false;
-			}, 300);
 		},
 		$_handleResize: function $_handleResize() {
 			if (this.isOpen && this.popperInstance) {
@@ -4210,6 +4265,32 @@ var Popover = { render: function render() {
 		}
 	}
 };
+
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+	if (isIOS) {
+		document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
+			passive: true
+		} : false);
+	} else {
+		window.addEventListener('click', handleGlobalClick);
+	}
+}
+
+function handleGlobalClick(event) {
+	handleGlobalClose(event);
+}
+
+function handleGlobalTouchend(event) {
+	handleGlobalClose(event, true);
+}
+
+function handleGlobalClose(event) {
+	var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+	for (var i = 0; i < openPopovers.length; i++) {
+		openPopovers[i].$_handleGlobalClose(event, touch);
+	}
+}
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -6440,13 +6521,16 @@ function install(Vue) {
 	var finalOptions = {};
 	lodash_merge(finalOptions, defaultOptions, options);
 
+	plugin.options = finalOptions;
 	directive.options = finalOptions;
 
 	Vue.directive('tooltip', directive);
+	Vue.directive('close-popover', vclosepopover);
 	Vue.component('v-popover', Popover);
 }
 
 var VTooltip = directive;
+var VClosePopover = vclosepopover;
 var VPopover = Popover;
 
 var plugin = {
@@ -6474,6 +6558,7 @@ if (GlobalVue) {
 
 exports.install = install;
 exports.VTooltip = VTooltip;
+exports.VClosePopover = VClosePopover;
 exports.VPopover = VPopover;
 exports['default'] = plugin;
 
