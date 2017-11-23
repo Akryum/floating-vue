@@ -283,7 +283,43 @@ You can change the default values in the [Global options](#global-options).
 - `hide`
 - `dispose`
 - `auto-hide` - Emitted when the popover is closed if clicked outside.
+- `close-directive` - Emitted when the popover is closed with the [Close directive](#close-directive).
 - `resize` - Emitted when the content size changes. You must set the `handleResize` prop to `true`.
+
+### Close directive
+
+Use the `v-close-popover` directive on an element inside the popover to close it when the element is clicked (or touched on mobile):
+
+```html
+<v-popover>
+  <button>Click me</button>
+
+  <template slot="popover">
+    <a v-close-popover>Close</a>
+  </template>
+</v-popover>
+```
+
+You can also set it to true or false to enable or disable the directive (enabled by default):
+
+```html
+<a v-popover="false">Close</a>
+<a v-popover="true">Close</a>
+```
+
+You can also use a property:
+
+```html
+<a v-popover="myBooleanProp">Close</a>
+```
+
+```js
+data () {
+  return {
+    myBooleanProp: true,
+  }
+}
+```
 
 ## Global options
 
