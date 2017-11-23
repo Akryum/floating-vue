@@ -18,7 +18,7 @@
 			}"
 			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
-			<div class="wrapper">
+			<div :class="popoverWrapperClass">
 				<div ref="arrow" :class="popoverArrowClass"></div>
 				<div
 					ref="inner"
@@ -110,6 +110,10 @@ export default {
 		popoverInnerClass: {
 			type: [String, Array],
 			default: () => directive.options.popover.defaultInnerClass,
+		},
+		popoverWrapperClass: {
+			type: [String, Array],
+			default: () => directive.options.popover.defaultWrapperClass,
 		},
 		popoverArrowClass: {
 			type: [String, Array],
