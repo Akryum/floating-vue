@@ -353,10 +353,10 @@ import VTooltip from 'v-tooltip'
 Vue.use(VTooltip, options)
 ```
 
-Or directly on the directive definition:
+Or directly on package:
 
 ```javascript
-import { VTooltip } from 'v-tooltip'
+import VTooltip from 'v-tooltip'
 // Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
 ```

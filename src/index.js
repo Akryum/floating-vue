@@ -9,6 +9,7 @@ export function install (Vue, options = {}) {
 	const finalOptions = {}
 	merge(finalOptions, defaultOptions, options)
 
+	plugin.options = finalOptions
 	vtooltip.options = finalOptions
 
 	Vue.directive('tooltip', vtooltip)
