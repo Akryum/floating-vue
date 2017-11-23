@@ -10,6 +10,11 @@ Vue.use(VTooltip, {
   disposeTimeout: 5000,
 })
 
+VTooltip.options.defaultDelay = {
+  show: 300,
+  hide: 0,
+}
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({

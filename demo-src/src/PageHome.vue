@@ -48,7 +48,7 @@
           offset: 100,
           delay: {
             show: 500,
-            hide: 0,
+            hide: 300,
           },
         }">Hover me</button>
       </div>
@@ -281,7 +281,7 @@ const componentSnippet2 = `
   offset: 100,
   delay: {
     show: 500,
-    hide: 0,
+    hide: 300,
   },
 }">Hover me</button>`
 
