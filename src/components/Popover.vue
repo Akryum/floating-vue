@@ -67,6 +67,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 		placement: {
 			type: String,
 			default: () => getDefault('defaultPlacement'),
@@ -149,6 +153,16 @@ export default {
 			}
 		},
 
+		disabled (val, oldVal) {
+			if (val !== oldVal) {
+				if (val) {
+					this.hide()
+				} else if (this.open) {
+					this.show()
+				}
+			}
+		},
+
 		container (val) {
 			if (this.isOpen && this.popperInstance) {
 				const popoverNode = this.$refs.popover
@@ -220,7 +234,47 @@ export default {
 	},
 
 	methods: {
-		show () {
+		show ({ event, skipDelay = false, force = false } = {}) {
+			if (force || !this.disabled) {
+				this.$_scheduleShow(event)
+				this.$emit('show')
+			}
+			this.$emit('update:open', true)
+		},
+
+		hide ({ event, skipDelay = false } = {}) {
+			this.$_scheduleHide(event)
+
+			this.$emit('hide')
+			this.$emit('update:open', false)
+		},
+
+		dispose () {
+			this.$_isDisposed = true
+			this.$_removeEventListeners()
+			this.$_removeGlobalEvents()
+			if (this.popperInstance) {
+				this.hide()
+				this.popperInstance.destroy()
+
+				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+				if (!this.popperInstance.options.removeOnDestroy) {
+					const popoverNode = this.$refs.popover
+					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
+				}
+			}
+			this.$_mounted = false
+
+			this.$emit('dispose')
+		},
+
+		$_init () {
+			if (this.trigger.indexOf('manual') === -1) {
+				this.$_addEventListeners()
+			}
+		},
+
+		$_show () {
 			const reference = this.$refs.trigger
 			const popoverNode = this.$refs.popover
 
@@ -297,12 +351,9 @@ export default {
 					}
 				})
 			}
-
-			this.$emit('update:open', true)
-			this.$emit('show')
 		},
 
-		hide () {
+		$_hide () {
 			// Already hidden
 			if (!this.isOpen) {
 				return
@@ -323,34 +374,6 @@ export default {
 						this.$_mounted = false
 					}
 				}, disposeTime)
-			}
-
-			this.$emit('update:open', false)
-			this.$emit('hide')
-		},
-
-		dispose () {
-			this.$_isDisposed = true
-			this.$_removeEventListeners()
-			this.$_removeGlobalEvents()
-			if (this.popperInstance) {
-				this.hide()
-				this.popperInstance.destroy()
-
-				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-				if (!this.popperInstance.options.removeOnDestroy) {
-					const popoverNode = this.$refs.popover
-					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
-				}
-			}
-			this.$_mounted = false
-
-			this.$emit('dispose')
-		},
-
-		$_init () {
-			if (this.trigger.indexOf('manual') === -1) {
-				this.$_addEventListeners()
 			}
 		},
 
@@ -409,12 +432,12 @@ export default {
 
 			// schedule show tooltip
 			directEvents.forEach(event => {
-				const func = evt => {
+				const func = event => {
 					if (this.isOpen) {
 						return
 					}
-					evt.usedByTooltip = true
-					!this.$_preventOpen && this.$_scheduleShow(evt)
+					event.usedByTooltip = true
+					!this.$_preventOpen && this.show({ event: event })
 				}
 				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
@@ -422,71 +445,79 @@ export default {
 
 			// schedule hide tooltip
 			oppositeEvents.forEach(event => {
-				const func = evt => {
-					if (evt.usedByTooltip) {
+				const func = event => {
+					if (event.usedByTooltip) {
 						return
 					}
-					this.$_scheduleHide(evt)
+					this.hide({ event: event })
 				}
 				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
 			})
 		},
 
-		$_scheduleShow (evt) {
-			// defaults to 0
-			const computedDelay = parseInt((this.delay && this.delay.show) || this.delay || 0)
+		$_scheduleShow (event = null, skipDelay = false) {
 			clearTimeout(this.$_scheduleTimer)
-			this.$_scheduleTimer = setTimeout(this.show.bind(this), computedDelay)
+			if (skipDelay) {
+				this.$_show()
+			} else {
+				// defaults to 0
+				const computedDelay = parseInt((this.delay && this.delay.show) || this.delay || 0)
+				this.$_scheduleTimer = setTimeout(this.$_show.bind(this), computedDelay)
+			}
 		},
 
-		$_scheduleHide (evt) {
-			// defaults to 0
-			const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0)
+		$_scheduleHide (event = null, skipDelay = false) {
 			clearTimeout(this.$_scheduleTimer)
-			this.$_scheduleTimer = setTimeout(() => {
-				if (!this.isOpen) {
-					return
-				}
-
-				// if we are hiding because of a mouseleave, we must check that the new
-				// reference isn't the tooltip, because in this case we don't want to hide it
-				if (evt.type === 'mouseleave') {
-					const isSet = this.$_setTooltipNodeEvent(evt)
-
-					// if we set the new event, don't hide the tooltip yet
-					// the new event will take care to hide it if necessary
-					if (isSet) {
+			if (skipDelay) {
+				this.$_hide()
+			} else {
+				// defaults to 0
+				const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0)
+				this.$_scheduleTimer = setTimeout(() => {
+					if (!this.isOpen) {
 						return
 					}
-				}
 
-				this.hide()
-			}, computedDelay)
+					// if we are hiding because of a mouseleave, we must check that the new
+					// reference isn't the tooltip, because in this case we don't want to hide it
+					if (event && event.type === 'mouseleave') {
+						const isSet = this.$_setTooltipNodeEvent(event)
+
+						// if we set the new event, don't hide the tooltip yet
+						// the new event will take care to hide it if necessary
+						if (isSet) {
+							return
+						}
+					}
+
+					this.$_hide()
+				}, computedDelay)
+			}
 		},
 
-		$_setTooltipNodeEvent (evt) {
+		$_setTooltipNodeEvent (event) {
 			const reference = this.$refs.trigger
 			const popoverNode = this.$refs.popover
 
-			const relatedreference = evt.relatedreference || evt.toElement
+			const relatedreference = event.relatedreference || event.toElement
 
-			const callback = evt2 => {
-				const relatedreference2 = evt2.relatedreference || evt2.toElement
+			const callback = event2 => {
+				const relatedreference2 = event2.relatedreference || event2.toElement
 
 				// Remove event listener after call
-				popoverNode.removeEventListener(evt.type, callback)
+				popoverNode.removeEventListener(event.type, callback)
 
 				// If the new reference is not the reference element
 				if (!reference.contains(relatedreference2)) {
 					// Schedule to hide tooltip
-					this.$_scheduleHide(evt2)
+					this.hide({ event: event2 })
 				}
 			}
 
 			if (popoverNode.contains(relatedreference)) {
 				// listen to mouseleave on the tooltip element to be able to hide the tooltip
-				popoverNode.addEventListener(evt.type, callback)
+				popoverNode.addEventListener(event.type, callback)
 				return true
 			}
 
@@ -539,11 +570,11 @@ export default {
 			}
 		},
 
-		$_handleWindowClick (evt, touch = false) {
+		$_handleWindowClick (event, touch = false) {
 			const popoverNode = this.$refs.popover
 
-			if (evt.closePopover || !popoverNode.contains(evt.target)) {
-				this.$_scheduleHide(evt)
+			if (event.closePopover || !popoverNode.contains(event.target)) {
+				this.$_scheduleHide({ event: event })
 				this.$emit('auto-hide')
 
 				if (touch) {
@@ -555,11 +586,11 @@ export default {
 			}
 		},
 
-		$_handleWindowTouchstart (evt) {
-			this.$_handleWindowClick(evt, true)
+		$_handleWindowTouchstart (event) {
+			this.$_handleWindowClick(event, true)
 		},
 
-		$_handleWindowTouchend (evt) {
+		$_handleWindowTouchend (event) {
 			document.removeEventListener('touchend', this.$_handleWindowTouchend)
 			setTimeout(() => {
 				this.$_preventOpen = false
