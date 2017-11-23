@@ -12,18 +12,17 @@
 		<div
 			ref="popover"
 			:id="popoverId"
-			class="tooltip popover"
-			:class="[cssClass, popoverClass]"
+			:class="[popoverBaseClass, popoverClass, cssClass]"
 			:style="{
 				display: isOpen ? '' : 'none',
 			}"
 			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
 			<div class="wrapper">
-				<div ref="arrow" class="tooltip-arrow popover-arrow"></div>
+				<div ref="arrow" :class="popoverArrowClass"></div>
 				<div
 					ref="inner"
-					class="tooltip-inner popover-inner"
+					:class="popoverInnerClass"
 					style="position: relative;"
 				>
 					<div>
@@ -99,6 +98,18 @@ export default {
 		popoverClass: {
 			type: [String, Array],
 			default: () => getDefault('defaultClass'),
+		},
+		popoverBaseClass: {
+			type: [String, Array],
+			default: () => directive.options.popover.defaultBaseClass,
+		},
+		popoverInnerClass: {
+			type: [String, Array],
+			default: () => directive.options.popover.defaultInnerClass,
+		},
+		popoverArrowClass: {
+			type: [String, Array],
+			default: () => directive.options.popover.defaultArrowClass,
 		},
 		autoHide: {
 			type: Boolean,

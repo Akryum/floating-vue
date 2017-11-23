@@ -52,6 +52,9 @@ export const defaultOptions = {
 	popover: {
 		defaultPlacement: 'bottom',
 		defaultClass: 'vue-popover-theme',
+		defaultBaseClass: 'tooltip popover',
+		defaultInnerClass: 'tooltip-inner popover-inner',
+		defaultArrowClass: 'tooltip-arrow popover-arrow',
 		defaultDelay: 0,
 		defaultTrigger: 'click',
 		defaultOffset: 0,
