@@ -539,7 +539,7 @@ export default {
 		$_addGlobalEvents () {
 			if (this.autoHide) {
 				if (isIOS) {
-					document.addEventListener('touchstart', this.$_handleWindowTouchstart, supportsPassive ? {
+					document.addEventListener('touchend', this.$_handleWindowTouchstart, supportsPassive ? {
 						passive: true,
 					} : false)
 				} else {
@@ -550,7 +550,7 @@ export default {
 
 		$_removeGlobalEvents () {
 			if (isIOS) {
-				document.removeEventListener('touchstart', this.$_handleWindowTouchstart)
+				document.removeEventListener('touchend', this.$_handleWindowTouchstart)
 			} else {
 				window.removeEventListener('click', this.$_handleWindowClick)
 			}
@@ -583,22 +583,15 @@ export default {
 
 				if (touch) {
 					this.$_preventOpen = true
-					document.addEventListener('touchend', this.$_handleWindowTouchend, supportsPassive ? {
-						passive: true,
-					} : false)
+					setTimeout(() => {
+						this.$_preventOpen = false
+					}, 300)
 				}
 			}
 		},
 
 		$_handleWindowTouchstart (event) {
 			this.$_handleWindowClick(event, true)
-		},
-
-		$_handleWindowTouchend (event) {
-			document.removeEventListener('touchend', this.$_handleWindowTouchend)
-			setTimeout(() => {
-				this.$_preventOpen = false
-			}, 300)
 		},
 
 		$_handleResize () {
