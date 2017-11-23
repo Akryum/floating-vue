@@ -77,6 +77,8 @@ describe('getOptions', () => {
 			placement: VTooltip.defaultOptions.defaultPlacement,
 			delay: VTooltip.defaultOptions.defaultDelay,
 			template: VTooltip.defaultOptions.defaultTemplate,
+			innerSelector: VTooltip.defaultOptions.defaultInnerSelector,
+			arrowSelector: VTooltip.defaultOptions.defaultArrowSelector,
 			trigger: VTooltip.defaultOptions.defaultTrigger,
 			offset: VTooltip.defaultOptions.defaultOffset,
 			container: VTooltip.defaultOptions.defaultContainer,
