@@ -33,6 +33,7 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
     - [Disabling tooltips](#disabling-tooltips)
   - [Popover and Dropdown](#popover)
     - [Popover Component Reference](#popover-component-reference)
+    - [Close directive](#close-directive)
   - [Global options](#global-options)
 - [Style Examples](#style-examples)
 
