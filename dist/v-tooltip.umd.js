@@ -6,7 +6,7 @@
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.9
+ * @version 1.12.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28,7 +28,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -45,7 +45,7 @@ function microtaskDebounce(fn) {
       return;
     }
     called = true;
-    window.Promise.resolve().then(function () {
+    Promise.resolve().then(function () {
       called = false;
       fn();
     });
@@ -102,7 +102,7 @@ function getStyleComputedProperty(element, property) {
     return [];
   }
   // NOTE: 1 DOM access here
-  var css = getComputedStyle(element, null);
+  var css = window.getComputedStyle(element, null);
   return property ? css[property] : css;
 }
 
@@ -130,7 +130,7 @@ function getParentNode(element) {
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
   if (!element) {
-    return document.body;
+    return window.document.body;
   }
 
   switch (element.nodeName) {
@@ -172,7 +172,7 @@ function getOffsetParent(element) {
       return element.ownerDocument.documentElement;
     }
 
-    return document.documentElement;
+    return window.document.documentElement;
   }
 
   // .offsetParent will return the closest TD or TABLE in case
@@ -219,7 +219,7 @@ function getRoot(node) {
 function findCommonOffsetParent(element1, element2) {
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
   if (!element1 || !element1.nodeType || !element2 || !element2.nodeType) {
-    return document.documentElement;
+    return window.document.documentElement;
   }
 
   // Here we make sure to give as "start" the element that comes first in the DOM
@@ -311,7 +311,7 @@ function getBordersSize(styles, axis) {
   var sideA = axis === 'x' ? 'Left' : 'Top';
   var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
-  return parseFloat(styles['border' + sideA + 'Width'], 10) + parseFloat(styles['border' + sideB + 'Width'], 10);
+  return +styles['border' + sideA + 'Width'].split('px')[0] + +styles['border' + sideB + 'Width'].split('px')[0];
 }
 
 /**
@@ -334,9 +334,9 @@ function getSize(axis, body, html, computedStyle) {
 }
 
 function getWindowSizes() {
-  var body = document.body;
-  var html = document.documentElement;
-  var computedStyle = isIE10$1() && getComputedStyle(html);
+  var body = window.document.body;
+  var html = window.document.documentElement;
+  var computedStyle = isIE10$1() && window.getComputedStyle(html);
 
   return {
     height: getSize('Height', body, html, computedStyle),
@@ -479,8 +479,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   var scrollParent = getScrollParent(children);
 
   var styles = getStyleComputedProperty(parent);
-  var borderTopWidth = parseFloat(styles.borderTopWidth, 10);
-  var borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
+  var borderTopWidth = +styles.borderTopWidth.split('px')[0];
+  var borderLeftWidth = +styles.borderLeftWidth.split('px')[0];
 
   var offsets = getClientRect({
     top: childrenRect.top - parentRect.top - borderTopWidth,
@@ -496,8 +496,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   // differently when margins are applied to it. The margins are included in
   // the box of the documentElement, in the other cases not.
   if (!isIE10 && isHTML) {
-    var marginTop = parseFloat(styles.marginTop, 10);
-    var marginLeft = parseFloat(styles.marginLeft, 10);
+    var marginTop = +styles.marginTop.split('px')[0];
+    var marginLeft = +styles.marginLeft.split('px')[0];
 
     offsets.top -= borderTopWidth - marginTop;
     offsets.bottom -= borderTopWidth - marginTop;
@@ -576,7 +576,7 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     // Handle other cases based on DOM element used as boundaries
     var boundariesNode = void 0;
     if (boundariesElement === 'scrollParent') {
-      boundariesNode = getScrollParent(getParentNode(reference));
+      boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
         boundariesNode = popper.ownerDocument.documentElement;
       }
@@ -702,7 +702,7 @@ function getReferenceOffsets(state, popper, reference) {
  * @returns {Object} object containing width and height properties
  */
 function getOuterSizes(element) {
-  var styles = getComputedStyle(element);
+  var styles = window.getComputedStyle(element);
   var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   var result = {
@@ -919,7 +919,7 @@ function getSupportedPropertyName(property) {
   for (var i = 0; i < prefixes.length - 1; i++) {
     var prefix = prefixes[i];
     var toCheck = prefix ? '' + prefix + upperProp : property;
-    if (typeof document.body.style[toCheck] !== 'undefined') {
+    if (typeof window.document.body.style[toCheck] !== 'undefined') {
       return toCheck;
     }
   }
@@ -1038,7 +1038,7 @@ function removeEventListeners(reference, state) {
  */
 function disableEventListeners() {
   if (this.state.eventsEnabled) {
-    cancelAnimationFrame(this.scheduleUpdate);
+    window.cancelAnimationFrame(this.scheduleUpdate);
     this.state = removeEventListeners(this.reference, this.state);
   }
 }
@@ -1278,8 +1278,6 @@ function isModifierRequired(modifiers, requestingName, requestedName) {
  * @returns {Object} The data object, properly modified
  */
 function arrow(data, options) {
-  var _data$offsets$arrow;
-
   // arrow depends on keepTogether in order to work
   if (!isModifierRequired(data.instance.modifiers, 'arrow', 'keepTogether')) {
     return data;
@@ -1331,23 +1329,22 @@ function arrow(data, options) {
   if (reference[side] + arrowElementSize > popper[opSide]) {
     data.offsets.popper[side] += reference[side] + arrowElementSize - popper[opSide];
   }
-  data.offsets.popper = getClientRect(data.offsets.popper);
 
   // compute center of the popper
   var center = reference[side] + reference[len] / 2 - arrowElementSize / 2;
 
   // Compute the sideValue using the updated popper offsets
   // take popper margin in account because we don't have this info available
-  var css = getStyleComputedProperty(data.instance.popper);
-  var popperMarginSide = parseFloat(css['margin' + sideCapitalized], 10);
-  var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width'], 10);
-  var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
+  var popperMarginSide = getStyleComputedProperty(data.instance.popper, 'margin' + sideCapitalized).replace('px', '');
+  var sideValue = center - getClientRect(data.offsets.popper)[side] - popperMarginSide;
 
   // prevent arrowElement from being placed not contiguously to its popper
   sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
 
   data.arrowElement = arrowElement;
-  data.offsets.arrow = (_data$offsets$arrow = {}, defineProperty(_data$offsets$arrow, side, Math.round(sideValue)), defineProperty(_data$offsets$arrow, altSide, ''), _data$offsets$arrow);
+  data.offsets.arrow = {};
+  data.offsets.arrow[side] = Math.round(sideValue);
+  data.offsets.arrow[altSide] = ''; // make sure to unset any eventual altSide value from the DOM node
 
   return data;
 }
@@ -2456,8 +2453,8 @@ function convertToArray(value) {
 function addClasses(el, classes) {
 	var newClasses = convertToArray(classes);
 	var classList = void 0;
-	if (classList instanceof SVGAnimatedString) {
-		classList = Array.from(classList);
+	if (el.className instanceof SVGAnimatedString) {
+		classList = Array.from(el.className);
 	} else {
 		classList = convertToArray(el.className);
 	}
@@ -2483,8 +2480,8 @@ function addClasses(el, classes) {
 function removeClasses(el, classes) {
 	var newClasses = convertToArray(classes);
 	var classList = void 0;
-	if (classList instanceof SVGAnimatedString) {
-		classList = Array.from(classList);
+	if (el.className instanceof SVGAnimatedString) {
+		classList = Array.from(el.className);
 	} else {
 		classList = convertToArray(el.className);
 	}
@@ -2525,7 +2522,118 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
 
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
 
 
 
@@ -2687,7 +2795,7 @@ var Tooltip = function () {
 		value: function setContent(content) {
 			this.options.title = content;
 			if (this._tooltipNode) {
-				var el = this._tooltipNode.querySelector(this.innerSelector);
+				var el = this._tooltipNode.querySelector(this.options.innerSelector);
 
 				if (el) {
 					if (!content) {
@@ -2744,11 +2852,6 @@ var Tooltip = function () {
 		}
 
 		//
-		// Defaults
-		//
-
-
-		//
 		// Private methods
 		//
 
@@ -2794,7 +2897,7 @@ var Tooltip = function () {
 			tooltipNode.setAttribute('aria-hidden', 'true');
 
 			// add title to tooltip
-			var titleNode = tooltipGenerator.querySelector(this.innerSelector);
+			var titleNode = tooltipGenerator.querySelector(this.options.innerSelector);
 			if (title.nodeType === 1) {
 				// if title is a node, append it only if allowHtml is true
 				allowHtml && titleNode.appendChild(title);
@@ -2889,7 +2992,7 @@ var Tooltip = function () {
 
 			popperOptions.modifiers = _extends$1({}, popperOptions.modifiers, {
 				arrow: {
-					element: this.arrowSelector
+					element: this.options.arrowSelector
 				}
 			});
 
@@ -3157,8 +3260,6 @@ var _initialiseProps = function _initialiseProps() {
 		}
 	};
 
-	this.arrowSelector = '.tooltip-arrow, .tooltip__arrow';
-	this.innerSelector = '.tooltip-inner, .tooltip__inner';
 	this._events = [];
 
 	this._setTooltipNodeEvent = function (evt, reference, delay, options) {
@@ -3227,8 +3328,13 @@ var defaultOptions = {
 	// Default CSS classes applied to the target element of the tooltip
 	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
-	// It must include `tooltip` & `tooltip-inner` CSS classes
+	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
+	// Change if the classes conflict with other libraries (for example bootstrap)
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	// Selector used to get the arrow element in the tooltip template
+	defaultArrowSelector: '.tooltip-arrow, .tooltip__arrow',
+	// Selector used to get the inner content element in the tooltip template
+	defaultInnerSelector: '.tooltip-inner, .tooltip__inner',
 	// Delay (ms)
 	defaultDelay: 0,
 	// Default events that trigger the tooltip
@@ -3246,7 +3352,16 @@ var defaultOptions = {
 	// Options for popover
 	popover: {
 		defaultPlacement: 'bottom',
+		// Use the `popoverClass` prop for theming
 		defaultClass: 'vue-popover-theme',
+		// Base class (change if conflicts with other libraries)
+		defaultBaseClass: 'tooltip popover',
+		// Wrapper class (contains arrow and inner)
+		defaultWrapperClass: 'wrapper',
+		// Inner content class
+		defaultInnerClass: 'tooltip-inner popover-inner',
+		// Arrow class
+		defaultArrowClass: 'tooltip-arrow popover-arrow',
 		defaultDelay: 0,
 		defaultTrigger: 'click',
 		defaultOffset: 0,
@@ -3265,6 +3380,8 @@ function getOptions(options) {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
+		arrowSelector: typeof options.arrowSelector !== 'undefined' ? options.arrowSelector : directive.options.defaultArrowSelector,
+		innerSelector: typeof options.innerSelector !== 'undefined' ? options.innerSelector : directive.options.defaultInnerSelector,
 		trigger: typeof options.trigger !== 'undefined' ? options.trigger : directive.options.defaultTrigger,
 		offset: typeof options.offset !== 'undefined' ? options.offset : directive.options.defaultOffset,
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
@@ -3503,9 +3620,9 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 }
 
 var Popover = { render: function render() {
-		var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "v-popover", class: _vm.cssClass }, [_c('span', { ref: "trigger", staticClass: "trigger", staticStyle: { "display": "inline-block" }, attrs: { "aria-describedby": _vm.popoverId } }, [_vm._t("default")], 2), _vm._v(" "), _c('div', { ref: "popover", staticClass: "tooltip popover", class: [_vm.cssClass, _vm.popoverClass], style: {
+		var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "v-popover", class: _vm.cssClass }, [_c('span', { ref: "trigger", staticClass: "trigger", staticStyle: { "display": "inline-block" }, attrs: { "aria-describedby": _vm.popoverId } }, [_vm._t("default")], 2), _vm._v(" "), _c('div', { ref: "popover", class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass], style: {
 				display: _vm.isOpen ? '' : 'none'
-			}, attrs: { "id": _vm.popoverId, "aria-hidden": _vm.isOpen ? 'false' : 'true' } }, [_c('div', { staticClass: "wrapper" }, [_c('div', { ref: "arrow", staticClass: "tooltip-arrow popover-arrow" }), _vm._v(" "), _c('div', { ref: "inner", staticClass: "tooltip-inner popover-inner", staticStyle: { "position": "relative" } }, [_c('div', [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c('ResizeObserver', { on: { "notify": _vm.$_handleResize } }) : _vm._e()], 1)])])]);
+			}, attrs: { "id": _vm.popoverId, "aria-hidden": _vm.isOpen ? 'false' : 'true' } }, [_c('div', { class: _vm.popoverWrapperClass }, [_c('div', { ref: "arrow", class: _vm.popoverArrowClass }), _vm._v(" "), _c('div', { ref: "inner", class: _vm.popoverInnerClass, staticStyle: { "position": "relative" } }, [_c('div', [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c('ResizeObserver', { on: { "notify": _vm.$_handleResize } }) : _vm._e()], 1)])])]);
 	}, staticRenderFns: [],
 	name: 'VPopover',
 
@@ -3515,6 +3632,10 @@ var Popover = { render: function render() {
 
 	props: {
 		open: {
+			type: Boolean,
+			default: false
+		},
+		disabled: {
 			type: Boolean,
 			default: false
 		},
@@ -3566,6 +3687,30 @@ var Popover = { render: function render() {
 				return getDefault('defaultClass');
 			}
 		},
+		popoverBaseClass: {
+			type: [String, Array],
+			default: function _default() {
+				return directive.options.popover.defaultBaseClass;
+			}
+		},
+		popoverInnerClass: {
+			type: [String, Array],
+			default: function _default() {
+				return directive.options.popover.defaultInnerClass;
+			}
+		},
+		popoverWrapperClass: {
+			type: [String, Array],
+			default: function _default() {
+				return directive.options.popover.defaultWrapperClass;
+			}
+		},
+		popoverArrowClass: {
+			type: [String, Array],
+			default: function _default() {
+				return directive.options.popover.defaultArrowClass;
+			}
+		},
 		autoHide: {
 			type: Boolean,
 			default: function _default() {
@@ -3605,6 +3750,15 @@ var Popover = { render: function render() {
 				this.show();
 			} else {
 				this.hide();
+			}
+		},
+		disabled: function disabled(val, oldVal) {
+			if (val !== oldVal) {
+				if (val) {
+					this.hide();
+				} else if (this.open) {
+					this.show();
+				}
 			}
 		},
 		container: function container(val) {
@@ -3680,6 +3834,52 @@ var Popover = { render: function render() {
 
 	methods: {
 		show: function show() {
+			var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    event = _ref.event,
+			    _ref$skipDelay = _ref.skipDelay,
+			    skipDelay = _ref$skipDelay === undefined ? false : _ref$skipDelay,
+			    _ref$force = _ref.force,
+			    force = _ref$force === undefined ? false : _ref$force;
+
+			if (force || !this.disabled) {
+				this.$_scheduleShow(event);
+				this.$emit('show');
+			}
+			this.$emit('update:open', true);
+		},
+		hide: function hide() {
+			var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+			    event = _ref2.event;
+
+			this.$_scheduleHide(event);
+
+			this.$emit('hide');
+			this.$emit('update:open', false);
+		},
+		dispose: function dispose() {
+			this.$_isDisposed = true;
+			this.$_removeEventListeners();
+			this.$_removeGlobalEvents();
+			if (this.popperInstance) {
+				this.hide();
+				this.popperInstance.destroy();
+
+				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+				if (!this.popperInstance.options.removeOnDestroy) {
+					var popoverNode = this.$refs.popover;
+					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
+				}
+			}
+			this.$_mounted = false;
+
+			this.$emit('dispose');
+		},
+		$_init: function $_init() {
+			if (this.trigger.indexOf('manual') === -1) {
+				this.$_addEventListeners();
+			}
+		},
+		$_show: function $_show() {
 			var _this3 = this;
 
 			var reference = this.$refs.trigger;
@@ -3756,11 +3956,8 @@ var Popover = { render: function render() {
 					}
 				});
 			}
-
-			this.$emit('update:open', true);
-			this.$emit('show');
 		},
-		hide: function hide() {
+		$_hide: function $_hide() {
 			var _this4 = this;
 
 			// Already hidden
@@ -3783,32 +3980,6 @@ var Popover = { render: function render() {
 						_this4.$_mounted = false;
 					}
 				}, disposeTime);
-			}
-
-			this.$emit('update:open', false);
-			this.$emit('hide');
-		},
-		dispose: function dispose() {
-			this.$_isDisposed = true;
-			this.$_removeEventListeners();
-			this.$_removeGlobalEvents();
-			if (this.popperInstance) {
-				this.hide();
-				this.popperInstance.destroy();
-
-				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-				if (!this.popperInstance.options.removeOnDestroy) {
-					var popoverNode = this.$refs.popover;
-					popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
-				}
-			}
-			this.$_mounted = false;
-
-			this.$emit('dispose');
-		},
-		$_init: function $_init() {
-			if (this.trigger.indexOf('manual') === -1) {
-				this.$_addEventListeners();
 			}
 		},
 		$_findContainer: function $_findContainer(container, reference) {
@@ -3862,12 +4033,12 @@ var Popover = { render: function render() {
 
 			// schedule show tooltip
 			directEvents.forEach(function (event) {
-				var func = function func(evt) {
+				var func = function func(event) {
 					if (_this5.isOpen) {
 						return;
 					}
-					evt.usedByTooltip = true;
-					!_this5.$_preventOpen && _this5.$_scheduleShow(evt);
+					event.usedByTooltip = true;
+					!_this5.$_preventOpen && _this5.show({ event: event });
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
@@ -3875,72 +4046,85 @@ var Popover = { render: function render() {
 
 			// schedule hide tooltip
 			oppositeEvents.forEach(function (event) {
-				var func = function func(evt) {
-					if (evt.usedByTooltip) {
+				var func = function func(event) {
+					if (event.usedByTooltip) {
 						return;
 					}
-					_this5.$_scheduleHide(evt);
+					_this5.hide({ event: event });
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
 			});
 		},
-		$_scheduleShow: function $_scheduleShow(evt) {
-			// defaults to 0
-			var computedDelay = parseInt(this.delay && this.delay.show || this.delay || 0);
+		$_scheduleShow: function $_scheduleShow() {
+			var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 			clearTimeout(this.$_scheduleTimer);
-			this.$_scheduleTimer = setTimeout(this.show.bind(this), computedDelay);
+			if (skipDelay) {
+				this.$_show();
+			} else {
+				// defaults to 0
+				var computedDelay = parseInt(this.delay && this.delay.show || this.delay || 0);
+				this.$_scheduleTimer = setTimeout(this.$_show.bind(this), computedDelay);
+			}
 		},
-		$_scheduleHide: function $_scheduleHide(evt) {
+		$_scheduleHide: function $_scheduleHide() {
 			var _this6 = this;
 
-			// defaults to 0
-			var computedDelay = parseInt(this.delay && this.delay.hide || this.delay || 0);
+			var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+			var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 			clearTimeout(this.$_scheduleTimer);
-			this.$_scheduleTimer = setTimeout(function () {
-				if (!_this6.isOpen) {
-					return;
-				}
-
-				// if we are hiding because of a mouseleave, we must check that the new
-				// reference isn't the tooltip, because in this case we don't want to hide it
-				if (evt.type === 'mouseleave') {
-					var isSet = _this6.$_setTooltipNodeEvent(evt);
-
-					// if we set the new event, don't hide the tooltip yet
-					// the new event will take care to hide it if necessary
-					if (isSet) {
+			if (skipDelay) {
+				this.$_hide();
+			} else {
+				// defaults to 0
+				var computedDelay = parseInt(this.delay && this.delay.hide || this.delay || 0);
+				this.$_scheduleTimer = setTimeout(function () {
+					if (!_this6.isOpen) {
 						return;
 					}
-				}
 
-				_this6.hide();
-			}, computedDelay);
+					// if we are hiding because of a mouseleave, we must check that the new
+					// reference isn't the tooltip, because in this case we don't want to hide it
+					if (event && event.type === 'mouseleave') {
+						var isSet = _this6.$_setTooltipNodeEvent(event);
+
+						// if we set the new event, don't hide the tooltip yet
+						// the new event will take care to hide it if necessary
+						if (isSet) {
+							return;
+						}
+					}
+
+					_this6.$_hide();
+				}, computedDelay);
+			}
 		},
-		$_setTooltipNodeEvent: function $_setTooltipNodeEvent(evt) {
+		$_setTooltipNodeEvent: function $_setTooltipNodeEvent(event) {
 			var _this7 = this;
 
 			var reference = this.$refs.trigger;
 			var popoverNode = this.$refs.popover;
 
-			var relatedreference = evt.relatedreference || evt.toElement;
+			var relatedreference = event.relatedreference || event.toElement;
 
-			var callback = function callback(evt2) {
-				var relatedreference2 = evt2.relatedreference || evt2.toElement;
+			var callback = function callback(event2) {
+				var relatedreference2 = event2.relatedreference || event2.toElement;
 
 				// Remove event listener after call
-				popoverNode.removeEventListener(evt.type, callback);
+				popoverNode.removeEventListener(event.type, callback);
 
 				// If the new reference is not the reference element
 				if (!reference.contains(relatedreference2)) {
 					// Schedule to hide tooltip
-					_this7.$_scheduleHide(evt2);
+					_this7.hide({ event: event2 });
 				}
 			};
 
 			if (popoverNode.contains(relatedreference)) {
 				// listen to mouseleave on the tooltip element to be able to hide the tooltip
-				popoverNode.addEventListener(evt.type, callback);
+				popoverNode.addEventListener(event.type, callback);
 				return true;
 			}
 
@@ -3948,9 +4132,9 @@ var Popover = { render: function render() {
 		},
 		$_removeEventListeners: function $_removeEventListeners() {
 			var reference = this.$refs.trigger;
-			this.$_events.forEach(function (_ref) {
-				var func = _ref.func,
-				    event = _ref.event;
+			this.$_events.forEach(function (_ref3) {
+				var func = _ref3.func,
+				    event = _ref3.event;
 
 				reference.removeEventListener(event, func);
 			});
@@ -3990,13 +4174,13 @@ var Popover = { render: function render() {
 				}
 			}
 		},
-		$_handleWindowClick: function $_handleWindowClick(evt) {
+		$_handleWindowClick: function $_handleWindowClick(event) {
 			var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 			var popoverNode = this.$refs.popover;
 
-			if (evt.closePopover || !popoverNode.contains(evt.target)) {
-				this.$_scheduleHide(evt);
+			if (event.closePopover || !popoverNode.contains(event.target)) {
+				this.$_scheduleHide({ event: event });
 				this.$emit('auto-hide');
 
 				if (touch) {
@@ -4007,10 +4191,10 @@ var Popover = { render: function render() {
 				}
 			}
 		},
-		$_handleWindowTouchstart: function $_handleWindowTouchstart(evt) {
-			this.$_handleWindowClick(evt, true);
+		$_handleWindowTouchstart: function $_handleWindowTouchstart(event) {
+			this.$_handleWindowClick(event, true);
 		},
-		$_handleWindowTouchend: function $_handleWindowTouchend(evt) {
+		$_handleWindowTouchend: function $_handleWindowTouchend(event) {
 			var _this8 = this;
 
 			document.removeEventListener('touchend', this.$_handleWindowTouchend);
