@@ -120,7 +120,7 @@ export default class Tooltip {
 	setContent (content) {
 		this.options.title = content
 		if (this._tooltipNode) {
-			const el = this._tooltipNode.querySelector(this.innerSelector)
+			const el = this._tooltipNode.querySelector(this.options.innerSelector)
 
 			if (el) {
 				if (!content) {
@@ -184,12 +184,6 @@ export default class Tooltip {
 	}
 
 	//
-	// Defaults
-	//
-	arrowSelector = '.tooltip-arrow, .tooltip__arrow';
-	innerSelector = '.tooltip-inner, .tooltip__inner';
-
-	//
 	// Private methods
 	//
 
@@ -236,7 +230,7 @@ export default class Tooltip {
 		tooltipNode.setAttribute('aria-hidden', 'true')
 
 		// add title to tooltip
-		const titleNode = tooltipGenerator.querySelector(this.innerSelector)
+		const titleNode = tooltipGenerator.querySelector(this.options.innerSelector)
 		if (title.nodeType === 1) {
 			// if title is a node, append it only if allowHtml is true
 			allowHtml && titleNode.appendChild(title)
@@ -336,7 +330,7 @@ export default class Tooltip {
 		popperOptions.modifiers = {
 			...popperOptions.modifiers,
 			arrow: {
-				element: this.arrowSelector,
+				element: this.options.arrowSelector,
 			},
 		}
 

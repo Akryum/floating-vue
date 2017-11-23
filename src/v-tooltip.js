@@ -28,8 +28,12 @@ export const defaultOptions = {
 	// Default CSS classes applied to the target element of the tooltip
 	defaultTargetClass: 'has-tooltip',
 	// Default HTML template of the tooltip element
-	// It must include `tooltip` & `tooltip-inner` CSS classes
+	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
 	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	// Selector used to get the arrow element in the tooltip template
+	defaultArrowSelector: '.tooltip-arrow, .tooltip__arrow',
+	// Selector used to get the inner content element in the tooltip template
+	defaultInnerSelector: '.tooltip-inner, .tooltip__inner',
 	// Delay (ms)
 	defaultDelay: 0,
 	// Default events that trigger the tooltip
@@ -66,6 +70,8 @@ export function getOptions (options) {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
+		arrowSelector: typeof options.arrowSelector !== 'undefined' ? options.arrowSelector : directive.options.defaultArrowSelector,
+		innerSelector: typeof options.innerSelector !== 'undefined' ? options.innerSelector : directive.options.defaultInnerSelector,
 		trigger: typeof options.trigger !== 'undefined' ? options.trigger : directive.options.defaultTrigger,
 		offset: typeof options.offset !== 'undefined' ? options.offset : directive.options.defaultOffset,
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
