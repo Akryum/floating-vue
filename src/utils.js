@@ -16,8 +16,8 @@ export function convertToArray (value) {
 export function addClasses (el, classes) {
 	const newClasses = convertToArray(classes)
 	let classList
-	if (classList instanceof SVGAnimatedString) {
-		classList = Array.from(classList)
+	if (el.className instanceof SVGAnimatedString) {
+		classList = Array.from(el.className)
 	} else {
 		classList = convertToArray(el.className)
 	}
@@ -43,8 +43,8 @@ export function addClasses (el, classes) {
 export function removeClasses (el, classes) {
 	const newClasses = convertToArray(classes)
 	let classList
-	if (classList instanceof SVGAnimatedString) {
-		classList = Array.from(classList)
+	if (el.className instanceof SVGAnimatedString) {
+		classList = Array.from(el.className)
 	} else {
 		classList = convertToArray(el.className)
 	}
