@@ -109,7 +109,7 @@ Of course, you can use a reactive property:
 You can specify the tooltip position as a modifier:
 
 ```html
-<button v-tooltip.bottom-left="'You have ' + count + ' new messages.'">
+<button v-tooltip.bottom-start="'You have ' + count + ' new messages.'">
 ```
 
 The available positions are:
@@ -260,7 +260,7 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 
 - `open` - Boolean that shows or hide the popover.
 - `disable` - Boolean that disables the popover. If it was already open, it will be closed.
-- `placement` - *(see above)*
+- `placement` - *(see above)* `auto`, `auto-start`, and `auto-end` are also available.
 - `delay` - *(see above)*
 - `trigger` - *(see above)*
 - `offset` - *(see above)*
