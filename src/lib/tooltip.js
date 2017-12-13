@@ -245,7 +245,6 @@ export default class Tooltip {
 			allowHtml ? (titleNode.innerHTML = title) : (titleNode.innerText = title)
 		}
 
-		console.log('this.options.autoHide:', this.options.autoHide);
 		if (this.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
 			tooltipNode.addEventListener('mouseenter', this.hide)
 			tooltipNode.addEventListener('click', this.hide)
