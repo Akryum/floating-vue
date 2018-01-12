@@ -23,19 +23,66 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 
 **Table of Contents**
 
+- [Getting started](#getting-started)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Tooltip directive](#tooltip-directive)
+  - [Directive](#directive)
     - [Object notation](#object-notation)
     - [Dynamic CSS classes](#dynamic-css-classes)
     - [Other options](#other-options)
     - [Tooltip auto-hiding](#tooltip-auto-hiding)
     - [Disabling tooltips](#disabling-tooltips)
-  - [Popover and Dropdown](#popover)
+  - [Component](#component)
     - [Popover Component Reference](#popover-component-reference)
     - [Close directive](#close-directive)
   - [Global options](#global-options)
 - [Style Examples](#style-examples)
+
+<br>
+
+# Getting started
+
+This package offers two different usages: [directive](#directive) or [component](#component).
+
+1. Install the plugin:
+
+```
+npm install --save v-tooltip
+```
+
+2. Add the plugin into your app:
+
+```javascript
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip)
+```
+
+[More info on installation](#installation)
+
+3. Add [some style](#style-examples) to your liking.
+
+4. Use the `v-tooltip` directive:
+
+```html
+<button v-tooltip="'You have ' + count + ' new messages.'">
+```
+
+[More info on the directive](#directive)
+
+5. Use the `v-popover` component:
+
+```html
+<v-popover>
+  <!-- This will be the popover target (for the events and position) -->
+  <button>Click me</button>
+  <!-- This will be the content of the popover -->
+  <MyAwesomeComponent slot="popover"/>
+</v-popover>
+```
+
+[More info on the component](#component)
 
 <br>
 
@@ -207,7 +254,6 @@ VTooltip.enabled = window.innerWidth > 768
 If you need to display components inside the tooltip (or popover/dropdown, technically it's the same :smile:), use the `v-popover` component:
 
 ```html
-
 <v-popover
   offset="16"
 >
