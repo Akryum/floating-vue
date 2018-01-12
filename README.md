@@ -465,6 +465,8 @@ VTooltip.options.defaultClass = 'my-tooltip'
 
 # Style Examples
 
+Bellow are some examples of style you need. [Here](https://github.com/Akryum/v-tooltip/blob/83615e394c96ca491a4df04b892ae87e833beb97/demo-src/src/App.vue#L179-L303) is another example, used in the [live demo](https://akryum.github.io/v-tooltip/#/).
+
 ## Sass / Less
 
 ```less
