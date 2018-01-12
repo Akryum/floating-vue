@@ -42,7 +42,7 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 
 # Getting started
 
-This package offers two different usages: [directive](#directive) or [component](#component).
+This package offers two different usages: [directive](#directive) or [component](#component). You can use them to create tooltips, popovers or all kinds of dropdowns.
 
 1. Install the plugin:
 
@@ -141,7 +141,7 @@ Vue.component('v-popover', VTooltip.VPopover)
 
 # Usage
 
-## Tooltip directive
+## Directive
 
 In the template, use the `v-tooltip` directive:
 
@@ -249,7 +249,7 @@ On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
 VTooltip.enabled = window.innerWidth > 768
 ```
 
-## Popover
+## Component
 
 If you need to display components inside the tooltip (or popover/dropdown, technically it's the same :smile:), use the `v-popover` component:
 
