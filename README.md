@@ -111,11 +111,14 @@ Of course, you can use a reactive property:
 You can specify the tooltip position as a modifier:
 
 ```html
-<button v-tooltip.bottom-left="'You have ' + count + ' new messages.'">
+<button v-tooltip.bottom-start="'You have ' + count + ' new messages.'">
 ```
 
 The available positions are:
 
+ - `'auto'`
+ - `'auto-start'`
+ - `'auto-end'`
  - `'top'`
  - `'top-start'`
  - `'top-end'`
