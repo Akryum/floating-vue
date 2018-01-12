@@ -116,10 +116,9 @@ Vue.component('v-popover', VPopover)
 
 ## Browser
 
-Include [popper.js](https://popper.js.org/) with [v-tooltip](/dist/v-tooltip.min.js) in the page.
+Include [v-tooltip](/dist/v-tooltip.min.js) in the page.
 
 ```html
-<script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
 ```
 
@@ -229,6 +228,7 @@ Or a reactive property:
 - `template` - HTML template of the tooltip.
 - `arrowSelector` - CSS selector to get the arrow element in the tooltip template.
 - `innerSelector` - CSS selector to get the inner content element in the tooltip template.
+- `autoHide` - Boolean: automatically close the tooltip on mouseover.
 - `popperOptions` - Other Popper.js options.
 
 You can change the default values in the [Global options](#global-options).

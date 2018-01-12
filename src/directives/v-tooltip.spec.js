@@ -83,6 +83,7 @@ describe('getOptions', () => {
 			offset: VTooltip.defaultOptions.defaultOffset,
 			container: VTooltip.defaultOptions.defaultContainer,
 			boundariesElement: VTooltip.defaultOptions.defaultBoundariesElement,
+			autoHide: VTooltip.defaultOptions.autoHide,
 			popperOptions: VTooltip.defaultOptions.defaultPopperOptions,
 		})
 	})
