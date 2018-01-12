@@ -114,6 +114,9 @@ You can specify the tooltip position as a modifier:
 
 The available positions are:
 
+ - `'auto'`
+ - `'auto-start'`
+ - `'auto-end'`
  - `'top'`
  - `'top-start'`
  - `'top-end'`
@@ -259,8 +262,8 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 **Props:**
 
 - `open` - Boolean that shows or hide the popover.
-- `disable` - Boolean that disables the popover. If it was already open, it will be closed.
-- `placement` - *(see above)* `auto`, `auto-start`, and `auto-end` are also available.
+- `disabled` - Boolean that disables the popover. If it was already open, it will be closed.
+- `placement` - *(see above)*
 - `delay` - *(see above)*
 - `trigger` - *(see above)*
 - `offset` - *(see above)*
@@ -286,6 +289,20 @@ You can change the default values in the [Global options](#global-options).
 - `auto-hide` - Emitted when the popover is closed if clicked outside.
 - `close-directive` - Emitted when the popover is closed with the [Close directive](#close-directive).
 - `resize` - Emitted when the content size changes. You must set the `handleResize` prop to `true`.
+
+### Disable popover
+
+```html
+<v-popover :disabled="isDisabled"></v-popover>
+```
+
+```js
+data () {
+  return {
+    isDisabled: true,
+  }
+}
+```
 
 ### Close directive
 

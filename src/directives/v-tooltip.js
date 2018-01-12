@@ -86,6 +86,7 @@ export function getOptions (options) {
 		offset: typeof options.offset !== 'undefined' ? options.offset : directive.options.defaultOffset,
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
+		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
 		popperOptions: {
 			...(typeof options.popperOptions !== 'undefined' ? options.popperOptions : directive.options.defaultPopperOptions),
 		},
