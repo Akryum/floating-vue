@@ -1,3 +1,4 @@
 src/
 docs/
 demo-src/
+.babelrc
