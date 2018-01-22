@@ -153,12 +153,15 @@ export function createTooltip (el, value, modifiers) {
 	const targetClasses = typeof value.targetClasses !== 'undefined' ? value.targetClasses : directive.options.defaultTargetClass
 	el._tooltipTargetClasses = targetClasses
 	addClasses(el, targetClasses)
+
+	return tooltip
 }
 
 export function destroyTooltip (el) {
 	if (el._tooltip) {
 		el._tooltip.dispose()
 		delete el._tooltip
+		delete el._tooltipOldShow
 	}
 
 	if (el._tooltipTargetClasses) {
@@ -171,17 +174,26 @@ export function bind (el, { value, oldValue, modifiers }) {
 	const content = getContent(value)
 	if (!content || !state.enabled) {
 		destroyTooltip(el)
-	} else if (el._tooltip) {
-		const tooltip = el._tooltip
-		// Content
-		tooltip.setContent(content)
-		// Options
-		tooltip.setOptions({
-			...value,
-			placement: getPlacement(value, modifiers),
-		})
 	} else {
-		createTooltip(el, value, modifiers)
+		let tooltip
+		if (el._tooltip) {
+			tooltip = el._tooltip
+			// Content
+			tooltip.setContent(content)
+			// Options
+			tooltip.setOptions({
+				...value,
+				placement: getPlacement(value, modifiers),
+			})
+		} else {
+			tooltip = createTooltip(el, value, modifiers)
+		}
+
+		// Manual show
+		if (typeof value.show !== 'undefined' && value.show !== el._tooltipOldShow) {
+			el._tooltipOldShow = value.show
+			value.show ? tooltip.show() : tooltip.hide()
+		}
 	}
 }
 
