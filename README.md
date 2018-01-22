@@ -222,6 +222,7 @@ Or a reactive property:
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `placement` - *(see above)*
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `show` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
 - `boundariesElement` - DOM element for the tooltip boundaries.
@@ -232,6 +233,20 @@ Or a reactive property:
 - `popperOptions` - Other Popper.js options.
 
 You can change the default values in the [Global options](#global-options).
+
+### Manual trigger example
+
+Use the `trigger` and `show` options:
+
+```html
+<button
+  v-tooltip="{
+    content: 'Tooltip content here',
+    show: isOpen,
+    trigger: 'manual',
+  }"
+>A button</button>
+```
 
 ### Tooltip auto-hiding
 
