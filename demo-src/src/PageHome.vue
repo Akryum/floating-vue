@@ -66,6 +66,41 @@
 
     <section class="demo">
       <div class="section-content">
+        <h2>Manual mode</h2>
+
+        <div class="form">
+          <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+        </div>
+
+        <template v-if="isVisible">
+          <div class="form">
+            <label><input type="radio" name="open2" v-model="isOpen" :value="true" /> Show</label>
+            <label><input type="radio" name="open2" v-model="isOpen" :value="false" /> Hide</label>
+          </div>
+
+          <button
+            class="tooltip-target"
+            v-tooltip="{
+              content: msg,
+              show: isOpen,
+              trigger: 'manual',
+              placement: 'bottom',
+            }"
+          >A button</button>
+        </template>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet5" lang="html"/>
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="demo">
+      <div class="section-content">
         <h2>Use with components to create a popover</h2>
 
         <div class="form">
@@ -377,6 +412,29 @@ const componentSnippet4 = `
 </template>
 `
 
+const componentSnippet5 = `
+<div class="form">
+  <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+</div>
+
+<template v-if="isVisible">
+  <div class="form">
+    <label><input type="radio" name="open2" v-model="isOpen" :value="true" /> Show</label>
+    <label><input type="radio" name="open2" v-model="isOpen" :value="false" /> Hide</label>
+  </div>
+
+  <button
+    class="tooltip-target"
+    v-tooltip="{
+      content: msg,
+      show: isOpen,
+      trigger: 'manual',
+      placement: 'bottom',
+    }"
+  >A button</button>
+</template>
+`
+
 export default {
   name: 'Home',
 
@@ -400,6 +458,7 @@ export default {
       componentSnippet3,
       styleSnippet3,
       componentSnippet4,
+      componentSnippet5,
     }
   },
 
