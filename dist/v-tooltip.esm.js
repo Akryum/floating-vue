@@ -3335,12 +3335,15 @@ function createTooltip(el, value, modifiers) {
 	var targetClasses = typeof value.targetClasses !== 'undefined' ? value.targetClasses : directive.options.defaultTargetClass;
 	el._tooltipTargetClasses = targetClasses;
 	addClasses(el, targetClasses);
+
+	return tooltip;
 }
 
 function destroyTooltip(el) {
 	if (el._tooltip) {
 		el._tooltip.dispose();
 		delete el._tooltip;
+		delete el._tooltipOldShow;
 	}
 
 	if (el._tooltipTargetClasses) {
@@ -3357,16 +3360,25 @@ function bind(el, _ref) {
 	var content = getContent(value);
 	if (!content || !state.enabled) {
 		destroyTooltip(el);
-	} else if (el._tooltip) {
-		var tooltip = el._tooltip;
-		// Content
-		tooltip.setContent(content);
-		// Options
-		tooltip.setOptions(_extends$1({}, value, {
-			placement: getPlacement(value, modifiers)
-		}));
 	} else {
-		createTooltip(el, value, modifiers);
+		var tooltip = void 0;
+		if (el._tooltip) {
+			tooltip = el._tooltip;
+			// Content
+			tooltip.setContent(content);
+			// Options
+			tooltip.setOptions(_extends$1({}, value, {
+				placement: getPlacement(value, modifiers)
+			}));
+		} else {
+			tooltip = createTooltip(el, value, modifiers);
+		}
+
+		// Manual show
+		if (typeof value.show !== 'undefined' && value.show !== el._tooltipOldShow) {
+			el._tooltipOldShow = value.show;
+			value.show ? tooltip.show() : tooltip.hide();
+		}
 	}
 }
 
