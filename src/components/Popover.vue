@@ -579,23 +579,19 @@ export default {
 		},
 
 		$_handleGlobalClose (event, touch = false) {
-			const popoverNode = this.$refs.popover
+			this.hide({ event: event })
 
-			if (event.closePopover || (this.autoHide && !popoverNode.contains(event.target))) {
-				this.hide({ event: event })
+			if (event.closePopover) {
+				this.$emit('close-directive')
+			} else {
+				this.$emit('auto-hide')
+			}
 
-				if (event.closePopover) {
-					this.$emit('close-directive')
-				} else {
-					this.$emit('auto-hide')
-				}
-
-				if (touch) {
-					this.$_preventOpen = true
-					setTimeout(() => {
-						this.$_preventOpen = false
-					}, 300)
-				}
+			if (touch) {
+				this.$_preventOpen = true
+				setTimeout(() => {
+					this.$_preventOpen = false
+				}, 300)
 			}
 		},
 
@@ -630,7 +626,7 @@ function handleGlobalClose (event, touch = false) {
 	let popover
 	for (let i = 0; i < openPopovers.length; i++) {
 		popover = openPopovers[i]
-		if (event.closeAllPopover || popover.$refs.popover.contains(event.target)) {
+		if (event.closeAllPopover || (event.closePopover && popover.$refs.popover.contains(event.target)) || popover.autoHide) {
 			popover.$_handleGlobalClose(event, touch)
 		}
 	}
