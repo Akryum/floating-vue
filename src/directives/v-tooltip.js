@@ -45,6 +45,10 @@ export const defaultOptions = {
 	defaultContainer: 'body',
 	defaultBoundariesElement: undefined,
 	defaultPopperOptions: {},
+	// Class added when content is loading
+	defaultLoadingClass: 'tooltip-loading',
+	// Displayed when tooltip content is loading
+	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
 	// Auto destroy tooltip DOM nodes (ms)
@@ -87,6 +91,8 @@ export function getOptions (options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
+		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
+		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,
 		popperOptions: {
 			...(typeof options.popperOptions !== 'undefined' ? options.popperOptions : directive.options.defaultPopperOptions),
 		},
@@ -134,7 +140,7 @@ export function getContent (value) {
 	}
 }
 
-export function createTooltip (el, value, modifiers) {
+export function createTooltip (el, value, modifiers = {}) {
 	const content = getContent(value)
 	let classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass
 	const opts = {

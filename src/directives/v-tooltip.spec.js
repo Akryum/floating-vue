@@ -84,6 +84,8 @@ describe('getOptions', () => {
 			container: VTooltip.defaultOptions.defaultContainer,
 			boundariesElement: VTooltip.defaultOptions.defaultBoundariesElement,
 			autoHide: VTooltip.defaultOptions.autoHide,
+			loadingClass: VTooltip.defaultOptions.defaultLoadingClass,
+			loadingContent: VTooltip.defaultOptions.defaultLoadingContent,
 			popperOptions: VTooltip.defaultOptions.defaultPopperOptions,
 		})
 	})

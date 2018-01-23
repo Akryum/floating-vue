@@ -2,7 +2,7 @@
 
 import Popper from 'popper.js'
 import { getOptions, directive } from '../directives/v-tooltip'
-import { addClasses, supportsPassive } from '../utils'
+import { addClasses, removeClasses, supportsPassive } from '../utils'
 
 const DEFAULT_OPTIONS = {
 	container: false,
@@ -120,17 +120,7 @@ export default class Tooltip {
 	setContent (content) {
 		this.options.title = content
 		if (this._tooltipNode) {
-			const el = this._tooltipNode.querySelector(this.options.innerSelector)
-
-			if (el) {
-				if (!content) {
-					el.innerHTML = ''
-				} else {
-					el.innerHTML = content
-				}
-
-				this.popperInstance.update()
-			}
+			this._setContent(content, this.options)
 		}
 	}
 
@@ -215,7 +205,7 @@ export default class Tooltip {
 	 * @param {Boolean} allowHtml
 	 * @return {HTMLelement} tooltipNode
 	 */
-	_create (reference, template, title, allowHtml) {
+	_create (reference, template) {
 		// create tooltip element
 		const tooltipGenerator = window.document.createElement('div')
 		tooltipGenerator.innerHTML = template.trim()
@@ -229,22 +219,6 @@ export default class Tooltip {
 		// CSS transitions can play
 		tooltipNode.setAttribute('aria-hidden', 'true')
 
-		// add title to tooltip
-		const titleNode = tooltipGenerator.querySelector(this.options.innerSelector)
-		if (title.nodeType === 1) {
-			// if title is a node, append it only if allowHtml is true
-			allowHtml && titleNode.appendChild(title)
-		} else if (typeof title === 'function') {
-			// if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
-			const titleText = title.call(reference)
-			allowHtml
-				? (titleNode.innerHTML = titleText)
-				: (titleNode.innerText = titleText)
-		} else {
-			// if it's just a simple text, set innerText or innerHtml depending by `allowHtml` value
-			allowHtml ? (titleNode.innerHTML = title) : (titleNode.innerText = title)
-		}
-
 		if (this.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
 			tooltipNode.addEventListener('mouseenter', this.hide)
 			tooltipNode.addEventListener('click', this.hide)
@@ -252,6 +226,52 @@ export default class Tooltip {
 
 		// return the generated tooltip node
 		return tooltipNode
+	}
+
+	_setContent (content, options) {
+		this.asyncContent = false
+		this._applyContent(content, options).then(() => {
+			this.popperInstance.update()
+		})
+	}
+
+	_applyContent (title, options) {
+		return new Promise((resolve, reject) => {
+			const allowHtml = options.html
+			const rootNode = this._tooltipNode
+			const titleNode = rootNode.querySelector(this.options.innerSelector)
+			if (title.nodeType === 1) {
+				// if title is a node, append it only if allowHtml is true
+				if (allowHtml) {
+					while (titleNode.firstChild) {
+						titleNode.removeChild(titleNode.firstChild)
+					}
+					titleNode.appendChild(title)
+				}
+			} else if (typeof title === 'function') {
+				// if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
+				const result = title()
+				if (result && typeof result.then === 'function') {
+					this.asyncContent = true
+					options.loadingClass && addClasses(rootNode, options.loadingClass)
+					if (options.loadingContent) {
+						this._applyContent(options.loadingContent, options)
+					}
+					result.then(asyncResult => {
+						options.loadingClass && removeClasses(rootNode, options.loadingClass)
+						return this._applyContent(asyncResult, options)
+					}).then(resolve).catch(reject)
+				} else {
+					this._applyContent(result, options)
+						.then(resolve).catch(reject)
+				}
+				return
+			} else {
+				// if it's just a simple text, set innerText or innerHtml depending by `allowHtml` value
+				allowHtml ? (titleNode.innerHTML = title) : (titleNode.innerText = title)
+			}
+			resolve()
+		})
 	}
 
 	_show (reference, options) {
@@ -295,6 +315,9 @@ export default class Tooltip {
 			this._tooltipNode.setAttribute('aria-hidden', 'false')
 			this.popperInstance.enableEventListeners()
 			this.popperInstance.update()
+			if (this.asyncContent) {
+				this._setContent(options.title, options)
+			}
 			return this
 		}
 
@@ -309,10 +332,11 @@ export default class Tooltip {
 		// create tooltip node
 		const tooltipNode = this._create(
 			reference,
-			options.template,
-			title,
-			options.html
+			options.template
 		)
+		this._tooltipNode = tooltipNode
+
+		this._setContent(title, options)
 
 		// Add `aria-describedby` to our reference element for accessibility reasons
 		reference.setAttribute('aria-describedby', tooltipNode.id)
@@ -341,8 +365,6 @@ export default class Tooltip {
 		}
 
 		this.popperInstance = new Popper(reference, tooltipNode, popperOptions)
-
-		this._tooltipNode = tooltipNode
 
 		// Fix position
 		requestAnimationFrame(() => {
