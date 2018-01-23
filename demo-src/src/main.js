@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VTooltip from '../../'
+import VTooltip, { createTooltip, destroyTooltip} from '../../'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
@@ -32,3 +32,17 @@ new Vue({
   router,
   render: h => h(App),
 })
+
+// Create tooltips without the directive
+window.manualTooltip = () => {
+  const el = document.querySelector('button')
+  const tooltip = createTooltip(el, {
+    content: 'This is a manual tooltip',
+    placement: 'bottom',
+    trigger: 'manual',
+  })
+  tooltip.show()
+  setTimeout(() => {
+    destroyTooltip(el)
+  }, 2000)
+}

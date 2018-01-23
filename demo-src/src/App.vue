@@ -278,6 +278,7 @@ label input {
       padding: 24px;
       border-radius: 5px;
       box-shadow: 0 5px 30px rgba(black, .1);
+      max-width: 250px;
     }
 
     .tooltip-arrow {
@@ -298,6 +299,21 @@ label input {
 
     .popover-arrow {
       border-color: $color;
+    }
+  }
+
+  &.tooltip-loading {
+    .tooltip-inner {
+      color: #77aaff;
+    }
+  }
+}
+
+.v-popover {
+  &.inline {
+    display: inline-block;
+    &:not(:last-child) {
+      margin-right: 12px;
     }
   }
 }
@@ -369,6 +385,12 @@ label input {
 
     &.b3 {
       transform: rotate(-5deg);
+    }
+
+    &.popover-btn {
+      background: #333;
+      color: #eee;
+      border-color: #999;
     }
   }
 }

@@ -40,9 +40,19 @@
     <section class="demo">
       <div class="section-content">
         <h2>Customize it!</h2>
+
+        <div class="form">
+          <select v-model="placement">
+            <option value="bottom-center">bottom</option>
+            <option value="top-center">top</option>
+            <option value="left-center">left</option>
+            <option value="right-center">right</option>
+          </select>
+        </div>
+
         <button class="tooltip-target b2" v-tooltip="{
           content: 'You can change a lot of parameters: placement, classes, offset, delay...',
-          placement: 'bottom-center',
+          placement,
           classes: ['info'],
           targetClasses: ['it-has-a-tooltip'],
           offset: 100,
@@ -60,6 +70,30 @@
           <CodeSnippet class="snippet" :code="componentSnippet2" lang="html"/>
           <div class="plus">+</div>
           <CodeSnippet class="snippet" :code="styleSnippet2" lang="scss"/>
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="demo">
+      <div class="section-content">
+        <h2>Async content</h2>
+
+        <button
+          class="tooltip-target"
+          v-tooltip="{
+            content: asyncContent,
+            loadingContent: '<i>Loading...</i>',
+          }"
+        >Hover me</button>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet6" lang="html"/>
+          <div class="plus">+</div>
+          <CodeSnippet class="snippet" :code="styleSnippet6" lang="scss"/>
         </div>
       </Collapse>
     </section>
@@ -105,13 +139,24 @@
 
         <div class="form">
           <label><input type="checkbox" name="enabled" v-model="isEnabled" /> Enable</label>
+
+          <label><input type="checkbox" name="auto-hide" v-model="isAutoHiding" /> AutoHide</label>
+
+          <select v-model="placement">
+            <option value="bottom-center">bottom</option>
+            <option value="top-center">top</option>
+            <option value="left-center">left</option>
+            <option value="right-center">right</option>
+          </select>
         </div>
 
         <v-popover
           offset="16"
+          :placement="placement"
+          :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
         >
-          <button class="tooltip-target b3">Click me</button>
+          <button class="tooltip-target b3 popover-btn">Click me</button>
 
           <template slot="popover">
             <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
@@ -144,6 +189,81 @@
 
     <section class="demo">
       <div class="section-content">
+        <h2>Open group</h2>
+
+        <div class="form">
+          <a
+            v-close-popover.all
+            class="btn"
+          >Close All</a>
+        </div>
+
+        <v-popover
+          class="inline"
+          :placement="placement"
+          :auto-hide="false"
+          open-group="group1"
+        >
+          <button class="tooltip-target b1 popover-btn">Group 1</button>
+
+          <template slot="popover">
+            <div class="close">
+              <a
+                v-close-popover
+                class="btn"
+              >Close</a>
+            </div>
+          </template>
+        </v-popover>
+
+        <v-popover
+          class="inline"
+          :placement="placement"
+          :auto-hide="false"
+          open-group="group1"
+        >
+          <button class="tooltip-target b2 popover-btn">Group 1</button>
+
+          <template slot="popover">
+            <div class="close">
+              <a
+                v-close-popover
+                class="btn"
+              >Close</a>
+            </div>
+          </template>
+        </v-popover>
+
+        <v-popover
+          class="inline"
+          :placement="placement"
+          :auto-hide="false"
+          open-group="group2"
+        >
+          <button class="tooltip-target b3 popover-btn">Group 2</button>
+
+          <template slot="popover">
+            <div class="close">
+              <a
+                v-close-popover
+                class="btn"
+              >Close</a>
+            </div>
+          </template>
+        </v-popover>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet class="snippet" :code="componentSnippet7" lang="html"/>
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="demo">
+      <div class="section-content">
         <h2>Manual mode</h2>
 
         <div class="form">
@@ -162,7 +282,7 @@
             offset="16"
             :auto-hide="false"
           >
-            <button class="tooltip-target b1">Target</button>
+            <button class="tooltip-target b1 popover-btn">Target</button>
 
             <template slot="popover">
               <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
@@ -332,6 +452,7 @@ const styleSnippet2 = `
       padding: 24px;
       border-radius: 5px;
       box-shadow: 0 5px 30px rgba(black, .1);
+      max-width: 250px;
     }
 
     .tooltip-arrow {
@@ -424,7 +545,6 @@ const componentSnippet5 = `
   </div>
 
   <button
-    class="tooltip-target"
     v-tooltip="{
       content: msg,
       show: isOpen,
@@ -433,6 +553,54 @@ const componentSnippet5 = `
     }"
   >A button</button>
 </template>
+`
+
+const componentSnippet6 = `
+<button
+  v-tooltip="{
+    content: asyncContent,
+    loadingContent: '<i>Loading...</i>',
+  }"
+>Hover me</button>
+`
+
+const styleSnippet6 = `
+.tooltip {
+  // ...
+
+  &.tooltip-loading {
+    .tooltip-inner {
+      color: #77aaff;
+    }
+  }
+}
+`
+
+const componentSnippet7 = `
+<a
+  v-close-popover.all
+>Close All</a>
+
+<v-popover
+  :auto-hide="false"
+  open-group="group1"
+>
+  <!-- ... -->
+</v-popover>
+
+<v-popover
+  :auto-hide="false"
+  open-group="group1"
+>
+  <!-- ... -->
+</v-popover>
+
+<v-popover
+  :auto-hide="false"
+  open-group="group2"
+>
+  <!-- ... -->
+</v-popover>
 `
 
 export default {
@@ -447,6 +615,8 @@ export default {
   data () {
     return {
       msg: `This is a button.`,
+      placement: 'bottom-center',
+      isAutoHiding: false,
       isEnabled: true,
       isVisible: true,
       isOpen: false,
@@ -459,6 +629,9 @@ export default {
       styleSnippet3,
       componentSnippet4,
       componentSnippet5,
+      componentSnippet6,
+      styleSnippet6,
+      componentSnippet7,
     }
   },
 
@@ -467,6 +640,14 @@ export default {
       if (screenfull.enabled) {
         screenfull.toggle(document.documentElement)
       }
+    },
+
+    asyncContent () {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(`Hi, I'm some content from a server! :)`)
+        }, 2000)
+      })
     },
   },
 }
