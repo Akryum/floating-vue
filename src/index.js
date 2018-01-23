@@ -3,6 +3,8 @@ import vclosepopover from './directives/v-close-popover'
 import Popover from './components/Popover.vue'
 import merge from 'lodash.merge'
 
+export { createTooltip, destroyTooltip } from './directives/v-tooltip'
+
 export function install (Vue, options = {}) {
 	if (install.installed) return
 	install.installed = true
