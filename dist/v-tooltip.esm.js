@@ -4200,23 +4200,19 @@ var Popover = { render: function render() {
 
 			var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-			var popoverNode = this.$refs.popover;
+			this.hide({ event: event });
 
-			if (event.closePopover || this.autoHide && !popoverNode.contains(event.target)) {
-				this.hide({ event: event });
+			if (event.closePopover) {
+				this.$emit('close-directive');
+			} else {
+				this.$emit('auto-hide');
+			}
 
-				if (event.closePopover) {
-					this.$emit('close-directive');
-				} else {
-					this.$emit('auto-hide');
-				}
-
-				if (touch) {
-					this.$_preventOpen = true;
-					setTimeout(function () {
-						_this8.$_preventOpen = false;
-					}, 300);
-				}
+			if (touch) {
+				this.$_preventOpen = true;
+				setTimeout(function () {
+					_this8.$_preventOpen = false;
+				}, 300);
 			}
 		},
 		$_handleResize: function $_handleResize() {
@@ -4252,7 +4248,7 @@ function handleGlobalClose(event) {
 	var popover = void 0;
 	for (var i = 0; i < openPopovers.length; i++) {
 		popover = openPopovers[i];
-		if (event.closeAllPopover || popover.$refs.popover.contains(event.target)) {
+		if (event.closeAllPopover || event.closePopover && popover.$refs.popover.contains(event.target) || popover.autoHide) {
 			popover.$_handleGlobalClose(event, touch);
 		}
 	}
