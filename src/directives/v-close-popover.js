@@ -17,6 +17,7 @@ function removeListeners (el) {
 function onClick (event) {
 	const el = event.currentTarget
 	event.closePopover = !el.$_vclosepopover_touch
+	event.closeAllPopover = el.$_closePopoverModifiers && !!el.$_closePopoverModifiers.all
 }
 
 function onTouchStart (event) {
@@ -40,6 +41,7 @@ function onTouchEnd (event) {
 			Math.abs(touch.screenY - firstTouch.screenY) < 20 &&
 			Math.abs(touch.screenX - firstTouch.screenX) < 20
 		)
+		event.closeAllPopover = el.$_closePopoverModifiers && !!el.$_closePopoverModifiers.all
 	}
 }
 
@@ -49,12 +51,14 @@ function onTouchCancel (event) {
 }
 
 export default {
-	bind (el, { value }) {
+	bind (el, { value, modifiers }) {
+		el.$_closePopoverModifiers = modifiers
 		if (typeof value === 'undefined' || value) {
 			addListeners(el)
 		}
 	},
-	update (el, { value, oldValue }) {
+	update (el, { value, oldValue, modifiers }) {
+		el.$_closePopoverModifiers = modifiers
 		if (value !== oldValue) {
 			if (typeof value === 'undefined' || value) {
 				addListeners(el)

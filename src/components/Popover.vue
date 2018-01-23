@@ -52,7 +52,7 @@ function getDefault (key) {
 
 let isIOS = false
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-	isIOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+	isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
 const openPopovers = []
@@ -129,6 +129,10 @@ export default {
 			type: Boolean,
 			default: () => directive.options.popover.defaultHandleResize,
 		},
+		openGroup: {
+			type: String,
+			default: null,
+		},
 	},
 
 	data () {
@@ -172,6 +176,7 @@ export default {
 		container (val) {
 			if (this.isOpen && this.popperInstance) {
 				const popoverNode = this.$refs.popover
+				const reference = this.$refs.trigger
 
 				const container = this.$_findContainer(this.container, reference)
 				if (!container) {
@@ -355,6 +360,18 @@ export default {
 				})
 			}
 
+			const openGroup = this.openGroup
+			if (openGroup) {
+				let popover
+				for (let i = 0; i < openPopovers.length; i++) {
+					popover = openPopovers[i]
+					if (popover.openGroup !== openGroup) {
+						popover.hide()
+						popover.$emit('close-group')
+					}
+				}
+			}
+
 			openPopovers.push(this)
 		},
 
@@ -417,12 +434,12 @@ export default {
 			const oppositeEvents = []
 
 			const events = typeof this.trigger === 'string'
-			? this.trigger
-				.split(' ')
-				.filter(
-					trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-				)
-			: []
+				? this.trigger
+					.split(' ')
+					.filter(
+						trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+					)
+				: []
 
 			events.forEach(event => {
 				switch (event) {
@@ -610,8 +627,12 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose (event, touch = false) {
+	let popover
 	for (let i = 0; i < openPopovers.length; i++) {
-		openPopovers[i].$_handleGlobalClose(event, touch)
+		popover = openPopovers[i]
+		if (event.closeAllPopover || popover.$refs.popover.contains(event.target)) {
+			popover.$_handleGlobalClose(event, touch)
+		}
 	}
 }
 </script>
