@@ -4248,7 +4248,8 @@ function handleGlobalClose(event) {
 	var popover = void 0;
 	for (var i = 0; i < openPopovers.length; i++) {
 		popover = openPopovers[i];
-		if (event.closeAllPopover || event.closePopover && popover.$refs.popover.contains(event.target) || popover.autoHide) {
+		var contains = popover.$refs.popover.contains(event.target);
+		if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
 			popover.$_handleGlobalClose(event, touch);
 		}
 	}
