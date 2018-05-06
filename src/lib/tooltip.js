@@ -297,6 +297,8 @@ export default class Tooltip {
 			addClasses(this._tooltipNode, this._classes)
 		}
 
+		addClasses(reference, ['v-tooltip-open'])
+
 		return result
 	}
 
@@ -422,6 +424,8 @@ export default class Tooltip {
 				}
 			}, disposeTime)
 		}
+
+		removeClasses(this.reference, ['v-tooltip-open'])
 
 		return this
 	}
