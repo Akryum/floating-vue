@@ -5,6 +5,7 @@
 			class="trigger"
 			style="display: inline-block;"
 			:aria-describedby="popoverId"
+			:tabindex="trigger.indexOf('focus') !== -1 ? 0 : -1"
 		>
 			<slot />
 		</span>
