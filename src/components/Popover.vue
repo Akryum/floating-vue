@@ -248,15 +248,12 @@ export default {
 		show ({ event, skipDelay = false, force = false } = {}) {
 			if (force || !this.disabled) {
 				this.$_scheduleShow(event)
-				this.$emit('show')
 			}
 			this.$emit('update:open', true)
 		},
 
 		hide ({ event, skipDelay = false } = {}) {
 			this.$_scheduleHide(event)
-
-			this.$emit('hide')
 			this.$emit('update:open', false)
 		},
 
@@ -373,6 +370,7 @@ export default {
 			}
 
 			openPopovers.push(this)
+			this.$emit('show')
 		},
 
 		$_hide () {
@@ -403,6 +401,8 @@ export default {
 					}
 				}, disposeTime)
 			}
+
+			this.$emit('hide')
 		},
 
 		$_findContainer (container, reference) {
