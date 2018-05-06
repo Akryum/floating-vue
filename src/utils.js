@@ -17,7 +17,7 @@ export function addClasses (el, classes) {
 	const newClasses = convertToArray(classes)
 	let classList
 	if (el.className instanceof SVGAnimatedString) {
-		classList = Array.from(el.className)
+		classList = convertToArray(el.className.baseVal)
 	} else {
 		classList = convertToArray(el.className)
 	}
@@ -44,7 +44,7 @@ export function removeClasses (el, classes) {
 	const newClasses = convertToArray(classes)
 	let classList
 	if (el.className instanceof SVGAnimatedString) {
-		classList = Array.from(el.className)
+		classList = convertToArray(el.className.baseVal)
 	} else {
 		classList = convertToArray(el.className)
 	}
