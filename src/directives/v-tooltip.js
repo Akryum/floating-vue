@@ -27,6 +27,8 @@ export const defaultOptions = {
 	defaultClass: 'vue-tooltip-theme',
 	// Default CSS classes applied to the target element of the tooltip
 	defaultTargetClass: 'has-tooltip',
+	// Is the content HTML by default?
+	defaultHtml: true,
 	// Default HTML template of the tooltip element
 	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
 	// Change if the classes conflict with other libraries (for example bootstrap)
@@ -83,6 +85,7 @@ export function getOptions (options) {
 	const result = {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
+		html: typeof options.html !== 'undefined' ? options.html : directive.options.defaultHtml,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
 		arrowSelector: typeof options.arrowSelector !== 'undefined' ? options.arrowSelector : directive.options.defaultArrowSelector,
 		innerSelector: typeof options.innerSelector !== 'undefined' ? options.innerSelector : directive.options.defaultInnerSelector,
@@ -145,7 +148,6 @@ export function createTooltip (el, value, modifiers = {}) {
 	let classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass
 	const opts = {
 		title: content,
-		html: true,
 		...getOptions({
 			...value,
 			placement: getPlacement(value, modifiers),

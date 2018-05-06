@@ -76,6 +76,7 @@ describe('getOptions', () => {
 		expect(result).toEqual({
 			placement: VTooltip.defaultOptions.defaultPlacement,
 			delay: VTooltip.defaultOptions.defaultDelay,
+			html: VTooltip.defaultOptions.defaultHtml,
 			template: VTooltip.defaultOptions.defaultTemplate,
 			innerSelector: VTooltip.defaultOptions.defaultInnerSelector,
 			arrowSelector: VTooltip.defaultOptions.defaultArrowSelector,
