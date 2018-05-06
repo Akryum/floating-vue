@@ -57,6 +57,11 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 
 const openPopovers = []
 
+let Element = function () {}
+if (typeof window !== 'undefined') {
+	Element = window.Element
+}
+
 export default {
 	name: 'VPopover',
 

@@ -1,3 +1,7 @@
+let SVGAnimatedString = function () {}
+if (typeof window !== 'undefined') {
+	SVGAnimatedString = window.SVGAnimatedString
+}
 
 export function convertToArray (value) {
 	if (typeof value === 'string') {
