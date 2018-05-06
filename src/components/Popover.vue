@@ -19,7 +19,6 @@
 			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
 			<div :class="popoverWrapperClass">
-				<div ref="arrow" :class="popoverArrowClass"></div>
 				<div
 					ref="inner"
 					:class="popoverInnerClass"
@@ -31,6 +30,7 @@
 
 					<ResizeObserver v-if="handleResize" @notify="$_handleResize" />
 				</div>
+				<div ref="arrow" :class="popoverArrowClass"></div>
 			</div>
 		</div>
 	</div>

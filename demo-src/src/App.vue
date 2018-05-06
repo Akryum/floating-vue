@@ -194,7 +194,6 @@ label input {
     position: absolute;
     margin: 5px;
     border-color: black;
-    z-index: 1;
   }
 
   &[x-placement^="top"] {
