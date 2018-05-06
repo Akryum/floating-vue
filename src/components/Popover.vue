@@ -373,6 +373,8 @@ export default {
 			}
 
 			openPopovers.push(this)
+
+			this.$emit('apply-show')
 		},
 
 		$_hide () {
@@ -403,6 +405,8 @@ export default {
 					}
 				}, disposeTime)
 			}
+
+			this.$emit('apply-hide')
 		},
 
 		$_findContainer (container, reference) {
