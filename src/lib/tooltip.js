@@ -599,7 +599,8 @@ if (typeof document !== 'undefined') {
 		}
 	}, supportsPassive ? {
 		passive: true,
-	} : false)
+		capture: true,
+	} : true)
 }
 
 /**
