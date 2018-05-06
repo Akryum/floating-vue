@@ -10,7 +10,7 @@
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "prepublish": "npm run test && npm run build",
+    "prepublishOnly": "npm run test && npm run build",
     "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
     "test": "npm run test:unit",
     "test:unit": "jest --config tests/unit/jest.config.js --coverage"
