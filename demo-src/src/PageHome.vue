@@ -151,7 +151,7 @@
         </div>
 
         <v-popover
-          offset="16"
+          :offset="offset"
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
@@ -620,6 +620,7 @@ export default {
       isEnabled: true,
       isVisible: true,
       isOpen: false,
+      offset: 16,
       mainSnippet,
       componentSnippet1,
       styleSnippet1,
