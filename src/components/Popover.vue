@@ -528,10 +528,10 @@ export default {
 			const reference = this.$refs.trigger
 			const popoverNode = this.$refs.popover
 
-			const relatedreference = event.relatedreference || event.toElement
+			const relatedreference = event.relatedreference || event.toElement || event.relatedTarget
 
 			const callback = event2 => {
-				const relatedreference2 = event2.relatedreference || event2.toElement
+				const relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget
 
 				// Remove event listener after call
 				popoverNode.removeEventListener(event.type, callback)
