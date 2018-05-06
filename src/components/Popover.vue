@@ -14,7 +14,7 @@
 			:id="popoverId"
 			:class="[popoverBaseClass, popoverClass, cssClass]"
 			:style="{
-				display: isOpen ? '' : 'none',
+				visibility: isOpen ? 'visible' : 'hidden',
 			}"
 			:aria-hidden="isOpen ? 'false' : 'true'"
 		>
