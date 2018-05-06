@@ -219,6 +219,7 @@ Or a reactive property:
 - `content` - HTML text to be displayed in the tooltip. Can also be a function that returns the content or a Promise.
 - `classes` - *(see above)*
 - `targetClasses` - CSS classes added to the target element of the tooltip.
+- `html` - Boolean: allow HTML tooltip content.
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `placement` - *(see above)*
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
@@ -230,6 +231,7 @@ Or a reactive property:
 - `arrowSelector` - CSS selector to get the arrow element in the tooltip template.
 - `innerSelector` - CSS selector to get the inner content element in the tooltip template.
 - `autoHide` - Boolean: automatically close the tooltip on mouseover.
+- `hideOnTargetClick` - Boolean: automatically close the tooltip on target click.
 - `loadingClass` - CSS classes added to the tooltip when content is loading.
 - `loadingContent` - Same as `content`, used when the actual tooltip content is loading.
 - `popperOptions` - Other Popper.js options.
@@ -466,6 +468,8 @@ The default global options are:
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
+	// Close tooltip on click on tooltip target?
+	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
 	disposeTimeout: 5000,
 	// Options for popover
