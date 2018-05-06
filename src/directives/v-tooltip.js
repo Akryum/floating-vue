@@ -53,6 +53,8 @@ export const defaultOptions = {
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
+	// Close tooltip on click on tooltip target?
+	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
 	disposeTimeout: 5000,
 	// Options for popover
@@ -94,6 +96,7 @@ export function getOptions (options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
+		hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
 		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
 		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,
 		popperOptions: {

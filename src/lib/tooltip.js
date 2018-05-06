@@ -490,10 +490,12 @@ export default class Tooltip {
 			case 'hover':
 				directEvents.push('mouseenter')
 				oppositeEvents.push('mouseleave')
+				if (this.options.hideOnTargetClick) oppositeEvents.push('click')
 				break
 			case 'focus':
 				directEvents.push('focus')
 				oppositeEvents.push('blur')
+				if (this.options.hideOnTargetClick) oppositeEvents.push('click')
 				break
 			case 'click':
 				directEvents.push('click')
