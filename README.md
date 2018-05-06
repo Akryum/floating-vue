@@ -364,7 +364,9 @@ You can change the default values in the [Global options](#global-options).
 
 - `update:open(Boolean)` - This allow you to use the `.sync` modifier on the `open` prop.
 - `show`
+- `apply-show` - Emitted after the show delay
 - `hide`
+- `apply-hide` - Emitted after the hide delay
 - `dispose`
 - `auto-hide` - Emitted when the popover is closed if clicked outside.
 - `close-directive` - Emitted when the popover is closed with the [Close directive](#close-directive).
@@ -438,6 +440,8 @@ The default global options are:
 	defaultClass: 'vue-tooltip-theme',
 	// Default CSS classes applied to the target element of the tooltip
 	defaultTargetClass: 'has-tooltip',
+	// Is the content HTML by default?
+	defaultHtml: true,
 	// Default HTML template of the tooltip element
 	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
 	// Change if the classes conflict with other libraries (for example bootstrap)
