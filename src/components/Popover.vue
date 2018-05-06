@@ -190,7 +190,7 @@ export default {
 				}
 
 				container.appendChild(popoverNode)
-				this.popperInstance.update()
+				this.popperInstance.scheduleUpdate()
 			}
 		},
 
@@ -199,25 +199,13 @@ export default {
 			this.$_addEventListeners()
 		},
 
-		offset (val) {
-			this.$_updatePopper(() => {
-				if (val) {
-					const offset = this.$_getOffset()
-
-					this.popperInstance.options.modifiers.offset = {
-						offset,
-					}
-				} else {
-					this.popperInstance.options.modifiers.offset = undefined
-				}
-			})
-		},
-
 		placement (val) {
 			this.$_updatePopper(() => {
 				this.popperInstance.options.placement = val
 			})
 		},
+
+		offset: '$_restartPopper',
 
 		boundariesElement: '$_restartPopper',
 
@@ -283,6 +271,8 @@ export default {
 				}
 			}
 			this.$_mounted = false
+			this.popperInstance = null
+			this.isOpen = false
 
 			this.$emit('dispose')
 		},
@@ -308,7 +298,7 @@ export default {
 			if (this.popperInstance) {
 				this.isOpen = true
 				this.popperInstance.enableEventListeners()
-				this.popperInstance.update()
+				this.popperInstance.scheduleUpdate()
 			}
 
 			if (!this.$_mounted) {
@@ -353,7 +343,7 @@ export default {
 				// Fix position
 				requestAnimationFrame(() => {
 					if (!this.$_isDisposed && this.popperInstance) {
-						this.popperInstance.update()
+						this.popperInstance.scheduleUpdate()
 
 						// Show the tooltip
 						requestAnimationFrame(() => {
@@ -574,9 +564,9 @@ export default {
 		},
 
 		$_updatePopper (cb) {
-			if (this.isOpen && this.popperInstance) {
+			if (this.popperInstance) {
 				cb()
-				this.popperInstance.update()
+				if (this.isOpen) this.popperInstance.scheduleUpdate()
 			}
 		},
 
@@ -584,9 +574,10 @@ export default {
 			if (this.popperInstance) {
 				const isOpen = this.isOpen
 				this.dispose()
+				this.$_isDisposed = false
 				this.$_init()
 				if (isOpen) {
-					this.show()
+					this.show({ skipDelay: true, force: true })
 				}
 			}
 		},
@@ -612,7 +603,7 @@ export default {
 
 		$_handleResize () {
 			if (this.isOpen && this.popperInstance) {
-				this.popperInstance.update()
+				this.popperInstance.scheduleUpdate()
 				this.$emit('resize')
 			}
 		},
