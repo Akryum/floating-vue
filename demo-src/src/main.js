@@ -8,6 +8,15 @@ const PageTable = () => import('./PageTable.vue')
 
 Vue.use(VTooltip, {
   disposeTimeout: 5000,
+  popover: {
+    defaultPopperOptions: {
+      modifiers: {
+        preventOverflow: {
+          padding: 12,
+        },
+      },
+    },
+  },
 })
 
 VTooltip.options.defaultDelay = {
