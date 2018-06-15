@@ -121,6 +121,10 @@ export function getOptions (options) {
 		}
 	}
 
+	if (result.trigger && result.trigger.indexOf('click') !== -1) {
+		result.hideOnTargetClick = false
+	}
+
 	return result
 }
 
