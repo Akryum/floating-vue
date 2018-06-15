@@ -96,7 +96,7 @@ export default {
 			default: () => getDefault('defaultTrigger'),
 		},
 		container: {
-			type: [String, Object, Element],
+			type: [String, Object, Element, Boolean],
 			default: () => getDefault('defaultContainer'),
 		},
 		boundariesElement: {
