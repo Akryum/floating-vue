@@ -2892,6 +2892,7 @@ var Tooltip = function () {
 			return new Promise(function (resolve, reject) {
 				var allowHtml = options.html;
 				var rootNode = _this2._tooltipNode;
+				if (!rootNode) return;
 				var titleNode = rootNode.querySelector(_this2.options.innerSelector);
 				if (title.nodeType === 1) {
 					// if title is a node, append it only if allowHtml is true
@@ -3437,6 +3438,10 @@ function getOptions(options) {
 		};
 	}
 
+	if (result.trigger && result.trigger.indexOf('click') !== -1) {
+		result.hideOnTargetClick = false;
+	}
+
 	return result;
 }
 
@@ -3792,13 +3797,13 @@ var Popover = { render: function render() {
 			}
 		},
 		container: {
-			type: [String, Object, Element],
+			type: [String, Object, Element, Boolean],
 			default: function _default() {
 				return getDefault('defaultContainer');
 			}
 		},
 		boundariesElement: {
-			type: Element,
+			type: [String, Element],
 			default: function _default() {
 				return getDefault('defaultBoundariesElement');
 			}
@@ -4043,23 +4048,23 @@ var Popover = { render: function render() {
 				});
 
 				popperOptions.modifiers = _extends$1({}, popperOptions.modifiers, {
-					arrow: {
+					arrow: _extends$1({}, popperOptions.modifiers && popperOptions.modifiers.arrow, {
 						element: this.$refs.arrow
-					}
+					})
 				});
 
 				if (this.offset) {
 					var offset = this.$_getOffset();
 
-					popperOptions.modifiers.offset = {
+					popperOptions.modifiers.offset = _extends$1({}, popperOptions.modifiers && popperOptions.modifiers.offset, {
 						offset: offset
-					};
+					});
 				}
 
 				if (this.boundariesElement) {
-					popperOptions.modifiers.preventOverflow = {
+					popperOptions.modifiers.preventOverflow = _extends$1({}, popperOptions.modifiers && popperOptions.modifiers.preventOverflow, {
 						boundariesElement: this.boundariesElement
-					};
+					});
 				}
 
 				this.popperInstance = new Popper(reference, popoverNode, popperOptions);
