@@ -239,6 +239,7 @@ export default class Tooltip {
 		return new Promise((resolve, reject) => {
 			const allowHtml = options.html
 			const rootNode = this._tooltipNode
+			if (!rootNode) return
 			const titleNode = rootNode.querySelector(this.options.innerSelector)
 			if (title.nodeType === 1) {
 				// if title is a node, append it only if allowHtml is true
