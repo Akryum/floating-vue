@@ -100,7 +100,7 @@ export default {
 			default: () => getDefault('defaultContainer'),
 		},
 		boundariesElement: {
-			type: Element,
+			type: [String, Element],
 			default: () => getDefault('defaultBoundariesElement'),
 		},
 		popperOptions: {
