@@ -321,6 +321,7 @@ export default {
 				popperOptions.modifiers = {
 					...popperOptions.modifiers,
 					arrow: {
+						...popperOptions.modifiers && popperOptions.modifiers.arrow,
 						element: this.$refs.arrow,
 					},
 				}
@@ -329,12 +330,14 @@ export default {
 					const offset = this.$_getOffset()
 
 					popperOptions.modifiers.offset = {
+						...popperOptions.modifiers && popperOptions.modifiers.offset,
 						offset,
 					}
 				}
 
 				if (this.boundariesElement) {
 					popperOptions.modifiers.preventOverflow = {
+						...popperOptions.modifiers && popperOptions.modifiers.preventOverflow,
 						boundariesElement: this.boundariesElement,
 					}
 				}
