@@ -607,7 +607,7 @@ export default {
 
 		$_handleResize () {
 			if (this.isOpen && this.popperInstance) {
-				this.popperInstance.scheduleUpdate()
+				this.popperInstance.update()
 				this.$emit('resize')
 			}
 		},
