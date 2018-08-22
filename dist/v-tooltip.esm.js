@@ -2671,6 +2671,7 @@ var DEFAULT_OPTIONS = {
 };
 
 var openTooltips = [];
+var mouseTrackers = [];
 
 var Tooltip = function () {
 	/**
@@ -2680,7 +2681,7 @@ var Tooltip = function () {
   * @param {Object} options
   * @param {String} options.placement=bottom
   *			Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
-  *			left(-start, -end)`
+  *			left(-start, -end), mouse(-top, -right, -bottom, -left)`
   * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
   * @param {Number|Object} options.delay=0
   *			Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
@@ -3012,6 +3013,40 @@ var Tooltip = function () {
 				};
 			}
 
+			mouseTrackers[tooltipNode.id] = { pageX: 0, pageY: 0 };
+
+			popperOptions.onCreate = function () {
+				var mouseTrackerId = tooltipNode.id;
+
+				return function (_ref) {
+					var instance = _ref.instance;
+
+					document.addEventListener("mousemove", function (_ref2) {
+						var pageX = _ref2.pageX,
+						    pageY = _ref2.pageY;
+
+						pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+						mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
+						instance.scheduleUpdate();
+					});
+				};
+			}();
+
+			reference.getBoundingClientRect = function () {
+				var mouseTrackerId = tooltipNode.id;
+
+				return function () {
+					return {
+						top: mouseTrackers[mouseTrackerId].pageY,
+						right: mouseTrackers[mouseTrackerId].pageX,
+						bottom: mouseTrackers[mouseTrackerId].pageY,
+						left: mouseTrackers[mouseTrackerId].pageX,
+						height: 0,
+						width: 0
+					};
+				};
+			}();
+
 			this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
 
 			// Fix position
@@ -3061,6 +3096,16 @@ var Tooltip = function () {
 
 			this.popperInstance.disableEventListeners();
 
+			// TODO: add the removal of the event listener, if there's a onHide method available.
+			document.removeEventListener("mousemove", function (_ref3) {
+				var pageX = _ref3.pageX,
+				    pageY = _ref3.pageY;
+
+				pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+				mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
+				instance.scheduleUpdate();
+			});
+
 			clearTimeout(this._disposeTimer);
 			var disposeTime = directive.options.disposeTimeout;
 			if (disposeTime !== null) {
@@ -3087,9 +3132,9 @@ var Tooltip = function () {
 			this._isDisposed = true;
 
 			// remove event listeners first to prevent any unexpected behaviour
-			this._events.forEach(function (_ref) {
-				var func = _ref.func,
-				    event = _ref.event;
+			this._events.forEach(function (_ref4) {
+				var func = _ref4.func,
+				    event = _ref4.event;
 
 				_this5.reference.removeEventListener(event, func);
 			});
