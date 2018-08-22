@@ -23,6 +23,8 @@ const positions = [
 export const defaultOptions = {
 	// Default tooltip placement relative to target element
 	defaultPlacement: 'top',
+	// Follow mouse cursor over affected element
+	followMouse: false,
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
 	// Default CSS classes applied to the target element of the tooltip
@@ -55,7 +57,7 @@ export const defaultOptions = {
 	autoHide: true,
 	// function to execute when the tooltip gets hidden
 	onHide: undefined,
-	// delay, after which time the onHide method should be executed
+	// Delay, after which time the onHide method should be executed
 	onHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
@@ -90,6 +92,7 @@ export const defaultOptions = {
 export function getOptions (options) {
 	const result = {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
+		followMouse: typeof options.followMouse !== 'undefined' ? options.followMouse : directive.options.defaultfollowMouse,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
 		html: typeof options.html !== 'undefined' ? options.html : directive.options.defaultHtml,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,

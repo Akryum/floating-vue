@@ -2671,43 +2671,9 @@ var DEFAULT_OPTIONS = {
 };
 
 var openTooltips = [];
-var mouseTrackers = [];
+var mouseTrackers = {};
 
 var Tooltip = function () {
-<<<<<<< HEAD
-	/**
-  * Create a new Tooltip.js instance
-  * @class Tooltip
-  * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
-  * @param {Object} options
-  * @param {String} options.placement=bottom
-  *			Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
-  *			left(-start, -end), mouse(-top, -right, -bottom, -left)`
-  * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
-  * @param {Number|Object} options.delay=0
-  *			Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
-  *			If a number is supplied, delay is applied to both hide/show.
-  *			Object structure is: `{ show: 500, hide: 100 }`
-  * @param {Boolean} options.html=false - Insert HTML into the tooltip. If false, the content will inserted with `innerText`.
-  * @param {String|PlacementFunction} options.placement='top' - One of the allowed placements, or a function returning one of them.
-  * @param {String} [options.template='<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>']
-  *			Base HTML to used when creating the tooltip.
-  *			The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.
-  *			`.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.
-  *			The outermost wrapper element should have the `.tooltip` class.
-  * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
-  * @param {String} [options.trigger='hover focus']
-  *			How tooltip is triggered - click, hover, focus, manual.
-  *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
-  * @param {HTMLElement} options.boundariesElement
-  *			The element used as boundaries for the tooltip. For more information refer to Popper.js'
-  *			[boundariesElement docs](https://popper.js.org/popper-documentation.html)
-  * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
-  *			[offset docs](https://popper.js.org/popper-documentation.html)
-  * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
-  *			[options docs](https://popper.js.org/popper-documentation.html)
-  * @return {Object} instance - The generated tooltip instance
-=======
 	/**
   * Create a new Tooltip.js instance
   * @class Tooltip
@@ -2716,6 +2682,7 @@ var Tooltip = function () {
   * @param {String} options.placement=bottom
   *			Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
   *			left(-start, -end)`
+  * @param {Boolean} options.followMouse=false
   * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
   * @param {Number|Object} options.delay=0
   *			Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
@@ -2742,7 +2709,6 @@ var Tooltip = function () {
   * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
   *			[options docs](https://popper.js.org/popper-documentation.html)
   * @return {Object} instance - The generated tooltip instance
->>>>>>> 2f37994d48f32db26b405e4db69ad06d52e6f143
   */
 	function Tooltip(reference, options) {
 		classCallCheck$1(this, Tooltip);
@@ -2851,6 +2817,13 @@ var Tooltip = function () {
 					this.popperInstance.update();
 				}
 			}
+		}
+	}, {
+		key: '_mouseMoveHandler',
+		value: function _mouseMoveHandler() {
+			pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+			mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
+			instance.scheduleUpdate();
 		}
 
 		//
@@ -3051,39 +3024,35 @@ var Tooltip = function () {
 				};
 			}
 
-			mouseTrackers[tooltipNode.id] = { pageX: 0, pageY: 0 };
+			if (this.options.followMouse) {
+				mouseTrackers[tooltipNode.id] = { pageX: 0, pageY: 0 };
 
-			popperOptions.onCreate = function () {
-				var mouseTrackerId = tooltipNode.id;
+				popperOptions.onCreate = function () {
+					var mouseTrackerId = tooltipNode.id;
+					var mouseMoveHandler = this.mouseMoveHandler;
 
-				return function (_ref) {
-					var instance = _ref.instance;
+					return function (_ref) {
+						var instance = _ref.instance;
 
-					document.addEventListener("mousemove", function (_ref2) {
-						var pageX = _ref2.pageX,
-						    pageY = _ref2.pageY;
-
-						pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-						mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
-						instance.scheduleUpdate();
-					});
-				};
-			}();
-
-			reference.getBoundingClientRect = function () {
-				var mouseTrackerId = tooltipNode.id;
-
-				return function () {
-					return {
-						top: mouseTrackers[mouseTrackerId].pageY,
-						right: mouseTrackers[mouseTrackerId].pageX,
-						bottom: mouseTrackers[mouseTrackerId].pageY,
-						left: mouseTrackers[mouseTrackerId].pageX,
-						height: 0,
-						width: 0
+						document.addEventListener("mousemove", mouseMoveHandler);
 					};
-				};
-			}();
+				}.bind(this)();
+
+				reference.getBoundingClientRect = function () {
+					var mouseTrackerId = tooltipNode.id;
+
+					return function () {
+						return {
+							top: mouseTrackers[mouseTrackerId].pageY,
+							right: mouseTrackers[mouseTrackerId].pageX,
+							bottom: mouseTrackers[mouseTrackerId].pageY,
+							left: mouseTrackers[mouseTrackerId].pageX,
+							height: 0,
+							width: 0
+						};
+					};
+				}();
+			}
 
 			this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
 
@@ -3116,9 +3085,32 @@ var Tooltip = function () {
 			}
 		}
 	}, {
+		key: '_cleanup',
+		value: function _cleanup() {
+			var _this4 = this;
+
+			if (this.options.followMouse) {
+				delete mouseTrackers[_tooltipNode.id];
+				document.removeEventListener("mousemove", function (props) {
+					return _this4.mouseMoveHandler(props);
+				});
+			}
+		}
+	}, {
+		key: '_mouseMoveHandler',
+		value: function _mouseMoveHandler() /* props */{
+			var _props = props,
+			    pageX = _props.pageX,
+			    pageY = _props.pageY;
+
+			pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+			mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
+			instance.scheduleUpdate();
+		}
+	}, {
 		key: '_hide',
 		value: function _hide() /* reference, options */{
-			var _this4 = this;
+			var _this6 = this;
 
 			// don't hide if it's already hidden
 			if (!this._isOpen) {
@@ -3134,42 +3126,40 @@ var Tooltip = function () {
 
 			this.popperInstance.disableEventListeners();
 
-<<<<<<< HEAD
-			// TODO: add the removal of the event listener, if there's a onHide method available.
-			document.removeEventListener("mousemove", function (_ref3) {
-				var pageX = _ref3.pageX,
-				    pageY = _ref3.pageY;
-
-				pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-				mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
-				instance.scheduleUpdate();
-			});
-=======
 			clearTimeout(this._onHideDelay);
 
 			var onHideFunction = this.options.onHide;
 			var onHideDelay = this.options.onHideDelay;
 			if (onHideFunction) {
 				if (onHideDelay) {
-					this._onHideDelay = setTimeout(function () {
-						onHideFunction();
-					}, onHideDelay);
+					this._onHideDelay = function () {
+						var _this5 = this;
+
+						var mouseTrackerId = _tooltipNode.id;
+
+						return setTimeout(function () {
+							onHideFunction();
+							_this5._cleanup();
+						}, onHideDelay);
+					};
 				} else {
 					onHideFunction();
+					this._cleanup();
 				}
+			} else {
+				this._cleanup();
 			}
->>>>>>> 2f37994d48f32db26b405e4db69ad06d52e6f143
 
 			clearTimeout(this._disposeTimer);
 			var disposeTime = directive.options.disposeTimeout;
 			if (disposeTime !== null) {
 				this._disposeTimer = setTimeout(function () {
-					if (_this4._tooltipNode) {
-						_this4._tooltipNode.removeEventListener('mouseenter', _this4.hide);
-						_this4._tooltipNode.removeEventListener('click', _this4.hide);
+					if (_this6._tooltipNode) {
+						_this6._tooltipNode.removeEventListener('mouseenter', _this6.hide);
+						_this6._tooltipNode.removeEventListener('click', _this6.hide);
 						// Don't remove popper instance, just the HTML element
-						_this4._tooltipNode.parentNode.removeChild(_this4._tooltipNode);
-						_this4._tooltipNode = null;
+						_this6._tooltipNode.parentNode.removeChild(_this6._tooltipNode);
+						_this6._tooltipNode = null;
 					}
 				}, disposeTime);
 			}
@@ -3181,16 +3171,16 @@ var Tooltip = function () {
 	}, {
 		key: '_dispose',
 		value: function _dispose() {
-			var _this5 = this;
+			var _this7 = this;
 
 			this._isDisposed = true;
 
 			// remove event listeners first to prevent any unexpected behaviour
-			this._events.forEach(function (_ref4) {
-				var func = _ref4.func,
-				    event = _ref4.event;
+			this._events.forEach(function (_ref2) {
+				var func = _ref2.func,
+				    event = _ref2.event;
 
-				_this5.reference.removeEventListener(event, func);
+				_this7.reference.removeEventListener(event, func);
 			});
 			this._events = [];
 
@@ -3242,7 +3232,7 @@ var Tooltip = function () {
 	}, {
 		key: '_setEventListeners',
 		value: function _setEventListeners(reference, events, options) {
-			var _this6 = this;
+			var _this8 = this;
 
 			var directEvents = [];
 			var oppositeEvents = [];
@@ -3252,12 +3242,12 @@ var Tooltip = function () {
 					case 'hover':
 						directEvents.push('mouseenter');
 						oppositeEvents.push('mouseleave');
-						if (_this6.options.hideOnTargetClick) oppositeEvents.push('click');
+						if (_this8.options.hideOnTargetClick) oppositeEvents.push('click');
 						break;
 					case 'focus':
 						directEvents.push('focus');
 						oppositeEvents.push('blur');
-						if (_this6.options.hideOnTargetClick) oppositeEvents.push('click');
+						if (_this8.options.hideOnTargetClick) oppositeEvents.push('click');
 						break;
 					case 'click':
 						directEvents.push('click');
@@ -3269,13 +3259,13 @@ var Tooltip = function () {
 			// schedule show tooltip
 			directEvents.forEach(function (event) {
 				var func = function func(evt) {
-					if (_this6._isOpen === true) {
+					if (_this8._isOpen === true) {
 						return;
 					}
 					evt.usedByTooltip = true;
-					_this6._scheduleShow(reference, options.delay, options, evt);
+					_this8._scheduleShow(reference, options.delay, options, evt);
 				};
-				_this6._events.push({ event: event, func: func });
+				_this8._events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
 			});
 
@@ -3285,9 +3275,9 @@ var Tooltip = function () {
 					if (evt.usedByTooltip === true) {
 						return;
 					}
-					_this6._scheduleHide(reference, options.delay, options, evt);
+					_this8._scheduleHide(reference, options.delay, options, evt);
 				};
-				_this6._events.push({ event: event, func: func });
+				_this8._events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
 			});
 		}
@@ -3301,35 +3291,35 @@ var Tooltip = function () {
 	}, {
 		key: '_scheduleShow',
 		value: function _scheduleShow(reference, delay, options /*, evt */) {
-			var _this7 = this;
+			var _this9 = this;
 
 			// defaults to 0
 			var computedDelay = delay && delay.show || delay || 0;
 			clearTimeout(this._scheduleTimer);
 			this._scheduleTimer = window.setTimeout(function () {
-				return _this7._show(reference, options);
+				return _this9._show(reference, options);
 			}, computedDelay);
 		}
 	}, {
 		key: '_scheduleHide',
 		value: function _scheduleHide(reference, delay, options, evt) {
-			var _this8 = this;
+			var _this10 = this;
 
 			// defaults to 0
 			var computedDelay = delay && delay.hide || delay || 0;
 			clearTimeout(this._scheduleTimer);
 			this._scheduleTimer = window.setTimeout(function () {
-				if (_this8._isOpen === false) {
+				if (_this10._isOpen === false) {
 					return;
 				}
-				if (!document.body.contains(_this8._tooltipNode)) {
+				if (!document.body.contains(_this10._tooltipNode)) {
 					return;
 				}
 
 				// if we are hiding because of a mouseleave, we must check that the new
 				// reference isn't the tooltip, because in this case we don't want to hide it
 				if (evt.type === 'mouseleave') {
-					var isSet = _this8._setTooltipNodeEvent(evt, reference, delay, options);
+					var isSet = _this10._setTooltipNodeEvent(evt, reference, delay, options);
 
 					// if we set the new event, don't hide the tooltip yet
 					// the new event will take care to hide it if necessary
@@ -3338,7 +3328,7 @@ var Tooltip = function () {
 					}
 				}
 
-				_this8._hide(reference, options);
+				_this10._hide(reference, options);
 			}, computedDelay);
 		}
 	}]);
@@ -3349,25 +3339,29 @@ var Tooltip = function () {
 
 
 var _initialiseProps = function _initialiseProps() {
-	var _this9 = this;
+	var _this11 = this;
 
 	this.show = function () {
-		_this9._show(_this9.reference, _this9.options);
+		_this11._show(_this11.reference, _this11.options);
 	};
 
 	this.hide = function () {
-		_this9._hide();
+		_this11._hide();
+	};
+
+	this.mouseMoveHandler = function (props) {
+		_this11._mouseMoveHandler(props);
 	};
 
 	this.dispose = function () {
-		_this9._dispose();
+		_this11._dispose();
 	};
 
 	this.toggle = function () {
-		if (_this9._isOpen) {
-			return _this9.hide();
+		if (_this11._isOpen) {
+			return _this11.hide();
 		} else {
-			return _this9.show();
+			return _this11.show();
 		}
 	};
 
@@ -3380,18 +3374,18 @@ var _initialiseProps = function _initialiseProps() {
 			var relatedreference2 = evt2.relatedreference || evt2.toElement || evt2.relatedTarget;
 
 			// Remove event listener after call
-			_this9._tooltipNode.removeEventListener(evt.type, callback);
+			_this11._tooltipNode.removeEventListener(evt.type, callback);
 
 			// If the new reference is not the reference element
 			if (!reference.contains(relatedreference2)) {
 				// Schedule to hide tooltip
-				_this9._scheduleHide(reference, options.delay, options, evt2);
+				_this11._scheduleHide(reference, options.delay, options, evt2);
 			}
 		};
 
-		if (_this9._tooltipNode.contains(relatedreference)) {
+		if (_this11._tooltipNode.contains(relatedreference)) {
 			// listen to mouseleave on the tooltip element to be able to hide the tooltip
-			_this9._tooltipNode.addEventListener(evt.type, callback);
+			_this11._tooltipNode.addEventListener(evt.type, callback);
 			return true;
 		}
 
@@ -3435,6 +3429,8 @@ var positions = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-e
 var defaultOptions = {
 	// Default tooltip placement relative to target element
 	defaultPlacement: 'top',
+	// Follow mouse cursor over affected element
+	followMouse: false,
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
 	// Default CSS classes applied to the target element of the tooltip
@@ -3467,7 +3463,7 @@ var defaultOptions = {
 	autoHide: true,
 	// function to execute when the tooltip gets hidden
 	onHide: undefined,
-	// delay, after which time the onHide method should be executed
+	// Delay, after which time the onHide method should be executed
 	onHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
@@ -3502,6 +3498,7 @@ var defaultOptions = {
 function getOptions(options) {
 	var result = {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
+		followMouse: typeof options.followMouse !== 'undefined' ? options.followMouse : directive.options.defaultfollowMouse,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
 		html: typeof options.html !== 'undefined' ? options.html : directive.options.defaultHtml,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
