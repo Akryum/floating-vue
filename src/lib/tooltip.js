@@ -41,6 +41,8 @@ export default class Tooltip {
 	 *			The outermost wrapper element should have the `.tooltip` class.
 	 * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
 	 * @param {String} [options.trigger='hover focus']
+	 * @param {Function} options.onHide=undefined - Function to be executed, when the tooltip is being hidden. Works together with onHideDelay.
+	 * @param {Function} options.onHideDelay=0 - Number (in ms) after which the onHide function will be executed.
 	 *			How tooltip is triggered - click, hover, focus, manual.
 	 *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
 	 * @param {HTMLElement} options.boundariesElement
@@ -281,6 +283,7 @@ export default class Tooltip {
 			if (!container) return
 		}
 
+		clearTimeout(this._onHideDelay)
 		clearTimeout(this._disposeTimer)
 
 		options = Object.assign({}, options)
@@ -411,6 +414,20 @@ export default class Tooltip {
 		this._tooltipNode.setAttribute('aria-hidden', 'true')
 
 		this.popperInstance.disableEventListeners()
+
+		clearTimeout(this._onHideDelay)
+
+		const onHideFunction = this.options.onHide
+		const onHideDelay = this.options.onHideDelay
+		if (onHideFunction) {
+			if (onHideDelay) {
+				this._onHideDelay = setTimeout(() => {
+					onHideFunction()
+				}, onHideDelay)
+			} else {
+				onHideFunction()
+			}
+		}
 
 		clearTimeout(this._disposeTimer)
 		const disposeTime = directive.options.disposeTimeout

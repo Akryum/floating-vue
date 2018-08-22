@@ -2701,6 +2701,8 @@ var Tooltip = function () {
   *			The outermost wrapper element should have the `.tooltip` class.
   * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
   * @param {String} [options.trigger='hover focus']
+  * @param {Function} options.onHide=undefined - Function to be executed, when the tooltip is being hidden. Works together with onHideDelay.
+  * @param {Function} options.onHideDelay=0 - Number (in ms) after which the onHide function will be executed.
   *			How tooltip is triggered - click, hover, focus, manual.
   *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
   * @param {HTMLElement} options.boundariesElement
@@ -2934,6 +2936,7 @@ var Tooltip = function () {
 				if (!container) return;
 			}
 
+			clearTimeout(this._onHideDelay);
 			clearTimeout(this._disposeTimer);
 
 			options = Object.assign({}, options);
@@ -3066,6 +3069,20 @@ var Tooltip = function () {
 			this._tooltipNode.setAttribute('aria-hidden', 'true');
 
 			this.popperInstance.disableEventListeners();
+
+			clearTimeout(this._onHideDelay);
+
+			var onHideFunction = this.options.onHide;
+			var onHideDelay = this.options.onHideDelay;
+			if (onHideFunction) {
+				if (onHideDelay) {
+					this._onHideDelay = setTimeout(function () {
+						onHideFunction();
+					}, onHideDelay);
+				} else {
+					onHideFunction();
+				}
+			}
 
 			clearTimeout(this._disposeTimer);
 			var disposeTime = directive.options.disposeTimeout;
@@ -3372,6 +3389,10 @@ var defaultOptions = {
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
+	// function to execute when the tooltip gets hidden
+	onHide: undefined,
+	// delay, after which time the onHide method should be executed
+	onHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
@@ -3415,6 +3436,8 @@ function getOptions(options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
+		onHide: typeof options.onHide !== 'undefined' ? options.onHide : directive.options.onHide,
+		onHideDelay: typeof options.onHideDelay !== 'undefined' ? options.onHideDelay : directive.options.onHideDelay,
 		hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
 		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
 		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,
