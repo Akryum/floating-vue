@@ -2674,6 +2674,7 @@ var openTooltips = [];
 var mouseTrackers = [];
 
 var Tooltip = function () {
+<<<<<<< HEAD
 	/**
   * Create a new Tooltip.js instance
   * @class Tooltip
@@ -2706,6 +2707,42 @@ var Tooltip = function () {
   * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
   *			[options docs](https://popper.js.org/popper-documentation.html)
   * @return {Object} instance - The generated tooltip instance
+=======
+	/**
+  * Create a new Tooltip.js instance
+  * @class Tooltip
+  * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
+  * @param {Object} options
+  * @param {String} options.placement=bottom
+  *			Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
+  *			left(-start, -end)`
+  * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
+  * @param {Number|Object} options.delay=0
+  *			Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.
+  *			If a number is supplied, delay is applied to both hide/show.
+  *			Object structure is: `{ show: 500, hide: 100 }`
+  * @param {Boolean} options.html=false - Insert HTML into the tooltip. If false, the content will inserted with `innerText`.
+  * @param {String|PlacementFunction} options.placement='top' - One of the allowed placements, or a function returning one of them.
+  * @param {String} [options.template='<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>']
+  *			Base HTML to used when creating the tooltip.
+  *			The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.
+  *			`.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.
+  *			The outermost wrapper element should have the `.tooltip` class.
+  * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
+  * @param {String} [options.trigger='hover focus']
+  * @param {Function} options.onHide=undefined - Function to be executed, when the tooltip is being hidden. Works together with onHideDelay.
+  * @param {Function} options.onHideDelay=0 - Number (in ms) after which the onHide function will be executed.
+  *			How tooltip is triggered - click, hover, focus, manual.
+  *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
+  * @param {HTMLElement} options.boundariesElement
+  *			The element used as boundaries for the tooltip. For more information refer to Popper.js'
+  *			[boundariesElement docs](https://popper.js.org/popper-documentation.html)
+  * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
+  *			[offset docs](https://popper.js.org/popper-documentation.html)
+  * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
+  *			[options docs](https://popper.js.org/popper-documentation.html)
+  * @return {Object} instance - The generated tooltip instance
+>>>>>>> 2f37994d48f32db26b405e4db69ad06d52e6f143
   */
 	function Tooltip(reference, options) {
 		classCallCheck$1(this, Tooltip);
@@ -2929,6 +2966,7 @@ var Tooltip = function () {
 				if (!container) return;
 			}
 
+			clearTimeout(this._onHideDelay);
 			clearTimeout(this._disposeTimer);
 
 			options = Object.assign({}, options);
@@ -3096,6 +3134,7 @@ var Tooltip = function () {
 
 			this.popperInstance.disableEventListeners();
 
+<<<<<<< HEAD
 			// TODO: add the removal of the event listener, if there's a onHide method available.
 			document.removeEventListener("mousemove", function (_ref3) {
 				var pageX = _ref3.pageX,
@@ -3105,6 +3144,21 @@ var Tooltip = function () {
 				mouseTrackers[mouseTrackerId] = { pageX: pageX, pageY: pageY };
 				instance.scheduleUpdate();
 			});
+=======
+			clearTimeout(this._onHideDelay);
+
+			var onHideFunction = this.options.onHide;
+			var onHideDelay = this.options.onHideDelay;
+			if (onHideFunction) {
+				if (onHideDelay) {
+					this._onHideDelay = setTimeout(function () {
+						onHideFunction();
+					}, onHideDelay);
+				} else {
+					onHideFunction();
+				}
+			}
+>>>>>>> 2f37994d48f32db26b405e4db69ad06d52e6f143
 
 			clearTimeout(this._disposeTimer);
 			var disposeTime = directive.options.disposeTimeout;
@@ -3411,6 +3465,10 @@ var defaultOptions = {
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
+	// function to execute when the tooltip gets hidden
+	onHide: undefined,
+	// delay, after which time the onHide method should be executed
+	onHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
@@ -3454,6 +3512,8 @@ function getOptions(options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
+		onHide: typeof options.onHide !== 'undefined' ? options.onHide : directive.options.onHide,
+		onHideDelay: typeof options.onHideDelay !== 'undefined' ? options.onHideDelay : directive.options.onHideDelay,
 		hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
 		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
 		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,

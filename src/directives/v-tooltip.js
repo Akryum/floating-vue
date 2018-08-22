@@ -53,6 +53,10 @@ export const defaultOptions = {
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
 	autoHide: true,
+	// function to execute when the tooltip gets hidden
+	onHide: undefined,
+	// delay, after which time the onHide method should be executed
+	onHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
@@ -96,6 +100,8 @@ export function getOptions (options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
+		onHide: typeof options.onHide !== 'undefined' ? options.onHide : directive.options.onHide,
+		onHideDelay: typeof options.onHideDelay !== 'undefined' ? options.onHideDelay : directive.options.onHideDelay,
 		hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
 		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
 		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,
