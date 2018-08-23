@@ -15,7 +15,6 @@ module.exports = {
 		'^.+\\.jsx?$': '<rootDir>/node_modules/babel-jest',
 		'.*\\.(vue)$': '<rootDir>/node_modules/jest-vue',
 	},
-	mapCoverage: true,
 	snapshotSerializers: [
 		'<rootDir>/node_modules/jest-serializer-vue',
 	],
