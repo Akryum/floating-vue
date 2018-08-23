@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 table, tr, th, td {
   padding: 5px;
   border-collapse: collapse;
