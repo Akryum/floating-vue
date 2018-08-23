@@ -230,6 +230,7 @@ Or a reactive property:
 - `html` - Boolean: allow HTML tooltip content.
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `placement` - *(see above)*
+- `followMouse` - When the mouse is over the element, the tooltip will follow along (for best results, combine with `offset`)
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
 - `show` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
@@ -239,6 +240,8 @@ Or a reactive property:
 - `arrowSelector` - CSS selector to get the arrow element in the tooltip template.
 - `innerSelector` - CSS selector to get the inner content element in the tooltip template.
 - `autoHide` - Boolean: automatically close the tooltip on mouseover.
+- `onHide` - Function to be executed, as soon as the tooltip gets hidden. For best results, combine with onHideDelay.
+- `onHideDelay` - Number: Time in milliseconds to wait, before executing the onHide method after the hide sequence has been initialized (e.g. if you use css-transitions to fade out the tooltip after it's been hidden with css)
 - `hideOnTargetClick` - Boolean: automatically close the tooltip on target click.
 - `loadingClass` - CSS classes added to the tooltip when content is loading.
 - `loadingContent` - Same as `content`, used when the actual tooltip content is loading.
