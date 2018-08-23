@@ -24,7 +24,7 @@ export const defaultOptions = {
 	// Default tooltip placement relative to target element
 	defaultPlacement: 'top',
 	// Follow mouse cursor over affected element
-	followMouse: false,
+	defaultFollowMouse: false,
 	// Default CSS classes applied to the tooltip element
 	defaultClass: 'vue-tooltip-theme',
 	// Default CSS classes applied to the target element of the tooltip
@@ -54,11 +54,11 @@ export const defaultOptions = {
 	// Displayed when tooltip content is loading
 	defaultLoadingContent: '...',
 	// Hide on mouseover tooltip
-	autoHide: true,
+	defaultAutoHide: true,
 	// function to execute when the tooltip gets hidden
-	onHide: undefined,
+	DefaultOnHide: undefined,
 	// Delay, after which time the onHide method should be executed
-	onHideDelay: 0,
+	DefaultOnHideDelay: 0,
 	// Close tooltip on click on tooltip target?
 	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
@@ -92,7 +92,7 @@ export const defaultOptions = {
 export function getOptions (options) {
 	const result = {
 		placement: typeof options.placement !== 'undefined' ? options.placement : directive.options.defaultPlacement,
-		followMouse: typeof options.followMouse !== 'undefined' ? options.followMouse : directive.options.defaultfollowMouse,
+		followMouse: typeof options.followMouse !== 'undefined' ? options.followMouse : directive.options.defaultFollowMouse,
 		delay: typeof options.delay !== 'undefined' ? options.delay : directive.options.defaultDelay,
 		html: typeof options.html !== 'undefined' ? options.html : directive.options.defaultHtml,
 		template: typeof options.template !== 'undefined' ? options.template : directive.options.defaultTemplate,
@@ -103,8 +103,8 @@ export function getOptions (options) {
 		container: typeof options.container !== 'undefined' ? options.container : directive.options.defaultContainer,
 		boundariesElement: typeof options.boundariesElement !== 'undefined' ? options.boundariesElement : directive.options.defaultBoundariesElement,
 		autoHide: typeof options.autoHide !== 'undefined' ? options.autoHide : directive.options.autoHide,
-		onHide: typeof options.onHide !== 'undefined' ? options.onHide : directive.options.onHide,
-		onHideDelay: typeof options.onHideDelay !== 'undefined' ? options.onHideDelay : directive.options.onHideDelay,
+		onHide: typeof options.onHide !== 'undefined' ? options.onHide : directive.options.DefaultOnHide,
+		onHideDelay: typeof options.onHideDelay !== 'undefined' ? options.onHideDelay : directive.options.DefaultOnHideDelay,
 		hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
 		loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
 		loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,

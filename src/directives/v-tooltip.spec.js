@@ -75,6 +75,7 @@ describe('getOptions', () => {
 		const result = VTooltip.getOptions(options)
 		expect(result).toEqual({
 			placement: VTooltip.defaultOptions.defaultPlacement,
+			followMouse: VTooltip.defaultOptions.defaultFollowMouse,
 			delay: VTooltip.defaultOptions.defaultDelay,
 			html: VTooltip.defaultOptions.defaultHtml,
 			template: VTooltip.defaultOptions.defaultTemplate,
@@ -85,6 +86,8 @@ describe('getOptions', () => {
 			container: VTooltip.defaultOptions.defaultContainer,
 			boundariesElement: VTooltip.defaultOptions.defaultBoundariesElement,
 			autoHide: VTooltip.defaultOptions.autoHide,
+			onHide: VTooltip.defaultOptions.DefaultOnHide,
+			onHideDelay: VTooltip.defaultOptions.DefaultOnHideDelay,
 			hideOnTargetClick: VTooltip.defaultOptions.defaultHideOnTargetClick,
 			loadingClass: VTooltip.defaultOptions.defaultLoadingClass,
 			loadingContent: VTooltip.defaultOptions.defaultLoadingContent,
