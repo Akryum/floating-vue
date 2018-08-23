@@ -18,7 +18,6 @@ const DEFAULT_OPTIONS = {
 
 const openTooltips = []
 const mouseTrackers = {}
-setInterval(() => console.log(mouseTrackers), 1000);
 
 export default class Tooltip {
 	/**
@@ -100,8 +99,8 @@ export default class Tooltip {
 		this._mouseMoveHandler(props, this.popperInstance.popper.id, this.popperInstance)
 	}
 
-	cleanup = (mouseTrackerId, instance) => {
-		this._cleanup(mouseTrackerId, instance)
+	cleanup = () => {
+		this._cleanup(this.popperInstance.popper.id)
 	}
 
 	/**
@@ -440,9 +439,8 @@ export default class Tooltip {
 		instance.scheduleUpdate()
 	}
 
-	_cleanup(mouseTrackerId, instance = null) {
+	_cleanup(mouseTrackerId) {
 		if (this.options.followMouse) {
-			console.log(mouseTrackers[mouseTrackerId])
 			delete mouseTrackers[mouseTrackerId]
 			document.removeEventListener("mousemove", this.mouseMoveHandler)
 		}
@@ -469,20 +467,12 @@ export default class Tooltip {
 		const onHideDelay = this.options.onHideDelay
 		if (onHideFunction) {
 			if (onHideDelay) {
-				this._onHideDelay = (() => {
-					const mouseTrackerId = this._tooltipNode.id;
-
-					return setTimeout(() => {
-						this.cleanup(mouseTrackerId)
-						onHideFunction()
-					}, onHideDelay)
-				})()
+				this._onHideDelay = setTimeout(() => {
+					onHideFunction()
+				}, onHideDelay)
 			} else {
-				this.cleanup(this._tooltipNode.id)
 				onHideFunction()
 			}
-		} else {
-			this.cleanup(this._tooltipNode.id)
 		}
 
 		clearTimeout(this._disposeTimer)
@@ -495,6 +485,8 @@ export default class Tooltip {
 					// Don't remove popper instance, just the HTML element
 					this._tooltipNode.parentNode.removeChild(this._tooltipNode)
 					this._tooltipNode = null
+
+					this.cleanup()
 				}
 			}, disposeTime)
 		}
@@ -530,6 +522,8 @@ export default class Tooltip {
 		} else {
 			this._noLongerOpen()
 		}
+
+
 		return this
 	}
 
@@ -640,7 +634,6 @@ export default class Tooltip {
 					return
 				}
 			}
-
 			this._hide(reference, options)
 		}, computedDelay)
 	}
