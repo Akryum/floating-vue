@@ -18,6 +18,7 @@ const DEFAULT_OPTIONS = {
 
 const openTooltips = []
 const mouseTrackers = {}
+setInterval(() => console.log(mouseTrackers), 1000);
 
 export default class Tooltip {
 	/**
@@ -96,7 +97,11 @@ export default class Tooltip {
 	}
 
 	mouseMoveHandler = (props) => {
-		this._mouseMoveHandler(props)
+		this._mouseMoveHandler(props, this.popperInstance.popper.id, this.popperInstance)
+	}
+
+	cleanup = (mouseTrackerId, instance) => {
+		this._cleanup(mouseTrackerId, instance)
 	}
 
 	/**
@@ -179,12 +184,6 @@ export default class Tooltip {
 				this.popperInstance.update()
 			}
 		}
-	}
-
-	_mouseMoveHandler() {
-		pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
-		mouseTrackers[mouseTrackerId] = { pageX, pageY }
-		instance.scheduleUpdate()
 	}
 
 	//
@@ -385,14 +384,11 @@ export default class Tooltip {
 		if (this.options.followMouse) {
 			mouseTrackers[tooltipNode.id] = { pageX: 0, pageY: 0 }
 
-			popperOptions.onCreate = (function() {
-				let mouseTrackerId = tooltipNode.id
-				const mouseMoveHandler = this.mouseMoveHandler;
-
-				return function({ instance }) {
-					document.addEventListener("mousemove", mouseMoveHandler)
+			popperOptions.onCreate = (() => {
+				return ({ instance }) => {
+					document.addEventListener("mousemove", this.mouseMoveHandler)
 				}
-			}).bind(this)()
+			})()
 
 			reference.getBoundingClientRect = function () {
 				let mouseTrackerId = tooltipNode.id
@@ -438,18 +434,18 @@ export default class Tooltip {
 		}
 	}
 
-	_cleanup() {
-		if (this.options.followMouse) {
-			delete mouseTrackers[_tooltipNode.id]
-			document.removeEventListener("mousemove", (props) => this.mouseMoveHandler(props))
-		}
-	}
-
-	_mouseMoveHandler(/* props */) {
-		let { pageX, pageY } = props
+	_mouseMoveHandler({ pageX, pageY }, mouseTrackerId, instance) {
 		pageY -= window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
 		mouseTrackers[mouseTrackerId] = { pageX, pageY }
 		instance.scheduleUpdate()
+	}
+
+	_cleanup(mouseTrackerId, instance = null) {
+		if (this.options.followMouse) {
+			console.log(mouseTrackers[mouseTrackerId])
+			delete mouseTrackers[mouseTrackerId]
+			document.removeEventListener("mousemove", this.mouseMoveHandler)
+		}
 	}
 
 	_hide(/* reference, options */) {
@@ -473,20 +469,20 @@ export default class Tooltip {
 		const onHideDelay = this.options.onHideDelay
 		if (onHideFunction) {
 			if (onHideDelay) {
-				this._onHideDelay = function() {
-					const mouseTrackerId = _tooltipNode.id;
+				this._onHideDelay = (() => {
+					const mouseTrackerId = this._tooltipNode.id;
 
 					return setTimeout(() => {
+						this.cleanup(mouseTrackerId)
 						onHideFunction()
-						this._cleanup()
 					}, onHideDelay)
-				}
+				})()
 			} else {
+				this.cleanup(this._tooltipNode.id)
 				onHideFunction()
-				this._cleanup()
 			}
 		} else {
-			this._cleanup()
+			this.cleanup(this._tooltipNode.id)
 		}
 
 		clearTimeout(this._disposeTimer)
