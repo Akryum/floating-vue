@@ -2615,16 +2615,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-
-
-
-
-
-
-
-
-
-
 var classCallCheck$1 = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -2649,12 +2639,6 @@ var createClass$1 = function () {
   };
 }();
 
-
-
-
-
-
-
 var _extends$1 = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
@@ -2670,7 +2654,6 @@ var _extends$1 = Object.assign || function (target) {
 };
 
 /* Forked from https://github.com/FezVrasta/popper.js/blob/master/packages/tooltip/src/index.js */
-
 var DEFAULT_OPTIONS = {
 	container: false,
 	delay: 0,
@@ -2681,7 +2664,6 @@ var DEFAULT_OPTIONS = {
 	trigger: 'hover focus',
 	offset: 0
 };
-
 var openTooltips = [];
 var mouseTrackers = {};
 
@@ -2709,10 +2691,10 @@ var Tooltip = function () {
   *			The outermost wrapper element should have the `.tooltip` class.
   * @param {String|HTMLElement|TitleFunction} options.title='' - Default title value if `title` attribute isn't present.
   * @param {String} [options.trigger='hover focus']
-  * @param {Function} options.onHide=undefined - Function to be executed, when the tooltip is being hidden. Works together with onHideDelay.
-  * @param {Function} options.onHideDelay=0 - Number (in ms) after which the onHide function will be executed.
   *			How tooltip is triggered - click, hover, focus, manual.
   *			You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
+  * @param {Function} options.onHide=undefined - Function to be executed, when the tooltip is being hidden. Works together with onHideDelay.
+  * @param {Number} options.onHideDelay=0 - Number (in ms) after which the onHide function will be executed.
   * @param {HTMLElement} options.boundariesElement
   *			The element used as boundaries for the tooltip. For more information refer to Popper.js'
   *			[boundariesElement docs](https://popper.js.org/popper-documentation.html)
@@ -2729,30 +2711,23 @@ var Tooltip = function () {
 
 		// apply user options over default ones
 		options = _extends$1({}, DEFAULT_OPTIONS, options);
-
 		reference.jquery && (reference = reference[0]);
-
 		// cache reference and options
 		this.reference = reference;
 		this.options = options;
-
 		// set initial state
 		this._isOpen = false;
-
 		this._init();
 	}
-
 	//
 	// Public methods
 	//
-
 	/**
   * Reveals an element's tooltip. This is considered a "manual" triggering of the tooltip.
   * Tooltips with zero-length titles are never displayed.
   * @method Tooltip#show
   * @memberof Tooltip
   */
-
 
 	/**
   * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
@@ -2762,11 +2737,23 @@ var Tooltip = function () {
 
 
 	/**
+  * Handles mouse movement registration for enabled components.
+  * @method Tooltip#mouseMoveHandler
+  * @memberof Tooltip
+  */
+
+
+	/**
+  * Handles cleanup of event listeners and other stuff.
+  * @method Tooltip#cleanup
+  * @memberof Tooltip
+  */
+
+	/**
   * Hides and destroys an element’s tooltip.
   * @method Tooltip#dispose
   * @memberof Tooltip
   */
-
 
 	/**
   * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
@@ -2797,31 +2784,23 @@ var Tooltip = function () {
 				this.setClasses(classes);
 				classesUpdated = true;
 			}
-
 			options = getOptions(options);
-
 			var needPopperUpdate = false;
 			var needRestart = false;
-
 			if (this.options.offset !== options.offset || this.options.placement !== options.placement) {
 				needPopperUpdate = true;
 			}
-
 			if (this.options.template !== options.template || this.options.trigger !== options.trigger || this.options.container !== options.container || classesUpdated) {
 				needRestart = true;
 			}
-
 			for (var key in options) {
 				this.options[key] = options[key];
 			}
-
 			if (this._tooltipNode) {
 				if (needRestart) {
 					var isOpen = this._isOpen;
-
 					this.dispose();
 					this._init();
-
 					if (isOpen) {
 						this.show();
 					}
@@ -2830,7 +2809,6 @@ var Tooltip = function () {
 				}
 			}
 		}
-
 		//
 		// Private methods
 		//
@@ -2844,11 +2822,9 @@ var Tooltip = function () {
 			}) : [];
 			this._isDisposed = false;
 			this._enableDocumentTouch = events.indexOf('manual') === -1;
-
 			// set event listeners
 			this._setEventListeners(this.reference, events, this.options);
 		}
-
 		/**
    * Creates a new tooltip node
    * @memberof Tooltip
@@ -2867,20 +2843,16 @@ var Tooltip = function () {
 			var tooltipGenerator = window.document.createElement('div');
 			tooltipGenerator.innerHTML = template.trim();
 			var tooltipNode = tooltipGenerator.childNodes[0];
-
 			// add unique ID to our tooltip (needed for accessibility reasons)
 			tooltipNode.id = 'tooltip_' + Math.random().toString(36).substr(2, 10);
-
 			// Initially hide the tooltip
 			// The attribute will be switched in a next frame so
 			// CSS transitions can play
 			tooltipNode.setAttribute('aria-hidden', 'true');
-
 			if (this.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
 				tooltipNode.addEventListener('mouseenter', this.hide);
 				tooltipNode.addEventListener('click', this.hide);
 			}
-
 			// return the generated tooltip node
 			return tooltipNode;
 		}
@@ -2943,27 +2915,20 @@ var Tooltip = function () {
 				var container = document.querySelector(options.container);
 				if (!container) return;
 			}
-
 			clearTimeout(this._onHideDelay);
 			clearTimeout(this._disposeTimer);
-
 			options = Object.assign({}, options);
 			delete options.offset;
-
 			var updateClasses = true;
 			if (this._tooltipNode) {
 				addClasses(this._tooltipNode, this._classes);
 				updateClasses = false;
 			}
-
 			var result = this._ensureShown(reference, options);
-
 			if (updateClasses && this._tooltipNode) {
 				addClasses(this._tooltipNode, this._classes);
 			}
-
 			addClasses(reference, ['v-tooltip-open']);
-
 			return result;
 		}
 	}, {
@@ -2976,9 +2941,7 @@ var Tooltip = function () {
 				return this;
 			}
 			this._isOpen = true;
-
 			openTooltips.push(this);
-
 			// if the tooltipNode already exists, just show it
 			if (this._tooltipNode) {
 				this._tooltipNode.style.display = '';
@@ -2990,39 +2953,29 @@ var Tooltip = function () {
 				}
 				return this;
 			}
-
 			// get title
 			var title = reference.getAttribute('title') || options.title;
-
 			// don't show tooltip if no title is defined
 			if (!title) {
 				return this;
 			}
-
 			// create tooltip node
 			var tooltipNode = this._create(reference, options.template);
 			this._tooltipNode = tooltipNode;
-
 			this._setContent(title, options);
-
 			// Add `aria-describedby` to our reference element for accessibility reasons
 			reference.setAttribute('aria-describedby', tooltipNode.id);
-
 			// append tooltip to container
 			var container = this._findContainer(options.container, reference);
-
 			this._append(tooltipNode, container);
-
 			var popperOptions = _extends$1({}, options.popperOptions, {
 				placement: options.placement
 			});
-
 			popperOptions.modifiers = _extends$1({}, popperOptions.modifiers, {
 				arrow: {
 					element: this.options.arrowSelector
 				}
 			});
-
 			if (options.boundariesElement) {
 				popperOptions.modifiers.preventOverflow = {
 					boundariesElement: options.boundariesElement
@@ -3031,7 +2984,6 @@ var Tooltip = function () {
 
 			if (this.options.followMouse) {
 				mouseTrackers[tooltipNode.id] = { pageX: 0, pageY: 0 };
-
 				popperOptions.onCreate = function () {
 					return function (_ref) {
 						var instance = _ref.instance;
@@ -3042,7 +2994,6 @@ var Tooltip = function () {
 
 				reference.getBoundingClientRect = function () {
 					var mouseTrackerId = tooltipNode.id;
-
 					return function () {
 						return {
 							top: mouseTrackers[mouseTrackerId].pageY,
@@ -3057,12 +3008,10 @@ var Tooltip = function () {
 			}
 
 			this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
-
 			// Fix position
 			requestAnimationFrame(function () {
 				if (!_this3._isDisposed && _this3.popperInstance) {
 					_this3.popperInstance.update();
-
 					// Show the tooltip
 					requestAnimationFrame(function () {
 						if (!_this3._isDisposed) {
@@ -3075,7 +3024,6 @@ var Tooltip = function () {
 					_this3.dispose();
 				}
 			});
-
 			return this;
 		}
 	}, {
@@ -3113,18 +3061,14 @@ var Tooltip = function () {
 			if (!this._isOpen) {
 				return this;
 			}
-
 			this._isOpen = false;
 			this._noLongerOpen();
-
 			// hide tooltipNode
 			this._tooltipNode.style.display = 'none';
 			this._tooltipNode.setAttribute('aria-hidden', 'true');
-
 			this.popperInstance.disableEventListeners();
 
 			clearTimeout(this._onHideDelay);
-
 			var onHideFunction = this.options.onHide;
 			var onHideDelay = this.options.onHideDelay;
 			if (onHideFunction) {
@@ -3147,14 +3091,11 @@ var Tooltip = function () {
 						// Don't remove popper instance, just the HTML element
 						_this4._tooltipNode.parentNode.removeChild(_this4._tooltipNode);
 						_this4._tooltipNode = null;
-
 						_this4.cleanup();
 					}
 				}, disposeTime);
 			}
-
 			removeClasses(this.reference, ['v-tooltip-open']);
-
 			return this;
 		}
 	}, {
@@ -3163,7 +3104,6 @@ var Tooltip = function () {
 			var _this5 = this;
 
 			this._isDisposed = true;
-
 			// remove event listeners first to prevent any unexpected behaviour
 			this._events.forEach(function (_ref3) {
 				var func = _ref3.func,
@@ -3172,16 +3112,12 @@ var Tooltip = function () {
 				_this5.reference.removeEventListener(event, func);
 			});
 			this._events = [];
-
 			if (this._tooltipNode) {
 				this._hide();
-
 				this._tooltipNode.removeEventListener('mouseenter', this.hide);
 				this._tooltipNode.removeEventListener('click', this.hide);
-
 				// destroy instance
 				this.popperInstance.destroy();
-
 				// destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
 				if (!this.popperInstance.options.removeOnDestroy) {
 					this._tooltipNode.parentNode.removeChild(this._tooltipNode);
@@ -3190,7 +3126,6 @@ var Tooltip = function () {
 			} else {
 				this._noLongerOpen();
 			}
-
 			return this;
 		}
 	}, {
@@ -3205,7 +3140,6 @@ var Tooltip = function () {
 			}
 			return container;
 		}
-
 		/**
    * Append tooltip to container
    * @memberof Tooltip
@@ -3226,7 +3160,6 @@ var Tooltip = function () {
 
 			var directEvents = [];
 			var oppositeEvents = [];
-
 			events.forEach(function (event) {
 				switch (event) {
 					case 'hover':
@@ -3245,7 +3178,6 @@ var Tooltip = function () {
 						break;
 				}
 			});
-
 			// schedule show tooltip
 			directEvents.forEach(function (event) {
 				var func = function func(evt) {
@@ -3258,7 +3190,6 @@ var Tooltip = function () {
 				_this6._events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
 			});
-
 			// schedule hide tooltip
 			oppositeEvents.forEach(function (event) {
 				var func = function func(evt) {
@@ -3305,12 +3236,10 @@ var Tooltip = function () {
 				if (!document.body.contains(_this8._tooltipNode)) {
 					return;
 				}
-
 				// if we are hiding because of a mouseleave, we must check that the new
 				// reference isn't the tooltip, because in this case we don't want to hide it
 				if (evt.type === 'mouseleave') {
 					var isSet = _this8._setTooltipNodeEvent(evt, reference, delay, options);
-
 					// if we set the new event, don't hide the tooltip yet
 					// the new event will take care to hide it if necessary
 					if (isSet) {
@@ -3323,7 +3252,6 @@ var Tooltip = function () {
 	}]);
 	return Tooltip;
 }();
-
 // Hide tooltips on touch devices
 
 
@@ -3362,30 +3290,24 @@ var _initialiseProps = function _initialiseProps() {
 
 	this._setTooltipNodeEvent = function (evt, reference, delay, options) {
 		var relatedreference = evt.relatedreference || evt.toElement || evt.relatedTarget;
-
 		var callback = function callback(evt2) {
 			var relatedreference2 = evt2.relatedreference || evt2.toElement || evt2.relatedTarget;
-
 			// Remove event listener after call
 			_this9._tooltipNode.removeEventListener(evt.type, callback);
-
 			// If the new reference is not the reference element
 			if (!reference.contains(relatedreference2)) {
 				// Schedule to hide tooltip
 				_this9._scheduleHide(reference, options.delay, options, evt2);
 			}
 		};
-
 		if (_this9._tooltipNode.contains(relatedreference)) {
 			// listen to mouseleave on the tooltip element to be able to hide the tooltip
 			_this9._tooltipNode.addEventListener(evt.type, callback);
 			return true;
 		}
-
 		return false;
 	};
 };
-
 if (typeof document !== 'undefined') {
 	document.addEventListener('touchstart', function (event) {
 		for (var i = 0; i < openTooltips.length; i++) {
@@ -3396,22 +3318,6 @@ if (typeof document !== 'undefined') {
 		capture: true
 	} : true);
 }
-
-/**
- * Placement function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback PlacementFunction
- * @param {HTMLElement} tooltip - tooltip DOM node.
- * @param {HTMLElement} reference - reference DOM node.
- * @return {String} placement - One of the allowed placement options.
- */
-
-/**
- * Title function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback TitleFunction
- * @return {String} placement - The desired title.
- */
 
 var state = {
 	enabled: true
@@ -3795,7 +3701,7 @@ var ResizeObserver = { render: function render() {
 };
 
 // Install the components
-function install$1(Vue) {
+function install(Vue) {
 	Vue.component('resize-observer', ResizeObserver);
 	/* -- Add more components here -- */
 }
@@ -3804,22 +3710,24 @@ function install$1(Vue) {
 /* You shouldn't have to modify the code below */
 
 // Plugin
-var plugin$2 = {
+var plugin = {
 	// eslint-disable-next-line no-undef
 	version: "0.4.4",
-	install: install$1
+	install: install
 };
 
 // Auto-install
-var GlobalVue$1 = null;
+var GlobalVue = null;
 if (typeof window !== 'undefined') {
-	GlobalVue$1 = window.Vue;
+	GlobalVue = window.Vue;
 } else if (typeof global !== 'undefined') {
-	GlobalVue$1 = global.Vue;
+	GlobalVue = global.Vue;
 }
-if (GlobalVue$1) {
-	GlobalVue$1.use(plugin$2);
+if (GlobalVue) {
+	GlobalVue.use(plugin);
 }
+
+//
 
 function getDefault(key) {
 	var value = directive.options.popover[key];
@@ -3841,11 +3749,7 @@ if (typeof window !== 'undefined') {
 	Element = window.Element;
 }
 
-var Popover = { render: function render() {
-		var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "v-popover", class: _vm.cssClass }, [_c('span', { ref: "trigger", staticClass: "trigger", staticStyle: { "display": "inline-block" }, attrs: { "aria-describedby": _vm.popoverId, "tabindex": _vm.trigger.indexOf('focus') !== -1 ? 0 : -1 } }, [_vm._t("default")], 2), _vm._v(" "), _c('div', { ref: "popover", class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass], style: {
-				visibility: _vm.isOpen ? 'visible' : 'hidden'
-			}, attrs: { "id": _vm.popoverId, "aria-hidden": _vm.isOpen ? 'false' : 'true' } }, [_c('div', { class: _vm.popoverWrapperClass }, [_c('div', { ref: "inner", class: _vm.popoverInnerClass, staticStyle: { "position": "relative" } }, [_c('div', [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c('ResizeObserver', { on: { "notify": _vm.$_handleResize } }) : _vm._e()], 1), _vm._v(" "), _c('div', { ref: "arrow", class: _vm.popoverArrowClass })])])]);
-	}, staticRenderFns: [],
+var script = {
 	name: 'VPopover',
 
 	components: {
@@ -4053,7 +3957,6 @@ var Popover = { render: function render() {
 			var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
 			    event = _ref.event,
 			    _ref$skipDelay = _ref.skipDelay,
-			    skipDelay = _ref$skipDelay === undefined ? false : _ref$skipDelay,
 			    _ref$force = _ref.force,
 			    force = _ref$force === undefined ? false : _ref$force;
 
@@ -4469,11 +4372,125 @@ function handleGlobalClose(event) {
 	});
 }
 
+/* script */
+var __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function __vue_render__() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "v-popover", class: _vm.cssClass }, [_c("span", {
+    ref: "trigger",
+    staticClass: "trigger",
+    staticStyle: { display: "inline-block" },
+    attrs: {
+      "aria-describedby": _vm.popoverId,
+      tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : -1
+    }
+  }, [_vm._t("default")], 2), _vm._v(" "), _c("div", {
+    ref: "popover",
+    class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass],
+    style: {
+      visibility: _vm.isOpen ? "visible" : "hidden"
+    },
+    attrs: {
+      id: _vm.popoverId,
+      "aria-hidden": _vm.isOpen ? "false" : "true"
+    }
+  }, [_c("div", { class: _vm.popoverWrapperClass }, [_c("div", {
+    ref: "inner",
+    class: _vm.popoverInnerClass,
+    staticStyle: { position: "relative" }
+  }, [_c("div", [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c("ResizeObserver", { on: { notify: _vm.$_handleResize } }) : _vm._e()], 1), _vm._v(" "), _c("div", { ref: "arrow", class: _vm.popoverArrowClass })])])]);
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+/* style */
+var __vue_inject_styles__ = undefined;
+/* scoped */
+var __vue_scope_id__ = undefined;
+/* module identifier */
+var __vue_module_identifier__ = undefined;
+/* functional template */
+var __vue_is_functional_template__ = false;
+/* component normalizer */
+function __vue_normalize__(template, style, script$$1, scope, functional, moduleIdentifier, createInjector, createInjectorSSR) {
+  var component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
+
+  // For security concerns, we use only base name in production mode.
+  component.__file = "/mnt/c/Projects/v-tooltip/src/components/Popover.vue";
+
+  if (!component.render) {
+    component.render = template.render;
+    component.staticRenderFns = template.staticRenderFns;
+    component._compiled = true;
+
+    if (functional) component.functional = true;
+  }
+
+  component._scopeId = scope;
+
+  return component;
+}
+/* style inject */
+function __vue_create_injector__() {
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
+  var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+  return function addStyle(id, css) {
+    if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return; // SSR styles are present.
+
+    var group = isOldIE ? css.media || 'default' : id;
+    var style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+    if (!style.ids.includes(id)) {
+      var code = css.source;
+      var index = style.ids.length;
+
+      style.ids.push(id);
+
+      if (isOldIE) {
+        style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+      }
+
+      if (!style.element) {
+        var el = style.element = document.createElement('style');
+        el.type = 'text/css';
+
+        if (css.media) el.setAttribute('media', css.media);
+        if (isOldIE) {
+          el.setAttribute('data-group', group);
+          el.setAttribute('data-next-index', '0');
+        }
+
+        head.appendChild(el);
+      }
+
+      if (isOldIE) {
+        index = parseInt(style.element.getAttribute('data-next-index'));
+        style.element.setAttribute('data-next-index', index + 1);
+      }
+
+      if (style.element.styleSheet) {
+        style.parts.push(code);
+        style.element.styleSheet.cssText = style.parts.filter(Boolean).join('\n');
+      } else {
+        var textNode = document.createTextNode(code);
+        var nodes = style.element.childNodes;
+        if (nodes[index]) style.element.removeChild(nodes[index]);
+        if (nodes.length) style.element.insertBefore(textNode, nodes[index]);else style.element.appendChild(textNode);
+      }
+    }
+  };
+}
+/* style inject SSR */
+
+var Popover = __vue_normalize__({ render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, __vue_create_injector__, undefined);
+
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-
-
-
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -4572,7 +4589,7 @@ var freeSelf = typeof self == 'object' && self && self.Object === Object && self
 var root = freeGlobal || freeSelf || Function('return this')();
 
 /** Detect free variable `exports`. */
-var freeExports = 'object' == 'object' && exports && !exports.nodeType && exports;
+var freeExports = exports && !exports.nodeType && exports;
 
 /** Detect free variable `module`. */
 var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -5727,11 +5744,10 @@ function getRawTag(value) {
 
   try {
     value[symToStringTag] = undefined;
-    var unmasked = true;
   } catch (e) {}
 
   var result = nativeObjectToString.call(value);
-  if (unmasked) {
+  {
     if (isOwn) {
       value[symToStringTag] = tag;
     } else {
@@ -6445,16 +6461,16 @@ function stubFalse() {
 module.exports = merge;
 });
 
-function install(Vue) {
+function install$1(Vue) {
 	var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	if (install.installed) return;
-	install.installed = true;
+	if (install$1.installed) return;
+	install$1.installed = true;
 
 	var finalOptions = {};
 	lodash_merge(finalOptions, defaultOptions, options);
 
-	plugin.options = finalOptions;
+	plugin$1.options = finalOptions;
 	directive.options = finalOptions;
 
 	Vue.directive('tooltip', directive);
@@ -6466,8 +6482,8 @@ var VTooltip = directive;
 var VClosePopover = vclosepopover;
 var VPopover = Popover;
 
-var plugin = {
-	install: install,
+var plugin$1 = {
+	install: install$1,
 
 	get enabled() {
 		return state.enabled;
@@ -6479,15 +6495,15 @@ var plugin = {
 };
 
 // Auto-install
-var GlobalVue = null;
+var GlobalVue$1 = null;
 if (typeof window !== 'undefined') {
-	GlobalVue = window.Vue;
+	GlobalVue$1 = window.Vue;
 } else if (typeof global !== 'undefined') {
-	GlobalVue = global.Vue;
+	GlobalVue$1 = global.Vue;
 }
-if (GlobalVue) {
-	GlobalVue.use(plugin);
+if (GlobalVue$1) {
+	GlobalVue$1.use(plugin$1);
 }
 
-export { install, VTooltip, VClosePopover, VPopover, createTooltip, destroyTooltip };
-export default plugin;
+export default plugin$1;
+export { install$1 as install, VTooltip, VClosePopover, VPopover, createTooltip, destroyTooltip };
