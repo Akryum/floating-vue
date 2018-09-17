@@ -78,7 +78,7 @@ export default class Tooltip {
 	 * @method Tooltip#show
 	 * @memberof Tooltip
 	 */
-	show = () => {
+	show () {
 		this._show(this.reference, this.options)
 	}
 
@@ -87,7 +87,7 @@ export default class Tooltip {
 	 * @method Tooltip#hide
 	 * @memberof Tooltip
 	 */
-	hide = () => {
+	hide () {
 		this._hide()
 	}
 
@@ -96,7 +96,7 @@ export default class Tooltip {
 	 * @method Tooltip#dispose
 	 * @memberof Tooltip
 	 */
-	dispose = () => {
+	dispose () {
 		this._dispose()
 	}
 
@@ -105,7 +105,7 @@ export default class Tooltip {
 	 * @method Tooltip#toggle
 	 * @memberof Tooltip
 	 */
-	toggle = () => {
+	toggle () {
 		if (this._isOpen) {
 			return this.hide()
 		} else {
