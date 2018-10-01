@@ -3159,6 +3159,8 @@ var Tooltip = function () {
 					case 'hover':
 						directEvents.push('mouseenter');
 						oppositeEvents.push('mouseleave');
+						directEvents.push('touchstart');
+						oppositeEvents.push('touchend');
 						if (_this6.options.hideOnTargetClick) oppositeEvents.push('click');
 						break;
 					case 'focus':
