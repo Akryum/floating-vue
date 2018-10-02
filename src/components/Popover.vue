@@ -1,5 +1,5 @@
 <template>
-	<div class="v-popover" :class="cssClass">
+	<div class="v-popover" :class="{ [popoverOpenClass]: isOpen }">
 		<span
 			ref="trigger"
 			class="trigger"
@@ -127,6 +127,10 @@ export default {
 			type: [String, Array],
 			default: () => directive.options.popover.defaultArrowClass,
 		},
+		popoverOpenClass: {
+			type: [String, Array],
+			default: () => directive.options.popover.defaultOpenClass,
+		},
 		autoHide: {
 			type: Boolean,
 			default: () => directive.options.popover.defaultAutoHide,
@@ -149,12 +153,6 @@ export default {
 	},
 
 	computed: {
-		cssClass () {
-			return {
-				'open': this.isOpen,
-			}
-		},
-
 		popoverId () {
 			return `popover_${this.id}`
 		},
