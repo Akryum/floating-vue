@@ -763,4 +763,4 @@ Bellow are some examples of style you need. [Here](https://github.com/Akryum/v-t
 
 ---
 
-LICENCE ISC - Created by Guillaume CHAU (@Akryum)
+LICENCE MIT - Created by Guillaume CHAU (@Akryum)
