@@ -221,6 +221,7 @@ export default {
 		this.$_mounted = false
 		this.$_events = []
 		this.$_preventOpen = false
+		this.$_showPromises = []
 	},
 
 	mounted () {
@@ -252,7 +253,7 @@ export default {
 		},
 
 		hide ({ event, skipDelay = false } = {}) {
-			this.$_scheduleHide(event)
+			this.$_scheduleHide(event, skipDelay)
 
 			this.$emit('hide')
 			this.$emit('update:open', false)
@@ -295,89 +296,135 @@ export default {
 				return
 			}
 
-			// Popper is already initialized
-			if (this.popperInstance) {
-				this.isOpen = true
-				this.popperInstance.enableEventListeners()
-				this.popperInstance.scheduleUpdate()
-			}
+			const currentShowPromise = new Promise((resolve, reject) => {
+				/**
+				 * Helping flag for correct
+				 * promise resolving
+				 */
+				let finalPromiseResolve = true
 
-			if (!this.$_mounted) {
-				const container = this.$_findContainer(this.container, reference)
-				if (!container) {
-					console.warn('No container for popover', this)
-					return
-				}
-				container.appendChild(popoverNode)
-				this.$_mounted = true
-			}
-
-			if (!this.popperInstance) {
-				const popperOptions = {
-					...this.popperOptions,
-					placement: this.placement,
+				// Popper is already initialized
+				if (this.popperInstance) {
+					this.isOpen = true
+					this.popperInstance.enableEventListeners()
+					this.popperInstance.scheduleUpdate()
+					/**
+					 * If we've set isOpen to true,
+					 * without async calls of requestAnimationFrame -
+					 * then we can resolve promise.
+					 */
+					resolve(true)
+					finalPromiseResolve = false
 				}
 
-				popperOptions.modifiers = {
-					...popperOptions.modifiers,
-					arrow: {
-						...popperOptions.modifiers && popperOptions.modifiers.arrow,
-						element: this.$refs.arrow,
-					},
+				if (!this.$_mounted) {
+					const container = this.$_findContainer(this.container, reference)
+					if (!container) {
+						console.warn('No container for popover', this)
+						return
+					}
+					container.appendChild(popoverNode)
+					this.$_mounted = true
 				}
 
-				if (this.offset) {
-					const offset = this.$_getOffset()
+				if (!this.popperInstance) {
+					/**
+					 * If there were no popperInstance,
+					 * and requestAnimationFrame will be called
+					 * twice - promise will be resolved in
+					 * this block, in async func's.
+					 */
+					finalPromiseResolve = false
 
-					popperOptions.modifiers.offset = {
-						...popperOptions.modifiers && popperOptions.modifiers.offset,
-						offset,
+					const popperOptions = {
+						...this.popperOptions,
+						placement: this.placement,
+					}
+
+					popperOptions.modifiers = {
+						...popperOptions.modifiers,
+						arrow: {
+							...popperOptions.modifiers && popperOptions.modifiers.arrow,
+							element: this.$refs.arrow,
+						},
+					}
+
+					if (this.offset) {
+						const offset = this.$_getOffset()
+
+						popperOptions.modifiers.offset = {
+							...popperOptions.modifiers && popperOptions.modifiers.offset,
+							offset,
+						}
+					}
+
+					if (this.boundariesElement) {
+						popperOptions.modifiers.preventOverflow = {
+							...popperOptions.modifiers && popperOptions.modifiers.preventOverflow,
+							boundariesElement: this.boundariesElement,
+						}
+					}
+
+					this.popperInstance = new Popper(reference, popoverNode, popperOptions)
+
+					// Fix position
+					requestAnimationFrame(() => {
+						if (!this.$_isDisposed && this.popperInstance) {
+							this.popperInstance.scheduleUpdate()
+
+							// Show the tooltip
+							requestAnimationFrame(() => {
+								if (!this.$_isDisposed) {
+									this.isOpen = true
+								} else {
+									this.dispose()
+								}
+								resolve(true)
+							})
+						} else {
+							this.dispose()
+							resolve(true)
+						}
+					})
+				}
+
+				const openGroup = this.openGroup
+				if (openGroup) {
+					let popover
+					for (let i = 0; i < openPopovers.length; i++) {
+						popover = openPopovers[i]
+						if (popover.openGroup !== openGroup) {
+							popover.hide()
+							popover.$emit('close-group')
+						}
 					}
 				}
 
-				if (this.boundariesElement) {
-					popperOptions.modifiers.preventOverflow = {
-						...popperOptions.modifiers && popperOptions.modifiers.preventOverflow,
-						boundariesElement: this.boundariesElement,
-					}
+				openPopovers.push(this)
+
+				this.$emit('apply-show')
+
+				/**
+				 * Finally, if nothing already resolved promise -
+				 * we do it manually.
+				 */
+				if (finalPromiseResolve) {
+					resolve(true)
 				}
+			})
 
-				this.popperInstance = new Popper(reference, popoverNode, popperOptions)
-
-				// Fix position
-				requestAnimationFrame(() => {
-					if (!this.$_isDisposed && this.popperInstance) {
-						this.popperInstance.scheduleUpdate()
-
-						// Show the tooltip
-						requestAnimationFrame(() => {
-							if (!this.$_isDisposed) {
-								this.isOpen = true
-							} else {
-								this.dispose()
-							}
-						})
-					} else {
-						this.dispose()
-					}
-				})
-			}
-
-			const openGroup = this.openGroup
-			if (openGroup) {
-				let popover
-				for (let i = 0; i < openPopovers.length; i++) {
-					popover = openPopovers[i]
-					if (popover.openGroup !== openGroup) {
-						popover.hide()
-						popover.$emit('close-group')
-					}
+			/**
+			 * Add this promise to showPromises array,
+			 * and also clean it when it'll be resolved.
+			 */
+			this.$_showPromises.push(currentShowPromise)
+			currentShowPromise.then(result => {
+				const indexRes = this.$_showPromises
+					.findIndex(promise => promise === currentShowPromise)
+				if (indexRes !== -1) {
+					this.$_showPromises.splice(indexRes, 1)
 				}
-			}
-
-			openPopovers.push(this)
-
-			this.$emit('apply-show')
+			})
 		},
 
 		$_hide () {
@@ -509,25 +556,41 @@ export default {
 			} else {
 				// defaults to 0
 				const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0)
-				this.$_scheduleTimer = setTimeout(() => {
-					if (!this.isOpen) {
-						return
-					}
-
-					// if we are hiding because of a mouseleave, we must check that the new
-					// reference isn't the tooltip, because in this case we don't want to hide it
-					if (event && event.type === 'mouseleave') {
-						const isSet = this.$_setTooltipNodeEvent(event)
-
-						// if we set the new event, don't hide the tooltip yet
-						// the new event will take care to hide it if necessary
-						if (isSet) {
+				const hideCallback = () => {
+					this.$_scheduleTimer = setTimeout(() => {
+						if (!this.isOpen) {
 							return
 						}
-					}
 
-					this.$_hide()
-				}, computedDelay)
+						// if we are hiding because of a mouseleave, we must check that the new
+						// reference isn't the tooltip, because in this case we don't want to hide it
+						if (event && event.type === 'mouseleave') {
+							const isSet = this.$_setTooltipNodeEvent(event)
+
+							// if we set the new event, don't hide the tooltip yet
+							// the new event will take care to hide it if necessary
+							if (isSet) {
+								return
+							}
+						}
+
+						this.$_hide()
+					}, computedDelay)
+				}
+
+				/**
+				 * If popover runs show functions -
+				 * wait for them
+				 */
+				if (this.$_showPromises) {
+					Promise.all(this.$_showPromises)
+						.then(hideCallback)
+				/**
+				 * If all show func's already worked
+				 */
+				} else {
+					hideCallback()
+				}
 			}
 		},
 
