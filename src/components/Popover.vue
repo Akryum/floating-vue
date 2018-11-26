@@ -622,6 +622,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
 		} : true)
 	} else {
 		window.addEventListener('click', handleGlobalClick, true)
+		window.addEventListener('keydown', handleGlobalEsc, true)
 	}
 }
 
@@ -631,6 +632,13 @@ function handleGlobalClick (event) {
 
 function handleGlobalTouchend (event) {
 	handleGlobalClose(event, true)
+}
+
+function handleGlobalEsc (event) {
+	if (event.key === 'Escape') {
+		event.closePopover = true
+		handleGlobalClose(event)
+	}
 }
 
 function handleGlobalClose (event, touch = false) {
