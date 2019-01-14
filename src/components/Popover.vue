@@ -634,20 +634,18 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose(event) {
-  var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  var _contains = popover.$refs.popover.contains(event.target);
-  
-  // Delay so that close directive has time to set values
-  requestAnimationFrame((function (contains) {
+    var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
     var popover = void 0;
     for (var i = 0; i < openPopovers.length; i++) {
       popover = openPopovers[i];
       if (popover.$refs.popover) {
+        var contains = popover.$refs.popover.contains(event.target);
         if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
-          popover.$_handleGlobalClose(event, touch);
+          // Delay so that close directive has time to set values
+          requestAnimationFrame(popover.$_handleGlobalClose.bind(this, event, touch));
         }
       }
     }
-  }).bind(_contains));
-}
+  }
 </script>
