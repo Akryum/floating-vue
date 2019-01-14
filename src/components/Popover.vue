@@ -633,19 +633,21 @@ function handleGlobalTouchend (event) {
 	handleGlobalClose(event, true)
 }
 
-function handleGlobalClose (event, touch = false) {
-	// Delay so that close directive has time to set values
-	requestAnimationFrame(() => {
-		let popover
-		for (let i = 0; i < openPopovers.length; i++) {
-			popover = openPopovers[i]
-			if (popover.$refs.popover) {
-				const contains = popover.$refs.popover.contains(event.target)
-				if (event.closeAllPopover || (event.closePopover && contains) || (popover.autoHide && !contains)) {
-					popover.$_handleGlobalClose(event, touch)
-				}
-			}
-		}
-	})
+function handleGlobalClose(event) {
+  var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var _contains = popover.$refs.popover.contains(event.target);
+  
+  // Delay so that close directive has time to set values
+  requestAnimationFrame((function (contains) {
+    var popover = void 0;
+    for (var i = 0; i < openPopovers.length; i++) {
+      popover = openPopovers[i];
+      if (popover.$refs.popover) {
+        if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
+          popover.$_handleGlobalClose(event, touch);
+        }
+      }
+    }
+  }).bind(_contains));
 }
 </script>
