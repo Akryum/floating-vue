@@ -3184,8 +3184,8 @@ meow@^3.7.0:
     trim-newlines "^1.0.0"
 
 merge-options@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-1.0.0.tgz#5b4f339a957192b5b98994a3ac5c95d2ca651b94"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/merge-options/-/merge-options-1.0.1.tgz#2a64b24457becd4e4dc608283247e94ce589aa32"
   dependencies:
     is-plain-obj "^1.1"
 
