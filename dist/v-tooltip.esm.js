@@ -2738,28 +2738,52 @@ var Tooltip = function () {
   */
 
 
-	/**
-  * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-  * @method Tooltip#hide
-  * @memberof Tooltip
-  */
-
-
-	/**
-  * Hides and destroys an element’s tooltip.
-  * @method Tooltip#dispose
-  * @memberof Tooltip
-  */
-
-
-	/**
-  * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-  * @method Tooltip#toggle
-  * @memberof Tooltip
-  */
-
-
 	createClass$1(Tooltip, [{
+		key: 'show',
+		value: function show() {
+			this._show(this.reference, this.options);
+		}
+
+		/**
+   * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+   * @method Tooltip#hide
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'hide',
+		value: function hide() {
+			this._hide();
+		}
+
+		/**
+   * Hides and destroys an element’s tooltip.
+   * @method Tooltip#dispose
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'dispose',
+		value: function dispose() {
+			this._dispose();
+		}
+
+		/**
+   * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+   * @method Tooltip#toggle
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'toggle',
+		value: function toggle() {
+			if (this._isOpen) {
+				return this.hide();
+			} else {
+				return this.show();
+			}
+		}
+	}, {
 		key: 'setClasses',
 		value: function setClasses(classes) {
 			this._classes = classes;
@@ -3251,26 +3275,6 @@ var Tooltip = function () {
 
 var _initialiseProps = function _initialiseProps() {
 	var _this9 = this;
-
-	this.show = function () {
-		_this9._show(_this9.reference, _this9.options);
-	};
-
-	this.hide = function () {
-		_this9._hide();
-	};
-
-	this.dispose = function () {
-		_this9._dispose();
-	};
-
-	this.toggle = function () {
-		if (_this9._isOpen) {
-			return _this9.hide();
-		} else {
-			return _this9.show();
-		}
-	};
 
 	this._events = [];
 
@@ -4359,19 +4363,19 @@ function handleGlobalTouchend(event) {
 function handleGlobalClose(event) {
 	var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-	// Delay so that close directive has time to set values
-	requestAnimationFrame(function () {
-		var popover = void 0;
-		for (var i = 0; i < openPopovers.length; i++) {
-			popover = openPopovers[i];
-			if (popover.$refs.popover) {
-				var contains = popover.$refs.popover.contains(event.target);
-				if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
+	var popover = void 0;
+	for (var i = 0; i < openPopovers.length; i++) {
+		popover = openPopovers[i];
+		if (popover.$refs.popover) {
+			var contains = popover.$refs.popover.contains(event.target);
+			if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
+				// Delay so that close directive has time to set values
+				requestAnimationFrame(function () {
 					popover.$_handleGlobalClose(event, touch);
-				}
+				});
 			}
 		}
-	});
+	}
 }
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
