@@ -55,7 +55,7 @@
     "jest": "^21.2.1",
     "jest-serializer-vue": "^0.3.0",
     "jest-vue": "^0.8.2",
-    "rollup": "^0.51.8",
+    "rollup": "^1.6.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.0",
     "rollup-plugin-node-resolve": "^3.0.0",
