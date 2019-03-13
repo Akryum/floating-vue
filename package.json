@@ -52,7 +52,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jest": "^21.2.1",
+    "jest": "^24.5.0",
     "jest-serializer-vue": "^0.3.0",
     "jest-vue": "^0.8.2",
     "rollup": "^0.51.8",
