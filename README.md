@@ -148,6 +148,21 @@ Vue.directive('close-popover', VClosePopover)
 Vue.component('v-popover', VPopover)
 ```
 
+## Nuxt.js
+
+Add `v-tooltip/nuxt` to modules section of `nuxt.config.js`
+
+```js
+{
+  modules: [
+    'v-tooltip/nuxt',
+
+    // Or if you have custom options...
+    ['v-tooltip/nuxt', { defaultPlacement: 'top' }],
+  ]
+}
+```
+
 ## Browser
 
 Include [v-tooltip](/dist/v-tooltip.min.js) in the page.
