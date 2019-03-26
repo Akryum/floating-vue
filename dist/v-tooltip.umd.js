@@ -3959,6 +3959,9 @@ var Popover = { render: function render() {
 	beforeDestroy: function beforeDestroy() {
 		this.dispose();
 	},
+	deactivated: function deactivated() {
+		this.hide();
+	},
 
 
 	methods: {

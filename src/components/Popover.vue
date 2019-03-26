@@ -238,6 +238,10 @@ export default {
 		this.dispose()
 	},
 
+	deactivated() {
+		this.hide();
+	},
+
 	methods: {
 		show ({ event, skipDelay = false, force = false } = {}) {
 			if (force || !this.disabled) {
