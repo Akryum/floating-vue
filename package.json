@@ -50,7 +50,7 @@
     "eslint-plugin-html": "^3.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^21.2.1",
     "jest-serializer-vue": "^0.3.0",
