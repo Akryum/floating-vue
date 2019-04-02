@@ -2744,28 +2744,52 @@ var Tooltip = function () {
   */
 
 
-	/**
-  * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-  * @method Tooltip#hide
-  * @memberof Tooltip
-  */
-
-
-	/**
-  * Hides and destroys an element’s tooltip.
-  * @method Tooltip#dispose
-  * @memberof Tooltip
-  */
-
-
-	/**
-  * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
-  * @method Tooltip#toggle
-  * @memberof Tooltip
-  */
-
-
 	createClass$1(Tooltip, [{
+		key: 'show',
+		value: function show() {
+			this._show(this.reference, this.options);
+		}
+
+		/**
+   * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+   * @method Tooltip#hide
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'hide',
+		value: function hide() {
+			this._hide();
+		}
+
+		/**
+   * Hides and destroys an element’s tooltip.
+   * @method Tooltip#dispose
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'dispose',
+		value: function dispose() {
+			this._dispose();
+		}
+
+		/**
+   * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+   * @method Tooltip#toggle
+   * @memberof Tooltip
+   */
+
+	}, {
+		key: 'toggle',
+		value: function toggle() {
+			if (this._isOpen) {
+				return this.hide();
+			} else {
+				return this.show();
+			}
+		}
+	}, {
 		key: 'setClasses',
 		value: function setClasses(classes) {
 			this._classes = classes;
@@ -3257,26 +3281,6 @@ var Tooltip = function () {
 
 var _initialiseProps = function _initialiseProps() {
 	var _this9 = this;
-
-	this.show = function () {
-		_this9._show(_this9.reference, _this9.options);
-	};
-
-	this.hide = function () {
-		_this9._hide();
-	};
-
-	this.dispose = function () {
-		_this9._dispose();
-	};
-
-	this.toggle = function () {
-		if (_this9._isOpen) {
-			return _this9.hide();
-		} else {
-			return _this9.show();
-		}
-	};
 
 	this._events = [];
 
@@ -4071,11 +4075,23 @@ var Popover = { render: function render() {
 
 				// Fix position
 				requestAnimationFrame(function () {
+					if (_this3.hidden) {
+						_this3.hidden = false;
+						_this3.$_hide();
+						return;
+					}
+
 					if (!_this3.$_isDisposed && _this3.popperInstance) {
 						_this3.popperInstance.scheduleUpdate();
 
 						// Show the tooltip
 						requestAnimationFrame(function () {
+							if (_this3.hidden) {
+								_this3.hidden = false;
+								_this3.$_hide();
+								return;
+							}
+
 							if (!_this3.$_isDisposed) {
 								_this3.isOpen = true;
 							} else {
@@ -4194,6 +4210,7 @@ var Popover = { render: function render() {
 					}
 					event.usedByTooltip = true;
 					!_this5.$_preventOpen && _this5.show({ event: event });
+					_this5.hidden = false;
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
@@ -4206,6 +4223,7 @@ var Popover = { render: function render() {
 						return;
 					}
 					_this5.hide({ event: event });
+					_this5.hidden = true;
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
