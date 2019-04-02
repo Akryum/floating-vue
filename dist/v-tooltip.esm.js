@@ -4072,11 +4072,23 @@ var Popover = { render: function render() {
 
 				// Fix position
 				requestAnimationFrame(function () {
+					if (_this3.hidden) {
+						_this3.hidden = false;
+						_this3.$_hide();
+						return;
+					}
+
 					if (!_this3.$_isDisposed && _this3.popperInstance) {
 						_this3.popperInstance.scheduleUpdate();
 
 						// Show the tooltip
 						requestAnimationFrame(function () {
+							if (_this3.hidden) {
+								_this3.hidden = false;
+								_this3.$_hide();
+								return;
+							}
+
 							if (!_this3.$_isDisposed) {
 								_this3.isOpen = true;
 							} else {
@@ -4195,6 +4207,7 @@ var Popover = { render: function render() {
 					}
 					event.usedByTooltip = true;
 					!_this5.$_preventOpen && _this5.show({ event: event });
+					_this5.hidden = false;
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);
@@ -4207,6 +4220,7 @@ var Popover = { render: function render() {
 						return;
 					}
 					_this5.hide({ event: event });
+					_this5.hidden = true;
 				};
 				_this5.$_events.push({ event: event, func: func });
 				reference.addEventListener(event, func);

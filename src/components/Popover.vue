@@ -350,11 +350,23 @@ export default {
 
 				// Fix position
 				requestAnimationFrame(() => {
+					if (this.hidden) {
+						this.hidden = false;
+						this.$_hide();
+						return 
+					}
+
 					if (!this.$_isDisposed && this.popperInstance) {
 						this.popperInstance.scheduleUpdate()
 
 						// Show the tooltip
 						requestAnimationFrame(() => {
+							if (this.hidden) {
+								this.hidden = false;
+								this.$_hide();
+								return
+							}
+
 							if (!this.$_isDisposed) {
 								this.isOpen = true
 							} else {
@@ -477,6 +489,7 @@ export default {
 					}
 					event.usedByTooltip = true
 					!this.$_preventOpen && this.show({ event: event })
+					this.hidden = false
 				}
 				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
@@ -489,6 +502,7 @@ export default {
 						return
 					}
 					this.hide({ event: event })
+					this.hidden = true
 				}
 				this.$_events.push({ event, func })
 				reference.addEventListener(event, func)
