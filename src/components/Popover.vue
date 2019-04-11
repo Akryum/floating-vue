@@ -3,7 +3,7 @@
     class="v-popover"
     :class="cssClass"
   >
-    <span
+    <div
       ref="trigger"
       class="trigger"
       style="display: inline-block;"
@@ -11,7 +11,7 @@
       :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
     >
       <slot />
-    </span>
+    </div>
 
     <div
       ref="popover"
