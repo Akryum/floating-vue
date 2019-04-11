@@ -234,6 +234,10 @@ export default {
     }
   },
 
+  deactivated () {
+    this.hide()
+  },
+
   beforeDestroy () {
     this.dispose()
   },
