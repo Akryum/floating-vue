@@ -8,26 +8,18 @@ const config = require('../package.json')
 
 export default {
 	input: 'src/index.js',
-	name: 'v-tooltip',
 	plugins: [
 		resolve({
-			jsnext: true,
-			main: true,
-			browser: true,
-		}),
-		cjs({
-			include: 'node_modules/**',
+			mainFields: ['module', 'jsnext:main', 'main', 'browser'],
 		}),
 		vue({
-			css (style) {
-			},
+			css: false,
 		}),
 		babel({
 			exclude: 'node_modules/**',
-			'plugins': [
-				'external-helpers',
-			],
+			runtimeHelpers: true,
 		}),
+		cjs(),
 		replace({
 			VERSION: JSON.stringify(config.version),
 		}),
