@@ -3,36 +3,30 @@ import resolve from 'rollup-plugin-node-resolve'
 import vue from 'rollup-plugin-vue'
 import cjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
+import postcss from 'rollup-plugin-postcss'
 
 const config = require('../package.json')
 
 export default {
-	input: 'src/index.js',
-	name: 'v-tooltip',
-	plugins: [
-		resolve({
-			jsnext: true,
-			main: true,
-			browser: true,
-		}),
-		cjs({
-			include: 'node_modules/**',
-		}),
-		vue({
-			css (style) {
-			},
-		}),
-		babel({
-			exclude: 'node_modules/**',
-			'plugins': [
-				'external-helpers',
-			],
-		}),
-		replace({
-			VERSION: JSON.stringify(config.version),
-		}),
-	],
-	watch: {
-		include: 'src/**',
-	},
+  input: 'src/index.js',
+  plugins: [
+    resolve({
+      mainFields: ['module', 'jsnext:main', 'main', 'browser'],
+    }),
+    vue({
+      css: true,
+    }),
+    babel({
+      exclude: 'node_modules/**',
+      runtimeHelpers: true,
+    }),
+    cjs(),
+    replace({
+      VERSION: JSON.stringify(config.version),
+    }),
+    postcss(),
+  ],
+  watch: {
+    include: 'src/**',
+  },
 }

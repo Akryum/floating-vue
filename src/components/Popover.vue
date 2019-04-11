@@ -347,9 +347,9 @@ export default {
         // Fix position
         requestAnimationFrame(() => {
           if (this.hidden) {
-            this.hidden = false;
-            this.$_hide();
-            return 
+            this.hidden = false
+            this.$_hide()
+            return
           }
 
           if (!this.$_isDisposed && this.popperInstance) {
@@ -358,8 +358,8 @@ export default {
             // Show the tooltip
             requestAnimationFrame(() => {
               if (this.hidden) {
-                this.hidden = false;
-                this.$_hide();
+                this.hidden = false
+                this.$_hide()
                 return
               }
 
@@ -462,18 +462,18 @@ export default {
 
       events.forEach(event => {
         switch (event) {
-        case 'hover':
-          directEvents.push('mouseenter')
-          oppositeEvents.push('mouseleave')
-          break
-        case 'focus':
-          directEvents.push('focus')
-          oppositeEvents.push('blur')
-          break
-        case 'click':
-          directEvents.push('click')
-          oppositeEvents.push('click')
-          break
+          case 'hover':
+            directEvents.push('mouseenter')
+            oppositeEvents.push('mouseleave')
+            break
+          case 'focus':
+            directEvents.push('focus')
+            oppositeEvents.push('blur')
+            break
+          case 'click':
+            directEvents.push('click')
+            oppositeEvents.push('click')
+            break
         }
       })
 

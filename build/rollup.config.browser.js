@@ -1,16 +1,15 @@
 import base from './rollup.config.base'
-import uglify from 'rollup-plugin-uglify'
-import { minify } from 'uglify-es'
+import { terser } from 'rollup-plugin-terser'
 
 const config = Object.assign({}, base, {
-	exports: 'named',
-	output: {
-		file: 'dist/v-tooltip.min.js',
-		format: 'iife',
-	},
-	name: 'VTooltip',
+  output: {
+    exports: 'named',
+    name: 'VTooltip',
+    file: 'dist/v-tooltip.min.js',
+    format: 'iife',
+  },
 })
 
-config.plugins.push(uglify({}, minify))
+config.plugins.push(terser())
 
 export default config
