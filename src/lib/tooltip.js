@@ -58,6 +58,9 @@ export default class Tooltip {
 
     reference.jquery && (reference = reference[0])
 
+    this.show = this.show.bind(this)
+    this.hide = this.hide.bind(this)
+
     // cache reference and options
     this.reference = reference
     this.options = options
