@@ -109,7 +109,7 @@ function addClasses(el, classes) {
     }
   });
 
-  if (el instanceof SVGElement) {
+  if (el.prototype && el instanceof SVGElement) {
     el.setAttribute('class', classList.join(' '));
   } else {
     el.className = classList.join(' ');
@@ -141,7 +141,7 @@ function removeClasses(el, classes) {
     }
   });
 
-  if (el instanceof SVGElement) {
+  if (el.prototype && el instanceof SVGElement) {
     el.setAttribute('class', classList.join(' '));
   } else {
     el.className = classList.join(' ');
@@ -244,7 +244,9 @@ function () {
 
     // apply user options over default ones
     _options = _objectSpread({}, DEFAULT_OPTIONS, _options);
-    _reference.jquery && (_reference = _reference[0]); // cache reference and options
+    _reference.jquery && (_reference = _reference[0]);
+    this.show = this.show.bind(this);
+    this.hide = this.hide.bind(this); // cache reference and options
 
     this.reference = _reference;
     this.options = _options; // set initial state
@@ -375,7 +377,12 @@ function () {
       this._isDisposed = false;
       this._enableDocumentTouch = events.indexOf('manual') === -1; // set event listeners
 
-      this._setEventListeners(this.reference, events, this.options);
+      this._setEventListeners(this.reference, events, this.options); // title attribute
+
+
+      this.$_originalTitle = this.reference.getAttribute('title');
+      this.reference.removeAttribute('title');
+      this.reference.setAttribute('data-original-title', this.$_originalTitle);
     }
     /**
      * Creates a new tooltip node
@@ -624,9 +631,7 @@ function () {
             _this5._tooltipNode.removeEventListener('click', _this5.hide); // Don't remove popper instance, just the HTML element
 
 
-            _this5._tooltipNode.parentNode.removeChild(_this5._tooltipNode);
-
-            _this5._tooltipNode = null;
+            _this5._removeTooltipNode();
           }
         }, disposeTime);
       }
@@ -635,11 +640,30 @@ function () {
       return this;
     }
   }, {
+    key: "_removeTooltipNode",
+    value: function _removeTooltipNode() {
+      if (!this._tooltipNode) return;
+      var parentNode = this._tooltipNode.parentNode;
+
+      if (parentNode) {
+        parentNode.removeChild(this._tooltipNode);
+        this.reference.removeAttribute('aria-describedby');
+      }
+
+      this._tooltipNode = null;
+    }
+  }, {
     key: "_dispose",
     value: function _dispose() {
       var _this6 = this;
 
-      this._isDisposed = true; // remove event listeners first to prevent any unexpected behaviour
+      this._isDisposed = true;
+      this.reference.removeAttribute('data-original-title');
+
+      if (this.$_originalTitle) {
+        this.reference.setAttribute('title', this.$_originalTitle);
+      } // remove event listeners first to prevent any unexpected behaviour
+
 
       this._events.forEach(function (_ref) {
         var func = _ref.func,
@@ -661,9 +685,7 @@ function () {
         this.popperInstance.destroy(); // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
 
         if (!this.popperInstance.options.removeOnDestroy) {
-          this._tooltipNode.parentNode.removeChild(this._tooltipNode);
-
-          this._tooltipNode = null;
+          this._removeTooltipNode();
         }
       } else {
         this._noLongerOpen();
@@ -1335,6 +1357,9 @@ var script = {
       this.show();
     }
   },
+  deactivated: function deactivated() {
+    this.hide();
+  },
   beforeDestroy: function beforeDestroy() {
     this.dispose();
   },
@@ -1451,11 +1476,27 @@ var script = {
         this.popperInstance = new Popper(reference, popoverNode, popperOptions); // Fix position
 
         requestAnimationFrame(function () {
+          if (_this3.hidden) {
+            _this3.hidden = false;
+
+            _this3.$_hide();
+
+            return;
+          }
+
           if (!_this3.$_isDisposed && _this3.popperInstance) {
             _this3.popperInstance.scheduleUpdate(); // Show the tooltip
 
 
             requestAnimationFrame(function () {
+              if (_this3.hidden) {
+                _this3.hidden = false;
+
+                _this3.$_hide();
+
+                return;
+              }
+
               if (!_this3.$_isDisposed) {
                 _this3.isOpen = true;
               } else {
@@ -1583,6 +1624,7 @@ var script = {
           !_this5.$_preventOpen && _this5.show({
             event: event
           });
+          _this5.hidden = false;
         };
 
         _this5.$_events.push({
@@ -1602,6 +1644,8 @@ var script = {
           _this5.hide({
             event: event
           });
+
+          _this5.hidden = true;
         };
 
         _this5.$_events.push({
@@ -1880,14 +1924,14 @@ var __vue_render__ = function() {
   var _c = _vm._self._c || _h;
   return _c("div", { staticClass: "v-popover", class: _vm.cssClass }, [
     _c(
-      "span",
+      "div",
       {
         ref: "trigger",
         staticClass: "trigger",
         staticStyle: { display: "inline-block" },
         attrs: {
           "aria-describedby": _vm.popoverId,
-          tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : -1
+          tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
         }
       },
       [_vm._t("default")],
@@ -1904,7 +1948,19 @@ var __vue_render__ = function() {
         },
         attrs: {
           id: _vm.popoverId,
-          "aria-hidden": _vm.isOpen ? "false" : "true"
+          "aria-hidden": _vm.isOpen ? "false" : "true",
+          tabindex: _vm.autoHide ? 0 : undefined
+        },
+        on: {
+          keyup: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+            ) {
+              return null
+            }
+            _vm.autoHide && _vm.hide();
+          }
         }
       },
       [
