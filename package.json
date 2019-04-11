@@ -2,35 +2,22 @@
   "name": "v-tooltip",
   "version": "2.0.0-rc.33",
   "description": "Easy tooltips with Vue 2.x",
-  "main": "dist/v-tooltip.umd.js",
-  "module": "dist/v-tooltip.esm.js",
-  "unpkg": "dist/v-tooltip.min.js",
+  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
     "build": "NODE_ENV=production npm run build:browser && npm run build:es && npm run build:umd",
+    "test": "npm run test:unit",
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
-    "prepublishOnly": "npm run test && npm run build",
-    "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
-    "test": "npm run test:unit",
-    "test:unit": "jest --config tests/unit/jest.config.js --coverage",
+    "demo:build": "vue-cli-service build",
     "demo:serve": "vue-cli-service serve",
-    "demo:build": "vue-cli-service build"
+    "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
+    "prepublishOnly": "npm run test && npm run build",
+    "test:unit": "vue-cli-service test:unit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Akryum/vue-tooltip.git"
-  },
-  "keywords": [
-    "vue",
-    "tooltip"
-  ],
-  "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Akryum/vue-tooltip/issues"
-  },
-  "homepage": "https://github.com/Akryum/vue-tooltip#readme",
+  "main": "dist/v-tooltip.umd.js",
+  "module": "dist/v-tooltip.esm.js",
+  "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
     "lodash.merge": "^4.6.1",
     "popper.js": "^1.15.0",
@@ -45,8 +32,10 @@
     "@babel/preset-env": "^7.4.2",
     "@vue/cli-plugin-babel": "^3.5.1",
     "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-plugin-unit-jest": "^3.5.3",
     "@vue/cli-service": "^3.5.1",
     "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
     "clean-css": "^4.1.8",
@@ -82,5 +71,18 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/Akryum/vue-tooltip/issues"
+  },
+  "homepage": "https://github.com/Akryum/vue-tooltip#readme",
+  "keywords": [
+    "vue",
+    "tooltip"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/vue-tooltip.git"
+  }
 }
