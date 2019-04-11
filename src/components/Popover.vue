@@ -1,11 +1,14 @@
 <template>
-  <div class="v-popover" :class="cssClass">
+  <div
+    class="v-popover"
+    :class="cssClass"
+  >
     <span
       ref="trigger"
       class="trigger"
       style="display: inline-block;"
       :aria-describedby="popoverId"
-      :tabindex="trigger.indexOf('focus') !== -1 ? 0 : -1"
+      :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
     >
       <slot />
     </span>
@@ -18,6 +21,8 @@
         visibility: isOpen ? 'visible' : 'hidden',
       }"
       :aria-hidden="isOpen ? 'false' : 'true'"
+      :tabindex="autoHide ? 0 : undefined"
+      @keyup.esc="autoHide && hide()"
     >
       <div :class="popoverWrapperClass">
         <div
