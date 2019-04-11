@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VTooltip, { createTooltip, destroyTooltip} from '../../'
+import VTooltip, { createTooltip, destroyTooltip } from '../'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'

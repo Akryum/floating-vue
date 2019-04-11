@@ -37,8 +37,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~style/imports';
-
 .code-snippet {
   @include h-box;
   background: white;

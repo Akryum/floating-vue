@@ -26,8 +26,6 @@
 
 
 <style lang="scss">
-@import "~style/imports";
-
 body {
   background: white;
   margin: 0;

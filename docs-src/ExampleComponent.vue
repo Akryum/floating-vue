@@ -28,8 +28,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~style/imports';
-
 .example-component {
 	background: $primary-color;
 	padding: 4px 16px;

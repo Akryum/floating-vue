@@ -8,7 +8,10 @@
         <td
           v-for="(data, i) of row"
           :key="i"
-          v-tooltip="data"
+          v-tooltip="{
+            content: data,
+            delay: 0
+          }"
         >
           {{ data }}
         </td>
