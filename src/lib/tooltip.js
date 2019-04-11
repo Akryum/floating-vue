@@ -196,6 +196,11 @@ export default class Tooltip {
 
     // set event listeners
     this._setEventListeners(this.reference, events, this.options)
+
+    // title attribute
+    this.$_originalTitle = this.reference.getAttribute('title')
+    this.reference.removeAttribute('title')
+    this.reference.setAttribute('data-original-title', this.$_originalTitle)
   }
 
   /**
@@ -436,6 +441,11 @@ export default class Tooltip {
 
   _dispose () {
     this._isDisposed = true
+
+    this.reference.removeAttribute('data-original-title')
+    if (this.$_originalTitle) {
+      this.reference.setAttribute('title', this.$_originalTitle)
+    }
 
     // remove event listeners first to prevent any unexpected behaviour
     this._events.forEach(({ func, event }) => {
