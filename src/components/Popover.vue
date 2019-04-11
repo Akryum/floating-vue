@@ -1,40 +1,40 @@
 <template>
-	<div class="v-popover" :class="cssClass">
-		<span
-			ref="trigger"
-			class="trigger"
-			style="display: inline-block;"
-			:aria-describedby="popoverId"
-			:tabindex="trigger.indexOf('focus') !== -1 ? 0 : -1"
-		>
-			<slot />
-		</span>
+  <div class="v-popover" :class="cssClass">
+    <span
+      ref="trigger"
+      class="trigger"
+      style="display: inline-block;"
+      :aria-describedby="popoverId"
+      :tabindex="trigger.indexOf('focus') !== -1 ? 0 : -1"
+    >
+      <slot />
+    </span>
 
-		<div
-			ref="popover"
-			:id="popoverId"
-			:class="[popoverBaseClass, popoverClass, cssClass]"
-			:style="{
-				visibility: isOpen ? 'visible' : 'hidden',
-			}"
-			:aria-hidden="isOpen ? 'false' : 'true'"
-		>
-			<div :class="popoverWrapperClass">
-				<div
-					ref="inner"
-					:class="popoverInnerClass"
-					style="position: relative;"
-				>
-					<div>
-						<slot name="popover" />
-					</div>
+    <div
+      ref="popover"
+      :id="popoverId"
+      :class="[popoverBaseClass, popoverClass, cssClass]"
+      :style="{
+        visibility: isOpen ? 'visible' : 'hidden',
+      }"
+      :aria-hidden="isOpen ? 'false' : 'true'"
+    >
+      <div :class="popoverWrapperClass">
+        <div
+          ref="inner"
+          :class="popoverInnerClass"
+          style="position: relative;"
+        >
+          <div>
+            <slot name="popover" />
+          </div>
 
-					<ResizeObserver v-if="handleResize" @notify="$_handleResize" />
-				</div>
-				<div ref="arrow" :class="popoverArrowClass"></div>
-			</div>
-		</div>
-	</div>
+          <ResizeObserver v-if="handleResize" @notify="$_handleResize" />
+        </div>
+        <div ref="arrow" :class="popoverArrowClass"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -346,11 +346,23 @@ export default {
 
         // Fix position
         requestAnimationFrame(() => {
+          if (this.hidden) {
+            this.hidden = false
+            this.$_hide()
+            return
+          }
+
           if (!this.$_isDisposed && this.popperInstance) {
             this.popperInstance.scheduleUpdate()
 
             // Show the tooltip
             requestAnimationFrame(() => {
+              if (this.hidden) {
+                this.hidden = false
+                this.$_hide()
+                return
+              }
+
               if (!this.$_isDisposed) {
                 this.isOpen = true
               } else {
@@ -473,6 +485,7 @@ export default {
           }
           event.usedByTooltip = true
           !this.$_preventOpen && this.show({ event: event })
+          this.hidden = false
         }
         this.$_events.push({ event, func })
         reference.addEventListener(event, func)
@@ -485,6 +498,7 @@ export default {
             return
           }
           this.hide({ event: event })
+          this.hidden = true
         }
         this.$_events.push({ event, func })
         reference.addEventListener(event, func)
