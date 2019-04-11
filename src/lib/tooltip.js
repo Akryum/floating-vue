@@ -428,8 +428,7 @@ export default class Tooltip {
           this._tooltipNode.removeEventListener('mouseenter', this.hide)
           this._tooltipNode.removeEventListener('click', this.hide)
           // Don't remove popper instance, just the HTML element
-          this._tooltipNode.parentNode.removeChild(this._tooltipNode)
-          this._tooltipNode = null
+          this._removeTooltipNode()
         }
       }, disposeTime)
     }
@@ -437,6 +436,16 @@ export default class Tooltip {
     removeClasses(this.reference, ['v-tooltip-open'])
 
     return this
+  }
+
+  _removeTooltipNode () {
+    if (!this._tooltipNode) return
+    const parentNode = this._tooltipNode.parentNode
+    if (parentNode) {
+      parentNode.removeChild(this._tooltipNode)
+      this.reference.removeAttribute('aria-describedby')
+    }
+    this._tooltipNode = null
   }
 
   _dispose () {
@@ -464,8 +473,7 @@ export default class Tooltip {
 
       // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
       if (!this.popperInstance.options.removeOnDestroy) {
-        this._tooltipNode.parentNode.removeChild(this._tooltipNode)
-        this._tooltipNode = null
+        this._removeTooltipNode()
       }
     } else {
       this._noLongerOpen()
