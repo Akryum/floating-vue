@@ -75,66 +75,82 @@ export default {
       type: Boolean,
       default: false,
     },
+
     disabled: {
       type: Boolean,
       default: false,
     },
+
     placement: {
       type: String,
       default: () => getDefault('defaultPlacement'),
     },
+
     delay: {
       type: [String, Number, Object],
       default: () => getDefault('defaultDelay'),
     },
+
     offset: {
       type: [String, Number],
       default: () => getDefault('defaultOffset'),
     },
+
     trigger: {
       type: String,
       default: () => getDefault('defaultTrigger'),
     },
+
     container: {
       type: [String, Object, Element, Boolean],
       default: () => getDefault('defaultContainer'),
     },
+
     boundariesElement: {
       type: [String, Element],
       default: () => getDefault('defaultBoundariesElement'),
     },
+
     popperOptions: {
       type: Object,
       default: () => getDefault('defaultPopperOptions'),
     },
+
     popoverClass: {
       type: [String, Array],
       default: () => getDefault('defaultClass'),
     },
+
     popoverBaseClass: {
       type: [String, Array],
       default: () => directive.options.popover.defaultBaseClass,
     },
+
     popoverInnerClass: {
       type: [String, Array],
       default: () => directive.options.popover.defaultInnerClass,
     },
+
     popoverWrapperClass: {
       type: [String, Array],
       default: () => directive.options.popover.defaultWrapperClass,
     },
+
     popoverArrowClass: {
       type: [String, Array],
       default: () => directive.options.popover.defaultArrowClass,
     },
+
     autoHide: {
       type: Boolean,
       default: () => directive.options.popover.defaultAutoHide,
     },
+
     handleResize: {
       type: Boolean,
       default: () => directive.options.popover.defaultHandleResize,
     },
+
     openGroup: {
       type: String,
       default: null,
