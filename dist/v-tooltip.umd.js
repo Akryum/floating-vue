@@ -3060,9 +3060,9 @@
               result.then(function (asyncResult) {
                 options.loadingClass && removeClasses(rootNode, options.loadingClass);
                 return _this3._applyContent(asyncResult, options);
-              }).then(resolve)["catch"](reject);
+              }).then(resolve).catch(reject);
             } else {
-              _this3._applyContent(result, options).then(resolve)["catch"](reject);
+              _this3._applyContent(result, options).then(resolve).catch(reject);
             }
 
             return;
@@ -3876,99 +3876,99 @@
     props: {
       open: {
         type: Boolean,
-        "default": false
+        default: false
       },
       disabled: {
         type: Boolean,
-        "default": false
+        default: false
       },
       placement: {
         type: String,
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultPlacement');
         }
       },
       delay: {
         type: [String, Number, Object],
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultDelay');
         }
       },
       offset: {
         type: [String, Number],
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultOffset');
         }
       },
       trigger: {
         type: String,
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultTrigger');
         }
       },
       container: {
         type: [String, Object, Element, Boolean],
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultContainer');
         }
       },
       boundariesElement: {
         type: [String, Element],
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultBoundariesElement');
         }
       },
       popperOptions: {
         type: Object,
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultPopperOptions');
         }
       },
       popoverClass: {
         type: [String, Array],
-        "default": function _default() {
+        default: function _default() {
           return getDefault('defaultClass');
         }
       },
       popoverBaseClass: {
         type: [String, Array],
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultBaseClass;
         }
       },
       popoverInnerClass: {
         type: [String, Array],
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultInnerClass;
         }
       },
       popoverWrapperClass: {
         type: [String, Array],
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultWrapperClass;
         }
       },
       popoverArrowClass: {
         type: [String, Array],
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultArrowClass;
         }
       },
       autoHide: {
         type: Boolean,
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultAutoHide;
         }
       },
       handleResize: {
         type: Boolean,
-        "default": function _default() {
+        default: function _default() {
           return directive.options.popover.defaultHandleResize;
         }
       },
       openGroup: {
         type: String,
-        "default": null
+        default: null
       }
     },
     data: function data() {
