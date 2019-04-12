@@ -19,7 +19,7 @@
   "module": "dist/v-tooltip.esm.js",
   "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
-    "lodash.merge": "^4.6.1",
+    "lodash": "^4.17.11",
     "popper.js": "^1.15.0",
     "vue-resize": "^0.4.5"
   },
