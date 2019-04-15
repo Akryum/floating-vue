@@ -1061,10 +1061,10 @@
     lodash.kebabcase "^4.1.1"
     svg-tags "^1.0.0"
 
-"@vue/babel-preset-app@^3.5.5":
-  version "3.5.5"
-  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-3.5.5.tgz#d28bfc5fdec0b3dcc4edf2aba975cce09699db92"
-  integrity sha512-kK2DkQ+uGOjDnVjgn8A3Rczic55rI42nMESmwWfrfjssPeFQLGqiJixk9eQccHNBjyHcl3D+UOWx+EHQbpPByg==
+"@vue/babel-preset-app@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-3.6.0.tgz#39e12d4f81aed10696692fc7ef7d71d9328cd236"
+  integrity sha512-92CnysJemgQf+7VX/msCrHu7mNF9pgC0iwtIWPUI6jP2yUK6PUxsCbiPBmjHTcKrWtoLRri6kMBM9GU19tWRoQ==
   dependencies:
     "@babel/helper-module-imports" "^7.0.0"
     "@babel/plugin-proposal-class-properties" "^7.0.0"
@@ -1075,11 +1075,11 @@
     "@babel/preset-env" "^7.0.0 < 7.4.0"
     "@babel/runtime" "^7.0.0"
     "@babel/runtime-corejs2" "^7.2.0"
-    "@vue/babel-preset-jsx" "^1.0.0-beta.2"
+    "@vue/babel-preset-jsx" "^1.0.0-beta.3"
     babel-plugin-dynamic-import-node "^2.2.0"
     core-js "^2.6.5"
 
-"@vue/babel-preset-jsx@^1.0.0-beta.2":
+"@vue/babel-preset-jsx@^1.0.0-beta.3":
   version "1.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/@vue/babel-preset-jsx/-/babel-preset-jsx-1.0.0-beta.3.tgz#15c584bd62c0286a80f0196749ae38cde5cd703b"
   integrity sha512-qMKGRorTI/0nE83nLEM7MyQiBZUqc62sZyjkBdVaaU7S61MHI8RKHPtbLMMZlWXb2NCJ0fQci8xJWUK5JE+TFA==
@@ -1132,13 +1132,13 @@
   integrity sha512-DqzfkbKJfuzcNbJouA7ZaLX77xn7FCcVUJaPYVH8qm3pNhIz2tmbfN6WVBLU8XC5FNFFWzLjHmg9rpaEBq7RCA==
 
 "@vue/cli-plugin-babel@^3.5.1":
-  version "3.5.5"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.5.5.tgz#f07e7c699e445677a51d6763770d2904bf3c9d65"
-  integrity sha512-ew+EWL2ur234wqQfI1AvWcghjWQ2PlSVpUAfnDlejplDzXSHz7455IIwN7Auhs7siEbls3EVd/bl/ieKGjwY5g==
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.6.0.tgz#7863fca0151a60a7c9af9517b0537cc9a1420e64"
+  integrity sha512-LObyK/+B2ElmhNQuWffuOpSRGFk9WxOxnFn4g4zpE65ZRCuWJxXN3E3w8wx239my4oPe0wbnWbXmm8GPxNJ+cg==
   dependencies:
     "@babel/core" "^7.0.0"
-    "@vue/babel-preset-app" "^3.5.5"
-    "@vue/cli-shared-utils" "^3.5.1"
+    "@vue/babel-preset-app" "^3.6.0"
+    "@vue/cli-shared-utils" "^3.6.0"
     babel-loader "^8.0.5"
     webpack ">=4 < 4.29"
 
@@ -1228,10 +1228,10 @@
     webpack-merge "^4.2.1"
     yorkie "^2.0.0"
 
-"@vue/cli-shared-utils@^3.5.1":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-3.5.1.tgz#71d66f06fc619ba28df279bd7d37ba1ba29c9066"
-  integrity sha512-hCB7UbKeeC41w2Q8+Q7jmw3gHdq+ltRqp80S3uDRRGxwiOhxrSmdBHMzKUjh01L8bXOBRgvLey+BERi1Nj9n6Q==
+"@vue/cli-shared-utils@^3.5.1", "@vue/cli-shared-utils@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-3.6.0.tgz#43937a2ea42b809dcd35d9348edf318ebc28b0d9"
+  integrity sha512-C8nTiJ7o+dncNLyOIOZF8P4bMJdOVXhWOuwyZKqn8k3CcsQVzuLyCKUHHezWc+sI+PJi4wIg2ZffCiueeIXZ+w==
   dependencies:
     chalk "^2.4.1"
     execa "^1.0.0"
@@ -1240,10 +1240,10 @@
     lru-cache "^5.1.1"
     node-ipc "^9.1.1"
     opn "^5.3.0"
-    ora "^3.1.0"
+    ora "^3.4.0"
     request "^2.87.0"
     request-promise-native "^1.0.7"
-    semver "^5.5.0"
+    semver "^6.0.0"
     string.prototype.padstart "^3.0.0"
 
 "@vue/component-compiler-utils@^2.5.1", "@vue/component-compiler-utils@^2.6.0":
@@ -8336,7 +8336,7 @@ optionator@^0.8.1, optionator@^0.8.2:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-ora@^3.1.0:
+ora@^3.1.0, ora@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/ora/-/ora-3.4.0.tgz#bf0752491059a3ef3ed4c85097531de9fdbcd318"
   integrity sha512-eNwHudNbO1folBP3JsZ19v9azXWtQZjICdr3Q0TDPIaeBQ3mXLrh54wM+er0+hSp+dWKf+Z8KM58CYzEyIYxYg==
