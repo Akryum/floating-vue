@@ -20,6 +20,14 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 
 ## Sponsors
 
+### Gold
+
+<p align="center">
+  <a href="https://www.sumcumo.com/en/" target="_blank">
+    <img src="https://cdn.discordapp.com/attachments/258614093362102272/570728242399674380/logo-sumcumo.png" alt="sum.cumo logo" width="400px">
+  </a>
+</p>
+
 ### Silver
 
 <p align="center">
