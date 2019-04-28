@@ -19,6 +19,7 @@ export default {
     babel({
       exclude: 'node_modules/**',
       runtimeHelpers: true,
+      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
     }),
     cjs(),
     replace({
