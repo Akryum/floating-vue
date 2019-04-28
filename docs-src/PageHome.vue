@@ -81,7 +81,7 @@
         <button
           class="tooltip-target"
           v-tooltip="{
-            content: asyncContent,
+            content: () => asyncContent('foo', 'bar'),
             loadingContent: '<i>Loading...</i>',
           }"
         >Hover me</button>
@@ -643,10 +643,10 @@ export default {
       }
     },
 
-    asyncContent () {
+    asyncContent (...params) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve(`Hi, I'm some content from a server! :)`)
+          resolve(`Hi, I'm some content from a server! :)<br>Params: ${params}`)
         }, 2000)
       })
     },
