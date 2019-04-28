@@ -674,17 +674,16 @@ function handleGlobalTouchend (event) {
 
 function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
-  requestAnimationFrame(() => {
-    let popover
-    for (let i = 0; i < openPopovers.length; i++) {
-      popover = openPopovers[i]
-      if (popover.$refs.popover) {
-        const contains = popover.$refs.popover.contains(event.target)
+  for (let i = 0; i < openPopovers.length; i++) {
+    let popover = openPopovers[i]
+    if (popover.$refs.popover) {
+      const contains = popover.$refs.popover.contains(event.target)
+      requestAnimationFrame(() => {
         if (event.closeAllPopover || (event.closePopover && contains) || (popover.autoHide && !contains)) {
           popover.$_handleGlobalClose(event, touch)
         }
-      }
+      })
     }
-  })
+  }
 }
 </script>
