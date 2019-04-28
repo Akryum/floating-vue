@@ -400,7 +400,8 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 - `popoverInnerClass` - Class of the inner content element.
 - `autoHide` - Hide the popover if clicked outside.
 - `handleResize` - Automatically update the popover position if its size changes.
-- `open-group` - If set, will close all the open popovers that have a different `open-group` value or unset.
+- `openGroup` - If set, will close all the open popovers that have a different `open-group` value or unset.
+- `openClass` - Class put on the popover when it's open.
 
 You can change the default values in the [Global options](#global-options).
 
@@ -527,7 +528,7 @@ The default global options are:
 		defaultInnerClass: 'tooltip-inner popover-inner',
 		// Arrow class
     defaultArrowClass: 'tooltip-arrow popover-arrow',
-    // Class added when popover open
+    // Class added when popover is open
     defaultOpenClass: 'open',
 		defaultDelay: 0,
 		defaultTrigger: 'click',
