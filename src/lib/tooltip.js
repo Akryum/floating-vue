@@ -184,15 +184,15 @@ export default class Tooltip {
 
   _init () {
     // get events list
-    const events = typeof this.options.trigger === 'string'
-      ? this.options.trigger
-        .split(' ')
-        .filter(
-          trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-        )
+    let events = typeof this.options.trigger === 'string'
+      ? this.options.trigger.split(' ')
       : []
     this._isDisposed = false
     this._enableDocumentTouch = events.indexOf('manual') === -1
+
+    events = events.filter(
+      trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+    )
 
     // set event listeners
     this._setEventListeners(this.reference, events, this.options)
