@@ -2713,7 +2713,7 @@
       }
     });
 
-    if (el.prototype && el instanceof SVGElement) {
+    if (el instanceof SVGElement) {
       el.setAttribute('class', classList.join(' '));
     } else {
       el.className = classList.join(' ');
@@ -2745,7 +2745,7 @@
       }
     });
 
-    if (el.prototype && el instanceof SVGElement) {
+    if (el instanceof SVGElement) {
       el.setAttribute('class', classList.join(' '));
     } else {
       el.className = classList.join(' ');
@@ -2975,11 +2975,12 @@
       key: "_init",
       value: function _init() {
         // get events list
-        var events = typeof this.options.trigger === 'string' ? this.options.trigger.split(' ').filter(function (trigger) {
-          return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-        }) : [];
+        var events = typeof this.options.trigger === 'string' ? this.options.trigger.split(' ') : [];
         this._isDisposed = false;
-        this._enableDocumentTouch = events.indexOf('manual') === -1; // set event listeners
+        this._enableDocumentTouch = events.indexOf('manual') === -1;
+        events = events.filter(function (trigger) {
+          return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
+        }); // set event listeners
 
         this._setEventListeners(this.reference, events, this.options); // title attribute
 
@@ -3146,10 +3147,7 @@
 
         var tooltipNode = this._create(reference, options.template);
 
-        this._tooltipNode = tooltipNode;
-
-        this._setContent(title, options); // Add `aria-describedby` to our reference element for accessibility reasons
-
+        this._tooltipNode = tooltipNode; // Add `aria-describedby` to our reference element for accessibility reasons
 
         reference.setAttribute('aria-describedby', tooltipNode.id); // append tooltip to container
 
@@ -3173,7 +3171,10 @@
           };
         }
 
-        this.popperInstance = new Popper(reference, tooltipNode, popperOptions); // Fix position
+        this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
+
+        this._setContent(title, options); // Fix position
+
 
         requestAnimationFrame(function () {
           if (!_this4._isDisposed && _this4.popperInstance) {
@@ -3525,6 +3526,8 @@
       defaultInnerClass: 'tooltip-inner popover-inner',
       // Arrow class
       defaultArrowClass: 'tooltip-arrow popover-arrow',
+      // Class added when popover is open
+      defaultOpenClass: 'open',
       defaultDelay: 0,
       defaultTrigger: 'click',
       defaultOffset: 0,
@@ -3991,6 +3994,12 @@
       openGroup: {
         type: String,
         default: null
+      },
+      openClass: {
+        type: [String, Array],
+        default: function _default() {
+          return directive.options.popover.defaultOpenClass;
+        }
       }
     },
     data: function data() {
@@ -4001,9 +4010,7 @@
     },
     computed: {
       cssClass: function cssClass() {
-        return {
-          'open': this.isOpen
-        };
+        return _defineProperty({}, this.openClass, this.isOpen);
       },
       popoverId: function popoverId() {
         return "popover_".concat(this.id);
@@ -4084,11 +4091,11 @@
       show: function show() {
         var _this2 = this;
 
-        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            event = _ref.event,
-            _ref$skipDelay = _ref.skipDelay,
-            _ref$force = _ref.force,
-            force = _ref$force === void 0 ? false : _ref$force;
+        var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            event = _ref2.event,
+            _ref2$skipDelay = _ref2.skipDelay,
+            _ref2$force = _ref2.force,
+            force = _ref2$force === void 0 ? false : _ref2$force;
 
         if (force || !this.disabled) {
           this.$_scheduleShow(event);
@@ -4102,9 +4109,9 @@
         });
       },
       hide: function hide() {
-        var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            event = _ref2.event,
-            _ref2$skipDelay = _ref2.skipDelay;
+        var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            event = _ref3.event,
+            _ref3$skipDelay = _ref3.skipDelay;
 
         this.$_scheduleHide(event);
         this.$emit('hide');
@@ -4448,9 +4455,9 @@
       },
       $_removeEventListeners: function $_removeEventListeners() {
         var reference = this.$refs.trigger;
-        this.$_events.forEach(function (_ref3) {
-          var func = _ref3.func,
-              event = _ref3.event;
+        this.$_events.forEach(function (_ref4) {
+          var func = _ref4.func,
+              event = _ref4.event;
           reference.removeEventListener(event, func);
         });
         this.$_events = [];
@@ -4528,22 +4535,24 @@
 
   function handleGlobalClose(event) {
     var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    // Delay so that close directive has time to set values
-    requestAnimationFrame(function () {
-      var popover;
 
-      for (var i = 0; i < openPopovers.length; i++) {
-        popover = openPopovers[i];
+    var _loop = function _loop(i) {
+      var popover = openPopovers[i];
 
-        if (popover.$refs.popover) {
-          var contains = popover.$refs.popover.contains(event.target);
-
+      if (popover.$refs.popover) {
+        var contains = popover.$refs.popover.contains(event.target);
+        requestAnimationFrame(function () {
           if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
             popover.$_handleGlobalClose(event, touch);
           }
-        }
+        });
       }
-    });
+    };
+
+    // Delay so that close directive has time to set values
+    for (var i = 0; i < openPopovers.length; i++) {
+      _loop(i);
+    }
   }
 
   function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -4632,106 +4641,89 @@
   var normalizeComponent_1 = normalizeComponent;
 
   /* script */
-  const __vue_script__ = script;
-
+  var __vue_script__ = script;
   /* template */
-  var __vue_render__ = function() {
+
+  var __vue_render__ = function __vue_render__() {
     var _vm = this;
+
     var _h = _vm.$createElement;
+
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "v-popover", class: _vm.cssClass }, [
-      _c(
-        "div",
-        {
-          ref: "trigger",
-          staticClass: "trigger",
-          staticStyle: { display: "inline-block" },
-          attrs: {
-            "aria-describedby": _vm.popoverId,
-            tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
+
+    return _c("div", {
+      staticClass: "v-popover",
+      class: _vm.cssClass
+    }, [_c("div", {
+      ref: "trigger",
+      staticClass: "trigger",
+      staticStyle: {
+        display: "inline-block"
+      },
+      attrs: {
+        "aria-describedby": _vm.popoverId,
+        tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
+      }
+    }, [_vm._t("default")], 2), _vm._v(" "), _c("div", {
+      ref: "popover",
+      class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass],
+      style: {
+        visibility: _vm.isOpen ? "visible" : "hidden"
+      },
+      attrs: {
+        id: _vm.popoverId,
+        "aria-hidden": _vm.isOpen ? "false" : "true",
+        tabindex: _vm.autoHide ? 0 : undefined
+      },
+      on: {
+        keyup: function keyup($event) {
+          if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) {
+            return null;
           }
-        },
-        [_vm._t("default")],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          ref: "popover",
-          class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass],
-          style: {
-            visibility: _vm.isOpen ? "visible" : "hidden"
-          },
-          attrs: {
-            id: _vm.popoverId,
-            "aria-hidden": _vm.isOpen ? "false" : "true",
-            tabindex: _vm.autoHide ? 0 : undefined
-          },
-          on: {
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
-              ) {
-                return null
-              }
-              _vm.autoHide && _vm.hide();
-            }
-          }
-        },
-        [
-          _c("div", { class: _vm.popoverWrapperClass }, [
-            _c(
-              "div",
-              {
-                ref: "inner",
-                class: _vm.popoverInnerClass,
-                staticStyle: { position: "relative" }
-              },
-              [
-                _c("div", [_vm._t("popover")], 2),
-                _vm._v(" "),
-                _vm.handleResize
-                  ? _c("ResizeObserver", { on: { notify: _vm.$_handleResize } })
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { ref: "arrow", class: _vm.popoverArrowClass })
-          ])
-        ]
-      )
-    ])
+
+          _vm.autoHide && _vm.hide();
+        }
+      }
+    }, [_c("div", {
+      class: _vm.popoverWrapperClass
+    }, [_c("div", {
+      ref: "inner",
+      class: _vm.popoverInnerClass,
+      staticStyle: {
+        position: "relative"
+      }
+    }, [_c("div", [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c("ResizeObserver", {
+      on: {
+        notify: _vm.$_handleResize
+      }
+    }) : _vm._e()], 1), _vm._v(" "), _c("div", {
+      ref: "arrow",
+      class: _vm.popoverArrowClass
+    })])])]);
   };
+
   var __vue_staticRenderFns__ = [];
   __vue_render__._withStripped = true;
+  /* style */
 
-    /* style */
-    const __vue_inject_styles__ = undefined;
-    /* scoped */
-    const __vue_scope_id__ = undefined;
-    /* module identifier */
-    const __vue_module_identifier__ = undefined;
-    /* functional template */
-    const __vue_is_functional_template__ = false;
-    /* style inject */
-    
-    /* style inject SSR */
-    
+  var __vue_inject_styles__ = undefined;
+  /* scoped */
 
-    
-    var Popover = normalizeComponent_1(
-      { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
-      __vue_inject_styles__,
-      __vue_script__,
-      __vue_scope_id__,
-      __vue_is_functional_template__,
-      __vue_module_identifier__,
-      undefined,
-      undefined
-    );
+  var __vue_scope_id__ = undefined;
+  /* module identifier */
+
+  var __vue_module_identifier__ = undefined;
+  /* functional template */
+
+  var __vue_is_functional_template__ = false;
+  /* style inject */
+
+  /* style inject SSR */
+
+  var Popover = normalizeComponent_1({
+    render: __vue_render__,
+    staticRenderFns: __vue_staticRenderFns__
+  }, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, undefined, undefined);
 
   /**
    * Removes all key-value entries from the list cache.
