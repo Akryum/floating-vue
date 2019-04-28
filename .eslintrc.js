@@ -24,7 +24,5 @@ module.exports = {
     // beware of returning assignement
     'no-return-assign': 'off',
     'no-extend-native': 'warn',
-    'indent': ['error', 'tab'],
-    'no-tabs': 'off',
   }
 }
