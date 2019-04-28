@@ -164,7 +164,7 @@
               {{ msg }}
             </p>
 
-            <ExampleComponent char="=" />
+            <ExampleComponent char="✌️" />
 
             <div class="close">
               <a
