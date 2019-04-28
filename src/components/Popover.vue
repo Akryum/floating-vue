@@ -162,9 +162,9 @@ export default {
     },
 
     popoverOpenClass: {
-			type: [String, Array],
-			default: () => directive.options.popover.defaultOpenClass,
-		},
+      type: [String, Array],
+      default: () => directive.options.popover.defaultOpenClass,
+    },
   },
 
   data () {
