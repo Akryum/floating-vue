@@ -347,8 +347,6 @@ export default class Tooltip {
     )
     this._tooltipNode = tooltipNode
 
-    this._setContent(title, options)
-
     // Add `aria-describedby` to our reference element for accessibility reasons
     reference.setAttribute('aria-describedby', tooltipNode.id)
 
@@ -376,6 +374,8 @@ export default class Tooltip {
     }
 
     this.popperInstance = new Popper(reference, tooltipNode, popperOptions)
+
+    this._setContent(title, options)
 
     // Fix position
     requestAnimationFrame(() => {
