@@ -1,5 +1,8 @@
 import * as Utils from './utils'
 
+// Fix jsdom
+global.SVGElement = global.Element
+
 describe('convertToArray', () => {
   test('one item', () => {
     const text = 'foo'
