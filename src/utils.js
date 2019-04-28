@@ -30,7 +30,7 @@ export function addClasses (el, classes) {
       classList.push(newClass)
     }
   })
-  if (el.prototype && el instanceof SVGElement) {
+  if (el instanceof SVGElement) {
     el.setAttribute('class', classList.join(' '))
   } else {
     el.className = classList.join(' ')
@@ -58,7 +58,7 @@ export function removeClasses (el, classes) {
       classList.splice(index, 1)
     }
   })
-  if (el.prototype && el instanceof SVGElement) {
+  if (el instanceof SVGElement) {
     el.setAttribute('class', classList.join(' '))
   } else {
     el.className = classList.join(' ')
