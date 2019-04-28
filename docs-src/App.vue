@@ -257,13 +257,17 @@ label input {
   &[aria-hidden='true'] {
     visibility: hidden;
     opacity: 0;
-    transition: opacity .15s, visibility .15s;
+    &:not(.no-transition) {
+      transition: opacity .15s, visibility .15s;
+    }
   }
 
   &[aria-hidden='false'] {
     visibility: visible;
     opacity: 1;
-    transition: opacity .15s;
+    &:not(.no-transition) {
+      transition: opacity .15s;
+    }
   }
 
   &.info {

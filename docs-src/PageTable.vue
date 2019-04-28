@@ -10,7 +10,8 @@
           :key="i"
           v-tooltip="{
             content: data,
-            delay: 0
+            delay: 0,
+            classes: ['no-transition']
           }"
         >
           {{ data }}
