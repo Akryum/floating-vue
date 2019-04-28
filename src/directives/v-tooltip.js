@@ -70,6 +70,8 @@ export const defaultOptions = {
     defaultInnerClass: 'tooltip-inner popover-inner',
     // Arrow class
     defaultArrowClass: 'tooltip-arrow popover-arrow',
+    // Class added when popover is open
+    defaultOpenClass: 'open',
     defaultDelay: 0,
     defaultTrigger: 'click',
     defaultOffset: 0,

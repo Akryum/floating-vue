@@ -160,6 +160,11 @@ export default {
       type: String,
       default: null,
     },
+
+    openClass: {
+      type: [String, Array],
+      default: () => directive.options.popover.defaultOpenClass,
+    },
   },
 
   data () {
@@ -172,7 +177,7 @@ export default {
   computed: {
     cssClass () {
       return {
-        'open': this.isOpen,
+        [this.openClass]: this.isOpen,
       }
     },
 
