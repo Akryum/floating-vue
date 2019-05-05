@@ -7,8 +7,6 @@ export const config = {
   container: 'body',
   // Element used to compute position and size boundaries
   boundariesElement: undefined,
-  // Hide on mouseover tooltip
-  autoHide: true,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
   // Close tooltip on click on popper target?
@@ -45,6 +43,8 @@ export const config = {
       trigger: 'click',
       // Update popper on content resize
       handleResize: true,
+      // Hide on clock outside
+      autoHide: true,
     },
   },
 }
