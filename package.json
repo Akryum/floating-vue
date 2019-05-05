@@ -24,6 +24,9 @@
     "popper.js": "^1.15.0",
     "vue-resize": "^0.4.5"
   },
+  "peerDependencies": {
+    "vue": "^2.6.10"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
