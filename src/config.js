@@ -7,8 +7,6 @@ export const config = {
   container: 'body',
   // Element used to compute position and size boundaries
   boundariesElement: undefined,
-  // Displayed when tooltip content is loading
-  loadingContent: '...',
   // Hide on mouseover tooltip
   autoHide: true,
   // Auto destroy tooltip DOM nodes (ms)
@@ -35,6 +33,8 @@ export const config = {
       hideOnTargetClick: true,
       // Enable HTML content in directive
       contentHtml: true,
+      // Displayed when tooltip content is loading
+      loadingContent: '...',
     },
     dropdown: {
       // Default dropdown placement relative to target element
