@@ -613,13 +613,9 @@ const componentSnippet6 = `
 `
 
 const styleSnippet6 = `
-.tooltip {
-  // ...
-
-  &.tooltip-loading {
-    .tooltip-inner {
-      color: #77aaff;
-    }
+.v-popper--tooltip-loading {
+  .v-popper__inner {
+    color: #77aaff;
   }
 }
 `
