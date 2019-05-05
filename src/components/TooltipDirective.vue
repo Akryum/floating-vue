@@ -76,7 +76,7 @@ export default {
     },
 
     content: {
-      type: [String, Function],
+      type: [String, Number, Function],
       default: null,
     },
 
