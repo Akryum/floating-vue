@@ -17,6 +17,9 @@
   >
     <PopperContent
       ref="popperContent"
+      :class="{
+        'v-popper--tooltip-loading': loading,
+      }"
       :popper-id="popperId"
       :theme="theme"
       :is-open="isOpen"
@@ -27,11 +30,11 @@
     >
       <div
         v-if="contentHtml"
-        v-html="content"
+        v-html="finalContent"
       />
       <div
         v-else
-        v-text="content"
+        v-text="finalContent"
       />
     </PopperContent>
   </Popper>
@@ -71,8 +74,61 @@ export default {
     },
 
     content: {
+      type: [String, Function],
+      default: null,
+    },
+
+    loadingContent: {
       type: String,
-      default: '',
+      default () {
+        return getDefaultConfig(this.theme, 'loadingContent')
+      },
+    },
+  },
+
+  data () {
+    return {
+      asyncContent: null,
+    }
+  },
+
+  computed: {
+    isContentAsync () {
+      return typeof this.content === 'function'
+    },
+
+    loading () {
+      return this.isContentAsync && this.asyncContent == null
+    },
+
+    finalContent () {
+      if (this.isContentAsync) {
+        return this.loading ? this.loadingContent : this.asyncContent
+      }
+      return this.content
+    },
+  },
+
+  watch: {
+    content: {
+      handler: 'fetchContent',
+      immediate: true,
+    },
+  },
+
+  methods: {
+    fetchContent () {
+      if (typeof this.content === 'function') {
+        this.asyncContent = null
+        const result = this.content(this)
+        if (result.then) {
+          result.then(res => {
+            this.asyncContent = res
+          })
+        } else {
+          this.asyncContent = result
+        }
+      }
     },
   },
 }
