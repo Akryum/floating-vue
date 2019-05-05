@@ -119,8 +119,10 @@ export default {
       immediate: true,
     },
 
-    finalContent () {
-      this.$refs.popper.onResize()
+    finalContent (value) {
+      this.$nextTick(() => {
+        this.$refs.popper.onResize()
+      })
     },
   },
 
