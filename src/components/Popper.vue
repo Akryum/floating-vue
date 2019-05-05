@@ -241,6 +241,7 @@ export default {
     },
 
     dispose () {
+      this.$_removeFromOpenPoppers()
       this.$_isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
@@ -385,10 +386,7 @@ export default {
         return
       }
 
-      const index = openPoppers.indexOf(this)
-      if (index !== -1) {
-        openPoppers.splice(index, 1)
-      }
+      this.$_removeFromOpenPoppers()
 
       this.isOpen = false
       if (this.popperInstance) {
@@ -602,6 +600,13 @@ export default {
 
     $_detachPopperNode () {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
+    },
+
+    $_removeFromOpenPoppers () {
+      const index = openPoppers.indexOf(this)
+      if (index !== -1) {
+        openPoppers.splice(index, 1)
+      }
     },
   },
 
