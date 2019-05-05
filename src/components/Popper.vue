@@ -156,16 +156,13 @@ export default {
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
-        const popoverNode = this.popperNode()
-        const reference = this.triggerNode()
-
-        const container = this.$_findContainer(this.container, reference)
+        const container = this.$_findContainer(this.container, this.$_triggerNode)
         if (!container) {
           console.warn('No container for popover', this)
           return
         }
 
-        container.appendChild(popoverNode)
+        container.appendChild(this.$_popperNode)
         this.popperInstance.scheduleUpdate()
       }
     },
@@ -201,11 +198,13 @@ export default {
   },
 
   mounted () {
-    swapAttrs(this.triggerNode(), 'title', 'data-original-title')
+    // Nodes
+    this.$_triggerNode = this.triggerNode()
+    this.$_popperNode = this.popperNode()
 
-    const popoverNode = this.popperNode()
-    popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
+    swapAttrs(this.$_triggerNode, 'title', 'data-original-title')
 
+    this.$_detachPopperNode()
     this.$_init()
 
     if (this.open) {
@@ -250,15 +249,14 @@ export default {
 
         // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
         if (!this.popperInstance.options.removeOnDestroy) {
-          const popoverNode = this.popperNode()
-          popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
+          this.$_detachPopperNode()
         }
       }
       this.$_mounted = false
       this.popperInstance = null
       this.isOpen = false
 
-      swapAttrs(this.triggerNode(), 'data-original-title', 'title')
+      swapAttrs(this.$_triggerNode, 'data-original-title', 'title')
 
       this.$emit('dispose')
     },
@@ -277,9 +275,6 @@ export default {
     },
 
     $_show () {
-      const reference = this.triggerNode()
-      const popoverNode = this.popperNode()
-
       clearTimeout(this.$_disposeTimer)
 
       // Already open
@@ -295,12 +290,12 @@ export default {
       }
 
       if (!this.$_mounted) {
-        const container = this.$_findContainer(this.container, reference)
+        const container = this.$_findContainer(this.container, this.$_triggerNode)
         if (!container) {
           console.warn('No container for popover', this)
           return
         }
-        container.appendChild(popoverNode)
+        container.appendChild(this.$_popperNode)
         this.$_mounted = true
       }
 
@@ -334,7 +329,7 @@ export default {
           }
         }
 
-        this.popperInstance = new Popper(reference, popoverNode, popperOptions)
+        this.popperInstance = new Popper(this.$_triggerNode, this.$_popperNode, popperOptions)
 
         // Fix position
         requestAnimationFrame(() => {
@@ -404,10 +399,9 @@ export default {
       const disposeTime = getDefaultConfig(this.theme, 'disposeTimeout')
       if (disposeTime !== null) {
         this.$_disposeTimer = setTimeout(() => {
-          const popoverNode = this.popperNode()
-          if (popoverNode) {
+          if (this.$_popperNode) {
             // Don't remove popper instance, just the HTML element
-            popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
+            this.$_detachPopperNode()
             this.$_mounted = false
           }
         }, disposeTime)
@@ -440,7 +434,6 @@ export default {
     },
 
     $_addEventListeners () {
-      const reference = this.triggerNode()
       const directEvents = []
       const oppositeEvents = []
 
@@ -480,7 +473,7 @@ export default {
           this.hidden = false
         }
         this.$_events.push({ event, func })
-        reference.addEventListener(event, func)
+        this.$_triggerNode.addEventListener(event, func)
       })
 
       // schedule hide tooltip
@@ -493,7 +486,7 @@ export default {
           this.hidden = true
         }
         this.$_events.push({ event, func })
-        reference.addEventListener(event, func)
+        this.$_triggerNode.addEventListener(event, func)
       })
     },
 
@@ -538,27 +531,24 @@ export default {
     },
 
     $_setTooltipNodeEvent (event) {
-      const reference = this.triggerNode()
-      const popoverNode = this.popperNode()
-
       const relatedreference = event.relatedreference || event.toElement || event.relatedTarget
 
       const callback = event2 => {
         const relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget
 
         // Remove event listener after call
-        popoverNode.removeEventListener(event.type, callback)
+        this.$_popperNode.removeEventListener(event.type, callback)
 
         // If the new reference is not the reference element
-        if (!reference.contains(relatedreference2)) {
+        if (!this.$_triggerNode.contains(relatedreference2)) {
           // Schedule to hide tooltip
           this.hide({ event: event2 })
         }
       }
 
-      if (popoverNode.contains(relatedreference)) {
+      if (this.$_popperNode.contains(relatedreference)) {
         // listen to mouseleave on the tooltip element to be able to hide the tooltip
-        popoverNode.addEventListener(event.type, callback)
+        this.$_popperNode.addEventListener(event.type, callback)
         return true
       }
 
@@ -566,9 +556,8 @@ export default {
     },
 
     $_removeEventListeners () {
-      const reference = this.triggerNode()
       this.$_events.forEach(({ func, event }) => {
-        reference.removeEventListener(event, func)
+        this.$_triggerNode.removeEventListener(event, func)
       })
       this.$_events = []
     },
@@ -609,6 +598,10 @@ export default {
           this.$_preventOpen = false
         }, 300)
       }
+    },
+
+    $_detachPopperNode () {
+      this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
     },
   },
 
