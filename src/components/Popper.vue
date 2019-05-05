@@ -35,6 +35,11 @@ export default {
       required: true,
     },
 
+    arrowNode: {
+      type: Function,
+      default: null,
+    },
+
     open: {
       type: Boolean,
       default: false,
@@ -309,7 +314,7 @@ export default {
           ...popperOptions.modifiers,
           arrow: {
             ...popperOptions.modifiers && popperOptions.modifiers.arrow,
-            element: this.$refs.arrow,
+            element: (this.arrowNode && this.arrowNode()) || '[x-arrow]',
           },
         }
 
