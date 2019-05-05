@@ -8,6 +8,9 @@ const config = Object.assign({}, base, {
     file: 'dist/v-tooltip.min.js',
     format: 'iife',
   },
+  external: [
+    'vue',
+  ],
 })
 
 config.plugins.push(terser())

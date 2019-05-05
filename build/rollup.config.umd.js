@@ -7,6 +7,9 @@ const config = Object.assign({}, base, {
     file: 'dist/v-tooltip.umd.js',
     format: 'umd',
   },
+  external: [
+    'vue',
+  ],
 })
 
 export default config

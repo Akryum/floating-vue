@@ -10,6 +10,7 @@ const config = Object.assign({}, base, {
     'lodash',
     'popper.js',
     'vue-resize',
+    'vue',
   ],
 })
 
