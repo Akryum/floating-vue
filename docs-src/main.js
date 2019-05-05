@@ -19,6 +19,14 @@ Vue.use(VTooltip, {
         },
       },
     },
+    // Custom theme
+    'info-tooltip': {
+      $extend: 'tooltip',
+      delay: {
+        show: 800,
+        hide: 500,
+      },
+    },
   },
 })
 

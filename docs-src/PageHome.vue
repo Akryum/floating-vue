@@ -27,7 +27,7 @@
         <button
           v-tooltip.top-center="msg"
           class="tooltip-target"
-          title="This is a button"
+          title="Fallback title"
         >
           Hover me
         </button>
@@ -49,14 +49,6 @@
             class="snippet"
             :code="componentSnippet1"
             lang="html"
-          />
-          <div class="plus">
-            +
-          </div>
-          <CodeSnippet
-            class="snippet"
-            :code="styleSnippet1"
-            lang="scss"
           />
         </div>
       </Collapse>
@@ -86,14 +78,10 @@
         <button
           v-tooltip="{
             content: 'You can change a lot of parameters: placement, classes, offset, delay...',
+            theme: 'info-tooltip',
+            // Inline override
             placement,
-            classes: ['info'],
-            targetClasses: ['it-has-a-tooltip'],
             offset: 100,
-            delay: {
-              show: 500,
-              hide: 300,
-            },
           }"
           class="tooltip-target b2"
         >
@@ -105,6 +93,14 @@
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
+          <CodeSnippet
+            class="snippet"
+            :code="mainSnippet2"
+            lang="js"
+          />
+          <div class="plus">
+            +
+          </div>
           <CodeSnippet
             class="snippet"
             :code="componentSnippet2"
@@ -167,7 +163,7 @@
             v-model="isVisible"
             type="checkbox"
             name="open"
-          > Enable</label>
+          > Parent visible</label>
         </div>
 
         <template v-if="isVisible">
@@ -222,7 +218,7 @@
             v-model="isEnabled"
             type="checkbox"
             name="enabled"
-          > Enable</label>
+          > Enabled</label>
 
           <label><input
             v-model="isAutoHiding"
@@ -394,7 +390,7 @@
             v-model="isVisible"
             type="checkbox"
             name="open"
-          > Enable</label>
+          > Parent visible</label>
         </div>
 
         <template v-if="isVisible">
@@ -473,137 +469,56 @@ new Vue({
 `
 
 const componentSnippet1 = `
-<button v-tooltip.top-center="msg">Hover me</button>
+<button
+  v-tooltip.top-center="msg"
+  title="Fallback title"
+>
+  Hover me
+</button>
 `
 
-const styleSnippet1 = `
-.tooltip {
-  display: block !important;
-  z-index: 10000;
-
-  .tooltip-inner {
-    background: black;
-    color: white;
-    border-radius: 16px;
-    padding: 5px 10px 4px;
-  }
-
-  .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-    border-color: black;
-    z-index: 1;
-  }
-
-  &[x-placement^="top"] {
-    margin-bottom: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 0 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      bottom: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
+const mainSnippet2 = `
+Vue.use(VTooltip, {
+  themes: {
+    'info-tooltip': {
+      $extend: 'tooltip',
+      delay: {
+        show: 800,
+        hide: 500
+      }
     }
   }
-
-  &[x-placement^="bottom"] {
-    margin-top: 5px;
-
-    .tooltip-arrow {
-      border-width: 0 5px 5px 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-top-color: transparent !important;
-      top: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="right"] {
-    margin-left: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 5px 0;
-      border-left-color: transparent !important;
-      border-top-color: transparent !important;
-      border-bottom-color: transparent !important;
-      left: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[x-placement^="left"] {
-    margin-right: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 0 5px 5px;
-      border-top-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      right: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[aria-hidden='true'] {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .15s, visibility .15s;
-  }
-
-  &[aria-hidden='false'] {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity .15s;
-  }
-}
+})
 `
 
 const componentSnippet2 = `
-<button v-tooltip="{
-  content: msg,
-  placement: 'bottom',
-  classes: ['info'],
-  targetClasses: ['it-has-a-tooltip'],
-  offset: 100,
-  delay: {
-    show: 500,
-    hide: 300,
-  },
-}">Hover me</button>`
+<button
+  v-tooltip="{
+    content: 'You can change a lot of parameters: placement, classes, offset, delay...',
+    theme: 'info-tooltip',
+    // Inline override
+    placement,
+    offset: 100,
+  }"
+>
+  Hover me
+</button>`
 
 const styleSnippet2 = `
-.tooltip {
-  // ...
+.v-popper--theme-info-tooltip {
+  $color: rgba(#004499, .9);
 
-  &.info {
-    $color: rgba(#004499, .9);
+  .v-popper__inner {
+    background: $color;
+    color: white;
+    padding: 24px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
+    max-width: 250px;
+  }
 
-    .tooltip-inner {
-      background: $color;
-      color: white;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-      max-width: 250px;
-    }
-
-    .tooltip-arrow {
-      border-color: $color;
-    }
+  .v-popper__arrow {
+    border-color: $color;
   }
 }
 `
@@ -613,7 +528,7 @@ const componentSnippet3 = `
   offset="16"
   :disabled="!isEnabled"
 >
-  <button class="tooltip-target b3">Click me</button>
+  <button>Click me</button>
 
   <template #popper>
     <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
@@ -629,30 +544,17 @@ const componentSnippet3 = `
 `
 
 const styleSnippet3 = `
-.tooltip {
-  // ...
-
-  &.popover {
-    $color: #f9f9f9;
-
-    .popover-inner {
-      background: $color;
-      color: black;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-    }
-
-    .popover-arrow {
-      border-color: $color;
-    }
+.v-popper--theme-dropdown {
+  .v-popper__inner {
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
   }
 }
 `
 
 const componentSnippet4 = `
 <div class="form">
-  <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+  <label><input type="checkbox" name="open" v-model="isVisible" /> Parent visible</label>
 </div>
 
 <template v-if="isVisible">
@@ -667,7 +569,7 @@ const componentSnippet4 = `
     offset="16"
     :auto-hide="false"
   >
-    <button class="tooltip-target b1">Target</button>
+    <button>Target</button>
 
     <template #popper>
       <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
@@ -681,7 +583,7 @@ const componentSnippet4 = `
 
 const componentSnippet5 = `
 <div class="form">
-  <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+  <label><input type="checkbox" name="open" v-model="isVisible" /> Parent visible</label>
 </div>
 
 <template v-if="isVisible">
@@ -769,7 +671,7 @@ export default {
       offset: 16,
       mainSnippet,
       componentSnippet1,
-      styleSnippet1,
+      mainSnippet2,
       componentSnippet2,
       styleSnippet2,
       componentSnippet3,

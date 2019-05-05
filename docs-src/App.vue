@@ -2,16 +2,20 @@
   <div id="app">
     <header>
       <h1>v-tooltip</h1>
-      <div class="command">npm install --save v-tooltip</div>
+      <div class="command">
+        npm install --save v-tooltip
+      </div>
       <nav>
-        <a href="https://github.com/Akryum/vue-tooltip"><img src="https://img.shields.io/github/stars/Akryum/vue-tooltip.svg?style=social&label=Star" /></a>
+        <a href="https://github.com/Akryum/vue-tooltip"><img src="https://img.shields.io/github/stars/Akryum/vue-tooltip.svg?style=social&label=Star"></a>
         <a href="https://www.npmjs.com/package/v-tooltip">
-          <img src="https://img.shields.io/npm/v/v-tooltip.svg" />
-          <img src="https://img.shields.io/npm/dm/v-tooltip.svg" />
+          <img src="https://img.shields.io/npm/v/v-tooltip.svg">
+          <img src="https://img.shields.io/npm/dm/v-tooltip.svg">
         </a>
-        <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.0-orange.svg" /></a>
+        <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.0-orange.svg"></a>
       </nav>
-      <div class="description">Customizable &amp; reactive tooltips/popovers/dropdowns with smart positioning</div>
+      <div class="description">
+        Customizable &amp; reactive tooltips/popovers/dropdowns with smart positioning
+      </div>
     </header>
 
     <router-view />
@@ -23,7 +27,6 @@
     </section>
   </div>
 </template>
-
 
 <style lang="scss">
 body {
@@ -174,143 +177,37 @@ label input {
   margin-bottom: 12px;
 }
 
-.tooltip {
-  display: block !important;
-  z-index: 10000;
+.v-popper--theme-info-tooltip {
+  $color: rgba(#004499, .9);
 
-  .tooltip-inner {
-    background: black;
+  .v-popper__inner {
+    background: $color;
     color: white;
-    border-radius: 16px;
-    padding: 5px 10px 4px;
+    padding: 24px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
+    max-width: 250px;
   }
 
-  .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-    border-color: black;
-  }
-
-  &[x-placement^="top"] {
-    margin-bottom: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 0 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      bottom: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="bottom"] {
-    margin-top: 5px;
-
-    .tooltip-arrow {
-      border-width: 0 5px 5px 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-top-color: transparent !important;
-      top: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="right"] {
-    margin-left: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 5px 0;
-      border-left-color: transparent !important;
-      border-top-color: transparent !important;
-      border-bottom-color: transparent !important;
-      left: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[x-placement^="left"] {
-    margin-right: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 0 5px 5px;
-      border-top-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      right: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[aria-hidden='true'] {
-    visibility: hidden;
-    opacity: 0;
-    &:not(.no-transition) {
-      transition: opacity .15s, visibility .15s;
-    }
-  }
-
-  &[aria-hidden='false'] {
-    visibility: visible;
-    opacity: 1;
-    &:not(.no-transition) {
-      transition: opacity .15s;
-    }
-  }
-
-  &.info {
-    $color: rgba(#004499, .9);
-
-    .tooltip-inner {
-      background: $color;
-      color: white;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-      max-width: 250px;
-    }
-
-    .tooltip-arrow {
-      border-color: $color;
-    }
-  }
-
-  &.popover {
-    $color: #f9f9f9;
-
-    .popover-inner {
-      background: $color;
-      color: black;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-    }
-
-    .popover-arrow {
-      border-color: $color;
-    }
-  }
-
-  &.tooltip-loading {
-    .tooltip-inner {
-      color: #77aaff;
-    }
+  .v-popper__arrow {
+    border-color: $color;
   }
 }
 
-.v-popover {
+.v-popper--tooltip-loading {
+  .v-popper__inner {
+    color: #77aaff;
+  }
+}
+
+.v-popper--theme-dropdown {
+  .v-popper__inner {
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
+  }
+}
+
+.v-popper {
   &.inline {
     display: inline-block;
     &:not(:last-child) {
