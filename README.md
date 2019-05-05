@@ -352,7 +352,7 @@ The `content` option accepts a function that returns a promise:
 ```html
 <button
   v-tooltip="{
-    content: asyncMethod(),
+    content: asyncMethod,
     loadingContent: 'Please wait...',
   }"
 >Hover me!</button>
