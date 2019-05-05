@@ -7,6 +7,7 @@ import PrivatePopper from './components/Popper.vue'
 import PrivatePopperContent from './components/PopperContent.vue'
 import PrivatePopperMethods from './components/PopperMethods'
 import PrivatePopperWrapper from './components/PopperWrapper.vue'
+import PrivateThemeClass from './components/ThemeClass'
 import PrivateTooltip from './components/Tooltip.vue'
 import PrivateTooltipDirective from './components/TooltipDirective.vue'
 // Directives
@@ -26,6 +27,7 @@ export const Popper = PrivatePopper
 export const PopperContent = PrivatePopperContent
 export const PopperMethods = PrivatePopperMethods
 export const PopperWrapper = PrivatePopperWrapper
+export const ThemeClass = PrivateThemeClass
 export const Tooltip = PrivateTooltip
 export const TooltipDirective = PrivateTooltipDirective
 
