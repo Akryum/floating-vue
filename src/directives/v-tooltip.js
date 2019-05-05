@@ -4,7 +4,7 @@ import { addClasses, removeClasses } from '../util/css'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 
-const TARGET_CLASS = `v-popper--v-tooltipApp--has`
+const TARGET_CLASS = `v-popper--has-tooltip`
 
 /**
  * Support placement as directive modifier
