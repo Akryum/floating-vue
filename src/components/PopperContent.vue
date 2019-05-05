@@ -13,10 +13,10 @@
     :tabindex="autoHide ? 0 : undefined"
     @keyup.esc="autoHide && $emit('hide')"
   >
-    <div class="v-popper__popper-wrapper">
+    <div class="v-popper__wrapper">
       <div
         ref="inner"
-        class="v-popper__popper-inner"
+        class="v-popper__inner"
         style="position: relative;"
       >
         <div>
@@ -31,7 +31,7 @@
 
       <div
         ref="arrow"
-        class="v-popper__popper-arrow"
+        class="v-popper__arrow"
         x-arrow
       />
     </div>
@@ -77,7 +77,7 @@ export default {
   transition: opacity .15s;
 }
 
-.v-popper__popper-arrow {
+.v-popper__arrow {
   width: 0;
   height: 0;
   border-style: solid;
@@ -90,7 +90,7 @@ export default {
   margin-bottom: 5px;
 }
 
-.v-popper__popper[x-placement^="top"] .v-popper__popper-arrow {
+.v-popper__popper[x-placement^="top"] .v-popper__arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -105,7 +105,7 @@ export default {
   margin-top: 5px;
 }
 
-.v-popper__popper[x-placement^="bottom"] .v-popper__popper-arrow {
+.v-popper__popper[x-placement^="bottom"] .v-popper__arrow {
   border-width: 0 5px 5px 5px;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -120,7 +120,7 @@ export default {
   margin-left: 5px;
 }
 
-.v-popper__popper[x-placement^="right"] .v-popper__popper-arrow {
+.v-popper__popper[x-placement^="right"] .v-popper__arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent !important;
   border-top-color: transparent !important;
@@ -135,7 +135,7 @@ export default {
   margin-right: 5px;
 }
 
-.v-popper__popper[x-placement^="left"] .v-popper__popper-arrow {
+.v-popper__popper[x-placement^="left"] .v-popper__arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent !important;
   border-right-color: transparent !important;
