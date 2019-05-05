@@ -1,60 +1,8 @@
-<template>
-  <div
-    class="v-popover"
-    :class="cssClass"
-  >
-    <div
-      ref="trigger"
-      class="trigger"
-      style="display: inline-block;"
-      :aria-describedby="popoverId"
-      :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
-    >
-      <slot />
-    </div>
-
-    <div
-      ref="popover"
-      :id="popoverId"
-      :class="[popoverBaseClass, popoverClass, cssClass]"
-      :style="{
-        visibility: isOpen ? 'visible' : 'hidden',
-      }"
-      :aria-hidden="isOpen ? 'false' : 'true'"
-      :tabindex="autoHide ? 0 : undefined"
-      @keyup.esc="autoHide && hide()"
-    >
-      <div :class="popoverWrapperClass">
-        <div
-          ref="inner"
-          :class="popoverInnerClass"
-          style="position: relative;"
-        >
-          <div>
-            <slot name="popover" />
-          </div>
-
-          <ResizeObserver v-if="handleResize" @notify="$_handleResize" />
-        </div>
-        <div ref="arrow" :class="popoverArrowClass"></div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
-import { directive } from '../directives/v-tooltip'
 import Popper from 'popper.js'
-import { ResizeObserver } from 'vue-resize'
-import { supportsPassive } from '../utils'
-
-function getDefault (key) {
-  const value = directive.options.popover[key]
-  if (typeof value === 'undefined') {
-    return directive.options[key]
-  }
-  return value
-}
+import { supportsPassive } from '../util/support'
+import { getDefaultConfig } from '../config'
+import { placement } from '../const'
 
 let isIOS = false
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -69,13 +17,24 @@ if (typeof window !== 'undefined') {
 }
 
 export default {
-  name: 'VPopover',
-
-  components: {
-    ResizeObserver,
-  },
+  name: 'VPopper',
 
   props: {
+    theme: {
+      type: String,
+      required: true,
+    },
+
+    triggerNode: {
+      type: Function,
+      required: true,
+    },
+
+    popperNode: {
+      type: Function,
+      required: true,
+    },
+
     open: {
       type: Boolean,
       default: false,
@@ -83,107 +42,92 @@ export default {
 
     disabled: {
       type: Boolean,
-      default: false,
+      default () {
+        return getDefaultConfig(this.theme, 'disabled')
+      },
     },
 
     placement: {
       type: String,
-      default: () => getDefault('defaultPlacement'),
+      default () {
+        return getDefaultConfig(this.theme, 'placement')
+      },
+      validator: value => placement.includes(value),
     },
 
     delay: {
       type: [String, Number, Object],
-      default: () => getDefault('defaultDelay'),
+      default () {
+        return getDefaultConfig(this.theme, 'delay')
+      },
     },
 
     offset: {
       type: [String, Number],
-      default: () => getDefault('defaultOffset'),
+      default () {
+        return getDefaultConfig(this.theme, 'offset')
+      },
     },
 
     trigger: {
       type: String,
-      default: () => getDefault('defaultTrigger'),
+      default () {
+        return getDefaultConfig(this.theme, 'trigger')
+      },
     },
 
     container: {
       type: [String, Object, Element, Boolean],
-      default: () => getDefault('defaultContainer'),
+      default () {
+        return getDefaultConfig(this.theme, 'container')
+      },
     },
 
     boundariesElement: {
       type: [String, Element],
-      default: () => getDefault('defaultBoundariesElement'),
+      default () {
+        return getDefaultConfig(this.theme, 'boundariesElement')
+      },
     },
 
     popperOptions: {
       type: Object,
-      default: () => getDefault('defaultPopperOptions'),
-    },
-
-    popoverClass: {
-      type: [String, Array],
-      default: () => getDefault('defaultClass'),
-    },
-
-    popoverBaseClass: {
-      type: [String, Array],
-      default: () => directive.options.popover.defaultBaseClass,
-    },
-
-    popoverInnerClass: {
-      type: [String, Array],
-      default: () => directive.options.popover.defaultInnerClass,
-    },
-
-    popoverWrapperClass: {
-      type: [String, Array],
-      default: () => directive.options.popover.defaultWrapperClass,
-    },
-
-    popoverArrowClass: {
-      type: [String, Array],
-      default: () => directive.options.popover.defaultArrowClass,
+      default () {
+        return getDefaultConfig(this.theme, 'popperOptions')
+      },
     },
 
     autoHide: {
       type: Boolean,
-      default: () => directive.options.popover.defaultAutoHide,
+      default () {
+        return getDefaultConfig(this.theme, 'autoHide')
+      },
     },
 
     handleResize: {
       type: Boolean,
-      default: () => directive.options.popover.defaultHandleResize,
+      default () {
+        return getDefaultConfig(this.theme, 'handleResize')
+      },
+    },
+
+    hideOnTargetClick: {
+      type: Boolean,
+      default () {
+        return getDefaultConfig(this.theme, 'hideOnTargetClick')
+      },
     },
 
     openGroup: {
       type: String,
       default: null,
     },
-
-    openClass: {
-      type: [String, Array],
-      default: () => directive.options.popover.defaultOpenClass,
-    },
   },
 
   data () {
     return {
       isOpen: false,
-      id: Math.random().toString(36).substr(2, 10),
     }
-  },
-
-  computed: {
-    cssClass () {
-      return {
-        [this.openClass]: this.isOpen,
-      }
-    },
-
-    popoverId () {
-      return `popover_${this.id}`
-    },
   },
 
   watch: {
@@ -207,8 +151,8 @@ export default {
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
-        const popoverNode = this.$refs.popover
-        const reference = this.$refs.trigger
+        const popoverNode = this.popperNode()
+        const reference = this.triggerNode()
 
         const container = this.$_findContainer(this.container, reference)
         if (!container) {
@@ -243,6 +187,8 @@ export default {
   },
 
   created () {
+    this.popperId = `popper_${Math.random().toString(36).substr(2, 10)}`
+
     this.$_isDisposed = false
     this.$_mounted = false
     this.$_events = []
@@ -250,7 +196,7 @@ export default {
   },
 
   mounted () {
-    const popoverNode = this.$refs.popover
+    const popoverNode = this.popperNode()
     popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 
     this.$_init()
@@ -297,7 +243,7 @@ export default {
 
         // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
         if (!this.popperInstance.options.removeOnDestroy) {
-          const popoverNode = this.$refs.popover
+          const popoverNode = this.popperNode()
           popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
         }
       }
@@ -308,6 +254,13 @@ export default {
       this.$emit('dispose')
     },
 
+    onResize () {
+      if (this.isOpen && this.popperInstance) {
+        this.popperInstance.scheduleUpdate()
+        this.$emit('resize')
+      }
+    },
+
     $_init () {
       if (this.trigger.indexOf('manual') === -1) {
         this.$_addEventListeners()
@@ -315,8 +268,8 @@ export default {
     },
 
     $_show () {
-      const reference = this.$refs.trigger
-      const popoverNode = this.$refs.popover
+      const reference = this.triggerNode()
+      const popoverNode = this.popperNode()
 
       clearTimeout(this.$_disposeTimer)
 
@@ -439,10 +392,10 @@ export default {
       }
 
       clearTimeout(this.$_disposeTimer)
-      const disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout
+      const disposeTime = getDefaultConfig(this.theme, 'disposeTimeout')
       if (disposeTime !== null) {
         this.$_disposeTimer = setTimeout(() => {
-          const popoverNode = this.$refs.popover
+          const popoverNode = this.popperNode()
           if (popoverNode) {
             // Don't remove popper instance, just the HTML element
             popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
@@ -478,7 +431,7 @@ export default {
     },
 
     $_addEventListeners () {
-      const reference = this.$refs.trigger
+      const reference = this.triggerNode()
       const directEvents = []
       const oppositeEvents = []
 
@@ -576,8 +529,8 @@ export default {
     },
 
     $_setTooltipNodeEvent (event) {
-      const reference = this.$refs.trigger
-      const popoverNode = this.$refs.popover
+      const reference = this.triggerNode()
+      const popoverNode = this.popperNode()
 
       const relatedreference = event.relatedreference || event.toElement || event.relatedTarget
 
@@ -604,7 +557,7 @@ export default {
     },
 
     $_removeEventListeners () {
-      const reference = this.$refs.trigger
+      const reference = this.triggerNode()
       this.$_events.forEach(({ func, event }) => {
         reference.removeEventListener(event, func)
       })
@@ -648,13 +601,10 @@ export default {
         }, 300)
       }
     },
+  },
 
-    $_handleResize () {
-      if (this.isOpen && this.popperInstance) {
-        this.popperInstance.scheduleUpdate()
-        this.$emit('resize')
-      }
-    },
+  render (h) {
+    return this.$scopedSlots.default(this)[0]
   },
 }
 

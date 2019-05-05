@@ -1,4 +1,4 @@
-import * as Utils from './utils'
+import * as Utils from './css'
 
 // Fix jsdom
 global.SVGElement = global.Element

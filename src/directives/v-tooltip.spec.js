@@ -68,27 +68,3 @@ describe('getContent', () => {
     expect(typeof result).toBe('undefined')
   })
 })
-
-describe('getOptions', () => {
-  test('defaultOptions', () => {
-    const options = {}
-    const result = VTooltip.getOptions(options)
-    expect(result).toEqual({
-      placement: VTooltip.defaultOptions.defaultPlacement,
-      delay: VTooltip.defaultOptions.defaultDelay,
-      html: VTooltip.defaultOptions.defaultHtml,
-      template: VTooltip.defaultOptions.defaultTemplate,
-      innerSelector: VTooltip.defaultOptions.defaultInnerSelector,
-      arrowSelector: VTooltip.defaultOptions.defaultArrowSelector,
-      trigger: VTooltip.defaultOptions.defaultTrigger,
-      offset: VTooltip.defaultOptions.defaultOffset,
-      container: VTooltip.defaultOptions.defaultContainer,
-      boundariesElement: VTooltip.defaultOptions.defaultBoundariesElement,
-      autoHide: VTooltip.defaultOptions.autoHide,
-      hideOnTargetClick: VTooltip.defaultOptions.defaultHideOnTargetClick,
-      loadingClass: VTooltip.defaultOptions.defaultLoadingClass,
-      loadingContent: VTooltip.defaultOptions.defaultLoadingContent,
-      popperOptions: VTooltip.defaultOptions.defaultPopperOptions,
-    })
-  })
-})
