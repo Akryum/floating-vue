@@ -9,7 +9,7 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
   isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
-const openPopovers = []
+const openPoppers = []
 
 let Element = function () {}
 if (typeof window !== 'undefined') {
@@ -365,8 +365,8 @@ export default {
       const openGroup = this.openGroup
       if (openGroup) {
         let popover
-        for (let i = 0; i < openPopovers.length; i++) {
-          popover = openPopovers[i]
+        for (let i = 0; i < openPoppers.length; i++) {
+          popover = openPoppers[i]
           if (popover.openGroup !== openGroup) {
             popover.hide()
             popover.$emit('close-group')
@@ -374,7 +374,7 @@ export default {
         }
       }
 
-      openPopovers.push(this)
+      openPoppers.push(this)
 
       this.$emit('apply-show')
     },
@@ -385,9 +385,9 @@ export default {
         return
       }
 
-      const index = openPopovers.indexOf(this)
+      const index = openPoppers.indexOf(this)
       if (index !== -1) {
-        openPopovers.splice(index, 1)
+        openPoppers.splice(index, 1)
       }
 
       this.isOpen = false
@@ -632,9 +632,10 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose (event, touch = false) {
+  debugger
   // Delay so that close directive has time to set values
-  for (let i = 0; i < openPopovers.length; i++) {
-    let popover = openPopovers[i]
+  for (let i = 0; i < openPoppers.length; i++) {
+    let popover = openPoppers[i]
     if (popover.$refs.popover) {
       const contains = popover.$refs.popover.contains(event.target)
       requestAnimationFrame(() => {
