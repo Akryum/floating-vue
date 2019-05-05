@@ -185,7 +185,7 @@
           <button
             v-tooltip="{
               content: msg,
-              show: isOpen,
+              open: isOpen,
               trigger: 'manual',
               placement: 'bottom',
             }"
@@ -595,7 +595,7 @@ const componentSnippet5 = `
   <button
     v-tooltip="{
       content: msg,
-      show: isOpen,
+      open: isOpen,
       trigger: 'manual',
       placement: 'bottom',
     }"

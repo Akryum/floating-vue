@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VTooltip, { createTooltip, destroyTooltip } from '../'
-import '../dist/vue-ui.css'
+import '../dist/v-tooltip.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
