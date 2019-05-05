@@ -42,12 +42,23 @@ export function createTooltip (el, value, modifiers) {
   const options = getOptions(el, value, modifiers)
 
   const tooltipApp = el.$_popper = new Vue({
-    data: () => ({
+    data: {
       options,
-    }),
+    },
     render (h) {
+      const options = this.options
       return h(TooltipDirective, {
-        attrs: this.options,
+        attrs: {
+          ...options,
+          // Delete props from attrs to prevent Vue from
+          // mutating `this.options` when removing props
+          // from `$attrs` automatically
+          theme: undefined,
+          contentHtml: undefined,
+          content: undefined,
+          loadingContent: undefined,
+        },
+        props: options,
         ref: 'tooltip',
       })
     },
@@ -84,8 +95,7 @@ export function bind (el, { value, oldValue, modifiers }) {
     let tooltipApp
     if (el.$_popper) {
       tooltipApp = el.$_popper
-      // Options
-      tooltipApp.$data.options = options
+      tooltipApp.options = options
     } else {
       tooltipApp = createTooltip(el, value, modifiers)
     }
