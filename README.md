@@ -130,7 +130,9 @@ import 'v-tooltip/dist/v-tooltip.css'
   <!-- This will be the popover target (for the events and position) -->
   <button>Click me</button>
   <!-- This will be the content of the popover -->
-  <MyAwesomeComponent #popover/>
+  <template #popper>
+    <MyAwesomeComponent/>
+  </template>
 </VDropdown>
 ```
 
@@ -467,9 +469,9 @@ You can change the default values in the [Global options](#global-options).
 - `hide`
 - `apply-hide` - Emitted after the hide delay
 - `dispose`
-- `auto-hide` - Emitted when the popover is closed if clicked outside.
-- `close-directive` - Emitted when the popover is closed with the [Close directive](#close-directive).
-- `close-group` - Emitted when the popover is closed because a popover of another `open-group` was shown.
+- `auto-hide` - Emitted when the dropdown is closed if clicked outside.
+- `close-directive` - Emitted when the dropdown is closed with the [Close directive](#close-directive).
+- `close-group` - Emitted when the dropdown is closed because a dropdown of another `open-group` was shown.
 - `resize` - Emitted when the content size changes. You must set the `handleResize` prop to `true`.
 
 ### Disable popover
