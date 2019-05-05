@@ -114,6 +114,10 @@ export default {
       handler: 'fetchContent',
       immediate: true,
     },
+
+    finalContent () {
+      this.$refs.popper.onResize()
+    },
   },
 
   methods: {
