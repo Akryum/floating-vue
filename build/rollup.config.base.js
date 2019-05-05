@@ -30,7 +30,7 @@ export default {
     }),
     css({
       output: styles => {
-        fs.writeFileSync('dist/vue-ui.css', new CleanCSS().minify(styles).styles)
+        fs.writeFileSync('dist/v-tooltip.css', new CleanCSS().minify(styles).styles)
       },
     }),
     babel({
