@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
+Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
 </p>
 
 <p align="center">
@@ -58,8 +58,7 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 
 **Useful Links**
 
-- [Live Demo](https://akryum.github.io/v-tooltip/)
-- [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
+- [JSFiddle](https://jsfiddle.net/Akryum/gwL37q10/)
 
 <br>
 
@@ -70,15 +69,16 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 - [Usage](#usage)
   - [Directive](#directive)
     - [Object notation](#object-notation)
-    - [Dynamic CSS classes](#dynamic-css-classes)
+    - [Themes](#themes)
     - [Other options](#other-options)
+    - [Async content](#async-content)
     - [Tooltip auto-hiding](#tooltip-auto-hiding)
     - [Disabling tooltips](#disabling-tooltips)
   - [Component](#component)
     - [Popover Component Reference](#popover-component-reference)
     - [Close directive](#close-directive)
   - [Global options](#global-options)
-- [Style Examples](#style-examples)
+  - [Composition](#composition)
 
 <br>
 
@@ -89,7 +89,13 @@ This package offers two different usages: [directive](#directive) or [component]
 1. Install the plugin:
 
 ```
-npm install --save v-tooltip
+npm install --save v-tooltip@alpha
+```
+
+or
+
+```
+yarn add v-tooltip@alpha
 ```
 
 2. Add the plugin into your app:
@@ -101,9 +107,13 @@ import VTooltip from 'v-tooltip'
 Vue.use(VTooltip)
 ```
 
-[More info on installation](#installation)
+3. Add the default style:
 
-3. Add [some style](#style-examples) to your liking.
+```js
+import 'v-tooltip/dist/v-tooltip.css'
+```
+
+[More info on installation](#installation)
 
 4. Use the `v-tooltip` directive:
 
@@ -113,15 +123,15 @@ Vue.use(VTooltip)
 
 [More info on the directive](#directive)
 
-5. Use the `v-popover` component:
+5. Use the `VDropdown` component:
 
 ```html
-<v-popover>
+<VDropdown>
   <!-- This will be the popover target (for the events and position) -->
   <button>Click me</button>
   <!-- This will be the content of the popover -->
-  <MyAwesomeComponent slot="popover"/>
-</v-popover>
+  <MyAwesomeComponent #popover/>
+</VDropdown>
 ```
 
 [More info on the component](#component)
@@ -133,7 +143,13 @@ Vue.use(VTooltip)
 ## Npm
 
 ```
-npm install --save v-tooltip
+npm install --save v-tooltip@alpha
+```
+
+or
+
+```
+yarn add v-tooltip@alpha
 ```
 
 Install the plugin into Vue:
@@ -149,19 +165,31 @@ Or use the directives and components directly:
 
 ```javascript
 import Vue from 'vue'
-import { VTooltip, VPopover, VClosePopover } from 'v-tooltip'
+import { VTooltip, VDropdown, VClosePopper } from 'v-tooltip'
 
 Vue.directive('tooltip', VTooltip)
-Vue.directive('close-popover', VClosePopover)
-Vue.component('v-popover', VPopover)
+Vue.directive('close-popper', VClosePopper)
+Vue.component('VDropdown', VDropdown)
+```
+
+Add the default CSS:
+
+```js
+import 'v-tooltip/dist/v-tooltip.css'
 ```
 
 ## Browser
 
-Include [v-tooltip](/dist/v-tooltip.min.js) in the page.
+Include [v-tooltip](/dist/v-tooltip.min.js) in the page:
 
 ```html
-<script src="https://unpkg.com/v-tooltip"></script>
+<script src="https://unpkg.com/v-tooltip@alpha"></script>
+```
+
+Also include the default CSS:
+
+```html
+<link rel="stylsheet" href="https://unpkg.com/v-tooltip@alpha/dist/v-tooltip.css">
 ```
 
 **If Vue is detected in the Page, the plugin is installed automatically.**
@@ -176,8 +204,8 @@ Or use the directives and components directly:
 
 ```javascript
 Vue.directive('tooltip', VTooltip.VTooltip)
-Vue.directive('close-popover', VTooltip.VClosePopover)
-Vue.component('v-popover', VTooltip.VPopover)
+Vue.directive('close-popper', VTooltip.VClosePopper)
+Vue.component('VDropdown', VTooltip.VDropdown)
 ```
 
 # Usage
@@ -220,8 +248,6 @@ The available positions are:
  - `'left-start'`
  - `'left-end'`
 
-**:warning: You need to add style to the tooltips: [examples](#style-examples).**
-
 ### Object notation
 
 You can use an object instead of a simple string:
@@ -230,26 +256,64 @@ You can use an object instead of a simple string:
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
 ```
 
-### Dynamic CSS classes
+### Themes
 
-You can set the tooltip css classes dynamically with the object notation:
+To customize your tooltips and other popovers, you can create themes:
 
-```html
-<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: ['a', 'b'] }">
+```js
+Vue.use(VTooltip, {
+  themes: {
+    'info-tooltip': {
+      $extend: 'tooltip',
+      // Other options (see the 'Global options' section)
+    }
+  }
+})
 ```
 
-This will replace the default CSS classe with 'a b' on the tooltip element.
+Here, `$extend: 'tooltip'` extends the `tooltip` theme defined by default inside `v-tooltip`, so all its options and CSS classes are inherited.
 
-You can also use the standard class notation:
+If you don't want to inherit the CSS classes, use `$resetCss`:
 
-```html
-<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: 'a b' }">
+```js
+Vue.use(VTooltip, {
+  themes: {
+    'info-tooltip': {
+      $extend: 'tooltip',
+      $resetCss: true
+    }
+  }
+})
 ```
 
-Or a reactive property:
+To use the new theme, specify it on the directive:
 
 ```html
-<button v-tooltip="{ content: 'You have ' + count + ' new messages.', classes: tooltipClasses }">
+<button v-tooltip="{
+  content: 'You have ' + count + ' new messages.',
+  theme: 'info-tooltip'
+}">
+```
+
+Then you can customize the CSS for this theme:
+
+```css
+.v-popper--theme-info-tooltip {
+  $color: rgba(#004499, .9);
+
+  .v-popper__inner {
+    background: $color;
+    color: white;
+    padding: 24px;
+    border-radius: 5px;
+    box-shadow: 0 5px 30px rgba(black, .1);
+    max-width: 250px;
+  }
+
+  .v-popper__arrow {
+    border-color: $color;
+  }
+}
 ```
 
 ### Other options
@@ -259,37 +323,55 @@ Or a reactive property:
 ```
 
 - `content` - HTML text to be displayed in the tooltip. Can also be a function that returns the content or a Promise.
-- `classes` - *(see above)*
-- `targetClasses` - CSS classes added to the target element of the tooltip.
-- `html` - Boolean: allow HTML tooltip content.
-- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
-- `placement` - *(see above)*
+- `contentHtml` - Boolean: allow HTML tooltip content.
+- `loadingContent` - Same as `content`, used when the actual tooltip content is loading *(see Async content example below)*.
+- `theme` - The popper theme applied to the tooltip (default: `'tooltip'`) *(see above)*
+- `placement` - Popper placement (default: `'top'`) *(see above)*
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
-- `show` - Boolean to manually open or hide the tooltip.
+- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
+- `open` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
-- `boundariesElement` - DOM element for the tooltip boundaries.
-- `template` - HTML template of the tooltip.
-- `arrowSelector` - CSS selector to get the arrow element in the tooltip template.
-- `innerSelector` - CSS selector to get the inner content element in the tooltip template.
+- `boundariesElement` - DOM element for the popper position and size boundaries.
 - `autoHide` - Boolean: automatically close the tooltip on mouseover.
-- `hideOnTargetClick` - Boolean: automatically close the tooltip on target click.
-- `loadingClass` - CSS classes added to the tooltip when content is loading.
-- `loadingContent` - Same as `content`, used when the actual tooltip content is loading.
+- `hideOnTargetClick` - Boolean: automatically close the tooltip on target click. *(Not implemented yet)*
+- `disabled` - Boolean to disable the tooltip. If it was already open, it will be closed.
+- `handleResize` - Boolean to automatically update the popper position when content size changes.
+- `openGroup` - If set, will close all the open tooltips that have a different `open-group` value or an unset value.
+- `disposeTimeout` - Number of ms after hide when the popper instance is destroyed.
 - `popperOptions` - Other Popper.js options.
 
 You can change the default values in the [Global options](#global-options).
 
-### Async content example
+### Async content
 
-The `content` option accepts a promise:
+The `content` option accepts a function that returns a promise:
 
 ```html
 <button
   v-tooltip="{
     content: asyncMethod(),
     loadingContent: 'Please wait...',
-    loadingClass: 'content-is-loading',
+  }"
+>Hover me!</button>
+```
+
+You can style the tooltip content when it's loading:
+
+```css
+.v-popper--tooltip-loading {
+  .v-popper__inner {
+    color: #77aaff;
+  }
+}
+```
+
+To pass custom arguments to the async method, use an arrow function:
+
+```html
+<button
+  v-tooltip="{
+    content: () => asyncMethod('foo', 'bar'),
   }"
 >Hover me!</button>
 ```
@@ -310,33 +392,33 @@ Use the `trigger` and `show` options:
 
 ### Tooltip auto-hiding
 
-By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false`:
+By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false` on the `tooltip` theme:
 
 ```javascript
-VTooltip.options.autoHide = false
+VTooltip.options.themes.tooltip.autoHide = false
 ```
 
 ### Disabling tooltips
 
-On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
+On mobile, you can disable the tooltips with the `disabled` property on the `tooltip` theme:
 
 ```javascript
-VTooltip.enabled = window.innerWidth > 768
+VTooltip.options.themes.tooltip.disabled = window.innerWidth < 768
 ```
 
 ## Component
 
-If you need to display components inside the tooltip (or popover/dropdown, technically it's the same :smile:), use the `v-popover` component:
+If you need to display components inside the tooltip (or popover/dropdown, technically it's the same :smile:), use the `VDropdown` component:
 
 ```html
-<v-popover
+<VDropdown
   offset="16"
 >
   <!-- This will be the popover target (for the events and position) -->
-  <button class="tooltip-target b3">Click me</button>
+  <button>Click me</button>
 
   <!-- This will be the content of the popover -->
-  <template slot="popover">
+  <template #popper>
     <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
     <p>
       {{ msg }}
@@ -345,65 +427,37 @@ If you need to display components inside the tooltip (or popover/dropdown, techn
     <!-- You can put other components too -->
     <ExampleComponent char="=" />
   </template>
-</v-popover>
+</VDropdown>
 ```
 
-By default, the popover will have the `tooltip` and `popover` classes, so you can easily override [the style](#style-examples):
-
-```scss
-.tooltip {
-  // ...
-
-  &.popover {
-    $color: #f9f9f9;
-
-    .popover-inner {
-      background: $color;
-      color: black;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-    }
-
-    .popover-arrow {
-      border-color: $color;
-    }
-  }
-}
-```
-
-**⚠️ Set the arrow element `z-index` CSS property:**
-
-```scss
-.tooltip-arrow {
-  z-index: 1;
-}
-```
+As shown in the above example, the popper content must be passed to the `popper` slot.
 
 ### Popover Component Reference
 
 **Props:**
 
-- `open` - Boolean that shows or hide the popover.
-- `disabled` - Boolean that disables the popover. If it was already open, it will be closed.
-- `placement` - *(see above)*
-- `delay` - *(see above)*
-- `trigger` - *(see above)*
-- `offset` - *(see above)*
-- `container` - *(see above)*
-- `boundariesElement` - *(see above)*
-- `popperOptions` - *(see above)*
-- `popoverClass` - Classes applied to the popover element. Use this to apply different themes to the popover.
-- `popoverBaseClass` - Base classes applied to the popover element (defaults to `'tooltip popover'`).
-- `popoverWrapperClass` - Class of the element that contains the arrow and inner content.
-- `popoverArrowClass` - Class of the arrow element.
-- `popoverInnerClass` - Class of the inner content element.
-- `autoHide` - Hide the popover if clicked outside.
-- `handleResize` - Automatically update the popover position if its size changes.
+- `theme` - The popper theme applied to the dropdown  (default: `'dropdown'`) *(see above)*
+- `placement` - Popper placement (default: `'bottom'`) *(see above)*
+- `trigger` - Events triggering the dropdown separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
+- `open` - Boolean that shows or hide the dropdown.
+- `offset` - Offset of the position (px).
+- `container` - Selector: Container where the dropdown will be appended (e.g. `'body'`).
+- `boundariesElement` - DOM element for the popper position and size boundaries.
+- `autoHide` - Hide the dropdown if clicked outside.
+- `hideOnTargetClick` - Boolean: automatically close the dropdown on target click. Useful when `trigger` isn't `'click'`. *(Not implemented yet)*
+- `disabled` - Boolean that disables the dropdown. If it was already open, it will be closed.
+- `handleResize` - Automatically update the dropdown position if its size changes.
 - `openGroup` - If set, will close all the open popovers that have a different `open-group` value or unset.
-- `openClass` - Class put on the popover when it's open.
+- `disposeTimeout` - Number of ms after hide when the popper instance is destroyed.
+- `popperOptions` - Other Popper.js options.
 
 You can change the default values in the [Global options](#global-options).
+
+**Slots:**
+
+- `default`: Content put in the trigger part of the dropdown, typically a button.
+- `popper`: Content pu inside the popper of the dropdown.
 
 **Events:**
 
@@ -421,7 +475,7 @@ You can change the default values in the [Global options](#global-options).
 ### Disable popover
 
 ```html
-<v-popover :disabled="isDisabled"></v-popover>
+<VDropdown :disabled="isDisabled"></VDropdown>
 ```
 
 ```js
@@ -434,29 +488,29 @@ data () {
 
 ### Close directive
 
-Use the `v-close-popover` directive on an element inside the popover to close it when the element is clicked (or touched on mobile):
+Use the `v-close-popper` directive on an element inside the dropdown to close it when the element is clicked (or touched on mobile):
 
 ```html
-<v-popover>
+<VDropdown>
   <button>Click me</button>
 
-  <template slot="popover">
-    <a v-close-popover>Close</a>
+  <template #popper>
+    <a v-close-popper>Close</a>
   </template>
-</v-popover>
+</VDropdown>
 ```
 
 You can also set it to true or false to enable or disable the directive (enabled by default):
 
 ```html
-<a v-close-popover="false">Close</a>
-<a v-close-popover="true">Close</a>
+<a v-close-popper="false">Close</a>
+<a v-close-popper="true">Close</a>
 ```
 
 You can also use a property:
 
 ```html
-<a v-close-popover="myBooleanProp">Close</a>
+<a v-close-popper="myBooleanProp">Close</a>
 ```
 
 ```js
@@ -467,80 +521,66 @@ data () {
 }
 ```
 
-Close all the popovers in the page with the `all` modifier:
+Close all the dropdowns in the page with the `all` modifier:
 
 ```html
-<a v-close-popover.all>Close All</a>
+<a v-close-popper.all>Close All</a>
 ```
 
 ## Global options
 
 The default global options are:
 
-```javascript
-{
-	// Default tooltip placement relative to target element
-	defaultPlacement: 'top',
-	// Default CSS classes applied to the tooltip element
-	defaultClass: 'vue-tooltip-theme',
-	// Default CSS classes applied to the target element of the tooltip
-	defaultTargetClass: 'has-tooltip',
-	// Is the content HTML by default?
-	defaultHtml: true,
-	// Default HTML template of the tooltip element
-	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
-	// Change if the classes conflict with other libraries (for example bootstrap)
-	defaultTemplate: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-	// Selector used to get the arrow element in the tooltip template
-	defaultArrowSelector: '.tooltip-arrow, .tooltip__arrow',
-	// Selector used to get the inner content element in the tooltip template
-	defaultInnerSelector: '.tooltip-inner, .tooltip__inner',
-	// Delay (ms)
-	defaultDelay: 0,
-	// Default events that trigger the tooltip
-	defaultTrigger: 'hover focus',
-	// Default position offset (px)
-	defaultOffset: 0,
-	// Default container where the tooltip will be appended
-	defaultContainer: 'body',
-	defaultBoundariesElement: undefined,
-	defaultPopperOptions: {},
-	// Class added when content is loading
-	defaultLoadingClass: 'tooltip-loading',
-	// Displayed when tooltip content is loading
-	defaultLoadingContent: '...',
-	// Hide on mouseover tooltip
-	autoHide: true,
-	// Close tooltip on click on tooltip target?
-	defaultHideOnTargetClick: true,
-	// Auto destroy tooltip DOM nodes (ms)
-	disposeTimeout: 5000,
-	// Options for popover
-	popover: {
-		defaultPlacement: 'bottom',
-		// Use the `popoverClass` prop for theming
-		defaultClass: 'vue-popover-theme',
-		// Base class (change if conflicts with other libraries)
-		defaultBaseClass: 'tooltip popover',
-		// Wrapper class (contains arrow and inner)
-		defaultWrapperClass: 'wrapper',
-		// Inner content class
-		defaultInnerClass: 'tooltip-inner popover-inner',
-		// Arrow class
-    defaultArrowClass: 'tooltip-arrow popover-arrow',
-    // Class added when popover is open
-    defaultOpenClass: 'open',
-		defaultDelay: 0,
-		defaultTrigger: 'click',
-		defaultOffset: 0,
-		defaultContainer: 'body',
-		defaultBoundariesElement: undefined,
-		defaultPopperOptions: {},
-		// Hides if clicked outside of popover
-		defaultAutoHide: true,
-		// Update popper on content resize
-		defaultHandleResize: true,
-	},
+```js
+export const config = {
+  // Disable popper components
+  disabled: false,
+  // Default position offset (px)
+  offset: 0,
+  // Default container where the tooltip will be appended
+  container: 'body',
+  // Element used to compute position and size boundaries
+  boundariesElement: undefined,
+  // Auto destroy tooltip DOM nodes (ms)
+  disposeTimeout: 5000,
+  // Close tooltip on click on popper target? (Not implemented yet)
+  hideOnTargetClick: false,
+  // Options passed to Popper constructor
+  popperOptions: {},
+  // Themes
+  themes: {
+    tooltip: {
+      // Default tooltip placement relative to target element
+      placement: 'top',
+      // Delay (ms)
+      delay: {
+        show: 200,
+        hide: 0,
+      },
+      // Default events that trigger the tooltip
+      trigger: 'hover focus',
+      // Update popper on content resize
+      handleResize: false,
+      // Close tooltip on click on tooltip target?
+      hideOnTargetClick: true,
+      // Enable HTML content in directive
+      contentHtml: true,
+      // Displayed when tooltip content is loading
+      loadingContent: '...',
+    },
+    dropdown: {
+      // Default dropdown placement relative to target element
+      placement: 'bottom',
+      // Delay (ms)
+      delay: 0,
+      // Default events that trigger the dropdown
+      trigger: 'click',
+      // Update popper on content resize
+      handleResize: true,
+      // Hide on clock outside
+      autoHide: true,
+    },
+  },
 }
 ```
 
@@ -551,218 +591,38 @@ import VTooltip from 'v-tooltip'
 Vue.use(VTooltip, options)
 ```
 
-Or directly on package:
+Or directly on `VTooltip`:
 
 ```javascript
 import VTooltip from 'v-tooltip'
-// Set custom CSS class
-VTooltip.options.defaultClass = 'my-tooltip'
+VTooltip.options.offset = 12
 ```
 
-# Style Examples
+For a specific theme:
 
-Bellow are some examples of style you need. [Here](https://github.com/Akryum/v-tooltip/blob/83615e394c96ca491a4df04b892ae87e833beb97/demo-src/src/App.vue#L179-L303) is another example, used in the [live demo](https://akryum.github.io/v-tooltip/#/).
 
-## Sass / Less
-
-```less
-.tooltip {
-  display: block !important;
-  z-index: 10000;
-
-  .tooltip-inner {
-    background: black;
-    color: white;
-    border-radius: 16px;
-    padding: 5px 10px 4px;
-  }
-
-  .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-    border-color: black;
-    z-index: 1;
-  }
-
-  &[x-placement^="top"] {
-    margin-bottom: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 0 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      bottom: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="bottom"] {
-    margin-top: 5px;
-
-    .tooltip-arrow {
-      border-width: 0 5px 5px 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-top-color: transparent !important;
-      top: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="right"] {
-    margin-left: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 5px 0;
-      border-left-color: transparent !important;
-      border-top-color: transparent !important;
-      border-bottom-color: transparent !important;
-      left: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[x-placement^="left"] {
-    margin-right: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 0 5px 5px;
-      border-top-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      right: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &.popover {
-    $color: #f9f9f9;
-
-    .popover-inner {
-      background: $color;
-      color: black;
-      padding: 24px;
-      border-radius: 5px;
-      box-shadow: 0 5px 30px rgba(black, .1);
-    }
-
-    .popover-arrow {
-      border-color: $color;
-    }
-  }
-
-  &[aria-hidden='true'] {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .15s, visibility .15s;
-  }
-
-  &[aria-hidden='false'] {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity .15s;
-  }
-}
+```js
+import VTooltip from 'v-tooltip'
+VTooltip.options.themes.dropdown.offset = 12
 ```
 
-## CSS
+## Composition
 
-```css
-.tooltip {
-  display: block !important;
-  z-index: 10000;
+### Custom theme
+
+```vue
+<script>
+import { PopperWrapper } from 'v-tooltip'
+
+export default {
+  ...PopperWrapper,
+  name: 'VDropdown',
+  vPopperTheme: 'dropdown',
 }
+</script>
 
-.tooltip .tooltip-inner {
-  background: black;
-  color: white;
-  border-radius: 16px;
-  padding: 5px 10px 4px;
-}
-
-.tooltip .tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
-  border-color: black;
-  z-index: 1;
-}
-
-.tooltip[x-placement^="top"] {
-  margin-bottom: 5px;
-}
-
-.tooltip[x-placement^="top"] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.tooltip[x-placement^="bottom"] {
-  margin-top: 5px;
-}
-
-.tooltip[x-placement^="bottom"] .tooltip-arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  border-top-color: transparent !important;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.tooltip[x-placement^="right"] {
-  margin-left: 5px;
-}
-
-.tooltip[x-placement^="right"] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent !important;
-  border-top-color: transparent !important;
-  border-bottom-color: transparent !important;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.tooltip[x-placement^="left"] {
-  margin-right: 5px;
-}
-
-.tooltip[x-placement^="left"] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.tooltip.popover .popover-inner {
+<style>
+.v-popper--theme-dropdown .v-popper__inner {
   background: #f9f9f9;
   color: black;
   padding: 24px;
@@ -770,23 +630,104 @@ Bellow are some examples of style you need. [Here](https://github.com/Akryum/v-t
   box-shadow: 0 5px 30px rgba(black, .1);
 }
 
-.tooltip.popover .popover-arrow {
+.v-popper--theme-dropdown .v-popper__arrow {
   border-color: #f9f9f9;
 }
-
-.tooltip[aria-hidden='true'] {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity .15s, visibility .15s;
-}
-
-.tooltip[aria-hidden='false'] {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity .15s;
-}
+</style>
 ```
 
+### Custom dropdown/tooltip component
+
+```vue
+<template>
+  <Popper
+    ref="popper"
+    v-slot="{
+      popperId,
+      isOpen,
+      trigger,
+      autoHide,
+      hide,
+      handleResize,
+      onResize,
+    }"
+    v-bind="$attrs"
+    :theme="theme"
+    :target-node="() => $refs.trigger"
+    :popper-node="() => $refs.popperContent.$el"
+    :arrow-node="() => $refs.popperContent.$refs.arrow"
+    v-on="$listeners"
+  >
+    <div
+      class="v-popper"
+      :class="[
+        themeClass,
+        {
+          'v-popper--open': isOpen,
+        },
+      ]"
+    >
+      <div
+        ref="trigger"
+        :aria-describedby="popperId"
+        :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
+        class="v-popper__trigger"
+        style="display: inline-block;"
+      >
+        <slot />
+      </div>
+
+      <PopperContent
+        ref="popperContent"
+        :popper-id="popperId"
+        :theme="theme"
+        :is-open="isOpen"
+        :auto-hide="autoHide"
+        :handle-resize="handleResize"
+        @hide="hide"
+        @resize="onResize"
+      >
+        <slot name="popper" />
+      </PopperContent>
+    </div>
+  </Popper>
+</template>
+
+<script>
+import {
+  Popper,
+  PopperContent,
+  PopperMethods,
+  ThemeClass
+} from 'v-tooltip'
+
+export default {
+  name: 'MyPopper',
+
+  components: {
+    Popper,
+    PopperContent,
+  },
+
+  mixins: [
+    PopperMethods,
+    ThemeClass,
+  ],
+
+  inheritAttrs: false,
+
+  props: {
+    theme: {
+      type: String,
+      default () {
+        return this.$options.vPopperTheme
+      },
+    },
+  },
+}
+</script>
+
+```
 
 ---
 
