@@ -14,6 +14,8 @@
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
+    @apply-show="onShow"
+    @apply-hide="onHide"
   >
     <PopperContent
       ref="popperContent"
@@ -111,7 +113,9 @@ export default {
 
   watch: {
     content: {
-      handler: 'fetchContent',
+      handler () {
+        this.fetchContent(true)
+      },
       immediate: true,
     },
 
@@ -120,19 +124,39 @@ export default {
     },
   },
 
+  created () {
+    this.$_fetchId = 0
+  },
+
   methods: {
-    fetchContent () {
-      if (typeof this.content === 'function') {
+    fetchContent (force) {
+      if (typeof this.content === 'function' && this.$_isOpen &&
+        (force || (!this.$_loading && this.asyncContent == null))) {
         this.asyncContent = null
+        this.$_loading = true
+        const fetchId = ++this.$_fetchId
         const result = this.content(this)
         if (result.then) {
-          result.then(res => {
-            this.asyncContent = res
-          })
+          result.then(res => this.onResult(fetchId, res))
         } else {
-          this.asyncContent = result
+          this.onResult(fetchId, result)
         }
       }
+    },
+
+    onResult (fetchId, result) {
+      if (fetchId !== this.$_fetchId) return
+      this.$_loading = false
+      this.asyncContent = result
+    },
+
+    onShow () {
+      this.$_isOpen = true
+      this.fetchContent()
+    },
+
+    onHide () {
+      this.$_isOpen = false
     },
   },
 }
