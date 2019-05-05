@@ -612,28 +612,37 @@ VTooltip.options.themes.dropdown.offset = 12
 
 ### Custom theme
 
+```js
+Vue.use(VTooltip, {
+  themes: {
+    'info-dropdown': {
+      $extend: 'dropdown',
+      // Other options (see the 'Global options' section)
+      placement: 'right',
+      delay: 300
+    }
+  }
+})
+```
+
 ```vue
 <script>
 import { PopperWrapper } from 'v-tooltip'
 
 export default {
   ...PopperWrapper,
-  name: 'VDropdown',
-  vPopperTheme: 'dropdown',
+  name: 'VInfoDropdown',
+  vPopperTheme: 'info-dropdown',
 }
 </script>
 
 <style>
-.v-popper--theme-dropdown .v-popper__inner {
-  background: #f9f9f9;
-  color: black;
-  padding: 24px;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, .1);
+.v-popper--theme-info-dropdown .v-popper__inner {
+  background: #004499;
 }
 
-.v-popper--theme-dropdown .v-popper__arrow {
-  border-color: #f9f9f9;
+.v-popper--theme-info-dropdown .v-popper__arrow {
+  border-color: #004499;
 }
 </style>
 ```
