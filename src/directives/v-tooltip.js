@@ -43,11 +43,11 @@ export function createTooltip (el, value, modifiers) {
 
   const tooltipApp = el.$_popper = new Vue({
     data: () => ({
-      ...options,
+      options,
     }),
     render (h) {
       return h(TooltipDirective, {
-        attrs: this.$data,
+        attrs: this.options,
         ref: 'tooltip',
       })
     },
@@ -85,7 +85,7 @@ export function bind (el, { value, oldValue, modifiers }) {
     if (el.$_popper) {
       tooltipApp = el.$_popper
       // Options
-      Object.assign(tooltipApp.$data, options)
+      tooltipApp.$data.options = options
     } else {
       tooltipApp = createTooltip(el, value, modifiers)
     }
