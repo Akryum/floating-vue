@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VTooltip, { createTooltip, destroyTooltip } from '../'
+import '../dist/vue-ui.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
@@ -8,21 +9,25 @@ const PageTable = () => import('./PageTable.vue')
 
 Vue.use(VTooltip, {
   disposeTimeout: 5000,
-  popover: {
-    defaultPopperOptions: {
-      modifiers: {
-        preventOverflow: {
-          padding: 12,
+  themes: {
+    dropdown: {
+      popperOptions: {
+        modifiers: {
+          preventOverflow: {
+            padding: 12,
+          },
         },
       },
     },
   },
 })
 
-VTooltip.options.defaultDelay = {
+VTooltip.options.delay = {
   show: 300,
   hide: 0,
 }
+
+console.log(VTooltip.options)
 
 Vue.use(VueRouter)
 

@@ -1,13 +1,12 @@
 <template>
   <div class="page-home page">
-
     <section class="nav">
       <router-link
-        :to="{ name: 'install' }"
         v-tooltip="{
           content: 'Installation Instruction page',
           delay: { show: 400, hide: 0 },
         }"
+        :to="{ name: 'install' }"
       >
         Get Started
       </router-link>
@@ -19,20 +18,46 @@
     <section class="demo">
       <div class="section-content">
         <h2>Reactive content</h2>
-        <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+        <input
+          v-model="msg"
+          class="tooltip-content"
+          placeholder="Tooltip content"
+        >
 
-        <button class="tooltip-target" title="This is a button" v-tooltip.top-center="msg">Hover me</button>
+        <button
+          v-tooltip.top-center="msg"
+          class="tooltip-target"
+          title="This is a button"
+        >
+          Hover me
+        </button>
       </div>
     </section>
 
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="mainSnippet" lang="js"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="componentSnippet1" lang="html"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="styleSnippet1" lang="scss"/>
+          <CodeSnippet
+            class="snippet"
+            :code="mainSnippet"
+            lang="js"
+          />
+          <div class="plus">
+            +
+          </div>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet1"
+            lang="html"
+          />
+          <div class="plus">
+            +
+          </div>
+          <CodeSnippet
+            class="snippet"
+            :code="styleSnippet1"
+            lang="scss"
+          />
         </div>
       </Collapse>
     </section>
@@ -43,33 +68,56 @@
 
         <div class="form">
           <select v-model="placement">
-            <option value="bottom-center">bottom</option>
-            <option value="top-center">top</option>
-            <option value="left-center">left</option>
-            <option value="right-center">right</option>
+            <option value="bottom">
+              bottom
+            </option>
+            <option value="top">
+              top
+            </option>
+            <option value="left">
+              left
+            </option>
+            <option value="right">
+              right
+            </option>
           </select>
         </div>
 
-        <button class="tooltip-target b2" v-tooltip="{
-          content: 'You can change a lot of parameters: placement, classes, offset, delay...',
-          placement,
-          classes: ['info'],
-          targetClasses: ['it-has-a-tooltip'],
-          offset: 100,
-          delay: {
-            show: 500,
-            hide: 300,
-          },
-        }">Hover me</button>
+        <button
+          v-tooltip="{
+            content: 'You can change a lot of parameters: placement, classes, offset, delay...',
+            placement,
+            classes: ['info'],
+            targetClasses: ['it-has-a-tooltip'],
+            offset: 100,
+            delay: {
+              show: 500,
+              hide: 300,
+            },
+          }"
+          class="tooltip-target b2"
+        >
+          Hover me
+        </button>
       </div>
     </section>
 
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet2" lang="html"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="styleSnippet2" lang="scss"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet2"
+            lang="html"
+          />
+          <div class="plus">
+            +
+          </div>
+          <CodeSnippet
+            class="snippet"
+            :code="styleSnippet2"
+            lang="scss"
+          />
         </div>
       </Collapse>
     </section>
@@ -79,21 +127,33 @@
         <h2>Async content</h2>
 
         <button
-          class="tooltip-target"
           v-tooltip="{
             content: () => asyncContent('foo', 'bar'),
             loadingContent: '<i>Loading...</i>',
           }"
-        >Hover me</button>
+          class="tooltip-target"
+        >
+          Hover me
+        </button>
       </div>
     </section>
 
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet6" lang="html"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="styleSnippet6" lang="scss"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet6"
+            lang="html"
+          />
+          <div class="plus">
+            +
+          </div>
+          <CodeSnippet
+            class="snippet"
+            :code="styleSnippet6"
+            lang="scss"
+          />
         </div>
       </Collapse>
     </section>
@@ -103,24 +163,40 @@
         <h2>Manual mode</h2>
 
         <div class="form">
-          <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+          <label><input
+            v-model="isVisible"
+            type="checkbox"
+            name="open"
+          > Enable</label>
         </div>
 
         <template v-if="isVisible">
           <div class="form">
-            <label><input type="radio" name="open2" v-model="isOpen" :value="true" /> Show</label>
-            <label><input type="radio" name="open2" v-model="isOpen" :value="false" /> Hide</label>
+            <label><input
+              v-model="isOpen"
+              type="radio"
+              name="open2"
+              :value="true"
+            > Show</label>
+            <label><input
+              v-model="isOpen"
+              type="radio"
+              name="open2"
+              :value="false"
+            > Hide</label>
           </div>
 
           <button
-            class="tooltip-target"
             v-tooltip="{
               content: msg,
               show: isOpen,
               trigger: 'manual',
               placement: 'bottom',
             }"
-          >A button</button>
+            class="tooltip-target"
+          >
+            A button
+          </button>
         </template>
       </div>
     </section>
@@ -128,7 +204,11 @@
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet5" lang="html"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet5"
+            lang="html"
+          />
         </div>
       </Collapse>
     </section>
@@ -138,29 +218,51 @@
         <h2>Use with components to create a popover</h2>
 
         <div class="form">
-          <label><input type="checkbox" name="enabled" v-model="isEnabled" /> Enable</label>
+          <label><input
+            v-model="isEnabled"
+            type="checkbox"
+            name="enabled"
+          > Enable</label>
 
-          <label><input type="checkbox" name="auto-hide" v-model="isAutoHiding" /> AutoHide</label>
+          <label><input
+            v-model="isAutoHiding"
+            type="checkbox"
+            name="auto-hide"
+          > AutoHide</label>
 
           <select v-model="placement">
-            <option value="bottom-center">bottom</option>
-            <option value="top-center">top</option>
-            <option value="left-center">left</option>
-            <option value="right-center">right</option>
+            <option value="bottom">
+              bottom
+            </option>
+            <option value="top">
+              top
+            </option>
+            <option value="left">
+              left
+            </option>
+            <option value="right">
+              right
+            </option>
           </select>
         </div>
 
-        <v-popover
+        <VDropdown
           :offset="offset"
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
           open-class="is-open"
         >
-          <button class="tooltip-target b3 popover-btn">Click me</button>
+          <button class="tooltip-target b3 popover-btn">
+            Click me
+          </button>
 
-          <template slot="popover">
-            <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+          <template #popper>
+            <input
+              v-model="msg"
+              class="tooltip-content"
+              placeholder="Tooltip content"
+            >
             <p>
               {{ msg }}
             </p>
@@ -169,21 +271,31 @@
 
             <div class="close">
               <a
-                v-close-popover
+                v-close-popper
                 class="btn"
               >Close</a>
             </div>
           </template>
-        </v-popover>
+        </VDropdown>
       </div>
     </section>
 
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet3" lang="html"/>
-          <div class="plus">+</div>
-          <CodeSnippet class="snippet" :code="styleSnippet3" lang="scss"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet3"
+            lang="html"
+          />
+          <div class="plus">
+            +
+          </div>
+          <CodeSnippet
+            class="snippet"
+            :code="styleSnippet3"
+            lang="scss"
+          />
         </div>
       </Collapse>
     </section>
@@ -194,71 +306,81 @@
 
         <div class="form">
           <a
-            v-close-popover.all
+            v-close-popper.all
             class="btn"
           >Close All</a>
         </div>
 
-        <v-popover
+        <VDropdown
           class="inline"
           :placement="placement"
           :auto-hide="false"
           open-group="group1"
         >
-          <button class="tooltip-target b1 popover-btn">Group 1</button>
+          <button class="tooltip-target b1 popover-btn">
+            Group 1
+          </button>
 
-          <template slot="popover">
+          <template #popper>
             <div class="close">
               <a
-                v-close-popover
+                v-close-popper
                 class="btn"
               >Close</a>
             </div>
           </template>
-        </v-popover>
+        </VDropdown>
 
-        <v-popover
+        <VDropdown
           class="inline"
           :placement="placement"
           :auto-hide="false"
           open-group="group1"
         >
-          <button class="tooltip-target b2 popover-btn">Group 1</button>
+          <button class="tooltip-target b2 popover-btn">
+            Group 1
+          </button>
 
-          <template slot="popover">
+          <template #popper>
             <div class="close">
               <a
-                v-close-popover
+                v-close-popper
                 class="btn"
               >Close</a>
             </div>
           </template>
-        </v-popover>
+        </VDropdown>
 
-        <v-popover
+        <VDropdown
           class="inline"
           :placement="placement"
           :auto-hide="false"
           open-group="group2"
         >
-          <button class="tooltip-target b3 popover-btn">Group 2</button>
+          <button class="tooltip-target b3 popover-btn">
+            Group 2
+          </button>
 
-          <template slot="popover">
+          <template #popper>
             <div class="close">
               <a
-                v-close-popover
+                v-close-popper
                 class="btn"
               >Close</a>
             </div>
           </template>
-        </v-popover>
+        </VDropdown>
       </div>
     </section>
 
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet7" lang="html"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet7"
+            lang="html"
+          />
         </div>
       </Collapse>
     </section>
@@ -268,30 +390,50 @@
         <h2>Manual mode</h2>
 
         <div class="form">
-          <label><input type="checkbox" name="open" v-model="isVisible" /> Enable</label>
+          <label><input
+            v-model="isVisible"
+            type="checkbox"
+            name="open"
+          > Enable</label>
         </div>
 
         <template v-if="isVisible">
           <div class="form">
-            <label><input type="radio" name="open" v-model="isOpen" :value="true" /> Show</label>
-            <label><input type="radio" name="open" v-model="isOpen" :value="false" /> Hide</label>
+            <label><input
+              v-model="isOpen"
+              type="radio"
+              name="open"
+              :value="true"
+            > Show</label>
+            <label><input
+              v-model="isOpen"
+              type="radio"
+              name="open"
+              :value="false"
+            > Hide</label>
           </div>
 
-          <v-popover
+          <VDropdown
             trigger="manual"
             :open="isOpen"
             offset="16"
             :auto-hide="false"
           >
-            <button class="tooltip-target b1 popover-btn">Target</button>
+            <button class="tooltip-target b1 popover-btn">
+              Target
+            </button>
 
-            <template slot="popover">
-              <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
+            <template #popper>
+              <input
+                v-model="msg"
+                class="tooltip-content"
+                placeholder="Tooltip content"
+              >
               <p>
                 {{ msg }}
               </p>
             </template>
-          </v-popover>
+          </VDropdown>
         </template>
       </div>
     </section>
@@ -299,11 +441,14 @@
     <section class="snippets">
       <Collapse title="Show code">
         <div class="section-content">
-          <CodeSnippet class="snippet" :code="componentSnippet4" lang="html"/>
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet4"
+            lang="html"
+          />
         </div>
       </Collapse>
     </section>
-
   </div>
 </template>
 
@@ -430,7 +575,7 @@ const styleSnippet1 = `
 const componentSnippet2 = `
 <button v-tooltip="{
   content: msg,
-  placement: 'bottom-center',
+  placement: 'bottom',
   classes: ['info'],
   targetClasses: ['it-has-a-tooltip'],
   offset: 100,
@@ -464,13 +609,13 @@ const styleSnippet2 = `
 `
 
 const componentSnippet3 = `
-<v-popover
+<VDropdown
   offset="16"
   :disabled="!isEnabled"
 >
   <button class="tooltip-target b3">Click me</button>
 
-  <template slot="popover">
+  <template #popper>
     <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
     <p>
       {{ msg }}
@@ -478,9 +623,9 @@ const componentSnippet3 = `
 
     <ExampleComponent char="=" />
 
-    <a v-close-popover>Close</a>
+    <a v-close-popper>Close</a>
   </template>
-</v-popover>
+</VDropdown>
 `
 
 const styleSnippet3 = `
@@ -516,7 +661,7 @@ const componentSnippet4 = `
     <label><input type="radio" name="open" v-model="isOpen" :value="false" /> Hide</label>
   </div>
 
-  <v-popover
+  <VDropdown
     trigger="manual"
     :open="isOpen"
     offset="16"
@@ -524,13 +669,13 @@ const componentSnippet4 = `
   >
     <button class="tooltip-target b1">Target</button>
 
-    <template slot="popover">
+    <template #popper>
       <input class="tooltip-content" v-model="msg" placeholder="Tooltip content" />
       <p>
         {{ msg }}
       </p>
     </template>
-  </v-popover>
+  </VDropdown>
 </template>
 `
 
@@ -579,29 +724,29 @@ const styleSnippet6 = `
 
 const componentSnippet7 = `
 <a
-  v-close-popover.all
+  v-close-popper.all
 >Close All</a>
 
-<v-popover
+<VDropdown
   :auto-hide="false"
   open-group="group1"
 >
   <!-- ... -->
-</v-popover>
+</VDropdown>
 
-<v-popover
+<VDropdown
   :auto-hide="false"
   open-group="group1"
 >
   <!-- ... -->
-</v-popover>
+</VDropdown>
 
-<v-popover
+<VDropdown
   :auto-hide="false"
   open-group="group2"
 >
   <!-- ... -->
-</v-popover>
+</VDropdown>
 `
 
 export default {
@@ -616,7 +761,7 @@ export default {
   data () {
     return {
       msg: `This is a button.`,
-      placement: 'bottom-center',
+      placement: 'bottom',
       isAutoHiding: false,
       isEnabled: true,
       isVisible: true,
