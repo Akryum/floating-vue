@@ -8,7 +8,7 @@ const TARGET_CLASS = `v-popper--has-tooltip`
 /**
  * Support placement as directive modifier
  */
-function getPlacement (options, modifiers) {
+export function getPlacement (options, modifiers) {
   var result = options.placement
   if (!result && modifiers) {
     for (const pos of placement) {
@@ -23,7 +23,7 @@ function getPlacement (options, modifiers) {
   return result
 }
 
-function getOptions (el, value, modifiers) {
+export function getOptions (el, value, modifiers) {
   let options
   const type = typeof value
   if (type === 'string') {
