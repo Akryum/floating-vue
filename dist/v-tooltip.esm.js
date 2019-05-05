@@ -3254,7 +3254,7 @@ const __vue_script__ = script;
     undefined
   );
 
-var ThemeClass = {
+var PrivateThemeClass = {
   computed: {
     themeClass: function themeClass() {
       return getThemeClasses(this.theme);
@@ -3268,7 +3268,7 @@ var script$1 = {
   components: {
     ResizeObserver: ResizeObserver
   },
-  mixins: [ThemeClass],
+  mixins: [PrivateThemeClass],
   props: {
     popperId: String,
     theme: String,
@@ -3408,7 +3408,7 @@ var script$2 = {
     Popper: PrivatePopper,
     PopperContent: PrivatePopperContent
   },
-  mixins: [PrivatePopperMethods, ThemeClass],
+  mixins: [PrivatePopperMethods, PrivateThemeClass],
   inheritAttrs: false,
   props: {
     theme: {
@@ -3928,7 +3928,7 @@ function destroyTooltip(el) {
   if (el.$_popper) {
     el.$_popper.$destroy();
     delete el.$_popper;
-    delete el.$_popperOldShow;
+    delete el.$_popperOldOpen;
   }
 
   if (el.classList) {
@@ -3954,9 +3954,9 @@ function bind(el, _ref) {
     } // Manual show
 
 
-    if (typeof value.show !== 'undefined' && value.show !== el.$_popperOldShow) {
-      el.$_popperOldShow = value.show;
-      value.show ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide();
+    if (typeof value.open !== 'undefined' && value.open !== el.$_popperOldOpen) {
+      el.$_popperOldOpen = value.open;
+      value.open ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide();
     }
   }
 }
@@ -4050,13 +4050,14 @@ var PrivateVClosePopper = {
 var options = config; // Directive
 
 var VTooltip = PrivateVTooltip;
-var VClosePopover = PrivateVClosePopper; // Components
+var VClosePopper = PrivateVClosePopper; // Components
 
 var Dropdown = PrivateDropdown;
 var Popper = PrivatePopper;
 var PopperContent = PrivatePopperContent;
 var PopperMethods = PrivatePopperMethods;
 var PopperWrapper = PrivatePopperWrapper;
+var ThemeClass = PrivateThemeClass;
 var Tooltip = PrivateTooltip;
 var TooltipDirective = PrivateTooltipDirective;
 /* Vue plugin */
@@ -4093,4 +4094,4 @@ if (GlobalVue) {
 }
 
 export default plugin;
-export { Dropdown, Popper, PopperContent, PopperMethods, PopperWrapper, Tooltip, TooltipDirective, VClosePopover, VTooltip, createTooltip, destroyTooltip, install, options };
+export { Dropdown, Popper, PopperContent, PopperMethods, PopperWrapper, ThemeClass, Tooltip, TooltipDirective, VClosePopper, VTooltip, createTooltip, destroyTooltip, install, options };

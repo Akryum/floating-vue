@@ -5973,7 +5973,7 @@
   	GlobalVue.use(plugin);
   }
 
-  var ThemeClass = {
+  var PrivateThemeClass = {
     computed: {
       themeClass: function themeClass() {
         return getThemeClasses(this.theme);
@@ -5987,7 +5987,7 @@
     components: {
       ResizeObserver: ResizeObserver
     },
-    mixins: [ThemeClass],
+    mixins: [PrivateThemeClass],
     props: {
       popperId: String,
       theme: String,
@@ -6127,7 +6127,7 @@
       Popper: PrivatePopper,
       PopperContent: PrivatePopperContent
     },
-    mixins: [PrivatePopperMethods, ThemeClass],
+    mixins: [PrivatePopperMethods, PrivateThemeClass],
     inheritAttrs: false,
     props: {
       theme: {
@@ -6647,7 +6647,7 @@
     if (el.$_popper) {
       el.$_popper.$destroy();
       delete el.$_popper;
-      delete el.$_popperOldShow;
+      delete el.$_popperOldOpen;
     }
 
     if (el.classList) {
@@ -6673,9 +6673,9 @@
       } // Manual show
 
 
-      if (typeof value.show !== 'undefined' && value.show !== el.$_popperOldShow) {
-        el.$_popperOldShow = value.show;
-        value.show ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide();
+      if (typeof value.open !== 'undefined' && value.open !== el.$_popperOldOpen) {
+        el.$_popperOldOpen = value.open;
+        value.open ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide();
       }
     }
   }
@@ -6769,13 +6769,14 @@
   var options = config; // Directive
 
   var VTooltip = PrivateVTooltip;
-  var VClosePopover = PrivateVClosePopper; // Components
+  var VClosePopper = PrivateVClosePopper; // Components
 
   var Dropdown = PrivateDropdown;
   var Popper$1 = PrivatePopper;
   var PopperContent = PrivatePopperContent;
   var PopperMethods = PrivatePopperMethods;
   var PopperWrapper = PrivatePopperWrapper;
+  var ThemeClass = PrivateThemeClass;
   var Tooltip = PrivateTooltip;
   var TooltipDirective = PrivateTooltipDirective;
   /* Vue plugin */
@@ -6816,9 +6817,10 @@
   exports.PopperContent = PopperContent;
   exports.PopperMethods = PopperMethods;
   exports.PopperWrapper = PopperWrapper;
+  exports.ThemeClass = ThemeClass;
   exports.Tooltip = Tooltip;
   exports.TooltipDirective = TooltipDirective;
-  exports.VClosePopover = VClosePopover;
+  exports.VClosePopper = VClosePopper;
   exports.VTooltip = VTooltip;
   exports.createTooltip = createTooltip;
   exports.default = plugin$1;
