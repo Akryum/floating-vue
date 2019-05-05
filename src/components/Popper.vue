@@ -632,18 +632,16 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose (event, touch = false) {
-  debugger
   // Delay so that close directive has time to set values
   for (let i = 0; i < openPoppers.length; i++) {
-    let popover = openPoppers[i]
-    if (popover.$refs.popover) {
-      const contains = popover.$refs.popover.contains(event.target)
-      requestAnimationFrame(() => {
-        if (event.closeAllPopover || (event.closePopover && contains) || (popover.autoHide && !contains)) {
-          popover.$_handleGlobalClose(event, touch)
-        }
-      })
-    }
+    let popper = openPoppers[i]
+    const popperContent = popper.popperNode()
+    const contains = popperContent.contains(event.target)
+    requestAnimationFrame(() => {
+      if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
+        popper.$_handleGlobalClose(event, touch)
+      }
+    })
   }
 }
 
