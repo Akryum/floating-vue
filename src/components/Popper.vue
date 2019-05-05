@@ -196,6 +196,8 @@ export default {
   },
 
   mounted () {
+    swapAttrs(this.triggerNode(), 'title', 'data-original-title')
+
     const popoverNode = this.popperNode()
     popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode)
 
@@ -250,6 +252,8 @@ export default {
       this.$_mounted = false
       this.popperInstance = null
       this.isOpen = false
+
+      swapAttrs(this.triggerNode(), 'data-original-title', 'title')
 
       this.$emit('dispose')
     },
@@ -639,6 +643,14 @@ function handleGlobalClose (event, touch = false) {
         }
       })
     }
+  }
+}
+
+function swapAttrs (node, attrFrom, attrTo) {
+  const value = node.getAttribute(attrFrom)
+  if (typeof value !== 'undefined') {
+    node.removeAttribute(attrFrom)
+    node.setAttribute(attrTo, value)
   }
 }
 </script>
