@@ -19,7 +19,7 @@ export const options = config
 // Directive
 export const VTooltip = PrivateVTooltip
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
-export const VClosePopover = PrivateVClosePopper
+export const VClosePopper = PrivateVClosePopper
 // Components
 export const Dropdown = PrivateDropdown
 export const Popper = PrivatePopper
