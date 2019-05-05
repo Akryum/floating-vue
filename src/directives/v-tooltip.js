@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { placement } from '../const'
-import { addClasses, removeClasses } from '../util/css'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 
@@ -58,7 +57,9 @@ export function createTooltip (el, value, modifiers) {
   tooltipApp.$mount(mountTarget)
 
   // Class on target
-  addClasses(el, TARGET_CLASS)
+  if (el.classList) {
+    el.classList.add(TARGET_CLASS)
+  }
 
   return tooltipApp
 }
@@ -70,7 +71,9 @@ export function destroyTooltip (el) {
     delete el.$_popperOldShow
   }
 
-  removeClasses(TARGET_CLASS)
+  if (el.classList) {
+    el.classList.remove(TARGET_CLASS)
+  }
 }
 
 export function bind (el, { value, oldValue, modifiers }) {
