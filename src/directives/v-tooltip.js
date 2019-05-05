@@ -34,7 +34,7 @@ function getOptions (el, value, modifiers) {
     options = { content: false }
   }
   options.placement = getPlacement(options, modifiers)
-  options.triggerNode = () => el
+  options.targetNode = () => el
   return options
 }
 

@@ -25,7 +25,7 @@ export default {
       required: true,
     },
 
-    triggerNode: {
+    targetNode: {
       type: Function,
       required: true,
     },
@@ -156,7 +156,7 @@ export default {
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
-        const container = this.$_findContainer(this.container, this.$_triggerNode)
+        const container = this.$_findContainer(this.container, this.$_targetNode)
         if (!container) {
           console.warn('No container for popover', this)
           return
@@ -199,10 +199,10 @@ export default {
 
   mounted () {
     // Nodes
-    this.$_triggerNode = this.triggerNode()
+    this.$_targetNode = this.targetNode()
     this.$_popperNode = this.popperNode()
 
-    swapAttrs(this.$_triggerNode, 'title', 'data-original-title')
+    swapAttrs(this.$_targetNode, 'title', 'data-original-title')
 
     this.$_detachPopperNode()
     this.$_init()
@@ -256,7 +256,7 @@ export default {
       this.popperInstance = null
       this.isOpen = false
 
-      swapAttrs(this.$_triggerNode, 'data-original-title', 'title')
+      swapAttrs(this.$_targetNode, 'data-original-title', 'title')
 
       this.$emit('dispose')
     },
@@ -290,7 +290,7 @@ export default {
       }
 
       if (!this.$_mounted) {
-        const container = this.$_findContainer(this.container, this.$_triggerNode)
+        const container = this.$_findContainer(this.container, this.$_targetNode)
         if (!container) {
           console.warn('No container for popover', this)
           return
@@ -329,7 +329,7 @@ export default {
           }
         }
 
-        this.popperInstance = new Popper(this.$_triggerNode, this.$_popperNode, popperOptions)
+        this.popperInstance = new Popper(this.$_targetNode, this.$_popperNode, popperOptions)
 
         // Fix position
         requestAnimationFrame(() => {
@@ -473,7 +473,7 @@ export default {
           this.hidden = false
         }
         this.$_events.push({ event, func })
-        this.$_triggerNode.addEventListener(event, func)
+        this.$_targetNode.addEventListener(event, func)
       })
 
       // schedule hide tooltip
@@ -486,7 +486,7 @@ export default {
           this.hidden = true
         }
         this.$_events.push({ event, func })
-        this.$_triggerNode.addEventListener(event, func)
+        this.$_targetNode.addEventListener(event, func)
       })
     },
 
@@ -540,7 +540,7 @@ export default {
         this.$_popperNode.removeEventListener(event.type, callback)
 
         // If the new reference is not the reference element
-        if (!this.$_triggerNode.contains(relatedreference2)) {
+        if (!this.$_targetNode.contains(relatedreference2)) {
           // Schedule to hide tooltip
           this.hide({ event: event2 })
         }
@@ -557,7 +557,7 @@ export default {
 
     $_removeEventListeners () {
       this.$_events.forEach(({ func, event }) => {
-        this.$_triggerNode.removeEventListener(event, func)
+        this.$_targetNode.removeEventListener(event, func)
       })
       this.$_events = []
     },

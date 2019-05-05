@@ -12,7 +12,7 @@
     }"
     v-bind="$attrs"
     :theme="theme"
-    :trigger-node="() => $refs.trigger"
+    :target-node="() => $refs.trigger"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
