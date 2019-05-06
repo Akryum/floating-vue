@@ -136,23 +136,9 @@ export default {
   },
 
   watch: {
-    open (val) {
-      if (val) {
-        this.show()
-      } else {
-        this.hide()
-      }
-    },
+    open: '$_autoShowHide',
 
-    disabled (val, oldVal) {
-      if (val !== oldVal) {
-        if (val) {
-          this.hide()
-        } else if (this.open) {
-          this.show()
-        }
-      }
-    },
+    disabled: '$_autoShowHide',
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
@@ -272,6 +258,14 @@ export default {
     $_init () {
       if (this.trigger.indexOf('manual') === -1) {
         this.$_addEventListeners()
+      }
+    },
+
+    $_autoShowHide () {
+      if (this.open) {
+        this.show()
+      } else {
+        this.hide()
       }
     },
 
