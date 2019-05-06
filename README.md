@@ -1,8 +1,8 @@
-<h1 align="center">v-tooltip</h1>
-
 <p align="center">
 <img src="./logo.png" width="279" height="208" alt="v-tooltip logo"/>
 </p>
+
+<h1 align="center">v-tooltip</h1>
 
 <p align="center">
 <a href="https://www.npmjs.com/package/v-tooltip"><img src="https://img.shields.io/npm/v/v-tooltip.svg"/> <img src="https://img.shields.io/npm/dm/v-tooltip.svg"/></a> <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.x-brightgreen.svg"/></a>
