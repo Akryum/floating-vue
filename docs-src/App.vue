@@ -200,11 +200,12 @@ label input {
   }
 }
 
-.v-popper--theme-dropdown {
-  .v-popper__inner {
-    border-radius: 5px;
-    box-shadow: 0 5px 30px rgba(black, .1);
-  }
+.v-popper--theme-dropdown .v-popper__inner {
+  background: #f9f9f9;
+}
+
+.v-popper--theme-dropdown .v-popper__arrow {
+  border-color: #f9f9f9;
 }
 
 .v-popper {

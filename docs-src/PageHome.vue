@@ -25,7 +25,7 @@
         >
 
         <button
-          v-tooltip.top="msg"
+          v-tooltip.right="msg"
           class="tooltip-target"
           title="Fallback title"
         >
@@ -34,7 +34,7 @@
 
         <!-- <VTooltip
           :disabled="!msg"
-          placement="top"
+          placement="right"
           title="Fallback title"
         >
           <button class="tooltip-target">
@@ -484,7 +484,7 @@ new Vue({
 
 const componentSnippet1 = `
 <button
-  v-tooltip.top="msg"
+  v-tooltip.right="msg"
   title="Fallback title"
 >
   Hover me
