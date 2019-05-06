@@ -1,7 +1,7 @@
 {
   "name": "v-tooltip",
   "version": "3.0.0-alpha.3",
-  "description": "Easy tooltips with Vue 2.x",
+  "description": "Easy Vue tooltips, dropdowns & popovers using Popper.js",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
     "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
@@ -79,7 +79,11 @@
   "homepage": "https://github.com/Akryum/vue-tooltip#readme",
   "keywords": [
     "vue",
-    "tooltip"
+    "popper",
+    "tooltip",
+    "popover",
+    "dropdown",
+    "menu"
   ],
   "license": "ISC",
   "repository": {
