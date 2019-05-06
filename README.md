@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./logo.png" width="279" height="208" alt="v-tooltip logo"/>
+<img src="./logo.png" alt="v-tooltip logo"/>
 </p>
 
 <h1 align="center">v-tooltip</h1>
