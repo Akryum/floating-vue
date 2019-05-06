@@ -430,9 +430,6 @@ export default {
     },
 
     $_addEventListeners () {
-      const directEvents = []
-      const oppositeEvents = []
-
       const events = typeof this.trigger === 'string'
         ? this.trigger
           .split(' ')
@@ -441,49 +438,51 @@ export default {
           )
         : []
 
+      const addEvent = (event, handler) => {
+        this.$_events.push({ event, handler })
+        this.$_targetNode.addEventListener(event, handler)
+      }
+
+      const handleShow = (event) => {
+        if (this.isOpen) {
+          return
+        }
+        event.usedByTooltip = true
+        !this.$_preventOpen && this.show({ event })
+        this.hidden = false
+      }
+
+      const handleHide = (event) => {
+        if (event.usedByTooltip) {
+          return
+        }
+        this.hide({ event })
+        this.hidden = true
+      }
+
       events.forEach(event => {
         switch (event) {
           case 'hover':
-            directEvents.push('mouseenter')
-            oppositeEvents.push('mouseleave')
+            addEvent('mouseenter', handleShow)
+            addEvent('mouseleave', handleHide)
             break
           case 'focus':
-            directEvents.push('focus')
-            oppositeEvents.push('blur')
+            addEvent('focus', handleShow)
+            addEvent('blur', handleHide)
             break
           case 'click':
-            directEvents.push('click')
-            oppositeEvents.push('click')
+            addEvent('click', handleShow)
+            addEvent('click', handleHide)
             break
         }
       })
+    },
 
-      // schedule show tooltip
-      directEvents.forEach(event => {
-        const func = event => {
-          if (this.isOpen) {
-            return
-          }
-          event.usedByTooltip = true
-          !this.$_preventOpen && this.show({ event: event })
-          this.hidden = false
-        }
-        this.$_events.push({ event, func })
-        this.$_targetNode.addEventListener(event, func)
+    $_removeEventListeners () {
+      this.$_events.forEach(({ event, handler }) => {
+        this.$_targetNode.removeEventListener(event, handler)
       })
-
-      // schedule hide tooltip
-      oppositeEvents.forEach(event => {
-        const func = event => {
-          if (event.usedByTooltip) {
-            return
-          }
-          this.hide({ event: event })
-          this.hidden = true
-        }
-        this.$_events.push({ event, func })
-        this.$_targetNode.addEventListener(event, func)
-      })
+      this.$_events = []
     },
 
     $_scheduleShow (event = null, skipDelay = false) {
@@ -549,13 +548,6 @@ export default {
       }
 
       return false
-    },
-
-    $_removeEventListeners () {
-      this.$_events.forEach(({ func, event }) => {
-        this.$_targetNode.removeEventListener(event, func)
-      })
-      this.$_events = []
     },
 
     $_updatePopper (cb) {
