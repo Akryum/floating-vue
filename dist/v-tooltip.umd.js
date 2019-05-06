@@ -92,7 +92,7 @@
           hide: 0
         },
         // Default events that trigger the tooltip
-        trigger: 'hover focus',
+        trigger: 'hover focus touch',
         // Update popper on content resize
         handleResize: false,
         // Close tooltip on click on tooltip target?
@@ -3203,7 +3203,7 @@
         var _this5 = this;
 
         var events = typeof this.trigger === 'string' ? this.trigger.split(' ').filter(function (trigger) {
-          return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
+          return ['click', 'hover', 'focus', 'touch'].indexOf(trigger) !== -1;
         }) : [];
 
         var addEvent = function addEvent(event, handler) {
@@ -3254,6 +3254,11 @@
             case 'click':
               addEvent('click', handleShow);
               addEvent('click', handleHide);
+              break;
+
+            case 'touch':
+              addEvent('touchstart', handleShow);
+              addEvent('touchend', handleHide);
               break;
           }
         });
