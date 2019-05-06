@@ -138,7 +138,13 @@ export default {
   watch: {
     open: '$_autoShowHide',
 
-    disabled: '$_autoShowHide',
+    disabled (value) {
+      if (value) {
+        this.dispose()
+      } else {
+        this.init()
+      }
+    },
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
@@ -176,26 +182,10 @@ export default {
 
   created () {
     this.popperId = `popper_${Math.random().toString(36).substr(2, 10)}`
-
-    this.$_isDisposed = false
-    this.$_mounted = false
-    this.$_events = []
-    this.$_preventOpen = false
   },
 
   mounted () {
-    // Nodes
-    this.$_targetNode = this.targetNode()
-    this.$_popperNode = this.popperNode()
-
-    swapAttrs(this.$_targetNode, 'title', 'data-original-title')
-
-    this.$_detachPopperNode()
-    this.$_init()
-
-    if (this.open) {
-      this.show()
-    }
+    this.init()
   },
 
   activated () {
@@ -228,6 +218,26 @@ export default {
 
       this.$emit('hide')
       this.$emit('update:open', false)
+    },
+
+    init () {
+      this.$_isDisposed = false
+      this.$_mounted = false
+      this.$_events = []
+      this.$_preventOpen = false
+
+      // Nodes
+      this.$_targetNode = this.targetNode()
+      this.$_popperNode = this.popperNode()
+
+      swapAttrs(this.$_targetNode, 'title', 'data-original-title')
+
+      this.$_detachPopperNode()
+      this.$_init()
+
+      if (this.open) {
+        this.show()
+      }
     },
 
     dispose () {
