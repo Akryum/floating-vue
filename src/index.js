@@ -1,4 +1,4 @@
-import merge from 'lodash/merge'
+import assign from 'assign-deep'
 import { config } from './config'
 import 'vue-resize/dist/vue-resize.css'
 // Components
@@ -37,7 +37,7 @@ export function install (Vue, options = {}) {
   if (install.installed) return
   install.installed = true
 
-  merge(config, options)
+  assign(config, options)
 
   // Directive
   Vue.directive('tooltip', PrivateVTooltip)
