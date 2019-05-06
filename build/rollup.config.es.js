@@ -7,7 +7,6 @@ const config = Object.assign({}, base, {
     format: 'es',
   },
   external: [
-    'assign-deep',
     'popper.js',
     'vue-resize',
     'vue',

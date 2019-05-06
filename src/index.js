@@ -1,4 +1,4 @@
-import assign from 'assign-deep'
+import { assign } from './util/assign-deep'
 import { config } from './config'
 import 'vue-resize/dist/vue-resize.css'
 // Components

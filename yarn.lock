@@ -1761,22 +1761,10 @@ assert@^1.1.1:
   dependencies:
     util "0.10.3"
 
-assign-deep@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/assign-deep/-/assign-deep-1.0.0.tgz#755b553952aefc6064612b975ed691f2afe4027e"
-  integrity sha512-wH7AeUhZk5j8E8B3pDJ/nmN2eOR+zPK47do3a4GKn5L7bMtKTqFTnvtxNoDg4+XgmF08euylwYwgFv4F0l38QQ==
-  dependencies:
-    assign-symbols "^2.0.2"
-
 assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
   integrity sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
-
-assign-symbols@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-2.0.2.tgz#0fb9191dd9d617042746ecfc354f3a3d768a0c98"
-  integrity sha512-9sBQUQZMKFKcO/C3Bo6Rx4CQany0R0UeVcefNGRRdW2vbmaMOhV1sbmlXcQLcD56juLXbSGTBm0GGuvmrAF8pA==
 
 astral-regex@^1.0.0:
   version "1.0.0"
