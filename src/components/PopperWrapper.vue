@@ -28,6 +28,7 @@
     >
       <div
         ref="trigger"
+        :title="title"
         :aria-describedby="popperId"
         :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
         class="v-popper__trigger"
@@ -80,6 +81,8 @@ export default {
         return this.$options.vPopperTheme
       },
     },
+
+    title: String,
   },
 }
 </script>
