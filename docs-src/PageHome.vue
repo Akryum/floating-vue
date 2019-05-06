@@ -25,12 +25,26 @@
         >
 
         <button
-          v-tooltip.top-center="msg"
+          v-tooltip.top="msg"
           class="tooltip-target"
           title="Fallback title"
         >
           Hover me
         </button>
+
+        <!-- <VTooltip
+          :disabled="!msg"
+          placement="top"
+          title="Fallback title"
+        >
+          <button class="tooltip-target">
+            Hover me
+          </button>
+
+          <template #popper>
+            {{ msg }}
+          </template>
+        </VTooltip> -->
       </div>
     </section>
 
@@ -470,7 +484,7 @@ new Vue({
 
 const componentSnippet1 = `
 <button
-  v-tooltip.top-center="msg"
+  v-tooltip.top="msg"
   title="Fallback title"
 >
   Hover me
