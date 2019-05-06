@@ -198,6 +198,10 @@ export default {
     }
   },
 
+  activated () {
+    this.$_autoShowHide()
+  },
+
   deactivated () {
     this.hide()
   },
