@@ -77,6 +77,7 @@ Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta
   - [Component](#component)
     - [Popover Component Reference](#popover-component-reference)
     - [Close directive](#close-directive)
+    - [Tooltip component](#tooltip-component)
   - [Global options](#global-options)
   - [Composition](#composition)
 
@@ -527,6 +528,38 @@ Close all the dropdowns in the page with the `all` modifier:
 
 ```html
 <a v-close-popper.all>Close All</a>
+```
+
+#### Tooltip component
+
+By default, a `VTooltip` component is also registered. You can write the following:
+
+```html
+<button
+  v-tooltip.top="msg"
+  class="tooltip-target"
+  title="Fallback title"
+>
+  Hover me
+</button>
+```
+
+as the equivalent using the `VTooltip` component instead of the `v-tooltip` directive:
+
+```html
+<VTooltip
+  :disabled="!msg"
+  placement="top"
+  title="Fallback title"
+>
+  <button class="tooltip-target">
+    Hover me
+  </button>
+
+  <template #popper>
+    {{ msg }}
+  </template>
+</VTooltip>
 ```
 
 ## Global options
