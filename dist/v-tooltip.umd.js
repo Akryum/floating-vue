@@ -2783,9 +2783,6 @@
     } catch (e) {}
   }
 
-  // Possible Popper.js positions
-  var placement = ['auto', 'auto-start', 'auto-end', 'top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
-
   var isIOS = false;
 
   if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -2835,7 +2832,7 @@
           return getDefaultConfig(this.theme, 'placement');
         },
         validator: function validator(value) {
-          return placement.includes(value);
+          return Popper.placements.includes(value);
         }
       },
       delay: {
@@ -4260,7 +4257,7 @@
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = placement[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = Popper.placements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var pos = _step.value;
 
           if (modifiers[pos]) {
