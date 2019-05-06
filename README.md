@@ -1,7 +1,7 @@
 <h1 align="center">v-tooltip</h1>
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/Akryum/v-tooltip/master/v-tooltip.png" width="247" height="172" alt="Screenshot"/>
+<img src="./logo.png" width="279" height="208" alt="v-tooltip logo"/>
 </p>
 
 <p align="center">
