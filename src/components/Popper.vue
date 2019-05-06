@@ -2,7 +2,6 @@
 import Popper from 'popper.js'
 import { supportsPassive } from '../util/support'
 import { getDefaultConfig } from '../config'
-import { placement } from '../const'
 
 let isIOS = false
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -57,7 +56,7 @@ export default {
       default () {
         return getDefaultConfig(this.theme, 'placement')
       },
-      validator: value => placement.includes(value),
+      validator: value => Popper.placements.includes(value),
     },
 
     delay: {

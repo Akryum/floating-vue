@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { placement } from '../const'
+import Popper from 'popper.js'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 
@@ -11,7 +11,7 @@ const TARGET_CLASS = `v-popper--has-tooltip`
 export function getPlacement (options, modifiers) {
   var result = options.placement
   if (!result && modifiers) {
-    for (const pos of placement) {
+    for (const pos of Popper.placements) {
       if (modifiers[pos]) {
         result = pos
       }
