@@ -32,7 +32,6 @@
       <div
         ref="arrow"
         class="v-popper__arrow"
-        x-arrow
       />
     </div>
   </div>
