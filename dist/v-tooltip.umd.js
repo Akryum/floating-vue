@@ -55,8 +55,6 @@
   }
 
   function assign(to, from) {
-    debugger;
-
     for (var key in from) {
       if (Object.prototype.hasOwnProperty.call(from, key)) {
         if (_typeof(from[key]) === 'object' && to[key]) {
@@ -2906,7 +2904,13 @@
     },
     watch: {
       open: '$_autoShowHide',
-      disabled: '$_autoShowHide',
+      disabled: function disabled(value) {
+        if (value) {
+          this.dispose();
+        } else {
+          this.init();
+        }
+      },
       container: function container(val) {
         if (this.isOpen && this.popperInstance) {
           var container = this.$_findContainer(this.container, this.$_targetNode);
@@ -2940,22 +2944,9 @@
     },
     created: function created() {
       this.popperId = "popper_".concat(Math.random().toString(36).substr(2, 10));
-      this.$_isDisposed = false;
-      this.$_mounted = false;
-      this.$_events = [];
-      this.$_preventOpen = false;
     },
     mounted: function mounted() {
-      // Nodes
-      this.$_targetNode = this.targetNode();
-      this.$_popperNode = this.popperNode();
-      swapAttrs(this.$_targetNode, 'title', 'data-original-title');
-      this.$_detachPopperNode();
-      this.$_init();
-
-      if (this.open) {
-        this.show();
-      }
+      this.init();
     },
     activated: function activated() {
       this.$_autoShowHide();
@@ -2995,6 +2986,22 @@
         this.$_scheduleHide(event);
         this.$emit('hide');
         this.$emit('update:open', false);
+      },
+      init: function init() {
+        this.$_isDisposed = false;
+        this.$_mounted = false;
+        this.$_events = [];
+        this.$_preventOpen = false; // Nodes
+
+        this.$_targetNode = this.targetNode();
+        this.$_popperNode = this.popperNode();
+        swapAttrs(this.$_targetNode, 'title', 'data-original-title');
+        this.$_detachPopperNode();
+        this.$_init();
+
+        if (this.open) {
+          this.show();
+        }
       },
       dispose: function dispose() {
         this.$_removeFromOpenPoppers();
@@ -3830,7 +3837,8 @@
         default: function _default() {
           return this.$options.vPopperTheme;
         }
-      }
+      },
+      title: String
     }
   };
 
@@ -3892,6 +3900,7 @@
                               staticClass: "v-popper__trigger",
                               staticStyle: { display: "inline-block" },
                               attrs: {
+                                title: _vm.title,
                                 "aria-describedby": popperId,
                                 tabindex:
                                   trigger.indexOf("focus") !== -1 ? 0 : undefined
