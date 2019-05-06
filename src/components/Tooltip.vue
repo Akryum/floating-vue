@@ -10,13 +10,13 @@ export default {
 
 <style>
 .v-popper--theme-tooltip .v-popper__inner {
-  background: black;
+  background: rgba(0, 0, 0, .8);
   color: white;
-  border-radius: 16px;
-  padding: 5px 10px 4px;
+  border-radius: 6px;
+  padding: 7px 12px 6px;
 }
 
 .v-popper--theme-tooltip .v-popper__arrow {
-  border-color: black;
+  border-color: rgba(0, 0, 0, .8);
 }
 </style>

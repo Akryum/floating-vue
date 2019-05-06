@@ -10,14 +10,14 @@ export default {
 
 <style>
 .v-popper--theme-dropdown .v-popper__inner {
-  background: #f9f9f9;
+  background: #fff;
   color: black;
   padding: 24px;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, .1);
+  border-radius: 6px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
 }
 
 .v-popper--theme-dropdown .v-popper__arrow {
-  border-color: #f9f9f9;
+  border-color: #fff;
 }
 </style>
