@@ -443,7 +443,7 @@ export default {
         ? this.trigger
           .split(' ')
           .filter(
-            trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+            trigger => ['click', 'hover', 'focus', 'touch'].indexOf(trigger) !== -1
           )
         : []
 
@@ -482,6 +482,10 @@ export default {
           case 'click':
             addEvent('click', handleShow)
             addEvent('click', handleHide)
+            break
+          case 'touch':
+            addEvent('touchstart', handleShow)
+            addEvent('touchend', handleHide)
             break
         }
       })

@@ -330,7 +330,7 @@ Then you can customize the CSS for this theme:
 - `loadingContent` - Same as `content`, used when the actual tooltip content is loading *(see Async content example below)*.
 - `theme` - The popper theme applied to the tooltip (default: `'tooltip'`) *(see above)*
 - `placement` - Popper placement (default: `'top'`) *(see above)*
-- `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event).
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `open` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
@@ -441,7 +441,7 @@ As shown in the above example, the popper content must be passed to the `popper`
 
 - `theme` - The popper theme applied to the dropdown  (default: `'dropdown'`) *(see above)*
 - `placement` - Popper placement (default: `'bottom'`) *(see above)*
-- `trigger` - Events triggering the dropdown separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `trigger` - Events triggering the dropdown separated with spaces: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event).
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `open` - Boolean that shows or hide the dropdown.
 - `offset` - Offset of the position (px).
@@ -593,7 +593,7 @@ export const config = {
         hide: 0,
       },
       // Default events that trigger the tooltip
-      trigger: 'hover focus',
+      trigger: 'hover focus touch',
       // Update popper on content resize
       handleResize: false,
       // Close tooltip on click on tooltip target?

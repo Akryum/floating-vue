@@ -24,7 +24,7 @@ export const config = {
         hide: 0,
       },
       // Default events that trigger the tooltip
-      trigger: 'hover focus',
+      trigger: 'hover focus touch',
       // Update popper on content resize
       handleResize: false,
       // Close tooltip on click on tooltip target?
