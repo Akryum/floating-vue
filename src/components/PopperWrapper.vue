@@ -32,7 +32,6 @@
         :aria-describedby="popperId"
         :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
         class="v-popper__trigger"
-        style="display: inline-block;"
       >
         <slot />
       </div>
