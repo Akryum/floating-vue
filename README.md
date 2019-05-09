@@ -70,7 +70,7 @@ Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta
   - [Directive](#directive)
     - [Object notation](#object-notation)
     - [Themes](#themes)
-    - [Other options](#other-options)
+    - [All options](#all-options)
     - [Async content](#async-content)
     - [Tooltip auto-hiding](#tooltip-auto-hiding)
     - [Disabling tooltips](#disabling-tooltips)
@@ -319,7 +319,7 @@ Then you can customize the CSS for this theme:
 }
 ```
 
-### Other options
+### All options
 
 ```html
 <button v-tooltip="options">
@@ -330,14 +330,14 @@ Then you can customize the CSS for this theme:
 - `loadingContent` - Same as `content`, used when the actual tooltip content is loading *(see Async content example below)*.
 - `theme` - The popper theme applied to the tooltip (default: `'tooltip'`) *(see above)*
 - `placement` - Popper placement (default: `'top'`) *(see above)*
-- `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `trigger` - Events triggering the tooltip: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event). Example: `trigger: ['hover', 'focus']` or `trigger: 'hover focus'`.
+- `triggerShow` / `triggerHide` - Override the trigger events for showing or hiding. Can also be a function that gets the `trigger` list, and should return the new list -- for example: `triggerHide: events => [...events, 'click']`.
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `open` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
 - `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`).
 - `boundariesElement` - DOM element for the popper position and size boundaries.
 - `autoHide` - Boolean: automatically close the tooltip on mouseover.
-- `hideOnTargetClick` - Boolean: automatically close the tooltip on target click. *(Not implemented yet)*
 - `disabled` - Boolean to disable the tooltip. If it was already open, it will be closed.
 - `handleResize` - Boolean to automatically update the popper position when content size changes.
 - `openGroup` - If set, will close all the open tooltips that have a different `open-group` value or an unset value.
@@ -441,14 +441,14 @@ As shown in the above example, the popper content must be passed to the `popper`
 
 - `theme` - The popper theme applied to the dropdown  (default: `'dropdown'`) *(see above)*
 - `placement` - Popper placement (default: `'bottom'`) *(see above)*
-- `trigger` - Events triggering the dropdown separated with spaces: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event).
+- `trigger` - Events triggering the dropdown: `'hover'`, `'click'`, `'focus'`, `'touch'` or `'manual'` (`'manual'` can't be combined with any other event). Example: `:trigger="['hover', 'focus']"` or `trigger="hover focus"`.
+- `triggerShow` / `triggerHide` - Override the trigger events for showing or hiding. Can also be a function that gets the `trigger` list, and should return the new list -- for example: `triggerHide: events => [...events, 'click']`.
 - `delay` - Show/Hide delay, or object: `{ show: 500, hide: 100 }` (ms).
 - `open` - Boolean that shows or hide the dropdown.
 - `offset` - Offset of the position (px).
 - `container` - Selector: Container where the dropdown will be appended (e.g. `'body'`).
 - `boundariesElement` - DOM element for the popper position and size boundaries.
 - `autoHide` - Hide the dropdown if clicked outside.
-- `hideOnTargetClick` - Boolean: automatically close the dropdown on target click. Useful when `trigger` isn't `'click'`. *(Not implemented yet)*
 - `disabled` - Boolean that disables the dropdown. If it was already open, it will be closed.
 - `handleResize` - Automatically update the dropdown position if its size changes.
 - `openGroup` - If set, will close all the open popovers that have a different `open-group` value or unset.
@@ -578,8 +578,6 @@ export const config = {
   boundariesElement: undefined,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
-  // Close tooltip on click on popper target? (Not implemented yet)
-  hideOnTargetClick: false,
   // Options passed to Popper constructor
   popperOptions: {},
   // Themes
@@ -587,17 +585,17 @@ export const config = {
     tooltip: {
       // Default tooltip placement relative to target element
       placement: 'top',
+      // Default events that trigger the tooltip
+      trigger: ['hover', 'focus', 'touch'],
+      // Close tooltip on click on tooltip target
+      triggerHide: events => [...events, 'click'],
       // Delay (ms)
       delay: {
         show: 200,
         hide: 0,
       },
-      // Default events that trigger the tooltip
-      trigger: 'hover focus touch',
       // Update popper on content resize
       handleResize: false,
-      // Close tooltip on click on tooltip target?
-      hideOnTargetClick: true,
       // Enable HTML content in directive
       contentHtml: true,
       // Displayed when tooltip content is loading
@@ -606,10 +604,10 @@ export const config = {
     dropdown: {
       // Default dropdown placement relative to target element
       placement: 'bottom',
+      // Default events that trigger the dropdown
+      trigger: ['click'],
       // Delay (ms)
       delay: 0,
-      // Default events that trigger the dropdown
-      trigger: 'click',
       // Update popper on content resize
       handleResize: true,
       // Hide on clock outside

@@ -9,8 +9,6 @@ export const config = {
   boundariesElement: undefined,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
-  // Close tooltip on click on popper target?
-  hideOnTargetClick: false,
   // Options passed to Popper constructor
   popperOptions: {},
   // Themes
@@ -18,17 +16,17 @@ export const config = {
     tooltip: {
       // Default tooltip placement relative to target element
       placement: 'top',
+      // Default events that trigger the tooltip
+      trigger: ['hover', 'focus', 'touch'],
+      // Close tooltip on click on tooltip target
+      triggerHide: events => [...events, 'click'],
       // Delay (ms)
       delay: {
         show: 200,
         hide: 0,
       },
-      // Default events that trigger the tooltip
-      trigger: 'hover focus touch',
       // Update popper on content resize
       handleResize: false,
-      // Close tooltip on click on tooltip target?
-      hideOnTargetClick: true,
       // Enable HTML content in directive
       contentHtml: true,
       // Displayed when tooltip content is loading
@@ -37,10 +35,10 @@ export const config = {
     dropdown: {
       // Default dropdown placement relative to target element
       placement: 'bottom',
+      // Default events that trigger the dropdown
+      trigger: ['click'],
       // Delay (ms)
       delay: 0,
-      // Default events that trigger the dropdown
-      trigger: 'click',
       // Update popper on content resize
       handleResize: true,
       // Hide on clock outside

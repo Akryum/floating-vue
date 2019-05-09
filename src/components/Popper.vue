@@ -3,6 +3,22 @@ import Popper from 'popper.js'
 import { supportsPassive } from '../util/support'
 import { getDefaultConfig } from '../config'
 
+const SHOW_EVENT_MAP = {
+  hover: 'mouseenter',
+  focus: 'focus',
+  click: 'click',
+  touch: 'touchstart',
+}
+
+const HIDE_EVENT_MAP = {
+  hover: 'mouseleave',
+  focus: 'blur',
+  click: 'click',
+  touch: 'touchend',
+}
+
+const EVENTS = Object.keys(SHOW_EVENT_MAP)
+
 let isIOS = false
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
   isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
@@ -74,9 +90,23 @@ export default {
     },
 
     trigger: {
-      type: String,
+      type: [String, Array],
       default () {
         return getDefaultConfig(this.theme, 'trigger')
+      },
+    },
+
+    triggerShow: {
+      type: [String, Array, Function],
+      default () {
+        return getDefaultConfig(this.theme, 'triggerShow')
+      },
+    },
+
+    triggerHide: {
+      type: [String, Array, Function],
+      default () {
+        return getDefaultConfig(this.theme, 'triggerHide')
       },
     },
 
@@ -112,13 +142,6 @@ export default {
       type: Boolean,
       default () {
         return getDefaultConfig(this.theme, 'handleResize')
-      },
-    },
-
-    hideOnTargetClick: {
-      type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'hideOnTargetClick')
       },
     },
 
@@ -439,56 +462,49 @@ export default {
     },
 
     $_addEventListeners () {
-      const events = typeof this.trigger === 'string'
-        ? this.trigger
-          .split(' ')
-          .filter(
-            trigger => ['click', 'hover', 'focus', 'touch'].indexOf(trigger) !== -1
-          )
-        : []
+      const bothEvents = getEvents(this.trigger)
 
-      const addEvent = (event, handler) => {
-        this.$_events.push({ event, handler })
-        this.$_targetNode.addEventListener(event, handler)
+      const addEvents = (customTrigger, eventMap, handler) => {
+        let events = bothEvents
+        if (customTrigger != null) {
+          events = getEvents(typeof customTrigger === 'function' ? customTrigger(events) : customTrigger)
+        }
+
+        events.forEach(value => {
+          const event = eventMap[value]
+          this.$_events.push({ event, handler })
+          this.$_targetNode.addEventListener(event, handler)
+        })
       }
 
-      const handleShow = (event) => {
-        if (this.isOpen) {
-          return
+      // Add trigger show events
+      addEvents(
+        this.triggerShow,
+        SHOW_EVENT_MAP,
+        // Handle show
+        event => {
+          if (this.isOpen) {
+            return
+          }
+          event.usedByTooltip = true
+          !this.$_preventOpen && this.show({ event })
+          this.hidden = false
         }
-        event.usedByTooltip = true
-        !this.$_preventOpen && this.show({ event })
-        this.hidden = false
-      }
+      )
 
-      const handleHide = (event) => {
-        if (event.usedByTooltip) {
-          return
+      // Add trigger hide events
+      addEvents(
+        this.triggerHide,
+        HIDE_EVENT_MAP,
+        // Handle hide
+        event => {
+          if (event.usedByTooltip) {
+            return
+          }
+          this.hide({ event })
+          this.hidden = true
         }
-        this.hide({ event })
-        this.hidden = true
-      }
-
-      events.forEach(event => {
-        switch (event) {
-          case 'hover':
-            addEvent('mouseenter', handleShow)
-            addEvent('mouseleave', handleHide)
-            break
-          case 'focus':
-            addEvent('focus', handleShow)
-            addEvent('blur', handleHide)
-            break
-          case 'click':
-            addEvent('click', handleShow)
-            addEvent('click', handleHide)
-            break
-          case 'touch':
-            addEvent('touchstart', handleShow)
-            addEvent('touchend', handleHide)
-            break
-        }
-      })
+      )
     },
 
     $_removeEventListeners () {
@@ -657,5 +673,11 @@ function swapAttrs (node, attrFrom, attrTo) {
     node.removeAttribute(attrFrom)
     node.setAttribute(attrTo, value)
   }
+}
+
+function getEvents (rawEvents) {
+  let events = typeof rawEvents === 'string' ? rawEvents.split(/\s+/g) : rawEvents
+  events = events.filter(trigger => EVENTS.indexOf(trigger) !== -1)
+  return events
 }
 </script>
