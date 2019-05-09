@@ -530,7 +530,7 @@ Close all the dropdowns in the page with the `all` modifier:
 <a v-close-popper.all>Close All</a>
 ```
 
-#### Tooltip component
+### Tooltip component
 
 By default, a `VTooltip` component is also registered. You can write the following:
 
