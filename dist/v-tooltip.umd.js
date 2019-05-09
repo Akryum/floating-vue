@@ -54,6 +54,26 @@
     return target;
   }
 
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
   function assign(to, from) {
     for (var key in from) {
       if (Object.prototype.hasOwnProperty.call(from, key)) {
@@ -77,8 +97,6 @@
     boundariesElement: undefined,
     // Auto destroy tooltip DOM nodes (ms)
     disposeTimeout: 5000,
-    // Close tooltip on click on popper target?
-    hideOnTargetClick: false,
     // Options passed to Popper constructor
     popperOptions: {},
     // Themes
@@ -86,17 +104,19 @@
       tooltip: {
         // Default tooltip placement relative to target element
         placement: 'top',
+        // Default events that trigger the tooltip
+        trigger: ['hover', 'focus', 'touch'],
+        // Close tooltip on click on tooltip target
+        triggerHide: function triggerHide(events) {
+          return [].concat(_toConsumableArray(events), ['click']);
+        },
         // Delay (ms)
         delay: {
           show: 200,
           hide: 0
         },
-        // Default events that trigger the tooltip
-        trigger: 'hover focus touch',
         // Update popper on content resize
         handleResize: false,
-        // Close tooltip on click on tooltip target?
-        hideOnTargetClick: true,
         // Enable HTML content in directive
         contentHtml: true,
         // Displayed when tooltip content is loading
@@ -105,10 +125,10 @@
       dropdown: {
         // Default dropdown placement relative to target element
         placement: 'bottom',
+        // Default events that trigger the dropdown
+        trigger: ['click'],
         // Delay (ms)
         delay: 0,
-        // Default events that trigger the dropdown
-        trigger: 'click',
         // Update popper on content resize
         handleResize: true,
         // Hide on clock outside
@@ -2783,6 +2803,19 @@
     } catch (e) {}
   }
 
+  var SHOW_EVENT_MAP = {
+    hover: 'mouseenter',
+    focus: 'focus',
+    click: 'click',
+    touch: 'touchstart'
+  };
+  var HIDE_EVENT_MAP = {
+    hover: 'mouseleave',
+    focus: 'blur',
+    click: 'click',
+    touch: 'touchend'
+  };
+  var EVENTS = Object.keys(SHOW_EVENT_MAP);
   var isIOS = false;
 
   if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
@@ -2848,9 +2881,21 @@
         }
       },
       trigger: {
-        type: String,
+        type: [String, Array],
         default: function _default() {
           return getDefaultConfig(this.theme, 'trigger');
+        }
+      },
+      triggerShow: {
+        type: [String, Array, Function],
+        default: function _default() {
+          return getDefaultConfig(this.theme, 'triggerShow');
+        }
+      },
+      triggerHide: {
+        type: [String, Array, Function],
+        default: function _default() {
+          return getDefaultConfig(this.theme, 'triggerHide');
         }
       },
       container: {
@@ -2881,12 +2926,6 @@
         type: Boolean,
         default: function _default() {
           return getDefaultConfig(this.theme, 'handleResize');
-        }
-      },
-      hideOnTargetClick: {
-        type: Boolean,
-        default: function _default() {
-          return getDefaultConfig(this.theme, 'hideOnTargetClick');
         }
       },
       openGroup: {
@@ -3202,20 +3241,30 @@
       $_addEventListeners: function $_addEventListeners() {
         var _this5 = this;
 
-        var events = typeof this.trigger === 'string' ? this.trigger.split(' ').filter(function (trigger) {
-          return ['click', 'hover', 'focus', 'touch'].indexOf(trigger) !== -1;
-        }) : [];
+        var bothEvents = getEvents(this.trigger);
 
-        var addEvent = function addEvent(event, handler) {
-          _this5.$_events.push({
-            event: event,
-            handler: handler
+        var addEvents = function addEvents(customTrigger, eventMap, handler) {
+          var events = bothEvents;
+
+          if (customTrigger != null) {
+            events = getEvents(typeof customTrigger === 'function' ? customTrigger(events) : customTrigger);
+          }
+
+          events.forEach(function (value) {
+            var event = eventMap[value];
+
+            _this5.$_events.push({
+              event: event,
+              handler: handler
+            });
+
+            _this5.$_targetNode.addEventListener(event, handler);
           });
+        }; // Add trigger show events
 
-          _this5.$_targetNode.addEventListener(event, handler);
-        };
 
-        var handleShow = function handleShow(event) {
+        addEvents(this.triggerShow, SHOW_EVENT_MAP, // Handle show
+        function (event) {
           if (_this5.isOpen) {
             return;
           }
@@ -3225,9 +3274,10 @@
             event: event
           });
           _this5.hidden = false;
-        };
+        }); // Add trigger hide events
 
-        var handleHide = function handleHide(event) {
+        addEvents(this.triggerHide, HIDE_EVENT_MAP, // Handle hide
+        function (event) {
           if (event.usedByTooltip) {
             return;
           }
@@ -3237,30 +3287,6 @@
           });
 
           _this5.hidden = true;
-        };
-
-        events.forEach(function (event) {
-          switch (event) {
-            case 'hover':
-              addEvent('mouseenter', handleShow);
-              addEvent('mouseleave', handleHide);
-              break;
-
-            case 'focus':
-              addEvent('focus', handleShow);
-              addEvent('blur', handleHide);
-              break;
-
-            case 'click':
-              addEvent('click', handleShow);
-              addEvent('click', handleHide);
-              break;
-
-            case 'touch':
-              addEvent('touchstart', handleShow);
-              addEvent('touchend', handleHide);
-              break;
-          }
         });
       },
       $_removeEventListeners: function $_removeEventListeners() {
@@ -3451,6 +3477,14 @@
       node.removeAttribute(attrFrom);
       node.setAttribute(attrTo, value);
     }
+  }
+
+  function getEvents(rawEvents) {
+    var events = typeof rawEvents === 'string' ? rawEvents.split(/\s+/g) : rawEvents;
+    events = events.filter(function (trigger) {
+      return EVENTS.indexOf(trigger) !== -1;
+    });
+    return events;
   }
 
   function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -3900,7 +3934,6 @@
                             {
                               ref: "trigger",
                               staticClass: "v-popper__trigger",
-                              staticStyle: { display: "inline-block" },
                               attrs: {
                                 title: _vm.title,
                                 "aria-describedby": popperId,
