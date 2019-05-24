@@ -486,7 +486,8 @@ The default global options are:
 	// Default CSS classes applied to the target element of the tooltip
 	defaultTargetClass: 'has-tooltip',
 	// Is the content HTML by default?
-	defaultHtml: true,
+	// Disabled by default to reduce the risk of Cross-Site Scripting
+	defaultHtml: false,
 	// Default HTML template of the tooltip element
 	// It must include `tooltip-arrow` & `tooltip-inner` CSS classes (can be configured, see below)
 	// Change if the classes conflict with other libraries (for example bootstrap)
