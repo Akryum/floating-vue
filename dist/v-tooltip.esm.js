@@ -741,7 +741,10 @@ var script = {
       var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       clearTimeout(this.$_scheduleTimer);
-      hidingPopper = this;
+
+      if (this.isOpen) {
+        hidingPopper = this;
+      }
 
       if (skipDelay) {
         this.$_hide();
