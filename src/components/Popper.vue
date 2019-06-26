@@ -555,7 +555,9 @@ export default {
 
     $_scheduleHide (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer)
-      hidingPopper = this
+      if (this.isOpen) {
+        hidingPopper = this
+      }
       if (skipDelay) {
         this.$_hide()
       } else {
