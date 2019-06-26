@@ -263,10 +263,10 @@ export default {
     },
 
     dispose () {
-      this.$_removeFromOpenPoppers()
       this.$_isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
+
       if (this.popperInstance) {
         this.popperInstance.destroy()
 
@@ -275,6 +275,7 @@ export default {
           this.$_detachPopperNode()
         }
       }
+
       this.$_mounted = false
       this.popperInstance = null
       this.isOpen = false
@@ -411,12 +412,12 @@ export default {
     },
 
     $_hide () {
+      removeFromArray(openPoppers, this)
+
       // Already hidden
       if (!this.isOpen) {
         return
       }
-
-      this.$_removeFromOpenPoppers()
 
       this.isOpen = false
       if (this.popperInstance) {
@@ -620,13 +621,6 @@ export default {
     $_detachPopperNode () {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
     },
-
-    $_removeFromOpenPoppers () {
-      const index = openPoppers.indexOf(this)
-      if (index !== -1) {
-        openPoppers.splice(index, 1)
-      }
-    },
   },
 
   render (h) {
@@ -679,5 +673,12 @@ function getEvents (rawEvents) {
   let events = typeof rawEvents === 'string' ? rawEvents.split(/\s+/g) : rawEvents
   events = events.filter(trigger => EVENTS.indexOf(trigger) !== -1)
   return events
+}
+
+function removeFromArray (array, item) {
+  const index = array.indexOf(item)
+  if (index !== -1) {
+    array.splice(index, 1)
+  }
 }
 </script>
