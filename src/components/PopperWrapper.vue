@@ -4,6 +4,7 @@
     v-slot="{
       popperId,
       isOpen,
+      skipTransition,
       trigger,
       autoHide,
       hide,
@@ -41,6 +42,7 @@
         :popper-id="popperId"
         :theme="theme"
         :is-open="isOpen"
+        :skip-transition="skipTransition"
         :auto-hide="autoHide"
         :handle-resize="handleResize"
         @hide="hide"

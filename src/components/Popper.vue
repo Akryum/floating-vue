@@ -25,6 +25,7 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 }
 
 const openPoppers = []
+let hidingPopper = null
 
 let Element = function () {}
 if (typeof window !== 'undefined') {
@@ -149,11 +150,17 @@ export default {
       type: String,
       default: null,
     },
+
+    instantMove: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data () {
     return {
       isOpen: false,
+      skipTransition: false,
     }
   },
 
@@ -306,8 +313,10 @@ export default {
       }
     },
 
-    $_show () {
+    $_show (skipTransition = false) {
       clearTimeout(this.$_disposeTimer)
+      clearTimeout(this.$_scheduleTimer)
+      this.skipTransition = skipTransition
 
       // Already open
       if (this.isOpen) {
@@ -411,12 +420,18 @@ export default {
       this.$emit('apply-show')
     },
 
-    $_hide () {
+    $_hide (skipTransition = false) {
+      clearTimeout(this.$_scheduleTimer)
+      this.skipTransition = skipTransition
       removeFromArray(openPoppers, this)
 
       // Already hidden
       if (!this.isOpen) {
         return
+      }
+
+      if (hidingPopper === this) {
+        hidingPopper = null
       }
 
       this.isOpen = false
@@ -522,6 +537,13 @@ export default {
 
     $_scheduleShow (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer)
+
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+        hidingPopper.$_hide(true)
+        this.$_show(true)
+        return
+      }
+
       if (skipDelay) {
         this.$_show()
       } else {
@@ -531,6 +553,7 @@ export default {
 
     $_scheduleHide (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer)
+      hidingPopper = this
       if (skipDelay) {
         this.$_hide()
       } else {

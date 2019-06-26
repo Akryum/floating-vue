@@ -341,6 +341,7 @@ Then you can customize the CSS for this theme:
 - `disabled` - Boolean to disable the tooltip. If it was already open, it will be closed.
 - `handleResize` - Boolean to automatically update the popper position when content size changes.
 - `openGroup` - If set, will close all the open tooltips that have a different `open-group` value or an unset value.
+- `instantMove` - Boolean: skip delay & CSS transitions when another tooltip is open, so that the tooltip appear to instanly move to the new position.
 - `disposeTimeout` - Number of ms after hide when the popper instance is destroyed.
 - `popperOptions` - Other Popper.js options.
 
@@ -452,6 +453,7 @@ As shown in the above example, the popper content must be passed to the `popper`
 - `disabled` - Boolean that disables the dropdown. If it was already open, it will be closed.
 - `handleResize` - Automatically update the dropdown position if its size changes.
 - `openGroup` - If set, will close all the open popovers that have a different `open-group` value or unset.
+- `instantMove` - Boolean: skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
 - `disposeTimeout` - Number of ms after hide when the popper instance is destroyed.
 - `popperOptions` - Other Popper.js options.
 

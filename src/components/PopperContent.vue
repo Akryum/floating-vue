@@ -7,6 +7,7 @@
       themeClass,
       {
         'v-popper__popper--open': isOpen,
+        'v-popper__popper--skip-transition': skipTransition,
       },
     ]"
     :aria-hidden="isOpen ? 'false' : 'true'"
@@ -56,6 +57,7 @@ export default {
     popperId: String,
     theme: String,
     isOpen: Boolean,
+    skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean,
   },
@@ -74,6 +76,10 @@ export default {
   visibility: visible;
   opacity: 1;
   transition: opacity .15s;
+}
+
+.v-popper__popper.v-popper__popper--skip-transition {
+  transition: none !important;
 }
 
 .v-popper__arrow {
