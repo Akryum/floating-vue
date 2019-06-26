@@ -225,7 +225,7 @@ export default {
   methods: {
     show ({ event, skipDelay = false, force = false } = {}) {
       if (force || !this.disabled) {
-        this.$_scheduleShow(event)
+        this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
       }
       this.$emit('update:open', true)
@@ -236,7 +236,7 @@ export default {
     },
 
     hide ({ event, skipDelay = false } = {}) {
-      this.$_scheduleHide(event)
+      this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
       this.$emit('update:open', false)
