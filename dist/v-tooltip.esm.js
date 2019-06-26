@@ -217,6 +217,7 @@ if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
 }
 
 var openPoppers = [];
+var hidingPopper = null;
 
 var Element = function Element() {};
 
@@ -325,11 +326,16 @@ var script = {
     openGroup: {
       type: String,
       default: null
+    },
+    instantMove: {
+      type: Boolean,
+      default: false
     }
   },
   data: function data() {
     return {
-      isOpen: false
+      isOpen: false,
+      skipTransition: false
     };
   },
   watch: {
@@ -394,11 +400,12 @@ var script = {
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           event = _ref.event,
           _ref$skipDelay = _ref.skipDelay,
+          skipDelay = _ref$skipDelay === void 0 ? false : _ref$skipDelay,
           _ref$force = _ref.force,
           force = _ref$force === void 0 ? false : _ref$force;
 
       if (force || !this.disabled) {
-        this.$_scheduleShow(event);
+        this.$_scheduleShow(event, skipDelay);
         this.$emit('show');
       }
 
@@ -411,9 +418,10 @@ var script = {
     hide: function hide() {
       var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           event = _ref2.event,
-          _ref2$skipDelay = _ref2.skipDelay;
+          _ref2$skipDelay = _ref2.skipDelay,
+          skipDelay = _ref2$skipDelay === void 0 ? false : _ref2$skipDelay;
 
-      this.$_scheduleHide(event);
+      this.$_scheduleHide(event, skipDelay);
       this.$emit('hide');
       this.$emit('update:open', false);
     },
@@ -434,7 +442,6 @@ var script = {
       }
     },
     dispose: function dispose() {
-      this.$_removeFromOpenPoppers();
       this.$_isDisposed = true;
       this.$_removeEventListeners();
       this.hide({
@@ -476,7 +483,10 @@ var script = {
     $_show: function $_show() {
       var _this3 = this;
 
-      clearTimeout(this.$_disposeTimer); // Already open
+      var skipTransition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      clearTimeout(this.$_disposeTimer);
+      clearTimeout(this.$_scheduleTimer);
+      this.skipTransition = skipTransition; // Already open
 
       if (this.isOpen) {
         return;
@@ -582,12 +592,19 @@ var script = {
     $_hide: function $_hide() {
       var _this4 = this;
 
-      // Already hidden
+      var skipTransition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      clearTimeout(this.$_scheduleTimer);
+      this.skipTransition = skipTransition;
+      removeFromArray(openPoppers, this); // Already hidden
+
       if (!this.isOpen) {
         return;
       }
 
-      this.$_removeFromOpenPoppers();
+      if (hidingPopper === this) {
+        hidingPopper = null;
+      }
+
       this.isOpen = false;
 
       if (this.popperInstance) {
@@ -694,16 +711,24 @@ var script = {
       });
       this.$_events = [];
     },
+    $_computeDelay: function $_computeDelay(type) {
+      var delay = this.delay;
+      return parseInt(delay && delay[type] || delay || 0);
+    },
     $_scheduleShow: function $_scheduleShow() {
       var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       clearTimeout(this.$_scheduleTimer);
 
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+        hidingPopper.$_hide(true);
+        this.$_show(true);
+        return;
+      }
+
       if (skipDelay) {
         this.$_show();
       } else {
-        // defaults to 0
-        var computedDelay = parseInt(this.delay && this.delay.show || this.delay || 0);
-        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), computedDelay);
+        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), this.$_computeDelay('show'));
       }
     },
     $_scheduleHide: function $_scheduleHide() {
@@ -712,12 +737,11 @@ var script = {
       var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       clearTimeout(this.$_scheduleTimer);
+      hidingPopper = this;
 
       if (skipDelay) {
         this.$_hide();
       } else {
-        // defaults to 0
-        var computedDelay = parseInt(this.delay && this.delay.hide || this.delay || 0);
         this.$_scheduleTimer = setTimeout(function () {
           if (!_this7.isOpen) {
             return;
@@ -736,7 +760,7 @@ var script = {
           }
 
           _this7.$_hide();
-        }, computedDelay);
+        }, this.$_computeDelay('hide'));
       }
     },
     $_setTooltipNodeEvent: function $_setTooltipNodeEvent(event) {
@@ -811,13 +835,6 @@ var script = {
     },
     $_detachPopperNode: function $_detachPopperNode() {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode);
-    },
-    $_removeFromOpenPoppers: function $_removeFromOpenPoppers() {
-      var index = openPoppers.indexOf(this);
-
-      if (index !== -1) {
-        openPoppers.splice(index, 1);
-      }
     }
   },
   render: function render(h) {
@@ -879,6 +896,14 @@ function getEvents(rawEvents) {
     return EVENTS.indexOf(trigger) !== -1;
   });
   return events;
+}
+
+function removeFromArray(array, item) {
+  var index = array.indexOf(item);
+
+  if (index !== -1) {
+    array.splice(index, 1);
+  }
 }
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -1015,6 +1040,7 @@ var script$1 = {
     popperId: String,
     theme: String,
     isOpen: Boolean,
+    skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean
   }
@@ -1035,7 +1061,8 @@ var __vue_render__ = function() {
       class: [
         _vm.themeClass,
         {
-          "v-popper__popper--open": _vm.isOpen
+          "v-popper__popper--open": _vm.isOpen,
+          "v-popper__popper--skip-transition": _vm.skipTransition
         }
       ],
       attrs: {
@@ -1192,6 +1219,7 @@ var __vue_render__$1 = function() {
                 fn: function(ref) {
                   var popperId = ref.popperId;
                   var isOpen = ref.isOpen;
+                  var skipTransition = ref.skipTransition;
                   var trigger = ref.trigger;
                   var autoHide = ref.autoHide;
                   var hide = ref.hide;
@@ -1234,6 +1262,7 @@ var __vue_render__$1 = function() {
                               "popper-id": popperId,
                               theme: _vm.theme,
                               "is-open": isOpen,
+                              "skip-transition": skipTransition,
                               "auto-hide": autoHide,
                               "handle-resize": handleResize
                             },
@@ -1490,6 +1519,7 @@ var __vue_render__$2 = function() {
               fn: function(ref) {
                 var popperId = ref.popperId;
                 var isOpen = ref.isOpen;
+                var skipTransition = ref.skipTransition;
                 var autoHide = ref.autoHide;
                 var hide = ref.hide;
                 var handleResize = ref.handleResize;
@@ -1506,6 +1536,7 @@ var __vue_render__$2 = function() {
                         "popper-id": popperId,
                         theme: _vm.theme,
                         "is-open": isOpen,
+                        "skip-transition": skipTransition,
                         "auto-hide": autoHide,
                         "handle-resize": handleResize
                       },
