@@ -515,14 +515,17 @@ export default {
       this.$_events = []
     },
 
+    $_computeDelay (type) {
+      const delay = this.delay
+      return parseInt((delay && delay[type]) || delay || 0)
+    },
+
     $_scheduleShow (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer)
       if (skipDelay) {
         this.$_show()
       } else {
-        // defaults to 0
-        const computedDelay = parseInt((this.delay && this.delay.show) || this.delay || 0)
-        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), computedDelay)
+        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), this.$_computeDelay('show'))
       }
     },
 
@@ -531,8 +534,6 @@ export default {
       if (skipDelay) {
         this.$_hide()
       } else {
-        // defaults to 0
-        const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0)
         this.$_scheduleTimer = setTimeout(() => {
           if (!this.isOpen) {
             return
@@ -551,7 +552,7 @@ export default {
           }
 
           this.$_hide()
-        }, computedDelay)
+        }, this.$_computeDelay('hide'))
       }
     },
 
