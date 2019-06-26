@@ -170,6 +170,40 @@
 
     <section class="demo">
       <div class="section-content">
+        <h2>"Instant move" mode</h2>
+
+        <button
+          v-for="index in 5"
+          :key="index"
+          v-tooltip="{
+            content: `Hey ${index}`,
+            delay: {
+              show: 1000,
+              hide: 500,
+            },
+            instantMove: true,
+          }"
+          class="tooltip-target"
+        >
+          Hover me
+        </button>
+      </div>
+    </section>
+
+    <section class="snippets">
+      <Collapse title="Show code">
+        <div class="section-content">
+          <CodeSnippet
+            class="snippet"
+            :code="componentSnippet8"
+            lang="html"
+          />
+        </div>
+      </Collapse>
+    </section>
+
+    <section class="demo">
+      <div class="section-content">
         <h2>Manual mode</h2>
 
         <div class="form">
@@ -661,6 +695,24 @@ const componentSnippet7 = `
 </VDropdown>
 `
 
+const componentSnippet8 = `
+<button
+  v-for="index in 5"
+  :key="index"
+  v-tooltip="{
+    content: 'Hey ' + index,
+    delay: {
+      show: 1000,
+      hide: 500,
+    },
+    instantMove: true,
+  }"
+  class="tooltip-target"
+>
+  Hover me
+</button>
+`
+
 export default {
   name: 'Home',
 
@@ -691,6 +743,7 @@ export default {
       componentSnippet6,
       styleSnippet6,
       componentSnippet7,
+      componentSnippet8,
     }
   },
 
