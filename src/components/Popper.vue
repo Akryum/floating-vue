@@ -153,7 +153,9 @@ export default {
 
     instantMove: {
       type: Boolean,
-      default: false,
+      default () {
+        return getDefaultConfig(this.theme, 'instantMove')
+      },
     },
   },
 
