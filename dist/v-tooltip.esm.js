@@ -891,7 +891,7 @@ function handleGlobalClose(event) {
 function swapAttrs(node, attrFrom, attrTo) {
   var value = node.getAttribute(attrFrom);
 
-  if (typeof value !== 'undefined') {
+  if (value) {
     node.removeAttribute(attrFrom);
     node.setAttribute(attrTo, value);
   }
