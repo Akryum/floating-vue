@@ -3422,7 +3422,7 @@
             return;
           }
 
-          if (!document.body.contains(_this9._tooltipNode)) {
+          if (!_this9._tooltipNode.ownerDocument.body.contains(_this9._tooltipNode)) {
             return;
           } // if we are hiding because of a mouseleave, we must check that the new
           // reference isn't the tooltip, because in this case we don't want to hide it
