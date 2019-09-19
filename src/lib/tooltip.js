@@ -573,7 +573,7 @@ export default class Tooltip {
       if (this._isOpen === false) {
         return
       }
-      if (!document.body.contains(this._tooltipNode)) {
+      if (!this._tooltipNode.ownerDocument.body.contains(this._tooltipNode)) {
         return
       }
 
