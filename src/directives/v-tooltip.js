@@ -57,6 +57,7 @@ export const defaultOptions = {
   defaultHideOnTargetClick: true,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
+  disabled: false,
   // Options for popover
   popover: {
     defaultPlacement: 'bottom',
@@ -101,6 +102,7 @@ export function getOptions (options) {
     hideOnTargetClick: typeof options.hideOnTargetClick !== 'undefined' ? options.hideOnTargetClick : directive.options.defaultHideOnTargetClick,
     loadingClass: typeof options.loadingClass !== 'undefined' ? options.loadingClass : directive.options.defaultLoadingClass,
     loadingContent: typeof options.loadingContent !== 'undefined' ? options.loadingContent : directive.options.defaultLoadingContent,
+    disabled: typeof options.disabled !== 'undefined' ? options.disabled : directive.options.disabled,
     popperOptions: {
       ...(typeof options.popperOptions !== 'undefined' ? options.popperOptions : directive.options.defaultPopperOptions),
     },
@@ -188,6 +190,9 @@ export function destroyTooltip (el) {
 }
 
 export function bind (el, { value, oldValue, modifiers }) {
+  if (value.disabled) {
+    return
+  }
   const content = getContent(value)
   if (!content || !state.enabled) {
     destroyTooltip(el)

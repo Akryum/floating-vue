@@ -515,6 +515,7 @@ The default global options are:
 	defaultHideOnTargetClick: true,
 	// Auto destroy tooltip DOM nodes (ms)
 	disposeTimeout: 5000,
+	disabled: false,
 	// Options for popover
 	popover: {
 		defaultPlacement: 'bottom',
