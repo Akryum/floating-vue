@@ -1,4 +1,5 @@
 import * as VTooltip from './v-tooltip'
+import { destroyTooltip } from './v-tooltip'
 
 jest.mock('../lib/tooltip')
 
@@ -90,5 +91,23 @@ describe('getOptions', () => {
       loadingContent: VTooltip.defaultOptions.defaultLoadingContent,
       popperOptions: VTooltip.defaultOptions.defaultPopperOptions,
     })
+  })
+})
+
+describe('destroyTooltip', () => {
+  test('is deleted', () => {
+    const dispose = jest.fn(x => null)
+    const el = {
+      _tooltip: {
+        dispose: dispose,
+      },
+      _tooltipOldShow: {},
+    }
+
+    VTooltip.destroyTooltip(el)
+
+    expect(dispose.mock.calls.length).toBe(1)
+    expect(el._tooltip).toBeUndefined()
+    expect(el._tooltipOldShow).toBeUndefined()
   })
 })
