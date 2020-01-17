@@ -527,9 +527,9 @@ The default global options are:
 		// Inner content class
 		defaultInnerClass: 'tooltip-inner popover-inner',
 		// Arrow class
-    defaultArrowClass: 'tooltip-arrow popover-arrow',
-    // Class added when popover is open
-    defaultOpenClass: 'open',
+    		defaultArrowClass: 'tooltip-arrow popover-arrow',
+    		// Class added when popover is open
+    		defaultOpenClass: 'open',
 		defaultDelay: 0,
 		defaultTrigger: 'click',
 		defaultOffset: 0,
