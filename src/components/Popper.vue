@@ -162,6 +162,7 @@ export default {
   data () {
     return {
       isOpen: false,
+      isMounted: false,
       skipTransition: false,
     }
   },
@@ -253,7 +254,7 @@ export default {
 
     init () {
       this.$_isDisposed = false
-      this.$_mounted = false
+      this.isMounted = false
       this.$_events = []
       this.$_preventOpen = false
 
@@ -285,7 +286,7 @@ export default {
         }
       }
 
-      this.$_mounted = false
+      this.isMounted = false
       this.popperInstance = null
       this.isOpen = false
 
@@ -332,14 +333,14 @@ export default {
         this.popperInstance.scheduleUpdate()
       }
 
-      if (!this.$_mounted) {
+      if (!this.isMounted) {
         const container = this.$_findContainer(this.container, this.$_targetNode)
         if (!container) {
           console.warn('No container for popover', this)
           return
         }
         container.appendChild(this.$_popperNode)
-        this.$_mounted = true
+        this.isMounted = true
       }
 
       if (!this.popperInstance) {
@@ -448,7 +449,7 @@ export default {
           if (this.$_popperNode) {
             // Don't remove popper instance, just the HTML element
             this.$_detachPopperNode()
-            this.$_mounted = false
+            this.isMounted = false
           }
         }, disposeTime)
       }

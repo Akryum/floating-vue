@@ -20,14 +20,16 @@
         class="v-popper__inner"
         style="position: relative;"
       >
-        <div>
-          <slot />
-        </div>
+        <template v-if="isMounted">
+          <div>
+            <slot />
+          </div>
 
-        <ResizeObserver
-          v-if="handleResize"
-          @notify="$emit('resize', $event)"
-        />
+          <ResizeObserver
+            v-if="handleResize"
+            @notify="$emit('resize', $event)"
+          />
+        </template>
       </div>
 
       <div
@@ -57,6 +59,7 @@ export default {
     popperId: String,
     theme: String,
     isOpen: Boolean,
+    isMounted: Boolean,
     skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean,
