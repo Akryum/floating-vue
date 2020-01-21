@@ -3502,7 +3502,7 @@ var script = {
     id: {
       type: String,
       default: function _default() {
-        return Math.random().toString(36).substr(2, 10);
+        return "popover_".concat(Math.random().toString(36).substr(2, 10));
       }
     }
   },
@@ -3514,9 +3514,6 @@ var script = {
   computed: {
     cssClass: function cssClass() {
       return _defineProperty({}, this.openClass, this.isOpen);
-    },
-    popoverId: function popoverId() {
-      return "popover_".concat(this.id);
     }
   },
   watch: {
@@ -4154,7 +4151,7 @@ var __vue_render__ = function __vue_render__() {
       display: "inline-block"
     },
     attrs: {
-      "aria-describedby": _vm.popoverId,
+      "aria-describedby": _vm.id,
       tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
     }
   }, [_vm._t("default")], 2), _vm._v(" "), _c("div", {
@@ -4164,7 +4161,7 @@ var __vue_render__ = function __vue_render__() {
       visibility: _vm.isOpen ? "visible" : "hidden"
     },
     attrs: {
-      id: _vm.popoverId,
+      id: _vm.id,
       "aria-hidden": _vm.isOpen ? "false" : "true",
       tabindex: _vm.autoHide ? 0 : undefined
     },

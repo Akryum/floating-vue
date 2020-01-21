@@ -7,7 +7,7 @@
       ref="trigger"
       class="trigger"
       style="display: inline-block;"
-      :aria-describedby="popoverId"
+      :aria-describedby="id"
       :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
     >
       <slot />
@@ -15,7 +15,7 @@
 
     <div
       ref="popover"
-      :id="popoverId"
+      :id="id"
       :class="[popoverBaseClass, popoverClass, cssClass]"
       :style="{
         visibility: isOpen ? 'visible' : 'hidden',
@@ -168,7 +168,7 @@ export default {
 
     id: {
       type: String,
-      default: () => Math.random().toString(36).substr(2, 10),
+      default: () => `popover_${Math.random().toString(36).substr(2, 10)}`,
     }
   },
 
@@ -183,10 +183,6 @@ export default {
       return {
         [this.openClass]: this.isOpen,
       }
-    },
-
-    popoverId () {
-      return `popover_${this.id}`
     },
   },
 
