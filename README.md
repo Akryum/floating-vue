@@ -259,6 +259,14 @@ You can use an object instead of a simple string:
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
 ```
 
+### HTML content
+
+By default, content is displayed as text to help prevent XSS attacks. If the tooltip content is deemed safe, you can turn on HTML with the `contentHtml` option:
+
+```html
+<button v-tooltip="{ content: '<b>Bold</b>', contentHtml: true }">
+```
+
 ### Themes
 
 To customize your tooltips and other popovers, you can create themes:
@@ -601,7 +609,7 @@ export const config = {
       // Update popper on content resize
       handleResize: false,
       // Enable HTML content in directive
-      contentHtml: true,
+      contentHtml: false,
       // Displayed when tooltip content is loading
       loadingContent: '...',
     },
