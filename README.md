@@ -402,6 +402,7 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 - `handleResize` - Automatically update the popover position if its size changes.
 - `openGroup` - If set, will close all the open popovers that have a different `open-group` value or unset.
 - `openClass` - Class put on the popover when it's open.
+- `id` - Custom ID to override default randomly generated value.
 
 You can change the default values in the [Global options](#global-options).
 

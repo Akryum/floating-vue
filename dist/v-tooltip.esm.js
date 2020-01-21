@@ -3498,12 +3498,17 @@ var script = {
       default: function _default() {
         return directive.options.popover.defaultOpenClass;
       }
+    },
+    id: {
+      type: String,
+      default: function _default() {
+        return Math.random().toString(36).substr(2, 10);
+      }
     }
   },
   data: function data() {
     return {
-      isOpen: false,
-      id: Math.random().toString(36).substr(2, 10)
+      isOpen: false
     };
   },
   computed: {

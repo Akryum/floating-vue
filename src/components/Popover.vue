@@ -165,12 +165,16 @@ export default {
       type: [String, Array],
       default: () => directive.options.popover.defaultOpenClass,
     },
+
+    id: {
+      type: String,
+      default: () => Math.random().toString(36).substr(2, 10),
+    }
   },
 
   data () {
     return {
       isOpen: false,
-      id: Math.random().toString(36).substr(2, 10),
     }
   },
 

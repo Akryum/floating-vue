@@ -27,19 +27,3 @@ Build the library for production:
 ```
 yarn run build
 ```
-
-### Demo
-
-Run the demo:
-
-```
-cd demo-src
-yarn
-yarn run dev
-```
-
-Build the demo:
-
-```
-yarn run build
-```
