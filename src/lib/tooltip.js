@@ -3,6 +3,7 @@
 import Popper from 'popper.js'
 import { getOptions, directive } from '../directives/v-tooltip'
 import { addClasses, removeClasses, supportsPassive } from '../utils'
+import isEqual from 'lodash/isEqual'
 
 const DEFAULT_OPTIONS = {
   container: false,
@@ -130,7 +131,7 @@ export default class Tooltip {
   setOptions (options) {
     let classesUpdated = false
     const classes = (options && options.classes) || directive.options.defaultClass
-    if (this._classes !== classes) {
+    if (!isEqual(this._classes, classes)) {
       this.setClasses(classes)
       classesUpdated = true
     }
