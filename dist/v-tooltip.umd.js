@@ -2945,6 +2945,7 @@
     data: function data() {
       return {
         isOpen: false,
+        isMounted: false,
         skipTransition: false
       };
     },
@@ -3037,7 +3038,7 @@
       },
       init: function init() {
         this.$_isDisposed = false;
-        this.$_mounted = false;
+        this.isMounted = false;
         this.$_events = [];
         this.$_preventOpen = false; // Nodes
 
@@ -3066,7 +3067,7 @@
           }
         }
 
-        this.$_mounted = false;
+        this.isMounted = false;
         this.popperInstance = null;
         this.isOpen = false;
         swapAttrs(this.$_targetNode, 'data-original-title', 'title');
@@ -3109,7 +3110,7 @@
           this.popperInstance.scheduleUpdate();
         }
 
-        if (!this.$_mounted) {
+        if (!this.isMounted) {
           var container = this.$_findContainer(this.container, this.$_targetNode);
 
           if (!container) {
@@ -3118,7 +3119,7 @@
           }
 
           container.appendChild(this.$_popperNode);
-          this.$_mounted = true;
+          this.isMounted = true;
         }
 
         if (!this.popperInstance) {
@@ -3230,7 +3231,7 @@
               // Don't remove popper instance, just the HTML element
               _this4.$_detachPopperNode();
 
-              _this4.$_mounted = false;
+              _this4.isMounted = false;
             }
           }, disposeTime);
         }
@@ -3766,6 +3767,7 @@
       popperId: String,
       theme: String,
       isOpen: Boolean,
+      isMounted: Boolean,
       skipTransition: Boolean,
       autoHide: Boolean,
       handleResize: Boolean
@@ -3818,19 +3820,23 @@
               staticStyle: { position: "relative" }
             },
             [
-              _c("div", [_vm._t("default")], 2),
-              _vm._v(" "),
-              _vm.handleResize
-                ? _c("ResizeObserver", {
-                    on: {
-                      notify: function($event) {
-                        return _vm.$emit("resize", $event)
-                      }
-                    }
-                  })
+              _vm.isMounted
+                ? [
+                    _c("div", [_vm._t("default")], 2),
+                    _vm._v(" "),
+                    _vm.handleResize
+                      ? _c("ResizeObserver", {
+                          on: {
+                            notify: function($event) {
+                              return _vm.$emit("resize", $event)
+                            }
+                          }
+                        })
+                      : _vm._e()
+                  ]
                 : _vm._e()
             ],
-            1
+            2
           ),
           _vm._v(" "),
           _c("div", { ref: "arrow", staticClass: "v-popper__arrow" })
@@ -3945,6 +3951,7 @@
                   fn: function(ref) {
                     var popperId = ref.popperId;
                     var isOpen = ref.isOpen;
+                    var isMounted = ref.isMounted;
                     var skipTransition = ref.skipTransition;
                     var trigger = ref.trigger;
                     var autoHide = ref.autoHide;
@@ -3988,6 +3995,7 @@
                                 "popper-id": popperId,
                                 theme: _vm.theme,
                                 "is-open": isOpen,
+                                "is-mounted": isMounted,
                                 "skip-transition": skipTransition,
                                 "auto-hide": autoHide,
                                 "handle-resize": handleResize
@@ -4245,6 +4253,7 @@
                 fn: function(ref) {
                   var popperId = ref.popperId;
                   var isOpen = ref.isOpen;
+                  var isMounted = ref.isMounted;
                   var skipTransition = ref.skipTransition;
                   var autoHide = ref.autoHide;
                   var hide = ref.hide;
@@ -4262,6 +4271,7 @@
                           "popper-id": popperId,
                           theme: _vm.theme,
                           "is-open": isOpen,
+                          "is-mounted": isMounted,
                           "skip-transition": skipTransition,
                           "auto-hide": autoHide,
                           "handle-resize": handleResize

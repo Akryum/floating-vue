@@ -339,6 +339,7 @@ var script = {
   data: function data() {
     return {
       isOpen: false,
+      isMounted: false,
       skipTransition: false
     };
   },
@@ -431,7 +432,7 @@ var script = {
     },
     init: function init() {
       this.$_isDisposed = false;
-      this.$_mounted = false;
+      this.isMounted = false;
       this.$_events = [];
       this.$_preventOpen = false; // Nodes
 
@@ -460,7 +461,7 @@ var script = {
         }
       }
 
-      this.$_mounted = false;
+      this.isMounted = false;
       this.popperInstance = null;
       this.isOpen = false;
       swapAttrs(this.$_targetNode, 'data-original-title', 'title');
@@ -503,7 +504,7 @@ var script = {
         this.popperInstance.scheduleUpdate();
       }
 
-      if (!this.$_mounted) {
+      if (!this.isMounted) {
         var container = this.$_findContainer(this.container, this.$_targetNode);
 
         if (!container) {
@@ -512,7 +513,7 @@ var script = {
         }
 
         container.appendChild(this.$_popperNode);
-        this.$_mounted = true;
+        this.isMounted = true;
       }
 
       if (!this.popperInstance) {
@@ -624,7 +625,7 @@ var script = {
             // Don't remove popper instance, just the HTML element
             _this4.$_detachPopperNode();
 
-            _this4.$_mounted = false;
+            _this4.isMounted = false;
           }
         }, disposeTime);
       }
@@ -1047,6 +1048,7 @@ var script$1 = {
     popperId: String,
     theme: String,
     isOpen: Boolean,
+    isMounted: Boolean,
     skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean
@@ -1099,19 +1101,23 @@ var __vue_render__ = function() {
             staticStyle: { position: "relative" }
           },
           [
-            _c("div", [_vm._t("default")], 2),
-            _vm._v(" "),
-            _vm.handleResize
-              ? _c("ResizeObserver", {
-                  on: {
-                    notify: function($event) {
-                      return _vm.$emit("resize", $event)
-                    }
-                  }
-                })
+            _vm.isMounted
+              ? [
+                  _c("div", [_vm._t("default")], 2),
+                  _vm._v(" "),
+                  _vm.handleResize
+                    ? _c("ResizeObserver", {
+                        on: {
+                          notify: function($event) {
+                            return _vm.$emit("resize", $event)
+                          }
+                        }
+                      })
+                    : _vm._e()
+                ]
               : _vm._e()
           ],
-          1
+          2
         ),
         _vm._v(" "),
         _c("div", { ref: "arrow", staticClass: "v-popper__arrow" })
@@ -1226,6 +1232,7 @@ var __vue_render__$1 = function() {
                 fn: function(ref) {
                   var popperId = ref.popperId;
                   var isOpen = ref.isOpen;
+                  var isMounted = ref.isMounted;
                   var skipTransition = ref.skipTransition;
                   var trigger = ref.trigger;
                   var autoHide = ref.autoHide;
@@ -1269,6 +1276,7 @@ var __vue_render__$1 = function() {
                               "popper-id": popperId,
                               theme: _vm.theme,
                               "is-open": isOpen,
+                              "is-mounted": isMounted,
                               "skip-transition": skipTransition,
                               "auto-hide": autoHide,
                               "handle-resize": handleResize
@@ -1526,6 +1534,7 @@ var __vue_render__$2 = function() {
               fn: function(ref) {
                 var popperId = ref.popperId;
                 var isOpen = ref.isOpen;
+                var isMounted = ref.isMounted;
                 var skipTransition = ref.skipTransition;
                 var autoHide = ref.autoHide;
                 var hide = ref.hide;
@@ -1543,6 +1552,7 @@ var __vue_render__$2 = function() {
                         "popper-id": popperId,
                         theme: _vm.theme,
                         "is-open": isOpen,
+                        "is-mounted": isMounted,
                         "skip-transition": skipTransition,
                         "auto-hide": autoHide,
                         "handle-resize": handleResize
