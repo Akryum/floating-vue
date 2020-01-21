@@ -2,13 +2,32 @@
   <div class="example-component">
     <span>&lt;I'm a component!</span>
     <br>
-    <button v-if="count < 14" class="button" @click="count < 14 && count++">+</button>
-    <button v-if="count > 0" class="button" @click="count > 0 && count--">-</button>
+    <button
+      v-if="count < 14"
+      class="button"
+      @click="count < 14 && count++"
+    >
+      +
+    </button>
+    <button
+      v-if="count > 0"
+      class="button"
+      @click="count > 0 && count--"
+    >
+      -
+    </button>
     <br>
-    <transition-group tag="span" class="counter">
-			<span v-for="n in count" :key="n" class="char">{{ char }}</span>
-		</transition-group>
-		<span>/&gt;</span>
+    <transition-group
+      tag="span"
+      class="counter"
+    >
+      <span
+        v-for="n in count"
+        :key="n"
+        class="char"
+      >{{ char }}</span>
+    </transition-group>
+    <span>/&gt;</span>
   </div>
 </template>
 
@@ -25,6 +44,14 @@ export default {
     return {
       count: 0,
     }
+  },
+
+  mounted () {
+    console.log('popper child mounted')
+  },
+
+  destroyed () {
+    console.log('popper child destroyed')
   },
 }
 </script>
