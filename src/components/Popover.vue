@@ -665,7 +665,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       capture: true,
     } : true)
   } else {
-    window.addEventListener('click', handleGlobalClick, true)
+    window.addEventListener('mousedown', handleGlobalClick, true)
   }
 }
 
