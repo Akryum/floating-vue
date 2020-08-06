@@ -63,7 +63,7 @@
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-vue": "^5.0.0",
     "sass": "^1.18.0",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^9.0.3",
     "screenfull": "^3.3.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1",
