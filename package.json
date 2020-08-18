@@ -30,7 +30,7 @@
     "@babel/plugin-transform-runtime": "^7.4.0",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.2",
-    "@vue/cli-plugin-babel": "^3.5.1",
+    "@vue/cli-plugin-babel": "^4.5.4",
     "@vue/cli-plugin-eslint": "^3.5.1",
     "@vue/cli-plugin-unit-jest": "^3.5.3",
     "@vue/cli-service": "^3.5.1",
