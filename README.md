@@ -58,13 +58,13 @@ This package offers two different usages: [directive](#directive) or [component]
 
 1. Install the plugin:
 
-```
+```sh
 npm install --save v-tooltip
 ```
 
 2. Add the plugin into your app:
 
-```javascript
+```js
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 
@@ -102,13 +102,13 @@ Vue.use(VTooltip)
 
 ## Npm
 
-```
+```sh
 npm install --save v-tooltip
 ```
 
 Install the plugin into Vue:
 
-```javascript
+```js
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 
@@ -117,7 +117,7 @@ Vue.use(VTooltip)
 
 Or use the directives and components directly:
 
-```javascript
+```js
 import Vue from 'vue'
 import { VTooltip, VPopover, VClosePopover } from 'v-tooltip'
 
@@ -138,13 +138,13 @@ Include [v-tooltip](/dist/v-tooltip.min.js) in the page.
 
 Manually install the plugin into Vue:
 
-```javascript
+```js
 Vue.use(VTooltip)
 ```
 
 Or use the directives and components directly:
 
-```javascript
+```js
 Vue.directive('tooltip', VTooltip.VTooltip)
 Vue.directive('close-popover', VTooltip.VClosePopover)
 Vue.component('v-popover', VTooltip.VPopover)
@@ -174,21 +174,21 @@ You can specify the tooltip position as a modifier:
 
 The available positions are:
 
- - `'auto'`
- - `'auto-start'`
- - `'auto-end'`
- - `'top'`
- - `'top-start'`
- - `'top-end'`
- - `'right'`
- - `'right-start'`
- - `'right-end'`
- - `'bottom'`
- - `'bottom-start'`
- - `'bottom-end'`
- - `'left'`
- - `'left-start'`
- - `'left-end'`
+- `'auto'`
+- `'auto-start'`
+- `'auto-end'`
+- `'top'`
+- `'top-start'`
+- `'top-end'`
+- `'right'`
+- `'right-start'`
+- `'right-end'`
+- `'bottom'`
+- `'bottom-start'`
+- `'bottom-end'`
+- `'left'`
+- `'left-start'`
+- `'left-end'`
 
 **:warning: You need to add style to the tooltips: [examples](#style-examples).**
 
@@ -282,7 +282,7 @@ Use the `trigger` and `show` options:
 
 By default, if `trigger` contains `'hover'`, the tooltip is automatically hidden on hover or click. To disable this, set the `autoHide` option to `false`:
 
-```javascript
+```js
 VTooltip.options.autoHide = false
 ```
 
@@ -290,7 +290,7 @@ VTooltip.options.autoHide = false
 
 On mobile, you can disable the tooltips with the `VTooltip.enabled` property:
 
-```javascript
+```js
 VTooltip.enabled = window.innerWidth > 768
 ```
 
@@ -447,7 +447,7 @@ Close all the popovers in the page with the `all` modifier:
 
 The default global options are:
 
-```javascript
+```js
 {
   // Default tooltip placement relative to target element
   defaultPlacement: 'top',
@@ -516,14 +516,14 @@ The default global options are:
 
 You can change the options during install with the arguments:
 
-```javascript
+```js
 import VTooltip from 'v-tooltip'
 Vue.use(VTooltip, options)
 ```
 
 Or directly on package:
 
-```javascript
+```js
 import VTooltip from 'v-tooltip'
 // Set custom CSS class
 VTooltip.options.defaultClass = 'my-tooltip'
@@ -756,7 +756,6 @@ Bellow are some examples of style you need. [Here](https://github.com/Akryum/v-t
   transition: opacity .15s;
 }
 ```
-
 
 ---
 
