@@ -31,7 +31,10 @@
           style="position: relative;"
         >
           <div>
-            <slot name="popover" />
+            <slot
+              name="popover"
+              :is-open="isOpen"
+            />
           </div>
 
           <ResizeObserver v-if="handleResize" @notify="$_handleResize" />
