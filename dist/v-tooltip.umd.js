@@ -5052,6 +5052,7 @@
      *      [offset docs](https://popper.js.org/popper-documentation.html)
      * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
      *      [options docs](https://popper.js.org/popper-documentation.html)
+     * @param {string} [options.ariaId] Id used for accessibility
      * @return {Object} instance - The generated tooltip instance
      */
     function Tooltip(_reference, _options) {
@@ -5243,20 +5244,26 @@
     }, {
       key: "_create",
       value: function _create(reference, template) {
+        var _this2 = this;
+
         // create tooltip element
         var tooltipGenerator = window.document.createElement('div');
         tooltipGenerator.innerHTML = template.trim();
         var tooltipNode = tooltipGenerator.childNodes[0]; // add unique ID to our tooltip (needed for accessibility reasons)
 
-        tooltipNode.id = "tooltip_".concat(Math.random().toString(36).substr(2, 10)); // Initially hide the tooltip
+        tooltipNode.id = this.options.ariaId || "tooltip_".concat(Math.random().toString(36).substr(2, 10)); // Initially hide the tooltip
         // The attribute will be switched in a next frame so
         // CSS transitions can play
 
         tooltipNode.setAttribute('aria-hidden', 'true');
 
         if (this.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
-          tooltipNode.addEventListener('mouseenter', this.hide);
-          tooltipNode.addEventListener('click', this.hide);
+          tooltipNode.addEventListener('mouseenter', function (evt) {
+            return _this2._scheduleHide(reference, _this2.options.delay, _this2.options, evt);
+          });
+          tooltipNode.addEventListener('click', function (evt) {
+            return _this2._scheduleHide(reference, _this2.options.delay, _this2.options, evt);
+          });
         } // return the generated tooltip node
 
 
@@ -5265,24 +5272,26 @@
     }, {
       key: "_setContent",
       value: function _setContent(content, options) {
-        var _this2 = this;
+        var _this3 = this;
 
         this.asyncContent = false;
 
         this._applyContent(content, options).then(function () {
-          _this2.popperInstance.update();
+          if (!_this3.popperInstance) return;
+
+          _this3.popperInstance.update();
         });
       }
     }, {
       key: "_applyContent",
       value: function _applyContent(title, options) {
-        var _this3 = this;
+        var _this4 = this;
 
         return new Promise(function (resolve, reject) {
           var allowHtml = options.html;
-          var rootNode = _this3._tooltipNode;
+          var rootNode = _this4._tooltipNode;
           if (!rootNode) return;
-          var titleNode = rootNode.querySelector(_this3.options.innerSelector);
+          var titleNode = rootNode.querySelector(_this4.options.innerSelector);
 
           if (title.nodeType === 1) {
             // if title is a node, append it only if allowHtml is true
@@ -5298,19 +5307,19 @@
             var result = title();
 
             if (result && typeof result.then === 'function') {
-              _this3.asyncContent = true;
+              _this4.asyncContent = true;
               options.loadingClass && addClasses(rootNode, options.loadingClass);
 
               if (options.loadingContent) {
-                _this3._applyContent(options.loadingContent, options);
+                _this4._applyContent(options.loadingContent, options);
               }
 
               result.then(function (asyncResult) {
                 options.loadingClass && removeClasses(rootNode, options.loadingClass);
-                return _this3._applyContent(asyncResult, options);
+                return _this4._applyContent(asyncResult, options);
               }).then(resolve).catch(reject);
             } else {
-              _this3._applyContent(result, options).then(resolve).catch(reject);
+              _this4._applyContent(result, options).then(resolve).catch(reject);
             }
 
             return;
@@ -5352,7 +5361,7 @@
     }, {
       key: "_ensureShown",
       value: function _ensureShown(reference, options) {
-        var _this4 = this;
+        var _this5 = this;
 
         // don't show if it's already visible
         if (this._isOpen) {
@@ -5417,19 +5426,19 @@
 
 
         requestAnimationFrame(function () {
-          if (!_this4._isDisposed && _this4.popperInstance) {
-            _this4.popperInstance.update(); // Show the tooltip
+          if (!_this5._isDisposed && _this5.popperInstance) {
+            _this5.popperInstance.update(); // Show the tooltip
 
 
             requestAnimationFrame(function () {
-              if (!_this4._isDisposed) {
-                _this4._isOpen && tooltipNode.setAttribute('aria-hidden', 'false');
+              if (!_this5._isDisposed) {
+                _this5._isOpen && tooltipNode.setAttribute('aria-hidden', 'false');
               } else {
-                _this4.dispose();
+                _this5.dispose();
               }
             });
           } else {
-            _this4.dispose();
+            _this5.dispose();
           }
         });
         return this;
@@ -5448,7 +5457,7 @@
       value: function _hide()
       /* reference, options */
       {
-        var _this5 = this;
+        var _this6 = this;
 
         // don't hide if it's already hidden
         if (!this._isOpen) {
@@ -5464,19 +5473,22 @@
 
         this._tooltipNode.setAttribute('aria-hidden', 'true');
 
-        this.popperInstance.disableEventListeners();
+        if (this.popperInstance) {
+          this.popperInstance.disableEventListeners();
+        }
+
         clearTimeout(this._disposeTimer);
         var disposeTime = directive.options.disposeTimeout;
 
         if (disposeTime !== null) {
           this._disposeTimer = setTimeout(function () {
-            if (_this5._tooltipNode) {
-              _this5._tooltipNode.removeEventListener('mouseenter', _this5.hide);
+            if (_this6._tooltipNode) {
+              _this6._tooltipNode.removeEventListener('mouseenter', _this6.hide);
 
-              _this5._tooltipNode.removeEventListener('click', _this5.hide); // Don't remove popper instance, just the HTML element
+              _this6._tooltipNode.removeEventListener('click', _this6.hide); // Don't remove popper instance, just the HTML element
 
 
-              _this5._removeTooltipNode();
+              _this6._removeTooltipNode();
             }
           }, disposeTime);
         }
@@ -5500,7 +5512,7 @@
     }, {
       key: "_dispose",
       value: function _dispose() {
-        var _this6 = this;
+        var _this7 = this;
 
         this._isDisposed = true;
         this.reference.removeAttribute('data-original-title');
@@ -5514,7 +5526,7 @@
           var func = _ref.func,
               event = _ref.event;
 
-          _this6.reference.removeEventListener(event, func);
+          _this7.reference.removeEventListener(event, func);
         });
 
         this._events = [];
@@ -5567,7 +5579,7 @@
     }, {
       key: "_setEventListeners",
       value: function _setEventListeners(reference, events, options) {
-        var _this7 = this;
+        var _this8 = this;
 
         var directEvents = [];
         var oppositeEvents = [];
@@ -5576,13 +5588,13 @@
             case 'hover':
               directEvents.push('mouseenter');
               oppositeEvents.push('mouseleave');
-              if (_this7.options.hideOnTargetClick) oppositeEvents.push('click');
+              if (_this8.options.hideOnTargetClick) oppositeEvents.push('click');
               break;
 
             case 'focus':
               directEvents.push('focus');
               oppositeEvents.push('blur');
-              if (_this7.options.hideOnTargetClick) oppositeEvents.push('click');
+              if (_this8.options.hideOnTargetClick) oppositeEvents.push('click');
               break;
 
             case 'click':
@@ -5594,16 +5606,16 @@
 
         directEvents.forEach(function (event) {
           var func = function func(evt) {
-            if (_this7._isOpen === true) {
+            if (_this8._isOpen === true) {
               return;
             }
 
             evt.usedByTooltip = true;
 
-            _this7._scheduleShow(reference, options.delay, options, evt);
+            _this8._scheduleShow(reference, options.delay, options, evt);
           };
 
-          _this7._events.push({
+          _this8._events.push({
             event: event,
             func: func
           });
@@ -5617,10 +5629,10 @@
               return;
             }
 
-            _this7._scheduleHide(reference, options.delay, options, evt);
+            _this8._scheduleHide(reference, options.delay, options, evt);
           };
 
-          _this7._events.push({
+          _this8._events.push({
             event: event,
             func: func
           });
@@ -5640,36 +5652,36 @@
       value: function _scheduleShow(reference, delay, options
       /*, evt */
       ) {
-        var _this8 = this;
+        var _this9 = this;
 
         // defaults to 0
         var computedDelay = delay && delay.show || delay || 0;
         clearTimeout(this._scheduleTimer);
         this._scheduleTimer = window.setTimeout(function () {
-          return _this8._show(reference, options);
+          return _this9._show(reference, options);
         }, computedDelay);
       }
     }, {
       key: "_scheduleHide",
       value: function _scheduleHide(reference, delay, options, evt) {
-        var _this9 = this;
+        var _this10 = this;
 
         // defaults to 0
         var computedDelay = delay && delay.hide || delay || 0;
         clearTimeout(this._scheduleTimer);
         this._scheduleTimer = window.setTimeout(function () {
-          if (_this9._isOpen === false) {
+          if (_this10._isOpen === false) {
             return;
           }
 
-          if (!_this9._tooltipNode.ownerDocument.body.contains(_this9._tooltipNode)) {
+          if (!_this10._tooltipNode.ownerDocument.body.contains(_this10._tooltipNode)) {
             return;
           } // if we are hiding because of a mouseleave, we must check that the new
           // reference isn't the tooltip, because in this case we don't want to hide it
 
 
           if (evt.type === 'mouseleave') {
-            var isSet = _this9._setTooltipNodeEvent(evt, reference, delay, options); // if we set the new event, don't hide the tooltip yet
+            var isSet = _this10._setTooltipNodeEvent(evt, reference, delay, options); // if we set the new event, don't hide the tooltip yet
             // the new event will take care to hide it if necessary
 
 
@@ -5678,7 +5690,7 @@
             }
           }
 
-          _this9._hide(reference, options);
+          _this10._hide(reference, options);
         }, computedDelay);
       }
     }]);
@@ -5854,7 +5866,7 @@
 
     var opts = _objectSpread2({
       title: content
-    }, getOptions(_objectSpread2(_objectSpread2({}, value), {}, {
+    }, getOptions(_objectSpread2(_objectSpread2({}, _typeof(value) === 'object' ? value : {}), {}, {
       placement: getPlacement(value, modifiers)
     })));
 
@@ -6387,6 +6399,10 @@
         type: [String, Array],
         default: () => directive.options.popover.defaultOpenClass,
       },
+
+      ariaId: {
+        default: null,
+      },
     },
 
     data () {
@@ -6404,7 +6420,7 @@
       },
 
       popoverId () {
-        return `popover_${this.id}`
+        return `popover_${this.ariaId != null ? this.ariaId : this.id}`
       },
     },
 
@@ -6562,6 +6578,14 @@
           }
           container.appendChild(popoverNode);
           this.$_mounted = true;
+          this.isOpen = false;
+          if (this.popperInstance) {
+            requestAnimationFrame(() => {
+              if (!this.hidden) {
+                this.isOpen = true;
+              }
+            });
+          }
         }
 
         if (!this.popperInstance) {
@@ -7005,7 +7029,7 @@
           staticClass: "trigger",
           staticStyle: { display: "inline-block" },
           attrs: {
-            "aria-describedby": _vm.popoverId,
+            "aria-describedby": _vm.isOpen ? _vm.popoverId : undefined,
             tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
           }
         },
@@ -7048,7 +7072,7 @@
                 staticStyle: { position: "relative" }
               },
               [
-                _c("div", [_vm._t("popover")], 2),
+                _c("div", [_vm._t("popover", null, { isOpen: _vm.isOpen })], 2),
                 _vm._v(" "),
                 _vm.handleResize
                   ? _c("ResizeObserver", { on: { notify: _vm.$_handleResize } })

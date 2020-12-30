@@ -1,6 +1,6 @@
 {
   "name": "v-tooltip",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Easy tooltips with Vue 2.x",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
