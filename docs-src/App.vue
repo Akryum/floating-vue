@@ -258,7 +258,7 @@ label input {
     visibility: hidden;
     opacity: 0;
     &:not(.no-transition) {
-      transition: opacity .15s, visibility .15s;
+      transition: opacity .5s, visibility .5s;
     }
   }
 
@@ -266,7 +266,7 @@ label input {
     visibility: visible;
     opacity: 1;
     &:not(.no-transition) {
-      transition: opacity .15s;
+      transition: opacity .5s;
     }
   }
 

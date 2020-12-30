@@ -347,6 +347,14 @@ export default {
         }
         container.appendChild(popoverNode)
         this.$_mounted = true
+        this.isOpen = false
+        if (this.popperInstance) {
+          requestAnimationFrame(() => {
+            if (!this.hidden) {
+              this.isOpen = true
+            }
+          })
+        }
       }
 
       if (!this.popperInstance) {
