@@ -193,7 +193,7 @@ export default class Tooltip {
     this._enableDocumentTouch = events.indexOf('manual') === -1
 
     events = events.filter(
-      trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+      trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1,
     )
 
     // set event listeners
@@ -230,8 +230,8 @@ export default class Tooltip {
     tooltipNode.setAttribute('aria-hidden', 'true')
 
     if (this.options.autoHide && this.options.trigger.indexOf('hover') !== -1) {
-      tooltipNode.addEventListener('mouseenter', this.hide)
-      tooltipNode.addEventListener('click', this.hide)
+      tooltipNode.addEventListener('mouseenter', (evt) => this._scheduleHide(reference, this.options.delay, this.options, evt))
+      tooltipNode.addEventListener('click', (evt) => this._scheduleHide(reference, this.options.delay, this.options, evt))
     }
 
     // return the generated tooltip node
@@ -241,7 +241,7 @@ export default class Tooltip {
   _setContent (content, options) {
     this.asyncContent = false
     this._applyContent(content, options).then(() => {
-      if (!this.popperInstance) return;
+      if (!this.popperInstance) return
       this.popperInstance.update()
     })
   }
@@ -346,7 +346,7 @@ export default class Tooltip {
     // create tooltip node
     const tooltipNode = this._create(
       reference,
-      options.template
+      options.template,
     )
     this._tooltipNode = tooltipNode
 
