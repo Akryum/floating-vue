@@ -241,6 +241,7 @@ export default class Tooltip {
   _setContent (content, options) {
     this.asyncContent = false
     this._applyContent(content, options).then(() => {
+      if (!this.popperInstance) return;
       this.popperInstance.update()
     })
   }
@@ -420,7 +421,9 @@ export default class Tooltip {
     this._tooltipNode.style.display = 'none'
     this._tooltipNode.setAttribute('aria-hidden', 'true')
 
-    this.popperInstance.disableEventListeners()
+    if (this.popperInstance) {
+      this.popperInstance.disableEventListeners()
+    }
 
     clearTimeout(this._disposeTimer)
     const disposeTime = directive.options.disposeTimeout
