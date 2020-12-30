@@ -158,7 +158,7 @@ export function createTooltip (el, value, modifiers = {}) {
   const opts = {
     title: content,
     ...getOptions({
-      ...value,
+      ...(typeof value === 'object' ? value : {}),
       placement: getPlacement(value, modifiers),
     }),
   }
