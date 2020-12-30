@@ -165,6 +165,10 @@ export default {
       type: [String, Array],
       default: () => directive.options.popover.defaultOpenClass,
     },
+
+    ariaId: {
+      default: null,
+    },
   },
 
   data () {
@@ -182,7 +186,7 @@ export default {
     },
 
     popoverId () {
-      return `popover_${this.id}`
+      return `popover_${this.ariaId != null ? this.ariaId : this.id}`
     },
   },
 

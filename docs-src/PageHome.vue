@@ -155,6 +155,7 @@
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
+          aria-id="test-popper-aria-id"
           open-class="is-open"
         >
           <button class="tooltip-target b3 popover-btn">Click me</button>

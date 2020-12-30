@@ -51,6 +51,7 @@ export default class Tooltip {
    *      [offset docs](https://popper.js.org/popper-documentation.html)
    * @param {Object} options.popperOptions={} - Popper options, will be passed directly to popper instance. For more information refer to Popper.js'
    *      [options docs](https://popper.js.org/popper-documentation.html)
+   * @param {string} [options.ariaId] Id used for accessibility
    * @return {Object} instance - The generated tooltip instance
    */
   constructor (reference, options) {
@@ -221,7 +222,7 @@ export default class Tooltip {
     const tooltipNode = tooltipGenerator.childNodes[0]
 
     // add unique ID to our tooltip (needed for accessibility reasons)
-    tooltipNode.id = `tooltip_${Math.random().toString(36).substr(2, 10)}`
+    tooltipNode.id = this.options.ariaId || `tooltip_${Math.random().toString(36).substr(2, 10)}`
 
     // Initially hide the tooltip
     // The attribute will be switched in a next frame so
