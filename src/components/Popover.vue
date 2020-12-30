@@ -7,7 +7,7 @@
       ref="trigger"
       class="trigger"
       style="display: inline-block;"
-      :aria-describedby="popoverId"
+      :aria-describedby="isOpen ? popoverId : undefined"
       :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
     >
       <slot />
