@@ -1,8 +1,8 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
+import { babel } from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
 import vue from 'rollup-plugin-vue'
-import cjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
+import cjs from '@rollup/plugin-commonjs'
+import replace from '@rollup/plugin-replace'
 import postcss from 'rollup-plugin-postcss'
 import analyze from 'rollup-plugin-analyzer'
 
@@ -19,8 +19,6 @@ export default {
     }),
     babel({
       exclude: 'node_modules/**',
-      runtimeHelpers: true,
-      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
     }),
     cjs(),
     replace({
@@ -32,4 +30,5 @@ export default {
   watch: {
     include: 'src/**',
   },
+  external: [],
 }

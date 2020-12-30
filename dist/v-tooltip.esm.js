@@ -2,6 +2,8 @@ import Popper from 'popper.js';
 import { ResizeObserver } from 'vue-resize';
 
 function _typeof(obj) {
+  "@babel/helpers - typeof";
+
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {
       return typeof obj;
@@ -432,8 +434,18 @@ var _stackHas = stackHas;
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
+function createCommonjsModule(fn, basedir, module) {
+	return module = {
+		path: basedir,
+		exports: {},
+		require: function (path, base) {
+			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+		}
+	}, fn(module, module.exports), module.exports;
+}
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
 }
 
 /** Detect free variable `global` from Node.js. */
@@ -1199,10 +1211,11 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
   if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
     return false;
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(array);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
   }
   var index = -1,
       result = true,
@@ -2122,10 +2135,11 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
       return false;
     }
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(object);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
   }
   var result = true;
   stack.set(object, other);
@@ -2389,9 +2403,7 @@ var DEFAULT_OPTIONS = {
 };
 var openTooltips = [];
 
-var Tooltip =
-/*#__PURE__*/
-function () {
+var Tooltip = /*#__PURE__*/function () {
   /**
    * Create a new Tooltip.js instance
    * @class Tooltip
@@ -2458,7 +2470,7 @@ function () {
     });
 
     // apply user options over default ones
-    _options = _objectSpread2({}, DEFAULT_OPTIONS, {}, _options);
+    _options = _objectSpread2(_objectSpread2({}, DEFAULT_OPTIONS), _options);
     _reference.jquery && (_reference = _reference[0]);
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this); // cache reference and options
@@ -2766,11 +2778,11 @@ function () {
 
       this._append(tooltipNode, container);
 
-      var popperOptions = _objectSpread2({}, options.popperOptions, {
+      var popperOptions = _objectSpread2(_objectSpread2({}, options.popperOptions), {}, {
         placement: options.placement
       });
 
-      popperOptions.modifiers = _objectSpread2({}, popperOptions.modifiers, {
+      popperOptions.modifiers = _objectSpread2(_objectSpread2({}, popperOptions.modifiers), {}, {
         arrow: {
           element: this.options.arrowSelector
         }
@@ -3225,7 +3237,7 @@ function createTooltip(el, value) {
 
   var opts = _objectSpread2({
     title: content
-  }, getOptions(_objectSpread2({}, value, {
+  }, getOptions(_objectSpread2(_objectSpread2({}, value), {}, {
     placement: getPlacement(value, modifiers)
   })));
 
@@ -3267,7 +3279,7 @@ function bind(el, _ref) {
 
       tooltip.setContent(content); // Options
 
-      tooltip.setOptions(_objectSpread2({}, value, {
+      tooltip.setOptions(_objectSpread2(_objectSpread2({}, value), {}, {
         placement: getPlacement(value, modifiers)
       }));
     } else {
@@ -3367,162 +3379,156 @@ var vclosepopover = {
   }
 };
 
-function getDefault(key) {
-  var value = directive.options.popover[key];
+//
 
+function getDefault (key) {
+  const value = directive.options.popover[key];
   if (typeof value === 'undefined') {
-    return directive.options[key];
+    return directive.options[key]
   }
-
-  return value;
+  return value
 }
 
-var isIOS = false;
-
+let isIOS = false;
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
   isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
 
-var openPopovers = [];
+const openPopovers = [];
 
-var Element = function Element() {};
-
+let Element = function () {};
 if (typeof window !== 'undefined') {
   Element = window.Element;
 }
 
 var script = {
   name: 'VPopover',
+
   components: {
-    ResizeObserver: ResizeObserver
+    ResizeObserver,
   },
+
   props: {
     open: {
       type: Boolean,
-      default: false
+      default: false,
     },
+
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
+
     placement: {
       type: String,
-      default: function _default() {
-        return getDefault('defaultPlacement');
-      }
+      default: () => getDefault('defaultPlacement'),
     },
+
     delay: {
       type: [String, Number, Object],
-      default: function _default() {
-        return getDefault('defaultDelay');
-      }
+      default: () => getDefault('defaultDelay'),
     },
+
     offset: {
       type: [String, Number],
-      default: function _default() {
-        return getDefault('defaultOffset');
-      }
+      default: () => getDefault('defaultOffset'),
     },
+
     trigger: {
       type: String,
-      default: function _default() {
-        return getDefault('defaultTrigger');
-      }
+      default: () => getDefault('defaultTrigger'),
     },
+
     container: {
       type: [String, Object, Element, Boolean],
-      default: function _default() {
-        return getDefault('defaultContainer');
-      }
+      default: () => getDefault('defaultContainer'),
     },
+
     boundariesElement: {
       type: [String, Element],
-      default: function _default() {
-        return getDefault('defaultBoundariesElement');
-      }
+      default: () => getDefault('defaultBoundariesElement'),
     },
+
     popperOptions: {
       type: Object,
-      default: function _default() {
-        return getDefault('defaultPopperOptions');
-      }
+      default: () => getDefault('defaultPopperOptions'),
     },
+
     popoverClass: {
       type: [String, Array],
-      default: function _default() {
-        return getDefault('defaultClass');
-      }
+      default: () => getDefault('defaultClass'),
     },
+
     popoverBaseClass: {
       type: [String, Array],
-      default: function _default() {
-        return directive.options.popover.defaultBaseClass;
-      }
+      default: () => directive.options.popover.defaultBaseClass,
     },
+
     popoverInnerClass: {
       type: [String, Array],
-      default: function _default() {
-        return directive.options.popover.defaultInnerClass;
-      }
+      default: () => directive.options.popover.defaultInnerClass,
     },
+
     popoverWrapperClass: {
       type: [String, Array],
-      default: function _default() {
-        return directive.options.popover.defaultWrapperClass;
-      }
+      default: () => directive.options.popover.defaultWrapperClass,
     },
+
     popoverArrowClass: {
       type: [String, Array],
-      default: function _default() {
-        return directive.options.popover.defaultArrowClass;
-      }
+      default: () => directive.options.popover.defaultArrowClass,
     },
+
     autoHide: {
       type: Boolean,
-      default: function _default() {
-        return directive.options.popover.defaultAutoHide;
-      }
+      default: () => directive.options.popover.defaultAutoHide,
     },
+
     handleResize: {
       type: Boolean,
-      default: function _default() {
-        return directive.options.popover.defaultHandleResize;
-      }
+      default: () => directive.options.popover.defaultHandleResize,
     },
+
     openGroup: {
       type: String,
-      default: null
+      default: null,
     },
+
     openClass: {
       type: [String, Array],
-      default: function _default() {
-        return directive.options.popover.defaultOpenClass;
-      }
-    }
+      default: () => directive.options.popover.defaultOpenClass,
+    },
   },
-  data: function data() {
+
+  data () {
     return {
       isOpen: false,
-      id: Math.random().toString(36).substr(2, 10)
-    };
-  },
-  computed: {
-    cssClass: function cssClass() {
-      return _defineProperty({}, this.openClass, this.isOpen);
-    },
-    popoverId: function popoverId() {
-      return "popover_".concat(this.id);
+      id: Math.random().toString(36).substr(2, 10),
     }
   },
+
+  computed: {
+    cssClass () {
+      return {
+        [this.openClass]: this.isOpen,
+      }
+    },
+
+    popoverId () {
+      return `popover_${this.id}`
+    },
+  },
+
   watch: {
-    open: function open(val) {
+    open (val) {
       if (val) {
         this.show();
       } else {
         this.hide();
       }
     },
-    disabled: function disabled(val, oldVal) {
+
+    disabled (val, oldVal) {
       if (val !== oldVal) {
         if (val) {
           this.hide();
@@ -3531,128 +3537,128 @@ var script = {
         }
       }
     },
-    container: function container(val) {
-      if (this.isOpen && this.popperInstance) {
-        var popoverNode = this.$refs.popover;
-        var reference = this.$refs.trigger;
-        var container = this.$_findContainer(this.container, reference);
 
+    container (val) {
+      if (this.isOpen && this.popperInstance) {
+        const popoverNode = this.$refs.popover;
+        const reference = this.$refs.trigger;
+
+        const container = this.$_findContainer(this.container, reference);
         if (!container) {
           console.warn('No container for popover', this);
-          return;
+          return
         }
 
         container.appendChild(popoverNode);
         this.popperInstance.scheduleUpdate();
       }
     },
-    trigger: function trigger(val) {
+
+    trigger (val) {
       this.$_removeEventListeners();
       this.$_addEventListeners();
     },
-    placement: function placement(val) {
-      var _this = this;
 
-      this.$_updatePopper(function () {
-        _this.popperInstance.options.placement = val;
+    placement (val) {
+      this.$_updatePopper(() => {
+        this.popperInstance.options.placement = val;
       });
     },
+
     offset: '$_restartPopper',
+
     boundariesElement: '$_restartPopper',
+
     popperOptions: {
       handler: '$_restartPopper',
-      deep: true
-    }
+      deep: true,
+    },
   },
-  created: function created() {
+
+  created () {
     this.$_isDisposed = false;
     this.$_mounted = false;
     this.$_events = [];
     this.$_preventOpen = false;
   },
-  mounted: function mounted() {
-    var popoverNode = this.$refs.popover;
+
+  mounted () {
+    const popoverNode = this.$refs.popover;
     popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
+
     this.$_init();
 
     if (this.open) {
       this.show();
     }
   },
-  deactivated: function deactivated() {
+
+  deactivated () {
     this.hide();
   },
-  beforeDestroy: function beforeDestroy() {
+
+  beforeDestroy () {
     this.dispose();
   },
+
   methods: {
-    show: function show() {
-      var _this2 = this;
-
-      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          event = _ref2.event,
-          _ref2$skipDelay = _ref2.skipDelay,
-          _ref2$force = _ref2.force,
-          force = _ref2$force === void 0 ? false : _ref2$force;
-
+    show ({ event, skipDelay = false, force = false } = {}) {
       if (force || !this.disabled) {
         this.$_scheduleShow(event);
         this.$emit('show');
       }
-
       this.$emit('update:open', true);
       this.$_beingShowed = true;
-      requestAnimationFrame(function () {
-        _this2.$_beingShowed = false;
+      requestAnimationFrame(() => {
+        this.$_beingShowed = false;
       });
     },
-    hide: function hide() {
-      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          event = _ref3.event,
-          _ref3$skipDelay = _ref3.skipDelay;
 
+    hide ({ event, skipDelay = false } = {}) {
       this.$_scheduleHide(event);
+
       this.$emit('hide');
       this.$emit('update:open', false);
     },
-    dispose: function dispose() {
+
+    dispose () {
       this.$_isDisposed = true;
       this.$_removeEventListeners();
-      this.hide({
-        skipDelay: true
-      });
-
+      this.hide({ skipDelay: true });
       if (this.popperInstance) {
-        this.popperInstance.destroy(); // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
+        this.popperInstance.destroy();
 
+        // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
         if (!this.popperInstance.options.removeOnDestroy) {
-          var popoverNode = this.$refs.popover;
+          const popoverNode = this.$refs.popover;
           popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
         }
       }
-
       this.$_mounted = false;
       this.popperInstance = null;
       this.isOpen = false;
+
       this.$emit('dispose');
     },
-    $_init: function $_init() {
+
+    $_init () {
       if (this.trigger.indexOf('manual') === -1) {
         this.$_addEventListeners();
       }
     },
-    $_show: function $_show() {
-      var _this3 = this;
 
-      var reference = this.$refs.trigger;
-      var popoverNode = this.$refs.popover;
-      clearTimeout(this.$_disposeTimer); // Already open
+    $_show () {
+      const reference = this.$refs.trigger;
+      const popoverNode = this.$refs.popover;
 
+      clearTimeout(this.$_disposeTimer);
+
+      // Already open
       if (this.isOpen) {
-        return;
-      } // Popper is already initialized
+        return
+      }
 
-
+      // Popper is already initialized
       if (this.popperInstance) {
         this.isOpen = true;
         this.popperInstance.enableEventListeners();
@@ -3660,85 +3666,83 @@ var script = {
       }
 
       if (!this.$_mounted) {
-        var container = this.$_findContainer(this.container, reference);
-
+        const container = this.$_findContainer(this.container, reference);
         if (!container) {
           console.warn('No container for popover', this);
-          return;
+          return
         }
-
         container.appendChild(popoverNode);
         this.$_mounted = true;
       }
 
       if (!this.popperInstance) {
-        var popperOptions = _objectSpread2({}, this.popperOptions, {
-          placement: this.placement
-        });
+        const popperOptions = {
+          ...this.popperOptions,
+          placement: this.placement,
+        };
 
-        popperOptions.modifiers = _objectSpread2({}, popperOptions.modifiers, {
-          arrow: _objectSpread2({}, popperOptions.modifiers && popperOptions.modifiers.arrow, {
-            element: this.$refs.arrow
-          })
-        });
+        popperOptions.modifiers = {
+          ...popperOptions.modifiers,
+          arrow: {
+            ...popperOptions.modifiers && popperOptions.modifiers.arrow,
+            element: this.$refs.arrow,
+          },
+        };
 
         if (this.offset) {
-          var offset = this.$_getOffset();
-          popperOptions.modifiers.offset = _objectSpread2({}, popperOptions.modifiers && popperOptions.modifiers.offset, {
-            offset: offset
-          });
+          const offset = this.$_getOffset();
+
+          popperOptions.modifiers.offset = {
+            ...popperOptions.modifiers && popperOptions.modifiers.offset,
+            offset,
+          };
         }
 
         if (this.boundariesElement) {
-          popperOptions.modifiers.preventOverflow = _objectSpread2({}, popperOptions.modifiers && popperOptions.modifiers.preventOverflow, {
-            boundariesElement: this.boundariesElement
-          });
+          popperOptions.modifiers.preventOverflow = {
+            ...popperOptions.modifiers && popperOptions.modifiers.preventOverflow,
+            boundariesElement: this.boundariesElement,
+          };
         }
 
-        this.popperInstance = new Popper(reference, popoverNode, popperOptions); // Fix position
+        this.popperInstance = new Popper(reference, popoverNode, popperOptions);
 
-        requestAnimationFrame(function () {
-          if (_this3.hidden) {
-            _this3.hidden = false;
-
-            _this3.$_hide();
-
-            return;
+        // Fix position
+        requestAnimationFrame(() => {
+          if (this.hidden) {
+            this.hidden = false;
+            this.$_hide();
+            return
           }
 
-          if (!_this3.$_isDisposed && _this3.popperInstance) {
-            _this3.popperInstance.scheduleUpdate(); // Show the tooltip
+          if (!this.$_isDisposed && this.popperInstance) {
+            this.popperInstance.scheduleUpdate();
 
-
-            requestAnimationFrame(function () {
-              if (_this3.hidden) {
-                _this3.hidden = false;
-
-                _this3.$_hide();
-
-                return;
+            // Show the tooltip
+            requestAnimationFrame(() => {
+              if (this.hidden) {
+                this.hidden = false;
+                this.$_hide();
+                return
               }
 
-              if (!_this3.$_isDisposed) {
-                _this3.isOpen = true;
+              if (!this.$_isDisposed) {
+                this.isOpen = true;
               } else {
-                _this3.dispose();
+                this.dispose();
               }
             });
           } else {
-            _this3.dispose();
+            this.dispose();
           }
         });
       }
 
-      var openGroup = this.openGroup;
-
+      const openGroup = this.openGroup;
       if (openGroup) {
-        var popover;
-
-        for (var i = 0; i < openPopovers.length; i++) {
+        let popover;
+        for (let i = 0; i < openPopovers.length; i++) {
           popover = openPopovers[i];
-
           if (popover.openGroup !== openGroup) {
             popover.hide();
             popover.$emit('close-group');
@@ -3747,46 +3751,43 @@ var script = {
       }
 
       openPopovers.push(this);
+
       this.$emit('apply-show');
     },
-    $_hide: function $_hide() {
-      var _this4 = this;
 
+    $_hide () {
       // Already hidden
       if (!this.isOpen) {
-        return;
+        return
       }
 
-      var index = openPopovers.indexOf(this);
-
+      const index = openPopovers.indexOf(this);
       if (index !== -1) {
         openPopovers.splice(index, 1);
       }
 
       this.isOpen = false;
-
       if (this.popperInstance) {
         this.popperInstance.disableEventListeners();
       }
 
       clearTimeout(this.$_disposeTimer);
-      var disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout;
-
+      const disposeTime = directive.options.popover.disposeTimeout || directive.options.disposeTimeout;
       if (disposeTime !== null) {
-        this.$_disposeTimer = setTimeout(function () {
-          var popoverNode = _this4.$refs.popover;
-
+        this.$_disposeTimer = setTimeout(() => {
+          const popoverNode = this.$refs.popover;
           if (popoverNode) {
             // Don't remove popper instance, just the HTML element
             popoverNode.parentNode && popoverNode.parentNode.removeChild(popoverNode);
-            _this4.$_mounted = false;
+            this.$_mounted = false;
           }
         }, disposeTime);
       }
 
       this.$emit('apply-hide');
     },
-    $_findContainer: function $_findContainer(container, reference) {
+
+    $_findContainer (container, reference) {
       // if container is a query, get the relative element
       if (typeof container === 'string') {
         container = window.document.querySelector(container);
@@ -3794,201 +3795,178 @@ var script = {
         // if container is `false`, set it to reference parent
         container = reference.parentNode;
       }
-
-      return container;
+      return container
     },
-    $_getOffset: function $_getOffset() {
-      var typeofOffset = _typeof(this.offset);
 
-      var offset = this.offset; // One value -> switch
+    $_getOffset () {
+      const typeofOffset = typeof this.offset;
+      let offset = this.offset;
 
-      if (typeofOffset === 'number' || typeofOffset === 'string' && offset.indexOf(',') === -1) {
-        offset = "0, ".concat(offset);
+      // One value -> switch
+      if (typeofOffset === 'number' || (typeofOffset === 'string' && offset.indexOf(',') === -1)) {
+        offset = `0, ${offset}`;
       }
 
-      return offset;
+      return offset
     },
-    $_addEventListeners: function $_addEventListeners() {
-      var _this5 = this;
 
-      var reference = this.$refs.trigger;
-      var directEvents = [];
-      var oppositeEvents = [];
-      var events = typeof this.trigger === 'string' ? this.trigger.split(' ').filter(function (trigger) {
-        return ['click', 'hover', 'focus'].indexOf(trigger) !== -1;
-      }) : [];
-      events.forEach(function (event) {
+    $_addEventListeners () {
+      const reference = this.$refs.trigger;
+      const directEvents = [];
+      const oppositeEvents = [];
+
+      const events = typeof this.trigger === 'string'
+        ? this.trigger
+          .split(' ')
+          .filter(
+            trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+          )
+        : [];
+
+      events.forEach(event => {
         switch (event) {
           case 'hover':
             directEvents.push('mouseenter');
             oppositeEvents.push('mouseleave');
-            break;
-
+            break
           case 'focus':
             directEvents.push('focus');
             oppositeEvents.push('blur');
-            break;
-
+            break
           case 'click':
             directEvents.push('click');
             oppositeEvents.push('click');
-            break;
+            break
         }
-      }); // schedule show tooltip
+      });
 
-      directEvents.forEach(function (event) {
-        var func = function func(event) {
-          if (_this5.isOpen) {
-            return;
+      // schedule show tooltip
+      directEvents.forEach(event => {
+        const func = event => {
+          if (this.isOpen) {
+            return
           }
-
           event.usedByTooltip = true;
-          !_this5.$_preventOpen && _this5.show({
-            event: event
-          });
-          _this5.hidden = false;
+          !this.$_preventOpen && this.show({ event: event });
+          this.hidden = false;
         };
-
-        _this5.$_events.push({
-          event: event,
-          func: func
-        });
-
+        this.$_events.push({ event, func });
         reference.addEventListener(event, func);
-      }); // schedule hide tooltip
+      });
 
-      oppositeEvents.forEach(function (event) {
-        var func = function func(event) {
+      // schedule hide tooltip
+      oppositeEvents.forEach(event => {
+        const func = event => {
           if (event.usedByTooltip) {
-            return;
+            return
           }
-
-          _this5.hide({
-            event: event
-          });
-
-          _this5.hidden = true;
+          this.hide({ event: event });
+          this.hidden = true;
         };
-
-        _this5.$_events.push({
-          event: event,
-          func: func
-        });
-
+        this.$_events.push({ event, func });
         reference.addEventListener(event, func);
       });
     },
-    $_scheduleShow: function $_scheduleShow() {
-      var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      clearTimeout(this.$_scheduleTimer);
 
+    $_scheduleShow (event = null, skipDelay = false) {
+      clearTimeout(this.$_scheduleTimer);
       if (skipDelay) {
         this.$_show();
       } else {
         // defaults to 0
-        var computedDelay = parseInt(this.delay && this.delay.show || this.delay || 0);
+        const computedDelay = parseInt((this.delay && this.delay.show) || this.delay || 0);
         this.$_scheduleTimer = setTimeout(this.$_show.bind(this), computedDelay);
       }
     },
-    $_scheduleHide: function $_scheduleHide() {
-      var _this6 = this;
 
-      var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var skipDelay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    $_scheduleHide (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer);
-
       if (skipDelay) {
         this.$_hide();
       } else {
         // defaults to 0
-        var computedDelay = parseInt(this.delay && this.delay.hide || this.delay || 0);
-        this.$_scheduleTimer = setTimeout(function () {
-          if (!_this6.isOpen) {
-            return;
-          } // if we are hiding because of a mouseleave, we must check that the new
+        const computedDelay = parseInt((this.delay && this.delay.hide) || this.delay || 0);
+        this.$_scheduleTimer = setTimeout(() => {
+          if (!this.isOpen) {
+            return
+          }
+
+          // if we are hiding because of a mouseleave, we must check that the new
           // reference isn't the tooltip, because in this case we don't want to hide it
-
-
           if (event && event.type === 'mouseleave') {
-            var isSet = _this6.$_setTooltipNodeEvent(event); // if we set the new event, don't hide the tooltip yet
+            const isSet = this.$_setTooltipNodeEvent(event);
+
+            // if we set the new event, don't hide the tooltip yet
             // the new event will take care to hide it if necessary
-
-
             if (isSet) {
-              return;
+              return
             }
           }
 
-          _this6.$_hide();
+          this.$_hide();
         }, computedDelay);
       }
     },
-    $_setTooltipNodeEvent: function $_setTooltipNodeEvent(event) {
-      var _this7 = this;
 
-      var reference = this.$refs.trigger;
-      var popoverNode = this.$refs.popover;
-      var relatedreference = event.relatedreference || event.toElement || event.relatedTarget;
+    $_setTooltipNodeEvent (event) {
+      const reference = this.$refs.trigger;
+      const popoverNode = this.$refs.popover;
 
-      var callback = function callback(event2) {
-        var relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget; // Remove event listener after call
+      const relatedreference = event.relatedreference || event.toElement || event.relatedTarget;
 
-        popoverNode.removeEventListener(event.type, callback); // If the new reference is not the reference element
+      const callback = event2 => {
+        const relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget;
 
+        // Remove event listener after call
+        popoverNode.removeEventListener(event.type, callback);
+
+        // If the new reference is not the reference element
         if (!reference.contains(relatedreference2)) {
           // Schedule to hide tooltip
-          _this7.hide({
-            event: event2
-          });
+          this.hide({ event: event2 });
         }
       };
 
       if (popoverNode.contains(relatedreference)) {
         // listen to mouseleave on the tooltip element to be able to hide the tooltip
         popoverNode.addEventListener(event.type, callback);
-        return true;
+        return true
       }
 
-      return false;
+      return false
     },
-    $_removeEventListeners: function $_removeEventListeners() {
-      var reference = this.$refs.trigger;
-      this.$_events.forEach(function (_ref4) {
-        var func = _ref4.func,
-            event = _ref4.event;
+
+    $_removeEventListeners () {
+      const reference = this.$refs.trigger;
+      this.$_events.forEach(({ func, event }) => {
         reference.removeEventListener(event, func);
       });
       this.$_events = [];
     },
-    $_updatePopper: function $_updatePopper(cb) {
+
+    $_updatePopper (cb) {
       if (this.popperInstance) {
         cb();
         if (this.isOpen) this.popperInstance.scheduleUpdate();
       }
     },
-    $_restartPopper: function $_restartPopper() {
+
+    $_restartPopper () {
       if (this.popperInstance) {
-        var isOpen = this.isOpen;
+        const isOpen = this.isOpen;
         this.dispose();
         this.$_isDisposed = false;
         this.$_init();
-
         if (isOpen) {
-          this.show({
-            skipDelay: true,
-            force: true
-          });
+          this.show({ skipDelay: true, force: true });
         }
       }
     },
-    $_handleGlobalClose: function $_handleGlobalClose(event) {
-      var _this8 = this;
 
-      var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (this.$_beingShowed) return;
-      this.hide({
-        event: event
-      });
+    $_handleGlobalClose (event, touch = false) {
+      if (this.$_beingShowed) return
+
+      this.hide({ event: event });
 
       if (event.closePopover) {
         this.$emit('close-directive');
@@ -3998,58 +3976,52 @@ var script = {
 
       if (touch) {
         this.$_preventOpen = true;
-        setTimeout(function () {
-          _this8.$_preventOpen = false;
+        setTimeout(() => {
+          this.$_preventOpen = false;
         }, 300);
       }
     },
-    $_handleResize: function $_handleResize() {
+
+    $_handleResize () {
       if (this.isOpen && this.popperInstance) {
         this.popperInstance.scheduleUpdate();
         this.$emit('resize');
       }
-    }
-  }
+    },
+  },
 };
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
     document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
       passive: true,
-      capture: true
+      capture: true,
     } : true);
   } else {
     window.addEventListener('click', handleGlobalClick, true);
   }
 }
 
-function handleGlobalClick(event) {
+function handleGlobalClick (event) {
   handleGlobalClose(event);
 }
 
-function handleGlobalTouchend(event) {
+function handleGlobalTouchend (event) {
   handleGlobalClose(event, true);
 }
 
-function handleGlobalClose(event) {
-  var touch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-  var _loop = function _loop(i) {
-    var popover = openPopovers[i];
-
+function handleGlobalClose (event, touch = false) {
+  // Delay so that close directive has time to set values
+  for (let i = 0; i < openPopovers.length; i++) {
+    let popover = openPopovers[i];
     if (popover.$refs.popover) {
-      var contains = popover.$refs.popover.contains(event.target);
-      requestAnimationFrame(function () {
-        if (event.closeAllPopover || event.closePopover && contains || popover.autoHide && !contains) {
+      const contains = popover.$refs.popover.contains(event.target);
+      requestAnimationFrame(() => {
+        if (event.closeAllPopover || (event.closePopover && contains) || (popover.autoHide && !contains)) {
           popover.$_handleGlobalClose(event, touch);
         }
       });
     }
-  };
-
-  // Delay so that close directive has time to set values
-  for (var i = 0; i < openPopovers.length; i++) {
-    _loop(i);
   }
 }
 
@@ -4129,91 +4101,110 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
 }
 
 /* script */
-var __vue_script__ = script;
+const __vue_script__ = script;
+
 /* template */
-
-var __vue_render__ = function __vue_render__() {
+var __vue_render__ = function() {
   var _vm = this;
-
   var _h = _vm.$createElement;
-
   var _c = _vm._self._c || _h;
-
-  return _c("div", {
-    staticClass: "v-popover",
-    class: _vm.cssClass
-  }, [_c("div", {
-    ref: "trigger",
-    staticClass: "trigger",
-    staticStyle: {
-      display: "inline-block"
-    },
-    attrs: {
-      "aria-describedby": _vm.popoverId,
-      tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
-    }
-  }, [_vm._t("default")], 2), _vm._v(" "), _c("div", {
-    ref: "popover",
-    class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass],
-    style: {
-      visibility: _vm.isOpen ? "visible" : "hidden"
-    },
-    attrs: {
-      id: _vm.popoverId,
-      "aria-hidden": _vm.isOpen ? "false" : "true",
-      tabindex: _vm.autoHide ? 0 : undefined
-    },
-    on: {
-      keyup: function keyup($event) {
-        if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])) {
-          return null;
+  return _c("div", { staticClass: "v-popover", class: _vm.cssClass }, [
+    _c(
+      "div",
+      {
+        ref: "trigger",
+        staticClass: "trigger",
+        staticStyle: { display: "inline-block" },
+        attrs: {
+          "aria-describedby": _vm.popoverId,
+          tabindex: _vm.trigger.indexOf("focus") !== -1 ? 0 : undefined
         }
-
-        _vm.autoHide && _vm.hide();
-      }
-    }
-  }, [_c("div", {
-    class: _vm.popoverWrapperClass
-  }, [_c("div", {
-    ref: "inner",
-    class: _vm.popoverInnerClass,
-    staticStyle: {
-      position: "relative"
-    }
-  }, [_c("div", [_vm._t("popover")], 2), _vm._v(" "), _vm.handleResize ? _c("ResizeObserver", {
-    on: {
-      notify: _vm.$_handleResize
-    }
-  }) : _vm._e()], 1), _vm._v(" "), _c("div", {
-    ref: "arrow",
-    class: _vm.popoverArrowClass
-  })])])]);
+      },
+      [_vm._t("default")],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        ref: "popover",
+        class: [_vm.popoverBaseClass, _vm.popoverClass, _vm.cssClass],
+        style: {
+          visibility: _vm.isOpen ? "visible" : "hidden"
+        },
+        attrs: {
+          id: _vm.popoverId,
+          "aria-hidden": _vm.isOpen ? "false" : "true",
+          tabindex: _vm.autoHide ? 0 : undefined
+        },
+        on: {
+          keyup: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+            ) {
+              return null
+            }
+            _vm.autoHide && _vm.hide();
+          }
+        }
+      },
+      [
+        _c("div", { class: _vm.popoverWrapperClass }, [
+          _c(
+            "div",
+            {
+              ref: "inner",
+              class: _vm.popoverInnerClass,
+              staticStyle: { position: "relative" }
+            },
+            [
+              _c("div", [_vm._t("popover")], 2),
+              _vm._v(" "),
+              _vm.handleResize
+                ? _c("ResizeObserver", { on: { notify: _vm.$_handleResize } })
+                : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { ref: "arrow", class: _vm.popoverArrowClass })
+        ])
+      ]
+    )
+  ])
 };
-
 var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;
-/* style */
 
-var __vue_inject_styles__ = undefined;
-/* scoped */
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-var __vue_scope_id__ = undefined;
-/* module identifier */
-
-var __vue_module_identifier__ = undefined;
-/* functional template */
-
-var __vue_is_functional_template__ = false;
-/* style inject */
-
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-var __vue_component__ = normalizeComponent({
-  render: __vue_render__,
-  staticRenderFns: __vue_staticRenderFns__
-}, __vue_inject_styles__, __vue_script__, __vue_scope_id__, __vue_is_functional_template__, __vue_module_identifier__, false, undefined, undefined, undefined);
+  
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var defineProperty = (function() {
   try {
@@ -5158,8 +5149,8 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".resize-observer[data-v-b329ee4c]{position:absolute;top:0;left:0;z-index:-1;width:100%;height:100%;border:none;background-color:transparent;pointer-events:none;display:block;overflow:hidden;opacity:0}.resize-observer[data-v-b329ee4c] object{display:block;position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;pointer-events:none;z-index:-1}";
-styleInject(css);
+var css_248z = ".resize-observer[data-v-8859cc6c]{position:absolute;top:0;left:0;z-index:-1;width:100%;height:100%;border:none;background-color:transparent;pointer-events:none;display:block;overflow:hidden;opacity:0}.resize-observer[data-v-8859cc6c] object{display:block;position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;pointer-events:none;z-index:-1}";
+styleInject(css_248z);
 
 function install(Vue) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
