@@ -1,7 +1,7 @@
 import Tooltip from '../lib/tooltip'
 import { addClasses, removeClasses } from '../utils'
 
-export let state = {
+export const state = {
   enabled: true,
 }
 
@@ -131,9 +131,9 @@ export function getOptions (options) {
 }
 
 export function getPlacement (value, modifiers) {
-  var placement = value.placement
-  for (var i = 0; i < positions.length; i++) {
-    var pos = positions[i]
+  let placement = value.placement
+  for (let i = 0; i < positions.length; i++) {
+    const pos = positions[i]
     if (modifiers[pos]) {
       placement = pos
     }
@@ -154,7 +154,7 @@ export function getContent (value) {
 
 export function createTooltip (el, value, modifiers = {}) {
   const content = getContent(value)
-  let classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass
+  const classes = typeof value.classes !== 'undefined' ? value.classes : directive.options.defaultClass
   const opts = {
     title: content,
     ...getOptions({
