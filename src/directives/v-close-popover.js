@@ -2,9 +2,11 @@ import { supportsPassive } from '../utils'
 
 function addListeners (el) {
   el.addEventListener('click', onClick)
-  el.addEventListener('touchstart', onTouchStart, supportsPassive ? {
-    passive: true,
-  } : false)
+  el.addEventListener('touchstart', onTouchStart, supportsPassive
+    ? {
+        passive: true,
+      }
+    : false)
 }
 
 function removeListeners (el) {

@@ -14,8 +14,8 @@
     </div>
 
     <div
-      ref="popover"
       :id="popoverId"
+      ref="popover"
       :class="[popoverBaseClass, popoverClass, cssClass]"
       :style="{
         visibility: isOpen ? 'visible' : 'hidden',
@@ -37,9 +37,15 @@
             />
           </div>
 
-          <ResizeObserver v-if="handleResize" @notify="$_handleResize" />
+          <ResizeObserver
+            v-if="handleResize"
+            @notify="$_handleResize"
+          />
         </div>
-        <div ref="arrow" :class="popoverArrowClass"></div>
+        <div
+          ref="arrow"
+          :class="popoverArrowClass"
+        />
       </div>
     </div>
   </div>
@@ -499,10 +505,10 @@ export default {
 
       const events = typeof this.trigger === 'string'
         ? this.trigger
-          .split(' ')
-          .filter(
-            trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-          )
+            .split(' ')
+            .filter(
+              trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1,
+            )
         : []
 
       events.forEach(event => {
@@ -675,10 +681,12 @@ export default {
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
-      passive: true,
-      capture: true,
-    } : true)
+    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
+      ? {
+          passive: true,
+          capture: true,
+        }
+      : true)
   } else {
     window.addEventListener('click', handleGlobalClick, true)
   }
@@ -695,7 +703,7 @@ function handleGlobalTouchend (event) {
 function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
   for (let i = 0; i < openPopovers.length; i++) {
-    let popover = openPopovers[i]
+    const popover = openPopovers[i]
     if (popover.$refs.popover) {
       const contains = popover.$refs.popover.contains(event.target)
       requestAnimationFrame(() => {

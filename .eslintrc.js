@@ -1,18 +1,25 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module'
+    parser: 'babel-eslint',
+    ecmaVersion: 2017,
+    sourceType: 'module',
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: 'standard',
+  extends: [
+    'standard',
+    'plugin:vue/recommended',
+  ],
   // required to lint *.vue files
+  plugins: [
+    'vue',
+  ],
   env: {
     browser: true,
     jest: true,
   },
   // add your custom rules here
-  'rules': {
+  rules: {
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await
@@ -24,5 +31,5 @@ module.exports = {
     // beware of returning assignement
     'no-return-assign': 'off',
     'no-extend-native': 'warn',
-  }
+  },
 }

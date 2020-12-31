@@ -1,5 +1,4 @@
 import * as VTooltip from './v-tooltip'
-import { destroyTooltip } from './v-tooltip'
 
 jest.mock('../lib/tooltip')
 

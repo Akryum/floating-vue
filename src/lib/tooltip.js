@@ -630,10 +630,12 @@ if (typeof document !== 'undefined') {
     for (let i = 0; i < openTooltips.length; i++) {
       openTooltips[i]._onDocumentTouch(event)
     }
-  }, supportsPassive ? {
-    passive: true,
-    capture: true,
-  } : true)
+  }, supportsPassive
+    ? {
+        passive: true,
+        capture: true,
+      }
+    : true)
 }
 
 /**
