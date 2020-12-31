@@ -67,7 +67,7 @@
     "rollup-plugin-vue": "^5.0.0",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
-    "screenfull": "^3.3.2",
+    "screenfull": "^5.1.0",
     "typescript": "^4.1.3",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1",
