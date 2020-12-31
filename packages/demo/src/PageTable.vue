@@ -24,14 +24,14 @@
 <script>
 import faker from 'faker'
 
-let rows = 10
-let cols = 10
-let tableHeaders = Array.from({ length: cols }).map(
-  i => faker.random.word().toLowerCase()
+const rows = 10
+const cols = 10
+const tableHeaders = Array.from({ length: cols }).map(
+  i => faker.random.word().toLowerCase(),
 )
 
-let getTableData = () => Array.from({ length: rows }).map(i => {
-  let date = new Date(faker.date.past())
+const getTableData = () => Array.from({ length: rows }).map(i => {
+  const date = new Date(faker.date.past())
   return [
     i,
     faker.address.city(),
@@ -76,4 +76,3 @@ tr:nth-child(odd) {
   background-color: #f8f8f8;
 }
 </style>
-

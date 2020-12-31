@@ -58,21 +58,21 @@ export default {
 
 <style lang="scss" scoped>
 .example-component {
-	background: $primary-color;
-	padding: 4px 16px;
-	border-radius: 3px;
-	color: white;
-	text-align: center;
-	font-family: monospace;
-	font-size: 1.2em;
+  background: $primary-color;
+  padding: 4px 16px;
+  border-radius: 3px;
+  color: white;
+  text-align: center;
+  font-family: monospace;
+  font-size: 1.2em;
 }
 
 .button {
-	padding: 2px 6px;
+  padding: 2px 6px;
 }
 
 .counter {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .char {

@@ -139,6 +139,7 @@
         <button
           v-tooltip="{
             content: () => asyncContent('foo', 'bar'),
+            contentHtml: true,
             loadingContent: '<i>Loading...</i>',
           }"
           class="tooltip-target"
@@ -655,6 +656,7 @@ const componentSnippet6 = `
 <button
   v-tooltip="{
     content: asyncContent,
+    contentHtml: true,
     loadingContent: '<i>Loading...</i>',
   }"
 >Hover me</button>
@@ -724,7 +726,7 @@ export default {
 
   data () {
     return {
-      msg: `This is a button.`,
+      msg: 'This is a button.',
       placement: 'bottom',
       isAutoHiding: false,
       isEnabled: true,

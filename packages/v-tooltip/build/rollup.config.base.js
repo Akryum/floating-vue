@@ -1,10 +1,10 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
+import { babel } from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
 import vue from 'rollup-plugin-vue'
-import cjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
+import cjs from '@rollup/plugin-commonjs'
+import replace from '@rollup/plugin-replace'
 import { string } from 'rollup-plugin-string'
-import fs from 'fs'
+import fs from 'fs-extra'
 import CleanCSS from 'clean-css'
 import autoprefixer from 'autoprefixer'
 import css from 'rollup-plugin-css-only'
@@ -15,9 +15,7 @@ export default {
   input: 'src/index.js',
   plugins: [
     resolve({
-      jsnext: true,
-      main: true,
-      browser: true,
+      mainFields: ['module', 'jsnext', 'main', 'browser'],
     }),
     string({
       include: '**/*.svg',
@@ -30,12 +28,12 @@ export default {
     }),
     css({
       output: styles => {
+        fs.ensureDirSync('dist')
         fs.writeFileSync('dist/v-tooltip.css', new CleanCSS().minify(styles).styles)
       },
     }),
     babel({
       exclude: 'node_modules/**',
-      runtimeHelpers: true,
     }),
     cjs(),
     replace({
@@ -45,4 +43,7 @@ export default {
   watch: {
     include: 'src/**',
   },
+  external: [
+    'vue',
+  ],
 }

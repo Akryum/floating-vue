@@ -8,10 +8,11 @@ const config = Object.assign({}, base, {
     name: 'VTooltip',
     file: 'dist/v-tooltip.min.js',
     format: 'iife',
+    sourcemap: true,
+    globals: {
+      vue: 'Vue',
+    },
   },
-  external: [
-    'vue',
-  ],
 })
 
 config.plugins.push(analyze())

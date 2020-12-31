@@ -2,13 +2,15 @@ import base from './rollup.config.base'
 
 const config = Object.assign({}, base, {
   output: {
-    exports: 'named',
     name: 'v-tooltip',
-    file: 'dist/v-tooltip.umd.js',
-    format: 'umd',
+    file: 'dist/v-tooltip.esm.js',
+    format: 'es',
+    sourcemap: true,
   },
   external: [
-    'vue',
+    ...base.external,
+    'popper.js',
+    'vue-resize',
   ],
 })
 
