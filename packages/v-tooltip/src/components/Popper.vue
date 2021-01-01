@@ -298,14 +298,6 @@ export default {
       }
     },
 
-    $_autoShowHide () {
-      if (this.open) {
-        this.show()
-      } else {
-        this.hide()
-      }
-    },
-
     $_getPopperOptions () {
       const popperOptions = {
         ...this.popperOptions,
@@ -342,6 +334,39 @@ export default {
       }
 
       return popperOptions
+    },
+
+    $_scheduleShow (event = null, skipDelay = false) {
+      clearTimeout(this.$_scheduleTimer)
+
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+        hidingPopper.$_applyHide(event, true)
+        this.$_applyShow(true)
+        return
+      }
+
+      if (skipDelay) {
+        this.$_applyShow()
+      } else {
+        this.$_scheduleTimer = setTimeout(this.$_applyShow.bind(this), this.$_computeDelay('show'))
+      }
+    },
+
+    $_scheduleHide (event = null, skipDelay = false) {
+      clearTimeout(this.$_scheduleTimer)
+      if (this.isOpen) {
+        hidingPopper = this
+      }
+      if (skipDelay) {
+        this.$_applyHide(event)
+      } else {
+        this.$_scheduleTimer = setTimeout(() => this.$_applyHide(event), this.$_computeDelay('hide'))
+      }
+    },
+
+    $_computeDelay (type) {
+      const delay = this.delay
+      return parseInt((delay && delay[type]) || delay || 0)
     },
 
     $_applyShow (skipTransition = false) {
@@ -450,6 +475,14 @@ export default {
       this.$emit('apply-hide')
     },
 
+    $_autoShowHide () {
+      if (this.open) {
+        this.show()
+      } else {
+        this.hide()
+      }
+    },
+
     $_ensureContainer () {
       let container = this.container
       // if container is a query, get the relative element
@@ -518,39 +551,6 @@ export default {
         this.$_targetNodes.forEach(node => node.removeEventListener(event, handler))
       })
       this.$_events = []
-    },
-
-    $_computeDelay (type) {
-      const delay = this.delay
-      return parseInt((delay && delay[type]) || delay || 0)
-    },
-
-    $_scheduleShow (event = null, skipDelay = false) {
-      clearTimeout(this.$_scheduleTimer)
-
-      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
-        hidingPopper.$_applyHide(event, true)
-        this.$_applyShow(true)
-        return
-      }
-
-      if (skipDelay) {
-        this.$_applyShow()
-      } else {
-        this.$_scheduleTimer = setTimeout(this.$_applyShow.bind(this), this.$_computeDelay('show'))
-      }
-    },
-
-    $_scheduleHide (event = null, skipDelay = false) {
-      clearTimeout(this.$_scheduleTimer)
-      if (this.isOpen) {
-        hidingPopper = this
-      }
-      if (skipDelay) {
-        this.$_applyHide(event)
-      } else {
-        this.$_scheduleTimer = setTimeout(() => this.$_applyHide(event), this.$_computeDelay('hide'))
-      }
     },
 
     $_setTooltipNodeEvent (event) {
