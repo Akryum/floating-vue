@@ -95,7 +95,7 @@
             theme: 'info-tooltip',
             // Inline override
             placement,
-            offset: 100,
+            offset: [0, 100],
           }"
           class="tooltip-target b2"
         >
@@ -292,7 +292,7 @@
         </div>
 
         <VDropdown
-          :offset="offset"
+          :offset="[0, offset]"
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
@@ -461,7 +461,7 @@
           <VDropdown
             trigger="manual"
             :open="isOpen"
-            offset="16"
+            :offset="[0, 16]"
             :auto-hide="false"
           >
             <button class="tooltip-target b1 popover-btn">
@@ -547,7 +547,7 @@ const componentSnippet2 = `
     theme: 'info-tooltip',
     // Inline override
     placement,
-    offset: 100,
+    offset: [0, 100],
   }"
 >
   Hover me
@@ -574,7 +574,7 @@ const styleSnippet2 = `
 
 const componentSnippet3 = `
 <VDropdown
-  offset="16"
+  :offset="[0, 16]"
   :disabled="!isEnabled"
 >
   <button>Click me</button>
@@ -615,7 +615,7 @@ const componentSnippet4 = `
   <VDropdown
     trigger="manual"
     :open="isOpen"
-    offset="16"
+    :offset="[0, 16]"
     :auto-hide="false"
   >
     <button>Target</button>

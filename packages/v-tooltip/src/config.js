@@ -1,17 +1,21 @@
 export const config = {
   // Disable popper components
   disabled: false,
-  // Default position offset (px)
-  offset: 0,
+  // Default position offset [skidding, distance] (px)
+  offset: [0, 0],
   // Default container where the tooltip will be appended
   container: 'body',
   // Element used to compute position and size boundaries
-  boundariesElement: undefined,
+  boundary: undefined,
   // Skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
-  // Options passed to Popper constructor
+  // Positioning strategy
+  strategy: 'absolute',
+  // Popperjs modifiers
+  modifiers: [],
+  // Other options passed to Popperjs constructor
   popperOptions: {},
   // Themes
   themes: {
@@ -77,7 +81,7 @@ export function getDefaultConfig (theme, key) {
  * Theme CSS inheritance
  */
 export function getThemeClasses (theme) {
-  let result = [theme]
+  const result = [theme]
   let themeConfig = config.themes[theme] || {}
   do {
     // Support theme extend

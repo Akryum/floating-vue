@@ -9,7 +9,7 @@ const config = Object.assign({}, base, {
   },
   external: [
     ...base.external,
-    'popper.js',
+    /^@popperjs/,
     'vue-resize',
   ],
 })

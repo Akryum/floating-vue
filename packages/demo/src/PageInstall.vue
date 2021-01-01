@@ -69,7 +69,7 @@ const styleSnippet1 = `
     border-color: black;
   }
 
-  &[x-placement^="top"] {
+  &[data-popper-placement^="top"] {
     margin-bottom: 5px;
 
     .tooltip-arrow {
@@ -84,7 +84,7 @@ const styleSnippet1 = `
     }
   }
 
-  &[x-placement^="bottom"] {
+  &[data-popper-placement^="bottom"] {
     margin-top: 5px;
 
     .tooltip-arrow {
@@ -99,7 +99,7 @@ const styleSnippet1 = `
     }
   }
 
-  &[x-placement^="right"] {
+  &[data-popper-placement^="right"] {
     margin-left: 5px;
 
     .tooltip-arrow {
@@ -114,7 +114,7 @@ const styleSnippet1 = `
     }
   }
 
-  &[x-placement^="left"] {
+  &[data-popper-placement^="left"] {
     margin-right: 5px;
 
     .tooltip-arrow {

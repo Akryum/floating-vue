@@ -1,6 +1,7 @@
 <script>
-import Popper from 'popper.js'
+import { createPopper, placements } from '@popperjs/core'
 import { supportsPassive } from '../util/support'
+import { applyModifier } from '../util/popper'
 import { getDefaultConfig } from '../config'
 
 const SHOW_EVENT_MAP = {
@@ -73,7 +74,7 @@ export default {
       default () {
         return getDefaultConfig(this.theme, 'placement')
       },
-      validator: value => Popper.placements.includes(value),
+      validator: value => placements.includes(value),
     },
 
     delay: {
@@ -84,7 +85,7 @@ export default {
     },
 
     offset: {
-      type: [String, Number],
+      type: [Array, Function],
       default () {
         return getDefaultConfig(this.theme, 'offset')
       },
@@ -118,10 +119,25 @@ export default {
       },
     },
 
-    boundariesElement: {
+    boundary: {
       type: [String, Element],
       default () {
-        return getDefaultConfig(this.theme, 'boundariesElement')
+        return getDefaultConfig(this.theme, 'boundary')
+      },
+    },
+
+    strategy: {
+      type: String,
+      validator: value => ['absolute', 'fixed'].includes(value),
+      default () {
+        return getDefaultConfig(this.theme, 'strategy')
+      },
+    },
+
+    modifiers: {
+      type: Array,
+      default () {
+        return getDefaultConfig(this.theme, 'modifiers')
       },
     },
 
@@ -187,7 +203,7 @@ export default {
         }
 
         container.appendChild(this.$_popperNode)
-        this.popperInstance.scheduleUpdate()
+        this.popperInstance.update()
       }
     },
 
@@ -196,18 +212,13 @@ export default {
       this.$_addEventListeners()
     },
 
-    placement (val) {
-      this.$_updatePopper(() => {
-        this.popperInstance.options.placement = val
-      })
-    },
-
-    offset: '$_restartPopper',
-
-    boundariesElement: '$_restartPopper',
-
+    placement: '$_refreshPopperOptions',
+    offset: '$_refreshPopperOptions',
+    boundary: '$_refreshPopperOptions',
+    strategy: '$_refreshPopperOptions',
+    modifiers: '$_refreshPopperOptions',
     popperOptions: {
-      handler: '$_restartPopper',
+      handler: '$_refreshPopperOptions',
       deep: true,
     },
   },
@@ -279,11 +290,7 @@ export default {
 
       if (this.popperInstance) {
         this.popperInstance.destroy()
-
-        // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-        if (!this.popperInstance.options.removeOnDestroy) {
-          this.$_detachPopperNode()
-        }
+        this.$_detachPopperNode()
       }
 
       this.isMounted = false
@@ -297,7 +304,7 @@ export default {
 
     onResize () {
       if (this.isOpen && this.popperInstance) {
-        this.popperInstance.scheduleUpdate()
+        this.popperInstance.update()
         this.$emit('resize')
       }
     },
@@ -316,6 +323,44 @@ export default {
       }
     },
 
+    $_getPopperOptions () {
+      const popperOptions = {
+        ...this.popperOptions,
+        placement: this.placement,
+        strategy: this.strategy,
+        modifiers: this.modifiers,
+      }
+
+      if (!popperOptions.modifiers) {
+        popperOptions.modifiers = []
+      }
+
+      applyModifier(popperOptions.modifiers, 'arrow', {
+        element: (this.arrowNode && this.arrowNode()) || '[data-popper-arrow]',
+      })
+
+      if (this.offset) {
+        applyModifier(popperOptions.modifiers, 'offset', {
+          offset: this.offset,
+        })
+      }
+
+      if (this.boundary) {
+        applyModifier(popperOptions.modifiers, 'preventOverflow', {
+          boundary: this.boundary,
+        })
+      }
+
+      if (!this.isOpen) {
+        // Disable event listeners
+        applyModifier(popperOptions.modifiers, 'eventListeners', {
+          enabled: false,
+        })
+      }
+
+      return popperOptions
+    },
+
     $_show (skipTransition = false) {
       clearTimeout(this.$_disposeTimer)
       clearTimeout(this.$_scheduleTimer)
@@ -324,13 +369,6 @@ export default {
       // Already open
       if (this.isOpen) {
         return
-      }
-
-      // Popper is already initialized
-      if (this.popperInstance) {
-        this.isOpen = true
-        this.popperInstance.enableEventListeners()
-        this.popperInstance.scheduleUpdate()
       }
 
       if (!this.isMounted) {
@@ -344,83 +382,37 @@ export default {
       }
 
       if (!this.popperInstance) {
-        const popperOptions = {
-          ...this.popperOptions,
-          placement: this.placement,
-        }
-
-        popperOptions.modifiers = {
-          ...popperOptions.modifiers,
-          arrow: {
-            ...popperOptions.modifiers && popperOptions.modifiers.arrow,
-            element: (this.arrowNode && this.arrowNode()) || '[x-arrow]',
-          },
-        }
-
-        if (this.offset) {
-          const offset = this.$_getOffset()
-
-          popperOptions.modifiers.offset = {
-            ...popperOptions.modifiers && popperOptions.modifiers.offset,
-            offset,
-          }
-        }
-
-        if (this.boundariesElement) {
-          popperOptions.modifiers.preventOverflow = {
-            ...popperOptions.modifiers && popperOptions.modifiers.preventOverflow,
-            boundariesElement: this.boundariesElement,
-          }
-        }
-
-        this.popperInstance = new Popper(this.$_targetNode, this.$_popperNode, popperOptions)
-
-        // Fix position
-        requestAnimationFrame(() => {
-          if (this.hidden) {
-            this.hidden = false
-            this.$_hide()
-            return
-          }
-
-          if (!this.$_isDisposed && this.popperInstance) {
-            this.popperInstance.scheduleUpdate()
-
-            // Show the tooltip
-            requestAnimationFrame(() => {
-              if (this.hidden) {
-                this.hidden = false
-                this.$_hide()
-                return
-              }
-
-              if (!this.$_isDisposed) {
-                this.isOpen = true
-              } else {
-                this.dispose()
-              }
-            })
-          } else {
-            this.dispose()
-          }
-        })
+        this.popperInstance = createPopper(this.$_targetNode, this.$_popperNode, this.$_getPopperOptions())
+      } else {
+        this.popperInstance.update()
       }
 
-      const openGroup = this.openGroup
-      if (openGroup) {
-        let popover
-        for (let i = 0; i < openPoppers.length; i++) {
-          popover = openPoppers[i]
-          if (popover.openGroup !== openGroup) {
-            popover.hide()
-            popover.$emit('close-group')
+      // Allow fade-in animations
+      this.isOpen = false
+      requestAnimationFrame(() => {
+        if (this.hidden) return
+
+        this.isOpen = true
+
+        // Enable event listeners
+        this.$_refreshPopperOptions()
+
+        const openGroup = this.openGroup
+        if (openGroup) {
+          let popover
+          for (let i = 0; i < openPoppers.length; i++) {
+            popover = openPoppers[i]
+            if (popover.openGroup !== openGroup) {
+              popover.hide()
+              popover.$emit('close-group')
+            }
           }
         }
-      }
 
-      openPoppers.push(this)
+        openPoppers.push(this)
 
-      this.$emit('apply-show')
+        this.$emit('apply-show')
+      })
     },
 
     $_hide (skipTransition = false) {
@@ -438,8 +430,10 @@ export default {
       }
 
       this.isOpen = false
+
       if (this.popperInstance) {
-        this.popperInstance.disableEventListeners()
+        // Disable event listeners
+        this.$_refreshPopperOptions()
       }
 
       clearTimeout(this.$_disposeTimer)
@@ -466,18 +460,6 @@ export default {
         container = reference.parentNode
       }
       return container
-    },
-
-    $_getOffset () {
-      const typeofOffset = typeof this.offset
-      let offset = this.offset
-
-      // One value -> switch
-      if (typeofOffset === 'number' || (typeofOffset === 'string' && offset.indexOf(',') === -1)) {
-        offset = `0, ${offset}`
-      }
-
-      return offset
     },
 
     $_addEventListeners () {
@@ -508,7 +490,7 @@ export default {
           event.usedByTooltip = true
           !this.$_preventOpen && this.show({ event })
           this.hidden = false
-        }
+        },
       )
 
       // Add trigger hide events
@@ -522,7 +504,7 @@ export default {
           }
           this.hide({ event })
           this.hidden = true
-        }
+        },
       )
     },
 
@@ -609,22 +591,9 @@ export default {
       return false
     },
 
-    $_updatePopper (cb) {
+    $_refreshPopperOptions () {
       if (this.popperInstance) {
-        cb()
-        if (this.isOpen) this.popperInstance.scheduleUpdate()
-      }
-    },
-
-    $_restartPopper () {
-      if (this.popperInstance) {
-        const isOpen = this.isOpen
-        this.dispose()
-        this.$_isDisposed = false
-        this.$_init()
-        if (isOpen) {
-          this.show({ skipDelay: true, force: true })
-        }
+        this.popperInstance.setOptions(this.$_getPopperOptions())
       }
     },
 
@@ -679,7 +648,7 @@ function handleGlobalTouchend (event) {
 function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
   for (let i = 0; i < openPoppers.length; i++) {
-    let popper = openPoppers[i]
+    const popper = openPoppers[i]
     const popperContent = popper.popperNode()
     const contains = popperContent.contains(event.target)
     requestAnimationFrame(() => {

@@ -217,6 +217,14 @@ label input {
   }
 }
 
+.v-popper__popper {
+  transition: opacity .5s, visibility .5s;
+}
+
+.v-popper__popper.v-popper__popper--open {
+  transition: opacity .5s;
+}
+
 .command {
   background: darken($primary-color, 10%);
   color: white;
