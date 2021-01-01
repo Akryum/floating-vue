@@ -31,7 +31,7 @@
       <div
         ref="trigger"
         :title="title"
-        :aria-describedby="popperId"
+        :aria-describedby="isOpen ? popperId : undefined"
         :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
         class="v-popper__trigger"
       >
