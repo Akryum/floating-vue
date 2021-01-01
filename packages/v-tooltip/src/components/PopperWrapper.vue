@@ -6,7 +6,6 @@
       isOpen,
       isMounted,
       skipTransition,
-      trigger,
       autoHide,
       hide,
       handleResize,
@@ -14,7 +13,7 @@
     }"
     v-bind="$attrs"
     :theme="theme"
-    :target-node="() => $refs.trigger"
+    :target-node="getTargetNode"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
@@ -28,15 +27,7 @@
         },
       ]"
     >
-      <div
-        ref="trigger"
-        :title="title"
-        :aria-describedby="isOpen ? popperId : undefined"
-        :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
-        class="v-popper__trigger"
-      >
-        <slot />
-      </div>
+      <slot />
 
       <PopperContent
         ref="popperContent"
@@ -87,8 +78,12 @@ export default {
         return this.$options.vPopperTheme
       },
     },
+  },
 
-    title: String,
+  methods: {
+    getTargetNode () {
+      return this.$slots.default[0].elm
+    },
   },
 }
 </script>

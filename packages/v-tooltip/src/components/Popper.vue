@@ -273,7 +273,7 @@ export default {
       this.$_targetNode = this.targetNode()
       this.$_popperNode = this.popperNode()
 
-      swapAttrs(this.$_targetNode, 'title', 'data-original-title')
+      this.$_swapTargetAttrs('title', 'data-original-title')
 
       this.$_detachPopperNode()
       this.$_init()
@@ -297,7 +297,7 @@ export default {
       this.popperInstance = null
       this.isOpen = false
 
-      swapAttrs(this.$_targetNode, 'data-original-title', 'title')
+      this.$_swapTargetAttrs('data-original-title', 'title')
 
       this.$emit('dispose')
     },
@@ -397,6 +397,10 @@ export default {
         // Enable event listeners
         this.$_refreshPopperOptions()
 
+        this.$_applyAttrsToTarget({
+          'aria-describedby': this.popperId,
+        })
+
         const openGroup = this.openGroup
         if (openGroup) {
           let popover
@@ -435,6 +439,10 @@ export default {
         // Disable event listeners
         this.$_refreshPopperOptions()
       }
+
+      this.$_applyAttrsToTarget({
+        'aria-describedby': undefined,
+      })
 
       clearTimeout(this.$_disposeTimer)
       const disposeTime = getDefaultConfig(this.theme, 'disposeTimeout')
@@ -619,6 +627,31 @@ export default {
     $_detachPopperNode () {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
     },
+
+    $_swapTargetAttrs (attrFrom, attrTo) {
+      const children = [this.$_targetNode]
+      for (const el of children) {
+        const value = el.getAttribute(attrFrom)
+        if (value) {
+          el.removeAttribute(attrFrom)
+          el.setAttribute(attrTo, value)
+        }
+      }
+    },
+
+    $_applyAttrsToTarget (attrs) {
+      const children = [this.$_targetNode]
+      for (const el of children) {
+        for (const n in attrs) {
+          const value = attrs[n]
+          if (value == null) {
+            el.removeAttribute(n)
+          } else {
+            el.setAttribute(n, value)
+          }
+        }
+      }
+    },
   },
 
   render (h) {
@@ -656,14 +689,6 @@ function handleGlobalClose (event, touch = false) {
         popper.$_handleGlobalClose(event, touch)
       }
     })
-  }
-}
-
-function swapAttrs (node, attrFrom, attrTo) {
-  const value = node.getAttribute(attrFrom)
-  if (value) {
-    node.removeAttribute(attrFrom)
-    node.setAttribute(attrTo, value)
   }
 }
 
