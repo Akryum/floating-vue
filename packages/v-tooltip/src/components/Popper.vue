@@ -201,13 +201,7 @@ export default {
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
-        const container = this.$_findContainer()
-        if (!container) {
-          console.warn('No container for popover', this)
-          return
-        }
-
-        container.appendChild(this.$_popperNode)
+        this.$_ensureContainer()
         this.popperInstance.update()
       }
     },
@@ -377,12 +371,7 @@ export default {
       }
 
       if (!this.isMounted) {
-        const container = this.$_findContainer()
-        if (!container) {
-          console.warn('No container for popover', this)
-          return
-        }
-        container.appendChild(this.$_popperNode)
+        this.$_ensureContainer()
         this.isMounted = true
       }
 
@@ -464,7 +453,7 @@ export default {
       this.$emit('apply-hide')
     },
 
-    $_findContainer () {
+    $_ensureContainer () {
       let container = this.container
       // if container is a query, get the relative element
       if (typeof container === 'string') {
@@ -473,7 +462,12 @@ export default {
         // if container is `false`, set it to reference parent
         container = this.$_targetNodes[0].parentNode
       }
-      return container
+
+      if (!container) {
+        throw new Error('No container for popover: ' + this.container)
+      }
+
+      container.appendChild(this.$_popperNode)
     },
 
     $_addEventListeners () {
