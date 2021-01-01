@@ -42,7 +42,12 @@ export default {
       required: true,
     },
 
-    targetNode: {
+    targetNodes: {
+      type: Function,
+      required: true,
+    },
+
+    referenceNode: {
       type: Function,
       required: true,
     },
@@ -196,7 +201,7 @@ export default {
 
     container (val) {
       if (this.isOpen && this.popperInstance) {
-        const container = this.$_findContainer(this.container, this.$_targetNode)
+        const container = this.$_findContainer()
         if (!container) {
           console.warn('No container for popover', this)
           return
@@ -270,7 +275,7 @@ export default {
       this.$_preventOpen = false
 
       // Nodes
-      this.$_targetNode = this.targetNode()
+      this.$_targetNodes = this.targetNodes()
       this.$_popperNode = this.popperNode()
 
       this.$_swapTargetAttrs('title', 'data-original-title')
@@ -372,7 +377,7 @@ export default {
       }
 
       if (!this.isMounted) {
-        const container = this.$_findContainer(this.container, this.$_targetNode)
+        const container = this.$_findContainer()
         if (!container) {
           console.warn('No container for popover', this)
           return
@@ -382,7 +387,7 @@ export default {
       }
 
       if (!this.popperInstance) {
-        this.popperInstance = createPopper(this.$_targetNode, this.$_popperNode, this.$_getPopperOptions())
+        this.popperInstance = createPopper(this.referenceNode(), this.$_popperNode, this.$_getPopperOptions())
       } else {
         this.popperInstance.update()
       }
@@ -459,13 +464,14 @@ export default {
       this.$emit('apply-hide')
     },
 
-    $_findContainer (container, reference) {
+    $_findContainer () {
+      let container = this.container
       // if container is a query, get the relative element
       if (typeof container === 'string') {
         container = window.document.querySelector(container)
       } else if (container === false) {
         // if container is `false`, set it to reference parent
-        container = reference.parentNode
+        container = this.$_targetNodes[0].parentNode
       }
       return container
     },
@@ -482,7 +488,7 @@ export default {
         events.forEach(value => {
           const event = eventMap[value]
           this.$_events.push({ event, handler })
-          this.$_targetNode.addEventListener(event, handler)
+          this.$_targetNodes.forEach(node => node.addEventListener(event, handler))
         })
       }
 
@@ -518,7 +524,7 @@ export default {
 
     $_removeEventListeners () {
       this.$_events.forEach(({ event, handler }) => {
-        this.$_targetNode.removeEventListener(event, handler)
+        this.$_targetNodes.forEach(node => node.removeEventListener(event, handler))
       })
       this.$_events = []
     },
@@ -584,7 +590,7 @@ export default {
         this.$_popperNode.removeEventListener(event.type, callback)
 
         // If the new reference is not the reference element
-        if (!this.$_targetNode.contains(relatedreference2)) {
+        if (!this.$_targetNodes.some(node => node.contains(relatedreference2))) {
           // Schedule to hide tooltip
           this.hide({ event: event2 })
         }
@@ -629,8 +635,7 @@ export default {
     },
 
     $_swapTargetAttrs (attrFrom, attrTo) {
-      const children = [this.$_targetNode]
-      for (const el of children) {
+      for (const el of this.$_targetNodes) {
         const value = el.getAttribute(attrFrom)
         if (value) {
           el.removeAttribute(attrFrom)
@@ -640,8 +645,7 @@ export default {
     },
 
     $_applyAttrsToTarget (attrs) {
-      const children = [this.$_targetNode]
-      for (const el of children) {
+      for (const el of this.$_targetNodes) {
         for (const n in attrs) {
           const value = attrs[n]
           if (value == null) {

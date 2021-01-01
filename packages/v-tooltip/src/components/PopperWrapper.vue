@@ -13,12 +13,14 @@
     }"
     v-bind="$attrs"
     :theme="theme"
-    :target-node="getTargetNode"
+    :target-nodes="getTargetNodes"
+    :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
   >
     <div
+      ref="reference"
       class="v-popper"
       :class="[
         themeClass,
@@ -81,8 +83,8 @@ export default {
   },
 
   methods: {
-    getTargetNode () {
-      return this.$slots.default[0].elm
+    getTargetNodes () {
+      return this.$slots.default.map(vnode => vnode.elm).filter(Boolean)
     },
   },
 }

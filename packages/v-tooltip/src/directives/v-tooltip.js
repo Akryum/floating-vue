@@ -34,7 +34,8 @@ export function getOptions (el, value, modifiers) {
     options = { content: false }
   }
   options.placement = getPlacement(options, modifiers)
-  options.targetNode = () => el
+  options.targetNodes = () => [el]
+  options.referenceNode = () => el
   return options
 }
 
