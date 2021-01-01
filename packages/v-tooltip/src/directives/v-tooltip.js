@@ -55,7 +55,7 @@ export function createTooltip (el, value, modifiers) {
           // mutating `this.options` when removing props
           // from `$attrs` automatically
           theme: undefined,
-          contentHtml: undefined,
+          html: undefined,
           content: undefined,
           loadingContent: undefined,
         },

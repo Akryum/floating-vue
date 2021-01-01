@@ -35,7 +35,7 @@
       @resize="onResize"
     >
       <div
-        v-if="contentHtml"
+        v-if="html"
         v-html="finalContent"
       />
       <div
@@ -72,10 +72,10 @@ export default {
       default: 'tooltip',
     },
 
-    contentHtml: {
+    html: {
       type: Boolean,
       default () {
-        return getDefaultConfig(this.theme, 'contentHtml')
+        return getDefaultConfig(this.theme, 'html')
       },
     },
 

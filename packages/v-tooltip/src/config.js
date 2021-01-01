@@ -34,7 +34,7 @@ export const config = {
       // Update popper on content resize
       handleResize: false,
       // Enable HTML content in directive
-      contentHtml: false,
+      html: false,
       // Displayed when tooltip content is loading
       loadingContent: '...',
     },
