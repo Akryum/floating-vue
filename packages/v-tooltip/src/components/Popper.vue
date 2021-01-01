@@ -1,29 +1,14 @@
 <script>
 import { createPopper, placements } from '@popperjs/core'
-import { supportsPassive } from '../util/support'
+import { supportsPassive, isIOS } from '../util/env'
 import { applyModifier } from '../util/popper'
+import {
+  SHOW_EVENT_MAP,
+  HIDE_EVENT_MAP,
+  getEvents,
+} from '../util/events'
+import { removeFromArray } from '../util/lang'
 import { getDefaultConfig } from '../config'
-
-const SHOW_EVENT_MAP = {
-  hover: 'mouseenter',
-  focus: 'focus',
-  click: 'click',
-  touch: 'touchstart',
-}
-
-const HIDE_EVENT_MAP = {
-  hover: 'mouseleave',
-  focus: 'blur',
-  click: 'click',
-  touch: 'touchend',
-}
-
-const EVENTS = Object.keys(SHOW_EVENT_MAP)
-
-let isIOS = false
-if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-  isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-}
 
 const openPoppers = []
 let hidingPopper = null
@@ -65,6 +50,11 @@ export default {
     open: {
       type: Boolean,
       default: false,
+    },
+
+    openGroup: {
+      type: String,
+      default: null,
     },
 
     disabled: {
@@ -167,11 +157,6 @@ export default {
       },
     },
 
-    openGroup: {
-      type: String,
-      default: null,
-    },
-
     instantMove: {
       type: Boolean,
       default () {
@@ -247,12 +232,14 @@ export default {
       if (force || !this.disabled) {
         this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
+
+        // Prevent hiding with global handler
+        this.$_beingShowed = true
+        requestAnimationFrame(() => {
+          this.$_beingShowed = false
+        })
       }
       this.$emit('update:open', true)
-      this.$_beingShowed = true
-      requestAnimationFrame(() => {
-        this.$_beingShowed = false
-      })
     },
 
     hide ({ event, skipDelay = false } = {}) {
@@ -275,7 +262,10 @@ export default {
       this.$_swapTargetAttrs('title', 'data-original-title')
 
       this.$_detachPopperNode()
-      this.$_init()
+
+      if (this.trigger.indexOf('manual') === -1) {
+        this.$_addEventListeners()
+      }
 
       if (this.open) {
         this.show()
@@ -305,12 +295,6 @@ export default {
       if (this.isOpen && this.popperInstance) {
         this.popperInstance.update()
         this.$emit('resize')
-      }
-    },
-
-    $_init () {
-      if (this.trigger.indexOf('manual') === -1) {
-        this.$_addEventListeners()
       }
     },
 
@@ -360,7 +344,7 @@ export default {
       return popperOptions
     },
 
-    $_show (skipTransition = false) {
+    $_applyShow (skipTransition = false) {
       clearTimeout(this.$_disposeTimer)
       clearTimeout(this.$_scheduleTimer)
       this.skipTransition = skipTransition
@@ -413,15 +397,28 @@ export default {
       })
     },
 
-    $_hide (skipTransition = false) {
+    $_applyHide (event = null, skipTransition = false) {
       clearTimeout(this.$_scheduleTimer)
-      this.skipTransition = skipTransition
-      removeFromArray(openPoppers, this)
 
       // Already hidden
       if (!this.isOpen) {
         return
       }
+
+      // if we are hiding because of a mouseleave, we must check that the new
+      // reference isn't the tooltip, because in this case we don't want to hide it
+      if (event && event.type === 'mouseleave') {
+        const isSet = this.$_setTooltipNodeEvent(event)
+
+        // if we set the new event, don't hide the tooltip yet
+        // the new event will take care to hide it if necessary
+        if (isSet) {
+          return
+        }
+      }
+
+      this.skipTransition = skipTransition
+      removeFromArray(openPoppers, this)
 
       if (hidingPopper === this) {
         hidingPopper = null
@@ -532,15 +529,15 @@ export default {
       clearTimeout(this.$_scheduleTimer)
 
       if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
-        hidingPopper.$_hide(true)
-        this.$_show(true)
+        hidingPopper.$_applyHide(event, true)
+        this.$_applyShow(true)
         return
       }
 
       if (skipDelay) {
-        this.$_show()
+        this.$_applyShow()
       } else {
-        this.$_scheduleTimer = setTimeout(this.$_show.bind(this), this.$_computeDelay('show'))
+        this.$_scheduleTimer = setTimeout(this.$_applyShow.bind(this), this.$_computeDelay('show'))
       }
     },
 
@@ -550,27 +547,9 @@ export default {
         hidingPopper = this
       }
       if (skipDelay) {
-        this.$_hide()
+        this.$_applyHide(event)
       } else {
-        this.$_scheduleTimer = setTimeout(() => {
-          if (!this.isOpen) {
-            return
-          }
-
-          // if we are hiding because of a mouseleave, we must check that the new
-          // reference isn't the tooltip, because in this case we don't want to hide it
-          if (event && event.type === 'mouseleave') {
-            const isSet = this.$_setTooltipNodeEvent(event)
-
-            // if we set the new event, don't hide the tooltip yet
-            // the new event will take care to hide it if necessary
-            if (isSet) {
-              return
-            }
-          }
-
-          this.$_hide()
-        }, this.$_computeDelay('hide'))
+        this.$_scheduleTimer = setTimeout(() => this.$_applyHide(event), this.$_computeDelay('hide'))
       }
     },
 
@@ -687,19 +666,6 @@ function handleGlobalClose (event, touch = false) {
         popper.$_handleGlobalClose(event, touch)
       }
     })
-  }
-}
-
-function getEvents (rawEvents) {
-  let events = typeof rawEvents === 'string' ? rawEvents.split(/\s+/g) : rawEvents
-  events = events.filter(trigger => EVENTS.indexOf(trigger) !== -1)
-  return events
-}
-
-function removeFromArray (array, item) {
-  const index = array.indexOf(item)
-  if (index !== -1) {
-    array.splice(index, 1)
   }
 }
 </script>

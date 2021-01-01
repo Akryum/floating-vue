@@ -1,4 +1,4 @@
-import { supportsPassive } from '../util/support'
+import { supportsPassive } from '../util/env'
 
 function addListeners (el) {
   el.addEventListener('click', onClick)
