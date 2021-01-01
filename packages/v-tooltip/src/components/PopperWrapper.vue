@@ -50,7 +50,10 @@
         @hide="hide"
         @resize="onResize"
       >
-        <slot name="popper" />
+        <slot
+          name="popper"
+          :is-open="isOpen"
+        />
       </PopperContent>
     </div>
   </Popper>
