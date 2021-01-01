@@ -73,7 +73,7 @@
     "dropdown",
     "menu"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Akryum/vue-tooltip.git",
