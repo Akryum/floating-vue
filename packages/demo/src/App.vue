@@ -215,6 +215,11 @@ label input {
       margin-right: 12px;
     }
   }
+
+  &:not(.inline) {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .v-popper__popper {
