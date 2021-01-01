@@ -340,7 +340,7 @@ export default {
       clearTimeout(this.$_scheduleTimer)
 
       if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
-        hidingPopper.$_applyHide(event, true)
+        hidingPopper.$_applyHide(true)
         this.$_applyShow(true)
         return
       }
@@ -358,9 +358,9 @@ export default {
         hidingPopper = this
       }
       if (skipDelay) {
-        this.$_applyHide(event)
+        this.$_applyHide()
       } else {
-        this.$_scheduleTimer = setTimeout(() => this.$_applyHide(event), this.$_computeDelay('hide'))
+        this.$_scheduleTimer = setTimeout(this.$_applyHide.bind(this), this.$_computeDelay('hide'))
       }
     },
 
@@ -422,24 +422,12 @@ export default {
       })
     },
 
-    $_applyHide (event = null, skipTransition = false) {
+    $_applyHide (skipTransition = false) {
       clearTimeout(this.$_scheduleTimer)
 
       // Already hidden
       if (!this.isOpen) {
         return
-      }
-
-      // if we are hiding because of a mouseleave, we must check that the new
-      // reference isn't the tooltip, because in this case we don't want to hide it
-      if (event && event.type === 'mouseleave') {
-        const isSet = this.$_setTooltipNodeEvent(event)
-
-        // if we set the new event, don't hide the tooltip yet
-        // the new event will take care to hide it if necessary
-        if (isSet) {
-          return
-        }
       }
 
       this.skipTransition = skipTransition
@@ -551,31 +539,6 @@ export default {
         this.$_targetNodes.forEach(node => node.removeEventListener(event, handler))
       })
       this.$_events = []
-    },
-
-    $_setTooltipNodeEvent (event) {
-      const relatedreference = event.relatedreference || event.toElement || event.relatedTarget
-
-      const callback = event2 => {
-        const relatedreference2 = event2.relatedreference || event2.toElement || event2.relatedTarget
-
-        // Remove event listener after call
-        this.$_popperNode.removeEventListener(event.type, callback)
-
-        // If the new reference is not the reference element
-        if (!this.$_targetNodes.some(node => node.contains(relatedreference2))) {
-          // Schedule to hide tooltip
-          this.hide({ event: event2 })
-        }
-      }
-
-      if (this.$_popperNode.contains(relatedreference)) {
-        // listen to mouseleave on the tooltip element to be able to hide the tooltip
-        this.$_popperNode.addEventListener(event.type, callback)
-        return true
-      }
-
-      return false
     },
 
     $_refreshPopperOptions () {
