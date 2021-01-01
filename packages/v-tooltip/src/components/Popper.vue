@@ -234,9 +234,9 @@ export default {
         this.$emit('show')
 
         // Prevent hiding with global handler
-        this.$_beingShowed = true
+        this.$_showFrameLocked = true
         requestAnimationFrame(() => {
-          this.$_beingShowed = false
+          this.$_showFrameLocked = false
         })
       }
       this.$emit('update:open', true)
@@ -253,7 +253,7 @@ export default {
       this.$_isDisposed = false
       this.isMounted = false
       this.$_events = []
-      this.$_preventOpen = false
+      this.$_preventShow = false
 
       // Nodes
       this.$_targetNodes = this.targetNodes()
@@ -343,6 +343,7 @@ export default {
     },
 
     $_scheduleShow (event = null, skipDelay = false) {
+      this.$_hideInProgress = false
       clearTimeout(this.$_scheduleTimer)
 
       if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
@@ -359,10 +360,13 @@ export default {
     },
 
     $_scheduleHide (event = null, skipDelay = false) {
+      this.$_hideInProgress = true
       clearTimeout(this.$_scheduleTimer)
+
       if (this.isOpen) {
         hidingPopper = this
       }
+
       if (skipDelay) {
         this.$_applyHide()
       } else {
@@ -399,7 +403,7 @@ export default {
       // Allow fade-in animations
       this.isOpen = false
       requestAnimationFrame(() => {
-        if (this.hidden) return
+        if (this.$_hideInProgress) return
 
         this.isOpen = true
 
@@ -520,8 +524,8 @@ export default {
             return
           }
           event.usedByTooltip = true
-          !this.$_preventOpen && this.show({ event })
-          this.hidden = false
+          // Prevent open on mobile touch in global close
+          !this.$_preventShow && this.show({ event })
         },
       )
 
@@ -535,7 +539,6 @@ export default {
             return
           }
           this.hide({ event })
-          this.hidden = true
         },
       )
     },
@@ -548,7 +551,7 @@ export default {
     },
 
     $_handleGlobalClose (event, touch = false) {
-      if (this.$_beingShowed) return
+      if (this.$_showFrameLocked) return
 
       this.hide({ event: event })
 
@@ -559,9 +562,9 @@ export default {
       }
 
       if (touch) {
-        this.$_preventOpen = true
+        this.$_preventShow = true
         setTimeout(() => {
-          this.$_preventOpen = false
+          this.$_preventShow = false
         }, 300)
       }
     },
