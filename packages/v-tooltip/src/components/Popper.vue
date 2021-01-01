@@ -5,7 +5,6 @@ import { applyModifier } from '../util/popper'
 import {
   SHOW_EVENT_MAP,
   HIDE_EVENT_MAP,
-  getEvents,
 } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { getDefaultConfig } from '../config'
@@ -86,24 +85,24 @@ export default {
       },
     },
 
-    trigger: {
-      type: [String, Array],
+    triggers: {
+      type: Array,
       default () {
-        return getDefaultConfig(this.theme, 'trigger')
+        return getDefaultConfig(this.theme, 'triggers')
       },
     },
 
-    triggerShow: {
-      type: [String, Array, Function],
+    showTriggers: {
+      type: [Array, Function],
       default () {
-        return getDefaultConfig(this.theme, 'triggerShow')
+        return getDefaultConfig(this.theme, 'showTriggers')
       },
     },
 
-    triggerHide: {
-      type: [String, Array, Function],
+    hideTriggers: {
+      type: [Array, Function],
       default () {
-        return getDefaultConfig(this.theme, 'triggerHide')
+        return getDefaultConfig(this.theme, 'hideTriggers')
       },
     },
 
@@ -184,14 +183,14 @@ export default {
       }
     },
 
-    container (val) {
+    container () {
       if (this.isOpen && this.popperInstance) {
         this.$_ensureContainer()
         this.popperInstance.update()
       }
     },
 
-    trigger (val) {
+    triggers () {
       this.$_removeEventListeners()
       this.$_addEventListeners()
     },
@@ -263,7 +262,7 @@ export default {
 
       this.$_detachPopperNode()
 
-      if (this.trigger.indexOf('manual') === -1) {
+      if (this.triggers.length) {
         this.$_addEventListeners()
       }
 
@@ -499,25 +498,28 @@ export default {
     },
 
     $_addEventListeners () {
-      const bothEvents = getEvents(this.trigger)
+      const commonTriggers = this.triggers
 
-      const addEvents = (customTrigger, eventMap, handler) => {
-        let events = bothEvents
+      const addEvents = (eventMap, customTrigger, handler) => {
+        let triggers = commonTriggers
+
         if (customTrigger != null) {
-          events = getEvents(typeof customTrigger === 'function' ? customTrigger(events) : customTrigger)
+          triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
         }
 
-        events.forEach(value => {
-          const event = eventMap[value]
-          this.$_events.push({ event, handler })
-          this.$_targetNodes.forEach(node => node.addEventListener(event, handler))
+        triggers.forEach(trigger => {
+          const eventType = eventMap[trigger]
+          if (eventType) {
+            this.$_events.push({ eventType, handler })
+            this.$_targetNodes.forEach(node => node.addEventListener(eventType, handler))
+          }
         })
       }
 
       // Add trigger show events
       addEvents(
-        this.triggerShow,
         SHOW_EVENT_MAP,
+        this.showTriggers,
         // Handle show
         event => {
           if (this.isOpen) {
@@ -531,8 +533,8 @@ export default {
 
       // Add trigger hide events
       addEvents(
-        this.triggerHide,
         HIDE_EVENT_MAP,
+        this.hideTriggers,
         // Handle hide
         event => {
           if (event.usedByTooltip) {
@@ -544,8 +546,8 @@ export default {
     },
 
     $_removeEventListeners () {
-      this.$_events.forEach(({ event, handler }) => {
-        this.$_targetNodes.forEach(node => node.removeEventListener(event, handler))
+      this.$_events.forEach(({ eventType, handler }) => {
+        this.$_targetNodes.forEach(node => node.removeEventListener(eventType, handler))
       })
       this.$_events = []
     },

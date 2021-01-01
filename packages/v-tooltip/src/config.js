@@ -23,9 +23,9 @@ export const config = {
       // Default tooltip placement relative to target element
       placement: 'top',
       // Default events that trigger the tooltip
-      trigger: ['hover', 'focus', 'touch'],
+      triggers: ['hover', 'focus', 'touch'],
       // Close tooltip on click on tooltip target
-      triggerHide: events => [...events, 'click'],
+      hideTriggers: events => [...events, 'click'],
       // Delay (ms)
       delay: {
         show: 200,
@@ -42,7 +42,7 @@ export const config = {
       // Default dropdown placement relative to target element
       placement: 'bottom',
       // Default events that trigger the dropdown
-      trigger: ['click'],
+      triggers: ['click'],
       // Delay (ms)
       delay: 0,
       // Update popper on content resize

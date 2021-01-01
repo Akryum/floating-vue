@@ -61,7 +61,7 @@ window.manualTooltip = () => {
   const tooltip = createTooltip(el, {
     content: 'This is a manual tooltip',
     placement: 'bottom',
-    trigger: 'manual',
+    triggers: [],
   })
   tooltip.show()
   setTimeout(() => {

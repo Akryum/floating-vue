@@ -235,7 +235,7 @@
             v-tooltip="{
               content: msg,
               open: isOpen,
-              trigger: 'manual',
+              triggers: [],
               placement: 'bottom',
             }"
             class="tooltip-target"
@@ -459,7 +459,7 @@
           </div>
 
           <VDropdown
-            trigger="manual"
+            :triggers="[]"
             :open="isOpen"
             :offset="[0, 16]"
             :auto-hide="false"
@@ -613,7 +613,7 @@ const componentSnippet4 = `
   </div>
 
   <VDropdown
-    trigger="manual"
+    :triggers="[]"
     :open="isOpen"
     :offset="[0, 16]"
     :auto-hide="false"
@@ -645,7 +645,7 @@ const componentSnippet5 = `
     v-tooltip="{
       content: msg,
       open: isOpen,
-      trigger: 'manual',
+      triggers: [],
       placement: 'bottom',
     }"
   >A button</button>
