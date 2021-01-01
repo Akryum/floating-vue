@@ -336,6 +336,12 @@ export default {
       return popperOptions
     },
 
+    $_refreshPopperOptions () {
+      if (this.popperInstance) {
+        this.popperInstance.setOptions(this.$_getPopperOptions())
+      }
+    },
+
     $_scheduleShow (event = null, skipDelay = false) {
       clearTimeout(this.$_scheduleTimer)
 
@@ -539,12 +545,6 @@ export default {
         this.$_targetNodes.forEach(node => node.removeEventListener(event, handler))
       })
       this.$_events = []
-    },
-
-    $_refreshPopperOptions () {
-      if (this.popperInstance) {
-        this.popperInstance.setOptions(this.$_getPopperOptions())
-      }
     },
 
     $_handleGlobalClose (event, touch = false) {
