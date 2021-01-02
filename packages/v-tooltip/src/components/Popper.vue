@@ -422,6 +422,7 @@ export default {
 
         this.$_applyAttrsToTarget({
           'aria-describedby': this.popperId,
+          'data-popper-shown': '',
         })
 
         const showGroup = this.showGroup
@@ -466,6 +467,7 @@ export default {
 
       this.$_applyAttrsToTarget({
         'aria-describedby': undefined,
+        'data-popper-shown': undefined,
       })
 
       clearTimeout(this.$_disposeTimer)
