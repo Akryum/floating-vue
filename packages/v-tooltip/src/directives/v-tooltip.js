@@ -9,7 +9,7 @@ const TARGET_CLASS = 'v-popper--has-tooltip'
  * Support placement as directive modifier
  */
 export function getPlacement (options, modifiers) {
-  var result = options.placement
+  let result = options.placement
   if (!result && modifiers) {
     for (const pos of placements) {
       if (modifiers[pos]) {
