@@ -56,6 +56,11 @@ export default {
       default: null,
     },
 
+    // eslint-disable-next-line vue/require-prop-types
+    ariaId: {
+      default: null,
+    },
+
     disabled: {
       type: Boolean,
       default () {
@@ -172,6 +177,12 @@ export default {
     }
   },
 
+  computed: {
+    popperId () {
+      return this.ariaId != null ? this.ariaId : this.randomId
+    },
+  },
+
   watch: {
     open: '$_autoShowHide',
 
@@ -207,7 +218,7 @@ export default {
   },
 
   created () {
-    this.popperId = `popper_${Math.random().toString(36).substr(2, 10)}`
+    this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substr(2, 10)).join('_')}`
   },
 
   mounted () {

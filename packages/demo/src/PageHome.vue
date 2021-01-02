@@ -96,6 +96,7 @@
             // Inline override
             placement,
             offset: [0, 100],
+            ariaId: 'test-id',
           }"
           class="tooltip-target b2"
         >
