@@ -5,7 +5,6 @@ import 'v-tooltip/dist/v-tooltip.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
-const PageTable = () => import('./PageTable.vue')
 
 Vue.use(VTooltip, {
   disposeTimeout: 5000,
@@ -43,7 +42,8 @@ const router = new VueRouter({
   routes: [
     { path: '/', name: 'home', component: PageHome },
     { path: '/install', name: 'install', component: PageInstall },
-    { path: '/table', name: 'table', component: PageTable },
+    { path: '/table', name: 'table', component: () => import('./PageTable.vue') },
+    { path: '/hover-dropdown', name: 'hover-dropdown', component: () => import('./PageHoverDropdown.vue') },
     { path: '*', redirect: '/' },
   ],
 })
