@@ -11,6 +11,8 @@ export const config = {
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
+  // Triggers on the popper itself
+  popperTriggers: [],
   // Positioning strategy
   strategy: 'absolute',
   // Popperjs modifiers
@@ -49,6 +51,15 @@ export const config = {
       handleResize: true,
       // Hide on clock outside
       autoHide: true,
+    },
+    menu: {
+      $extend: 'dropdown',
+      triggers: ['hover', 'focus'],
+      popperTriggers: ['hover', 'focus'],
+      delay: {
+        show: 0,
+        hide: 400,
+      },
     },
   },
 }

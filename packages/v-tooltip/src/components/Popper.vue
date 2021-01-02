@@ -111,6 +111,27 @@ export default {
       },
     },
 
+    popperTriggers: {
+      type: Array,
+      default () {
+        return getDefaultConfig(this.theme, 'popperTriggers')
+      },
+    },
+
+    popperShowTriggers: {
+      type: [Array, Function],
+      default () {
+        return getDefaultConfig(this.theme, 'popperShowTriggers')
+      },
+    },
+
+    popperHideTriggers: {
+      type: [Array, Function],
+      default () {
+        return getDefaultConfig(this.theme, 'popperHideTriggers')
+      },
+    },
+
     container: {
       type: [String, Object, Element, Boolean],
       default () {
@@ -511,9 +532,7 @@ export default {
     },
 
     $_addEventListeners () {
-      const commonTriggers = this.triggers
-
-      const addEvents = (eventMap, customTrigger, handler) => {
+      const addEvents = (targetNodes, eventMap, commonTriggers, customTrigger, handler) => {
         let triggers = commonTriggers
 
         if (customTrigger != null) {
@@ -523,44 +542,42 @@ export default {
         triggers.forEach(trigger => {
           const eventType = eventMap[trigger]
           if (eventType) {
-            this.$_events.push({ eventType, handler })
-            this.$_targetNodes.forEach(node => node.addEventListener(eventType, handler))
+            this.$_events.push({ targetNodes, eventType, handler })
+            targetNodes.forEach(node => node.addEventListener(eventType, handler))
           }
         })
       }
 
       // Add trigger show events
-      addEvents(
-        SHOW_EVENT_MAP,
-        this.showTriggers,
-        // Handle show
-        event => {
-          if (this.isShown) {
-            return
-          }
-          event.usedByTooltip = true
-          // Prevent open on mobile touch in global close
-          !this.$_preventShow && this.show({ event })
-        },
-      )
+
+      const handleShow = event => {
+        if (this.isShown && !this.$_hideInProgress) {
+          return
+        }
+        event.usedByTooltip = true
+        // Prevent open on mobile touch in global close
+        !this.$_preventShow && this.show({ event })
+      }
+
+      addEvents(this.$_targetNodes, SHOW_EVENT_MAP, this.triggers, this.showTriggers, handleShow)
+      addEvents([this.$_popperNode], SHOW_EVENT_MAP, this.popperTriggers, this.popperShowTriggers, handleShow)
 
       // Add trigger hide events
-      addEvents(
-        HIDE_EVENT_MAP,
-        this.hideTriggers,
-        // Handle hide
-        event => {
-          if (event.usedByTooltip) {
-            return
-          }
-          this.hide({ event })
-        },
-      )
+
+      const handleHide = event => {
+        if (event.usedByTooltip) {
+          return
+        }
+        this.hide({ event })
+      }
+
+      addEvents(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
+      addEvents([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
     },
 
     $_removeEventListeners () {
-      this.$_events.forEach(({ eventType, handler }) => {
-        this.$_targetNodes.forEach(node => node.removeEventListener(eventType, handler))
+      this.$_events.forEach(({ targetNodes, eventType, handler }) => {
+        targetNodes.forEach(node => node.removeEventListener(eventType, handler))
       })
       this.$_events = []
     },

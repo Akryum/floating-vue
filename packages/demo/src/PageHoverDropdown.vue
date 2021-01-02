@@ -1,9 +1,7 @@
 <template>
   <div class="box">
-    <VDropdown
-      :triggers="['hover']"
+    <VMenu
       :offset="[0, 16]"
-      :auto-hide="false"
       placement="right"
     >
       <button class="tooltip-target b1 popover-btn">Target</button>
@@ -11,7 +9,7 @@
       <template #popper>
         Hello
       </template>
-    </VDropdown>
+    </VMenu>
 
     <VDropdown
       :triggers="['hover']"

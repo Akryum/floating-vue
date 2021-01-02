@@ -3,6 +3,7 @@ import { config } from './config'
 import 'vue-resize/dist/vue-resize.css'
 // Components
 import PrivateDropdown from './components/Dropdown.vue'
+import PrivateMenu from './components/Menu.vue'
 import PrivatePopper from './components/Popper.vue'
 import PrivatePopperContent from './components/PopperContent.vue'
 import PrivatePopperMethods from './components/PopperMethods'
@@ -43,10 +44,15 @@ export function install (Vue, options = {}) {
   Vue.directive('tooltip', PrivateVTooltip)
   Vue.directive('close-popper', PrivateVClosePopper)
   // Components
-  Vue.component('v-dropdown', PrivateDropdown)
-  Vue.component('VDropdown', PrivateDropdown)
+  // eslint-disable-next-line vue/component-definition-name-casing
   Vue.component('v-tooltip', PrivateTooltip)
   Vue.component('VTooltip', PrivateTooltip)
+  // eslint-disable-next-line vue/component-definition-name-casing
+  Vue.component('v-dropdown', PrivateDropdown)
+  Vue.component('VDropdown', PrivateDropdown)
+  // eslint-disable-next-line vue/component-definition-name-casing
+  Vue.component('v-menu', PrivateMenu)
+  Vue.component('VMenu', PrivateMenu)
 }
 
 const plugin = {
