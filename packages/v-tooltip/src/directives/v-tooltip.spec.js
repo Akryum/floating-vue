@@ -1,5 +1,9 @@
 import * as VTooltip from './v-tooltip'
 
+jest.mock('@popperjs/core', () => ({
+  placements: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'right', 'right-start', 'right-end', 'left', 'left-start', 'left-end', 'auto', 'auto-start', 'auto-end'],
+}))
+
 describe('getPlacement', () => {
   test('object notation', () => {
     const value = {
