@@ -606,10 +606,12 @@ export default {
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive ? {
-      passive: true,
-      capture: true,
-    } : true)
+    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
+      ? {
+          passive: true,
+          capture: true,
+        }
+      : true)
   } else {
     window.addEventListener('click', handleGlobalClick, true)
   }

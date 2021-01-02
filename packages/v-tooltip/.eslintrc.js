@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  'extends': [
+  extends: [
     'plugin:vue/recommended',
     '@vue/standard',
   ],
