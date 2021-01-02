@@ -6,11 +6,11 @@
     :class="[
       themeClass,
       {
-        'v-popper__popper--open': isOpen,
+        'v-popper__popper--shown': isShown,
         'v-popper__popper--skip-transition': skipTransition,
       },
     ]"
-    :aria-hidden="isOpen ? 'false' : 'true'"
+    :aria-hidden="isShown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
     @keyup.esc="autoHide && $emit('hide')"
   >
@@ -58,7 +58,7 @@ export default {
   props: {
     popperId: String,
     theme: String,
-    isOpen: Boolean,
+    isShown: Boolean,
     isMounted: Boolean,
     skipTransition: Boolean,
     autoHide: Boolean,
@@ -75,7 +75,7 @@ export default {
   transition: opacity .15s, visibility .15s;
 }
 
-.v-popper__popper.v-popper__popper--open {
+.v-popper__popper.v-popper__popper--shown {
   visibility: visible;
   opacity: 1;
   transition: opacity .15s;

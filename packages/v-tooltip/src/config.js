@@ -7,7 +7,7 @@ export const config = {
   container: 'body',
   // Element used to compute position and size boundaries
   boundary: undefined,
-  // Skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
+  // Skip delay & CSS transitions when another popper is shown, so that the popper appear to instanly move to the new position.
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,

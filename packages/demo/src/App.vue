@@ -226,7 +226,7 @@ label input {
   transition: opacity .5s, visibility .5s;
 }
 
-.v-popper__popper.v-popper__popper--open {
+.v-popper__popper.v-popper__popper--shown {
   transition: opacity .5s;
 }
 

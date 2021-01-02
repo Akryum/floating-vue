@@ -3,7 +3,7 @@
     ref="popper"
     v-slot="{
       popperId,
-      isOpen,
+      isShown,
       isMounted,
       skipTransition,
       autoHide,
@@ -26,7 +26,7 @@
       }"
       :popper-id="popperId"
       :theme="theme"
-      :is-open="isOpen"
+      :is-shown="isShown"
       :is-mounted="isMounted"
       :skip-transition="skipTransition"
       :auto-hide="autoHide"
@@ -136,7 +136,7 @@ export default {
 
   methods: {
     fetchContent (force) {
-      if (typeof this.content === 'function' && this.$_isOpen &&
+      if (typeof this.content === 'function' && this.$_isShown &&
         (force || (!this.$_loading && this.asyncContent == null))) {
         this.asyncContent = null
         this.$_loading = true
@@ -157,12 +157,12 @@ export default {
     },
 
     onShow () {
-      this.$_isOpen = true
+      this.$_isShown = true
       this.fetchContent()
     },
 
     onHide () {
-      this.$_isOpen = false
+      this.$_isShown = false
     },
   },
 }

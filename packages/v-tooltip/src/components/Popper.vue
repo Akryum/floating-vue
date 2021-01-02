@@ -9,7 +9,7 @@ import {
 import { removeFromArray } from '../util/lang'
 import { getDefaultConfig } from '../config'
 
-const openPoppers = []
+const shownPoppers = []
 let hidingPopper = null
 
 let Element = function () {}
@@ -46,12 +46,12 @@ export default {
       default: null,
     },
 
-    open: {
+    shown: {
       type: Boolean,
       default: false,
     },
 
-    openGroup: {
+    showGroup: {
       type: String,
       default: null,
     },
@@ -171,7 +171,7 @@ export default {
 
   data () {
     return {
-      isOpen: false,
+      isShown: false,
       isMounted: false,
       skipTransition: false,
     }
@@ -184,7 +184,7 @@ export default {
   },
 
   watch: {
-    open: '$_autoShowHide',
+    shown: '$_autoShowHide',
 
     disabled (value) {
       if (value) {
@@ -195,7 +195,7 @@ export default {
     },
 
     container () {
-      if (this.isOpen && this.popperInstance) {
+      if (this.isShown && this.popperInstance) {
         this.$_ensureContainer()
         this.popperInstance.update()
       }
@@ -249,14 +249,14 @@ export default {
           this.$_showFrameLocked = false
         })
       }
-      this.$emit('update:open', true)
+      this.$emit('update:shown', true)
     },
 
     hide ({ event, skipDelay = false } = {}) {
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
-      this.$emit('update:open', false)
+      this.$emit('update:shown', false)
     },
 
     init () {
@@ -277,7 +277,7 @@ export default {
         this.$_addEventListeners()
       }
 
-      if (this.open) {
+      if (this.shown) {
         this.show()
       }
     },
@@ -294,7 +294,7 @@ export default {
 
       this.isMounted = false
       this.popperInstance = null
-      this.isOpen = false
+      this.isShown = false
 
       this.$_swapTargetAttrs('data-original-title', 'title')
 
@@ -302,7 +302,7 @@ export default {
     },
 
     onResize () {
-      if (this.isOpen && this.popperInstance) {
+      if (this.isShown && this.popperInstance) {
         this.popperInstance.update()
         this.$emit('resize')
       }
@@ -336,7 +336,7 @@ export default {
         })
       }
 
-      if (!this.isOpen) {
+      if (!this.isShown) {
         // Disable event listeners
         applyModifier(popperOptions.modifiers, 'eventListeners', {
           enabled: false,
@@ -373,7 +373,7 @@ export default {
       this.$_hideInProgress = true
       clearTimeout(this.$_scheduleTimer)
 
-      if (this.isOpen) {
+      if (this.isShown) {
         hidingPopper = this
       }
 
@@ -394,8 +394,8 @@ export default {
       clearTimeout(this.$_scheduleTimer)
       this.skipTransition = skipTransition
 
-      // Already open
-      if (this.isOpen) {
+      // Already shown
+      if (this.isShown) {
         return
       }
 
@@ -411,11 +411,11 @@ export default {
       }
 
       // Allow fade-in animations
-      this.isOpen = false
+      this.isShown = false
       requestAnimationFrame(() => {
         if (this.$_hideInProgress) return
 
-        this.isOpen = true
+        this.isShown = true
 
         // Enable event listeners
         this.$_refreshPopperOptions()
@@ -424,19 +424,19 @@ export default {
           'aria-describedby': this.popperId,
         })
 
-        const openGroup = this.openGroup
-        if (openGroup) {
+        const showGroup = this.showGroup
+        if (showGroup) {
           let popover
-          for (let i = 0; i < openPoppers.length; i++) {
-            popover = openPoppers[i]
-            if (popover.openGroup !== openGroup) {
+          for (let i = 0; i < shownPoppers.length; i++) {
+            popover = shownPoppers[i]
+            if (popover.showGroup !== showGroup) {
               popover.hide()
               popover.$emit('close-group')
             }
           }
         }
 
-        openPoppers.push(this)
+        shownPoppers.push(this)
 
         this.$emit('apply-show')
       })
@@ -446,18 +446,18 @@ export default {
       clearTimeout(this.$_scheduleTimer)
 
       // Already hidden
-      if (!this.isOpen) {
+      if (!this.isShown) {
         return
       }
 
       this.skipTransition = skipTransition
-      removeFromArray(openPoppers, this)
+      removeFromArray(shownPoppers, this)
 
       if (hidingPopper === this) {
         hidingPopper = null
       }
 
-      this.isOpen = false
+      this.isShown = false
 
       if (this.popperInstance) {
         // Disable event listeners
@@ -484,7 +484,7 @@ export default {
     },
 
     $_autoShowHide () {
-      if (this.open) {
+      if (this.shown) {
         this.show()
       } else {
         this.hide()
@@ -533,7 +533,7 @@ export default {
         this.showTriggers,
         // Handle show
         event => {
-          if (this.isOpen) {
+          if (this.isShown) {
             return
           }
           event.usedByTooltip = true
@@ -638,8 +638,8 @@ function handleGlobalTouchend (event) {
 
 function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
-  for (let i = 0; i < openPoppers.length; i++) {
-    const popper = openPoppers[i]
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
     const popperContent = popper.popperNode()
     const contains = popperContent.contains(event.target)
     requestAnimationFrame(() => {

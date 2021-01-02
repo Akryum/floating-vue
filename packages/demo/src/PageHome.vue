@@ -235,7 +235,7 @@
           <button
             v-tooltip="{
               content: msg,
-              open: isOpen,
+              shown: isOpen,
               triggers: [],
               placement: 'bottom',
             }"
@@ -297,7 +297,6 @@
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
-          open-class="is-open"
         >
           <button class="tooltip-target b3 popover-btn">
             Click me
@@ -361,7 +360,7 @@
           class="inline"
           :placement="placement"
           :auto-hide="false"
-          open-group="group1"
+          show-group="group1"
         >
           <button class="tooltip-target b1 popover-btn">
             Group 1
@@ -381,7 +380,7 @@
           class="inline"
           :placement="placement"
           :auto-hide="false"
-          open-group="group1"
+          show-group="group1"
         >
           <button class="tooltip-target b2 popover-btn">
             Group 1
@@ -401,7 +400,7 @@
           class="inline"
           :placement="placement"
           :auto-hide="false"
-          open-group="group2"
+          show-group="group2"
         >
           <button class="tooltip-target b3 popover-btn">
             Group 2
@@ -461,7 +460,7 @@
 
           <VDropdown
             :triggers="[]"
-            :open="isOpen"
+            :shown="isOpen"
             :offset="[0, 16]"
             :auto-hide="false"
           >
@@ -615,7 +614,7 @@ const componentSnippet4 = `
 
   <VDropdown
     :triggers="[]"
-    :open="isOpen"
+    :shown="isOpen"
     :offset="[0, 16]"
     :auto-hide="false"
   >
@@ -645,7 +644,7 @@ const componentSnippet5 = `
   <button
     v-tooltip="{
       content: msg,
-      open: isOpen,
+      shown: isOpen,
       triggers: [],
       placement: 'bottom',
     }"
@@ -678,21 +677,21 @@ const componentSnippet7 = `
 
 <VDropdown
   :auto-hide="false"
-  open-group="group1"
+  show-group="group1"
 >
   <!-- ... -->
 </VDropdown>
 
 <VDropdown
   :auto-hide="false"
-  open-group="group1"
+  show-group="group1"
 >
   <!-- ... -->
 </VDropdown>
 
 <VDropdown
   :auto-hide="false"
-  open-group="group2"
+  show-group="group2"
 >
   <!-- ... -->
 </VDropdown>

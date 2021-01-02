@@ -3,7 +3,7 @@
     ref="popper"
     v-slot="{
       popperId,
-      isOpen,
+      isShown,
       isMounted,
       skipTransition,
       autoHide,
@@ -25,7 +25,7 @@
       :class="[
         themeClass,
         {
-          'v-popper--open': isOpen,
+          'v-popper--shown': isShown,
         },
       ]"
     >
@@ -35,7 +35,7 @@
         ref="popperContent"
         :popper-id="popperId"
         :theme="theme"
-        :is-open="isOpen"
+        :is-shown="isShown"
         :is-mounted="isMounted"
         :skip-transition="skipTransition"
         :auto-hide="autoHide"
@@ -45,7 +45,7 @@
       >
         <slot
           name="popper"
-          :is-open="isOpen"
+          :shown="isShown"
         />
       </PopperContent>
     </div>

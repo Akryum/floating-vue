@@ -80,7 +80,7 @@ export function destroyTooltip (el) {
   if (el.$_popper) {
     el.$_popper.$destroy()
     delete el.$_popper
-    delete el.$_popperOldOpen
+    delete el.$_popperOldShown
   }
 
   if (el.classList) {
@@ -102,9 +102,9 @@ export function bind (el, { value, oldValue, modifiers }) {
     }
 
     // Manual show
-    if (typeof value.open !== 'undefined' && value.open !== el.$_popperOldOpen) {
-      el.$_popperOldOpen = value.open
-      value.open ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide()
+    if (typeof value.shown !== 'undefined' && value.shown !== el.$_popperOldShown) {
+      el.$_popperOldShown = value.shown
+      value.shown ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide()
     }
   }
 }
