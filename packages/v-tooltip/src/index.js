@@ -24,6 +24,7 @@ export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 export const VClosePopper = PrivateVClosePopper
 // Components
 export const Dropdown = PrivateDropdown
+export const Menu = PrivateMenu
 export const Popper = PrivatePopper
 export const PopperContent = PrivatePopperContent
 export const PopperMethods = PrivatePopperMethods
