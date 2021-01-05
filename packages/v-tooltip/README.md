@@ -12,6 +12,10 @@
 Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
 </p>
 
+<p align="center">
+  <a href="https://v-tooltip.netlify.app/">Documentation</a>
+</p>
+
 [💚️ Become a Sponsor](https://github.com/sponsors/Akryum)
 
 ## Sponsors
