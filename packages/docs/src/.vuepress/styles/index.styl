@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Custom Styles here.
+ *
+ * ref：https://v1.vuepress.vuejs.org/config/#index-styl
+ */
+
+.home .hero img
+  max-width 450px!important
+
+
+h1
+  @apply text-4xl font-medium
+
+h2
+  @apply text-3xl font-medium
+
+h3
+  @apply text-xl font-medium
+
+p
+  @apply my-4
+
+a
+  color $accentColor
+
+ul:not(.sidebar-sub-headers)
+  @apply ml-4 my-4
+
+  & > li
+    @apply list-disc
