@@ -99,7 +99,7 @@ export default {
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
   bottom: -5px;
-  left: calc(50% - 5px);
+  left: -5px !important;
 }
 
 .v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow {
@@ -108,7 +108,7 @@ export default {
   border-right-color: transparent !important;
   border-top-color: transparent !important;
   top: -5px;
-  left: calc(50% - 5px);
+  left: -5px !important;
 }
 
 .v-popper__popper[data-popper-placement^="right"] .v-popper__arrow {
@@ -117,7 +117,7 @@ export default {
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
   left: -5px;
-  top: calc(50% - 5px);
+  top: -5px !important;
 }
 
 .v-popper__popper[data-popper-placement^="left"] .v-popper__arrow {
@@ -126,6 +126,6 @@ export default {
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
   right: -5px;
-  top: calc(50% - 5px);
+  top: -5px !important;
 }
 </style>
