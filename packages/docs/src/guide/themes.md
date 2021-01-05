@@ -14,7 +14,7 @@ The theme of a popper directive or component can be changed with the `theme` pro
 ```vue
 <button v-tooltip="{
   theme: 'dropdown'
-}>
+}">
 ```
 
 ```vue
