@@ -39,7 +39,7 @@ Vue.use(VTooltip)
 import 'v-tooltip/dist/v-tooltip.css'
 ```
 
-[More info on installation](./installation.md)
+[Learn more about installation](./installation.md)
 
 4. Use the `v-tooltip` directive:
 
@@ -47,7 +47,7 @@ import 'v-tooltip/dist/v-tooltip.css'
 <button v-tooltip="'You have ' + count + ' new messages.'">
 ```
 
-[More info on the directive](./directive.md)
+[Learn more about the directive](./directive.md)
 
 5. Use the `VDropdown` or `VMenu` component:
 
@@ -62,4 +62,4 @@ import 'v-tooltip/dist/v-tooltip.css'
 </VDropdown>
 ```
 
-[More info on the component](./component.md)
+[Learn more about the component](./component.md)
