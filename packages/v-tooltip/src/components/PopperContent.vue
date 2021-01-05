@@ -18,7 +18,6 @@
       <div
         ref="inner"
         class="v-popper__inner"
-        style="position: relative;"
       >
         <template v-if="isMounted">
           <div>
@@ -34,8 +33,10 @@
 
       <div
         ref="arrow"
-        class="v-popper__arrow"
-      />
+        class="v-popper__arrow-container"
+      >
+        <div class="v-popper__arrow" />
+      </div>
     </div>
   </div>
 </template>
@@ -85,12 +86,20 @@ export default {
   transition: none !important;
 }
 
+.v-popper__inner {
+  position: relative;
+}
+
+.v-popper__arrow-container {
+  width: 10px;
+  height: 10px;
+}
+
 .v-popper__arrow {
+  border-style: solid;
+  position: relative;
   width: 0;
   height: 0;
-  border-style: solid;
-  position: absolute;
-  z-index: 1;
 }
 
 .v-popper__popper[data-popper-placement^="top"] .v-popper__arrow {
@@ -98,8 +107,10 @@ export default {
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
-  bottom: -5px;
-  left: -5px !important;
+}
+
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-container {
+  top: 0;
 }
 
 .v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow {
@@ -108,7 +119,6 @@ export default {
   border-right-color: transparent !important;
   border-top-color: transparent !important;
   top: -5px;
-  left: -5px !important;
 }
 
 .v-popper__popper[data-popper-placement^="right"] .v-popper__arrow {
@@ -117,7 +127,10 @@ export default {
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
   left: -5px;
-  top: -5px !important;
+}
+
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-container {
+  right: -5px;
 }
 
 .v-popper__popper[data-popper-placement^="left"] .v-popper__arrow {
@@ -126,6 +139,5 @@ export default {
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
   right: -5px;
-  top: -5px !important;
 }
 </style>
