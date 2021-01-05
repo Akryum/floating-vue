@@ -12,13 +12,13 @@ Of course, you can use a reactive property:
 <button v-tooltip="tooltipContent">
 ```
 
-You can specify the tooltip position as a modifier:
+You can specify the tooltip placement as a modifier:
 
 ```vue
 <button v-tooltip.bottom-start="'You have ' + count + ' new messages.'">
 ```
 
-The available positions are:
+The available placements are:
 
  - `'auto'`
  - `'auto-start'`
@@ -43,6 +43,8 @@ You can use an object instead of a simple string:
 ```vue
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
 ```
+
+In this object, you can put any [component props](./component.md) plus the additional options below.
 
 ## HTML content
 
@@ -87,22 +89,33 @@ To pass custom arguments to the async method, use an arrow function:
 
 ## Manual trigger example
 
-Use the `trigger` and `show` options:
+Use the `triggers` and `shown` options from the [popper component](./component.md):
 
 ```vue
 <button
   v-tooltip="{
     content: 'Tooltip content here',
-    show: isOpen,
-    trigger: 'manual',
+    shown: isOpen,
+    triggers: [],
   }"
 >A button</button>
 ```
 
 ## Disabling tooltips
 
-On mobile, you can disable the tooltips with the `disabled` property on the `tooltip` theme:
+On mobile, you can disable the tooltips with the `disabled` prop on the `tooltip` theme:
 
 ```javascript
 VTooltip.options.themes.tooltip.disabled = window.innerWidth <= 768
+```
+
+You can still override this value, just like you would for any other prop which has a default value in the [configuration](./config.md):
+
+```vue
+<button
+  v-tooltip="{
+    content: 'Tooltip content here',
+    disabled: false,
+  }"
+>A button</button>
 ```
