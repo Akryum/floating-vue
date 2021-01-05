@@ -74,7 +74,11 @@ Vue.use(VTooltip)
 Or use the directives and components directly:
 
 ```javascript
+// Directives
 Vue.directive('tooltip', VTooltip.VTooltip)
 Vue.directive('close-popper', VTooltip.VClosePopper)
-Vue.component('VDropdown', VTooltip.VDropdown)
+// Components
+Vue.component('VDropdown', VTooltip.Dropdown)
+Vue.component('VTooltip', VTooltip.Tooltip)
+Vue.component('VMenu', VTooltip.Menu)
 ```
