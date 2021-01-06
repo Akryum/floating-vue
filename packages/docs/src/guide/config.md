@@ -35,7 +35,7 @@ export const config = {
   // Disable popper components
   disabled: false,
   // Default position offset [skidding, distance] (px)
-  offset: [0, 0],
+  offset: [0, 5],
   // Default container where the tooltip will be appended
   container: 'body',
   // Element used to compute position and size boundaries
