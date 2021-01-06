@@ -36,6 +36,8 @@ The available placements are:
  - `'left-start'`
  - `'left-end'`
 
+<tooltip-placement />
+
 ## Object notation
 
 You can use an object instead of a simple string:
@@ -54,6 +56,8 @@ By default, content is displayed as text to help prevent XSS attacks. If the too
 <button v-tooltip="{ content: '<b>Bold</b>', html: true }">
 ```
 
+<tooltip-html/>
+
 ## Async content
 
 The `content` option accepts a function that returns a promise:
@@ -70,12 +74,12 @@ The `content` option accepts a function that returns a promise:
 You can style the tooltip content when it's loading:
 
 ```css
-.v-popper--tooltip-loading {
-  .v-popper__inner {
-    color: #77aaff;
-  }
+.v-popper--tooltip-loading .v-popper__inner {
+  color: #77aaff;
 }
 ```
+
+<tooltip-async />
 
 To pass custom arguments to the async method, use an arrow function:
 
@@ -86,6 +90,31 @@ To pass custom arguments to the async method, use an arrow function:
   }"
 >Hover me!</button>
 ```
+
+## Arrow padding
+
+If you use tooltips that are positionned on the edge of the reference, you may need to specify an "arrow padding". This padding will prevent the arrow from glitch out of the tooltip:
+
+```vue
+<button v-tooltip="{
+  content: 'Hello',
+}">
+```
+
+<arrow-padding />
+
+To fix this, specify the `padding` option of the `arrow` modifier. In the following example, we prevent the arrow from going to the edges of the tooltip with a 8px limit:
+
+```vue
+<button v-tooltip="{
+  content: 'Hello',
+  modifiers: [
+    { name: 'arrow', options: { padding: 8 } },
+  ],
+}">
+```
+
+<arrow-padding :padding="8" />
 
 ## Manual trigger example
 

@@ -30,19 +30,23 @@ As shown in the above example, the popper content must be passed to the `popper`
 
 The `VDropdown` uses the `dropdown` theme.
 
+<dropdown-simple-example />
+
 ## Tooltip
 
 If you want to display a tooltip with components and more advanced content, you can use the `VTooltip` component that uses the `tooltip` theme (just like the `v-tooltip` directive).
 
 ```vue
 <VTooltip>
-  <button>Sponsor me</button>
+  <a>Sponsor me</a>
 
   <template #popper>
     Help me fund my Open Source work!
   </template>
 </VTooltip>
 ```
+
+<tooltip-component-example />
 
 ## Hover Menu
 
@@ -58,6 +62,8 @@ There is a `VMenu` variant with the `menu` theme which extends the `dropdown` th
   </template>
 </VMenu>
 ```
+
+<menu-simple-example />
 
 ## Triggers
 
