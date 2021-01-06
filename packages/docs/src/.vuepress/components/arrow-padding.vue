@@ -10,7 +10,7 @@
         { name: 'arrow', options: { padding: tempPadding } },
       ]"
     >
-      <button class="px-4 py-6 bg-gray-500 text-white rounded-lg text-sm md:text-base">Reference</button>
+      <button class="px-4 py-6 bg-gray-500 text-white rounded-lg !md:text-sm">Reference</button>
 
       <template #popper>
         Offset: {{ offset }}<br>
@@ -18,7 +18,7 @@
       </template>
     </VTooltip>
 
-    <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
+    <div class="flex !md:flex-col items-center !md:space-y-6 md:space-x-6">
       <input
         v-model.number="offset[0]"
         type="range"
@@ -36,7 +36,7 @@
       >
 
       <button
-        class="flex-none border border-gray-300 rounded px-8 py-3 md:px-2 md:py-0"
+        class="flex-none border border-gray-300 rounded px-8 md:px-2 !md:py-3"
         @click="offset = [...offset];tempPadding = padding"
       >
         Reset

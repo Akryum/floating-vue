@@ -10,15 +10,15 @@
         { name: 'preventOverflow', enabled: false }
       ]"
     >
-      <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg text-sm md:text-base">Reference</button>
+      <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">Reference</button>
 
       <template #popper>
         <div>Offset: {{ tempOffset }}</div>
-        <div v-if="info" class="text-sm text-gray-500 max-w-32 md:max-w-none">{{ info }}</div>
+        <div v-if="info" class="text-sm text-gray-500 !md:max-w-32">{{ info }}</div>
       </template>
     </VDropdown>
 
-    <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
+    <div class="flex !md:flex-col items-center !md:space-y-6 md:space-x-6">
       <input
         v-model.number="tempOffset[0]"
         type="range"
@@ -36,7 +36,7 @@
       >
 
       <button
-        class="flex-none border border-gray-300 rounded px-8 py-3 md:px-2 md:py-0"
+        class="flex-none border border-gray-300 rounded px-8 !md:py-3 md:px-2"
         @click="tempOffset = [...offset]"
       >
         Reset
