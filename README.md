@@ -162,6 +162,24 @@ Of course, you can use a reactive property:
 <button v-tooltip="tooltipContent">
 ```
 
+**⚠️ HTML is enabled in the tooltip by default. If you plan on using content coming from the users, please disable HTML parsing with the `html` global option to prevent XSS attacks:**
+
+```js
+import VTooltip from 'v-tooltip'
+Vue.use(VTooltip, {
+  defaultHtml: false,
+})
+```
+
+Or directly on package:
+
+```js
+import VTooltip from 'v-tooltip'
+VTooltip.options.defaultHtml = false
+```
+
+*You can then specify `html: true` on each tooltip you want to render HTML in. See below for more info on the tooltip options.*
+
 You can specify the tooltip position as a modifier:
 
 ```html
