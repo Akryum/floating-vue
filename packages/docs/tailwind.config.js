@@ -15,4 +15,11 @@ module.exports = {
       }, {}),
     },
   },
+
+  purge: {
+    content: [
+      `${sourceDir}/**/*.@(js|ts|md|vue|html)`,
+      `${vuepressDir}/**/*.@(js|ts|md|vue|html)`,
+    ],
+  },
 }
