@@ -54,13 +54,13 @@ import 'v-tooltip/dist/v-tooltip.css'
 Include [v-tooltip](/dist/v-tooltip.min.js) in the page:
 
 ```vue
-<script src="https://unpkg.com/v-tooltip@alpha"></script>
+<script src="https://unpkg.com/v-tooltip@^3.0.0-alpha.1"></script>
 ```
 
 Also include the default CSS:
 
 ```vue
-<link rel="stylsheet" href="https://unpkg.com/v-tooltip@alpha/dist/v-tooltip.css">
+<link rel="stylsheet" href="https://unpkg.com/v-tooltip@^3.0.0-alpha.1/dist/v-tooltip.css">
 ```
 
 **If Vue is detected in the Page, the plugin is installed automatically.**
