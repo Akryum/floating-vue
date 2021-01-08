@@ -127,7 +127,7 @@ Vue.component('v-popover', VPopover)
 Include [v-tooltip](/dist/v-tooltip.min.js) in the page.
 
 ```html
-<script src="https://unpkg.com/v-tooltip"></script>
+<script src="https://unpkg.com/v-tooltip@^2.0.0"></script>
 ```
 
 **If Vue is detected in the Page, the plugin is installed automatically.**
