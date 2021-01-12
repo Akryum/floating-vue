@@ -2,15 +2,19 @@
 
 ## Node
 
+<code-group>
+<code-block title="npm">
+```shell
+npm i -S v-tooltip@next
 ```
-npm install --save v-tooltip@next
-```
+</code-block>
 
-or
-
-```
+<code-block title="yarn">
+```shell
 yarn add v-tooltip@next
 ```
+</code-block>
+</code-group>
 
 Install the plugin into Vue:
 

@@ -13,7 +13,7 @@ h2
 h3
   @apply text-xl font-medium
 
-p
+p, .theme-code-group
   @apply my-4
 
 a
@@ -22,7 +22,7 @@ a
 ul:not(.sidebar-sub-headers)
   @apply ml-4 my-4
 
-  & > li
+  & > li:not(.theme-code-group__li)
     @apply list-disc
 
 .example

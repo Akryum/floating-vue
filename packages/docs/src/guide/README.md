@@ -14,15 +14,19 @@ Thank you to my sponsors allowing me to spend more time on Open Source projects!
 
 1. Install the package:
 
+<code-group>
+<code-block title="npm">
 ```shell
 npm i -S v-tooltip@next
 ```
+</code-block>
 
-Or
-
+<code-block title="yarn">
 ```shell
 yarn add v-tooltip@next
 ```
+</code-block>
+</code-group>
 
 2. Add the plugin into your app:
 
