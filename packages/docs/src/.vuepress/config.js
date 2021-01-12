@@ -1,5 +1,3 @@
-const { description } = require('../../package')
-
 module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title

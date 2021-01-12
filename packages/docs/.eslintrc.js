@@ -16,4 +16,9 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
   },
+  ignorePatterns: [
+    'node_modules/',
+    'dist/',
+    '!.vuepress/',
+  ],
 }
