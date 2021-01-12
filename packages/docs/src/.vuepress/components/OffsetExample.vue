@@ -3,18 +3,25 @@
     <VDropdown
       :triggers="[]"
       :shown="true"
-      :autoHide="false"
+      :auto-hide="false"
       placement="right"
       :offset="tempOffset"
       :modifiers="[
         { name: 'preventOverflow', enabled: false }
       ]"
     >
-      <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">Reference</button>
+      <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">
+        Reference
+      </button>
 
       <template #popper>
         <div>Offset: {{ tempOffset }}</div>
-        <div v-if="info" class="text-sm text-gray-500 !md:max-w-32">{{ info }}</div>
+        <div
+          v-if="info"
+          class="text-sm text-gray-500 !md:max-w-32"
+        >
+          {{ info }}
+        </div>
       </template>
     </VDropdown>
 
@@ -51,8 +58,8 @@ export default {
 
   data () {
     return {
-      tempOffset: [...this.offset]
+      tempOffset: [...this.offset],
     }
-  }
+  },
 }
 </script>

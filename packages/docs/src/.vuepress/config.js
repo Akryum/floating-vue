@@ -20,7 +20,7 @@ module.exports = {
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
-    ['link', { rel: 'icon', href: '/favicon.png' }]
+    ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
 
   /**
@@ -41,12 +41,12 @@ module.exports = {
       },
       {
         text: 'API Reference',
-        link: '/api/'
+        link: '/api/',
       },
       {
         text: '💚️ Sponsor',
-        link: 'https://github.com/sponsors/Akryum'
-      }
+        link: 'https://github.com/sponsors/Akryum',
+      },
     ],
     sidebar: {
       '/guide/': [
@@ -61,11 +61,11 @@ module.exports = {
             'config',
             'themes',
             'custom-component',
-            'migration'
-          ]
-        }
+            'migration',
+          ],
+        },
       ],
-    }
+    },
   },
 
   /**
@@ -75,5 +75,5 @@ module.exports = {
     '@vuepress/plugin-back-to-top',
     '@vuepress/plugin-medium-zoom',
     '@kawarimidoll/tailwind',
-  ]
+  ],
 }

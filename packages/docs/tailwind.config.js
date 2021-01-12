@@ -18,8 +18,8 @@ module.exports = {
 
   purge: {
     content: [
-      `${sourceDir}/**/*.@(js|ts|md|vue|html)`,
-      `${vuepressDir}/**/*.@(js|ts|md|vue|html)`,
+      'src/**/*.@(js|ts|md|vue|html)',
+      '.vuepress/**/*.@(js|ts|md|vue|html)',
     ],
   },
 }

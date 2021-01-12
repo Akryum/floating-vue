@@ -27,8 +27,8 @@
 export default {
   data () {
     return {
-      content: '<b>Bold</b>'
+      content: '<b>Bold</b>',
     }
-  }
+  },
 }
 </script>

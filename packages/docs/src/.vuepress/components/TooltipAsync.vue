@@ -12,12 +12,12 @@
     </button>
 
     <button
-     class="border border-gray-300 rounded px-4 py-2"
-     @click="id++"
+      class="border border-gray-300 rounded px-4 py-2"
+      @click="id++"
     >
       Reset
     </button>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -32,11 +32,11 @@ export default {
     asyncMethod () {
       return new Promise(resolve => {
         setTimeout(() => {
-          resolve(`I'm a message loaded asynchronously`)
+          resolve('I\'m a message loaded asynchronously')
         }, 2000)
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

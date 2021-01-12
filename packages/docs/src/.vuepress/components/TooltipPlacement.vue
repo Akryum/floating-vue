@@ -1,15 +1,18 @@
 <template>
   <div class="example flex flex-col space-y-12 items-center pt-12">
-    <button v-tooltip="{
-      content: placement,
-      placement,
-      triggers: [],
-      shown: true,
-      modifiers: [
-        { name: 'preventOverflow', enabled: false },
-        { name: 'arrow', options: { padding: 8 } },
-      ],
-    }" class="border border-gray-300 rounded px-4 py-3 text-xl">
+    <button
+      v-tooltip="{
+        content: placement,
+        placement,
+        triggers: [],
+        shown: true,
+        modifiers: [
+          { name: 'preventOverflow', enabled: false },
+          { name: 'arrow', options: { padding: 8 } },
+        ],
+      }"
+      class="border border-gray-300 rounded px-4 py-3 text-xl"
+    >
       🐈️
     </button>
 
@@ -32,7 +35,7 @@
 export default {
   data () {
     return {
-      placement: 'auto'
+      placement: 'auto',
     }
   },
 
@@ -47,7 +50,7 @@ export default {
         }
       }
       return list
-    }
-  }
+    },
+  },
 }
 </script>

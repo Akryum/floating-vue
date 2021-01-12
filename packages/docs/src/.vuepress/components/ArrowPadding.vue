@@ -10,7 +10,9 @@
         { name: 'arrow', options: { padding: tempPadding } },
       ]"
     >
-      <button class="px-4 py-6 bg-gray-500 text-white rounded-lg !md:text-sm">Reference</button>
+      <button class="px-4 py-6 bg-gray-500 text-white rounded-lg !md:text-sm">
+        Reference
+      </button>
 
       <template #popper>
         Offset: {{ offset }}<br>
@@ -59,6 +61,6 @@ export default {
       offset: [-32, 0],
       tempPadding: this.padding,
     }
-  }
+  },
 }
 </script>
