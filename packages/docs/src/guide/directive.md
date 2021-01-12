@@ -36,7 +36,7 @@ The available placements are:
  - `'left-start'`
  - `'left-end'`
 
-<tooltip-placement />
+<TooltipPlacement />
 
 ## Object notation
 
@@ -56,7 +56,7 @@ By default, content is displayed as text to help prevent XSS attacks. If the too
 <button v-tooltip="{ content: '<b>Bold</b>', html: true }">
 ```
 
-<tooltip-html/>
+<TooltipHtml />
 
 ## Async content
 
@@ -79,7 +79,7 @@ You can style the tooltip content when it's loading:
 }
 ```
 
-<tooltip-async />
+<TooltipAsync />
 
 To pass custom arguments to the async method, use an arrow function:
 
@@ -101,7 +101,7 @@ If you use tooltips that are positionned on the edge of the reference, you may n
 }">
 ```
 
-<arrow-padding />
+<ArrowPadding />
 
 To fix this, specify the `padding` option of the `arrow` modifier. In the following example, we prevent the arrow from going to the edges of the tooltip with a 8px limit:
 
@@ -114,7 +114,7 @@ To fix this, specify the `padding` option of the `arrow` modifier. In the follow
 }">
 ```
 
-<arrow-padding :padding="8" />
+<ArrowPadding :padding="8" />
 
 ## Manual trigger example
 

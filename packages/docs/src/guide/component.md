@@ -30,7 +30,7 @@ As shown in the above example, the popper content must be passed to the `popper`
 
 The `VDropdown` uses the `dropdown` theme.
 
-<dropdown-simple-example />
+<DropdownSimpleExample />
 
 ## Tooltip
 
@@ -46,7 +46,7 @@ If you want to display a tooltip with components and more advanced content, you 
 </VTooltip>
 ```
 
-<tooltip-component-example />
+<TooltipComponentExample />
 
 ## Hover Menu
 
@@ -63,7 +63,7 @@ There is a `VMenu` variant with the `menu` theme which extends the `dropdown` th
 </VMenu>
 ```
 
-<menu-simple-example />
+<MenuSimpleExample />
 
 ## Triggers
 
@@ -143,7 +143,7 @@ This example will move the popper away from the reference by `64` pixels:
 >
 ```
 
-<offset-example :offset="[0, 64]" info="(Distance)"/>
+<OffsetExample :offset="[0, 64]" info="(Distance)"/>
 
 This example will move the popper `32` pixels alongside the reference:
 
@@ -153,7 +153,7 @@ This example will move the popper `32` pixels alongside the reference:
 >
 ```
 
-<offset-example :offset="[32, 0]" info="(Skidding)"/>
+<OffsetExample :offset="[32, 0]" info="(Skidding)"/>
 
 You can also use negative value, since it's a relative offset.
 
@@ -163,7 +163,7 @@ You can also use negative value, since it's a relative offset.
 >
 ```
 
-<offset-example :offset="[-16, 32]" info="(Negative skidding and positive distance)"/>
+<OffsetExample :offset="[-16, 32]" info="(Negative skidding and positive distance)"/>
 
 ## Disable popper
 

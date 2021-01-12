@@ -51,7 +51,7 @@ import 'v-tooltip/dist/v-tooltip.css'
 <button v-tooltip="'You have ' + count + ' new messages.'">
 ```
 
-<tooltip-simple-example />
+<TooltipSimpleExample />
 
 [Learn more about the directive](./directive.md)
 
@@ -68,6 +68,6 @@ import 'v-tooltip/dist/v-tooltip.css'
 </VDropdown>
 ```
 
-<dropdown-simple-example />
+<DropdownSimpleExample />
 
 [Learn more about the component](./component.md)
