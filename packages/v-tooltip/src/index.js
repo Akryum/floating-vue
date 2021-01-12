@@ -57,6 +57,8 @@ export function install (Vue, options = {}) {
 }
 
 const plugin = {
+  // eslint-disable-next-line no-undef
+  version: VERSION,
   install,
   options: config,
 }
