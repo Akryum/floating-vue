@@ -62,11 +62,14 @@ export default {
   watch: {
     tab: storeValue.bind(null, TAB_KEY),
 
-    currentStyle (value) {
+    currentStyle: {
+      handler (value) {
       // Create new styles
-      if (value == null) {
-        this.$set(this.theme.styles, this.tab, {})
-      }
+        if (value == null) {
+          this.$set(this.theme.styles, this.tab, {})
+        }
+      },
+      immediate: true,
     },
   },
 

@@ -63,6 +63,7 @@ function generateArrowCSS (theme, key) {
  */
 function generateCSSForComponent (theme, key, handler) {
   const styles = theme.styles[key]
+  if (!styles) return []
   const isDark = key.endsWith('-dark')
   let classKey = key
   if (isDark) {

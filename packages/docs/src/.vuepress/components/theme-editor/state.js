@@ -128,10 +128,7 @@ function createThemeObject () {
       placement: 'bottom',
       autoHide: true,
     },
-    styles: {
-      inner: {},
-      arrow: {},
-    },
+    styles: {},
   }
 }
 
