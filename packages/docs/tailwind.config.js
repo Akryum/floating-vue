@@ -1,4 +1,3 @@
-const path = require('path')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -36,7 +35,7 @@ module.exports = {
 
     options: {
       safelist: [
-        /bg-\w+-300/,
+        /bg-\w+-(2|3)00/,
         /text-\w+-900/,
       ],
     },
