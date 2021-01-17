@@ -294,12 +294,14 @@ export default {
             <input
               v-model.number="currentStyle.borderRadius"
               type="number"
+              class="w-16"
             >
             <input
               v-model.number="currentStyle.borderRadius"
               type="range"
               min="0"
               max="100"
+              class="flex-1 w-0"
             >
           </template>
         </div>
