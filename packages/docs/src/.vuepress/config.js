@@ -42,6 +42,10 @@ module.exports = {
         link: '/api/',
       },
       {
+        text: 'Theme editor',
+        link: '/theme-editor',
+      },
+      {
         text: '💚️ Sponsor',
         link: 'https://github.com/sponsors/Akryum',
       },

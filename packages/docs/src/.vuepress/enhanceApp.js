@@ -15,5 +15,19 @@ export default ({
 }) => {
   // ...apply enhancements for the site.
 
-  Vue.use(VTooltipPlugin)
+  Vue.use(VTooltipPlugin, {
+    boundary: 'body',
+    themes: {
+      '_editor-tooltip': {
+        $extend: 'tooltip',
+        hideTriggers: events => events,
+        instantMove: true,
+        delay: { show: 100, hide: 200 },
+        html: true,
+      },
+      '_editor-dropdown': {
+        $extend: 'dropdown',
+      },
+    },
+  })
 }

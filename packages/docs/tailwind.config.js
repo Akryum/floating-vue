@@ -13,13 +13,32 @@ module.exports = {
         obj[`!${key}`] = { max: `${max}px` }
         return obj
       }, {}),
+
+      borderRadius: {
+        sm: '0.25rem',
+        DEFAULT: '0.375rem',
+        md: '0.5rem',
+        lg: '0.75rem',
+        xl: '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
+      },
     },
   },
+
+  darkMode: 'class',
 
   purge: {
     content: [
       'src/**/*.@(js|ts|md|vue|html)',
       '.vuepress/**/*.@(js|ts|md|vue|html)',
     ],
+
+    options: {
+      safelist: [
+        /bg-\w+-300/,
+        /text-\w+-900/,
+      ],
+    },
   },
 }
