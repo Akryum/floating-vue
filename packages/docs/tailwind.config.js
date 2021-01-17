@@ -1,3 +1,4 @@
+const path = require('path')
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -30,8 +31,7 @@ module.exports = {
 
   purge: {
     content: [
-      'src/**/*.@(js|ts|md|vue|html)',
-      '.vuepress/**/*.@(js|ts|md|vue|html)',
+      'src/.vuepress/components/**/*.vue',
     ],
 
     options: {

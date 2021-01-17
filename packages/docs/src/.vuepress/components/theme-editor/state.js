@@ -61,9 +61,11 @@ export const state = new Vue({
   },
 })
 
-loadValue(THEMES_KEY, value => {
-  state.themes = value
-})
+export function loadThemes () {
+  loadValue(THEMES_KEY, value => {
+    state.themes = value
+  })
+}
 
 export function mapState (propNames) {
   return propNames.reduce((obj, n) => {

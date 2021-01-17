@@ -8,7 +8,7 @@ import {
   CodeIcon,
   PlusIcon,
 } from 'vue-feather-icons'
-import { loadSettings, loadLastTheme, mapState } from './state'
+import { loadSettings, loadLastTheme, mapState, loadThemes } from './state'
 import Sandbox from './Sandbox.vue'
 import StyleEditor from './StyleEditor.vue'
 import ConfigEditor from './ConfigEditor.vue'
@@ -57,6 +57,7 @@ export default {
 
   beforeCreate () {
     loadSettings()
+    loadThemes()
     loadLastTheme()
   },
 

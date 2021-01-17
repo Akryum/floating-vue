@@ -2,4 +2,6 @@
 layout: LayoutBlank
 ---
 
-<ThemeEditor />
+<ClientOnly>
+  <ThemeEditor />
+</ClientOnly>
