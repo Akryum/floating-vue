@@ -61,6 +61,13 @@ export default {
 
   watch: {
     tab: storeValue.bind(null, TAB_KEY),
+
+    currentStyle (value) {
+      // Create new styles
+      if (value == null) {
+        this.$set(this.theme.styles, this.tab, {})
+      }
+    },
   },
 
   created () {
@@ -83,13 +90,18 @@ export default {
         v-model="tab"
         :tabs="[
           { id: 'inner', label: 'Inner' },
+          { id: 'inner-dark', label: 'Dark Inner' },
           { id: 'arrow', label: 'Arrow' },
+          { id: 'arrow-dark', label: 'Dark Arrow' },
         ]"
       />
     </div>
 
-    <div class="flex-1 overflow-auto flex flex-col items-stretch">
-      <template v-if="tab === 'inner'">
+    <div
+      v-if="currentStyle"
+      class="flex-1 overflow-auto flex flex-col items-stretch"
+    >
+      <template v-if="tab.startsWith('inner')">
         <div class="flex space-x-3 hover:bg-gray-50 p-2">
           <label for="backgroundColor">Background color:</label>
           <label class="flex items-center space-x-1">
@@ -352,7 +364,7 @@ export default {
         </div>
       </template>
 
-      <template v-if="tab === 'arrow'">
+      <template v-if="tab.startsWith('arrow')">
         <div class="flex space-x-3 hover:bg-gray-50 p-2">
           <label for="backgroundColor">Color:</label>
           <label class="flex items-center space-x-1">

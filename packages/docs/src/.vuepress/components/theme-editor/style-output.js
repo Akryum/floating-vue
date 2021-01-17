@@ -1,16 +1,19 @@
 import { indent } from './format-object'
+import { state } from './state'
 import Color from 'color'
 
 export function generateCSS (theme) {
   const components = [
-    generateInnerCSS(theme),
-    generateArrowCSS(theme),
+    generateInnerCSS(theme, 'inner'),
+    generateInnerCSS(theme, 'inner-dark'),
+    generateArrowCSS(theme, 'arrow'),
+    generateArrowCSS(theme, 'arrow-dark'),
   ]
   return components.filter(lines => lines.length).map(lines => lines.join('\n')).join('\n\n')
 }
 
-function generateInnerCSS (theme) {
-  return generateCSSForComponent(theme, 'inner', (styles, lines) => {
+function generateInnerCSS (theme, key) {
+  return generateCSSForComponent(theme, key, (styles, lines) => {
     if (styles.backgroundColor != null) {
       lines.push(`background: ${generateColorCSS(styles.backgroundColor)}`)
     }
@@ -47,8 +50,8 @@ function generateInnerCSS (theme) {
   })
 }
 
-function generateArrowCSS (theme) {
-  return generateCSSForComponent(theme, 'arrow', (styles, lines) => {
+function generateArrowCSS (theme, key) {
+  return generateCSSForComponent(theme, key, (styles, lines) => {
     if (styles.color != null) {
       lines.push(`border-color: ${generateColorCSS(styles.color)}`)
     }
@@ -60,7 +63,16 @@ function generateArrowCSS (theme) {
  */
 function generateCSSForComponent (theme, key, handler) {
   const styles = theme.styles[key]
-  const lines = [`.v-popper--theme-${theme.name} .v-popper__${key} {`]
+  const isDark = key.endsWith('-dark')
+  let classKey = key
+  if (isDark) {
+    classKey = classKey.substr(0, classKey.indexOf('-dark'))
+  }
+  let className = `.v-popper--theme-${theme.name} .v-popper__${classKey}`
+  if (isDark) {
+    className = `.${state.settings.darkClass} ${className}`
+  }
+  const lines = [`${className} {`]
   const ruleLines = []
   handler(styles, ruleLines)
   if (!ruleLines.length) return []
