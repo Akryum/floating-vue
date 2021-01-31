@@ -6,11 +6,11 @@
     :class="[
       themeClass,
       {
-        'v-popper__popper--shown': isShown,
+        'v-popper__popper--shown': shown,
         'v-popper__popper--skip-transition': skipTransition,
       },
     ]"
-    :aria-hidden="isShown ? 'false' : 'true'"
+    :aria-hidden="shown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
     @keyup.esc="autoHide && $emit('hide')"
   >
@@ -19,7 +19,7 @@
         ref="inner"
         class="v-popper__inner"
       >
-        <template v-if="isMounted">
+        <template v-if="mounted">
           <div>
             <slot />
           </div>
@@ -59,8 +59,8 @@ export default {
   props: {
     popperId: String,
     theme: String,
-    isShown: Boolean,
-    isMounted: Boolean,
+    shown: Boolean,
+    mounted: Boolean,
     skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean,
