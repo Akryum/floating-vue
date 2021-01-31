@@ -4,7 +4,7 @@
     v-slot="{
       popperId,
       isShown,
-      isMounted,
+      shouldMountContent,
       skipTransition,
       autoHide,
       hide,
@@ -36,7 +36,7 @@
         :popper-id="popperId"
         :theme="theme"
         :is-shown="isShown"
-        :is-mounted="isMounted"
+        :is-mounted="shouldMountContent"
         :skip-transition="skipTransition"
         :auto-hide="autoHide"
         :handle-resize="handleResize"

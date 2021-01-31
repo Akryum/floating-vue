@@ -87,6 +87,7 @@ const emptyTheme = [
   'triggers',
   'delay',
   'autoHide',
+  'eagerMount',
   'placement',
   'strategy',
   'offset',

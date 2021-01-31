@@ -37,6 +37,7 @@ The directive also support all the [Component props](#component-props).
 - `handleResize`: Automatically update the popper position if its size changes.
 - `showGroup`: If set, will close all the open popovers that have a different or unset `showGroup` value.
 - `instantMove`: Boolean: skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
+- `eagerMount`: Boolean: mount the popper content without waiting for the popper to be displayed.
 - `disposeTimeout`: Number of ms after hide when the popper instance is destroyed.
 - `airaId`: Id used for the `aria-describedby` attribute. By default a random id.
 - `modifiers`: Array of Popper.js [modifier objects](https://popper.js.org/docs/v2/modifiers/).

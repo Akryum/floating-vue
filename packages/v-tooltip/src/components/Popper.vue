@@ -188,6 +188,13 @@ export default {
         return getDefaultConfig(this.theme, 'instantMove')
       },
     },
+
+    eagerMount: {
+      type: Boolean,
+      default () {
+        return getDefaultConfig(this.theme, 'eagerMount')
+      },
+    },
   },
 
   data () {
@@ -202,6 +209,10 @@ export default {
     popperId () {
       return this.ariaId != null ? this.ariaId : this.randomId
     },
+
+    shouldMountContent () {
+      return this.eagerMount || this.isMounted
+    }
   },
 
   watch: {
