@@ -20,33 +20,31 @@
     @apply-show="onShow"
     @apply-hide="onHide"
   >
-    <div>
-      <PopperContent
-        ref="popperContent"
-        :class="{
-          'v-popper--tooltip-loading': loading,
-        }"
-        :popper-id="popperId"
-        :theme="theme"
-        :shown="isShown"
-        :mounted="shouldMountContent"
-        :skip-transition="skipTransition"
-        :auto-hide="autoHide"
-        :handle-resize="handleResize"
-        :classes="classes"
-        @hide="hide"
-        @resize="onResize"
-      >
-        <div
-          v-if="html"
-          v-html="finalContent"
-        />
-        <div
-          v-else
-          v-text="finalContent"
-        />
-      </PopperContent>
-    </div>
+    <PopperContent
+      ref="popperContent"
+      :class="{
+        'v-popper--tooltip-loading': loading,
+      }"
+      :popper-id="popperId"
+      :theme="theme"
+      :shown="isShown"
+      :mounted="shouldMountContent"
+      :skip-transition="skipTransition"
+      :auto-hide="autoHide"
+      :handle-resize="handleResize"
+      :classes="classes"
+      @hide="hide"
+      @resize="onResize"
+    >
+      <div
+        v-if="html"
+        v-html="finalContent"
+      />
+      <div
+        v-else
+        v-text="finalContent"
+      />
+    </PopperContent>
   </Popper>
 </template>
 
