@@ -212,7 +212,7 @@ export default {
 
     shouldMountContent () {
       return this.eagerMount || this.isMounted
-    }
+    },
   },
 
   watch: {
