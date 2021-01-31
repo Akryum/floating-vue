@@ -4,7 +4,7 @@ import 'vue-resize/dist/vue-resize.css'
 // Components
 import PrivateDropdown from './components/Dropdown.vue'
 import PrivateMenu from './components/Menu.vue'
-import PrivatePopper from './components/Popper.vue'
+import PrivatePopper from './components/Popper'
 import PrivatePopperContent from './components/PopperContent.vue'
 import PrivatePopperMethods from './components/PopperMethods'
 import PrivatePopperWrapper from './components/PopperWrapper.vue'

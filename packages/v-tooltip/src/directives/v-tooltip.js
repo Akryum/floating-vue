@@ -43,23 +43,28 @@ export function createTooltip (el, value, modifiers) {
   const options = getOptions(el, value, modifiers)
 
   const tooltipApp = el.$_popper = new Vue({
-    data: {
-      options,
+    data () {
+      return {
+        options,
+      }
     },
     render (h) {
-      const options = this.options
+      const {
+        theme,
+        html,
+        content,
+        loadingContent,
+        ...otherOptions
+      } = this.options
+
       return h(TooltipDirective, {
-        attrs: {
-          ...options,
-          // Delete props from attrs to prevent Vue from
-          // mutating `this.options` when removing props
-          // from `$attrs` automatically
-          theme: undefined,
-          html: undefined,
-          content: undefined,
-          loadingContent: undefined,
+        props: {
+          theme,
+          html,
+          content,
+          loadingContent,
         },
-        props: options,
+        attrs: otherOptions,
         ref: 'tooltip',
       })
     },

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import Popper from './Popper.vue'
+import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
@@ -62,7 +62,7 @@ export default {
   name: 'VPopperWrapper',
 
   components: {
-    Popper,
+    Popper: Popper(),
     PopperContent,
   },
 

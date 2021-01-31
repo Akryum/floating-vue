@@ -1,4 +1,3 @@
-<script>
 import { createPopper, placements } from '@popperjs/core'
 import { supportsPassive, isIOS } from '../util/env'
 import { applyModifier } from '../util/popper'
@@ -17,7 +16,7 @@ if (typeof window !== 'undefined') {
   Element = window.Element
 }
 
-export default {
+export default () => ({
   name: 'VPopper',
 
   props: {
@@ -643,7 +642,7 @@ export default {
   render (h) {
     return this.$scopedSlots.default(this)[0]
   },
-}
+})
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
@@ -679,4 +678,3 @@ function handleGlobalClose (event, touch = false) {
     })
   }
 }
-</script>

@@ -19,35 +19,37 @@
     @apply-show="onShow"
     @apply-hide="onHide"
   >
-    <PopperContent
-      ref="popperContent"
-      :class="{
-        'v-popper--tooltip-loading': loading,
-      }"
-      :popper-id="popperId"
-      :theme="theme"
-      :is-shown="isShown"
-      :is-mounted="shouldMountContent"
-      :skip-transition="skipTransition"
-      :auto-hide="autoHide"
-      :handle-resize="handleResize"
-      @hide="hide"
-      @resize="onResize"
-    >
-      <div
-        v-if="html"
-        v-html="finalContent"
-      />
-      <div
-        v-else
-        v-text="finalContent"
-      />
-    </PopperContent>
+    <div>
+      <PopperContent
+        ref="popperContent"
+        :class="{
+          'v-popper--tooltip-loading': loading,
+        }"
+        :popper-id="popperId"
+        :theme="theme"
+        :is-shown="isShown"
+        :is-mounted="shouldMountContent"
+        :skip-transition="skipTransition"
+        :auto-hide="autoHide"
+        :handle-resize="handleResize"
+        @hide="hide"
+        @resize="onResize"
+      >
+        <div
+          v-if="html"
+          v-html="finalContent"
+        />
+        <div
+          v-else
+          v-text="finalContent"
+        />
+      </PopperContent>
+    </div>
   </Popper>
 </template>
 
 <script>
-import Popper from './Popper.vue'
+import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import { getDefaultConfig } from '../config'
 import PopperMethods from './PopperMethods'
@@ -56,7 +58,7 @@ export default {
   name: 'VTooltipDirective',
 
   components: {
-    Popper,
+    Popper: Popper(),
     PopperContent,
   },
 
