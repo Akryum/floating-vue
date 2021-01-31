@@ -212,6 +212,19 @@ export default () => ({
     shouldMountContent () {
       return this.eagerMount || this.isMounted
     },
+
+    slotData () {
+      return {
+        popperId: this.popperId,
+        isShown: this.isShown,
+        shouldMountContent: this.shouldMountContent,
+        skipTransition: this.skipTransition,
+        autoHide: this.autoHide,
+        hide: this.hide,
+        handleResize: this.handleResize,
+        onResize: this.onResize,
+      }
+    },
   },
 
   watch: {
@@ -640,7 +653,7 @@ export default () => ({
   },
 
   render (h) {
-    return this.$scopedSlots.default(this)[0]
+    return this.$scopedSlots.default(this.slotData)[0]
   },
 })
 
