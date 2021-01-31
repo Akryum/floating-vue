@@ -201,6 +201,12 @@ export default () => ({
       isShown: false,
       isMounted: false,
       skipTransition: false,
+      classes: {
+        showFrom: false,
+        showTo: false,
+        hideFrom: false,
+        hideTo: true,
+      },
     }
   },
 
@@ -223,6 +229,7 @@ export default () => ({
         hide: this.hide,
         handleResize: this.handleResize,
         onResize: this.onResize,
+        classes: { ...this.classes },
       }
     },
   },
@@ -238,10 +245,10 @@ export default () => ({
       }
     },
 
-    container () {
+    async container () {
       if (this.isShown && this.popperInstance) {
         this.$_ensureContainer()
-        this.popperInstance.update()
+        await this.popperInstance.update()
       }
     },
 
@@ -345,9 +352,9 @@ export default () => ({
       this.$emit('dispose')
     },
 
-    onResize () {
+    async onResize () {
       if (this.isShown && this.popperInstance) {
-        this.popperInstance.update()
+        await this.popperInstance.update()
         this.$emit('resize')
       }
     },
@@ -358,6 +365,12 @@ export default () => ({
         placement: this.placement,
         strategy: this.strategy,
         modifiers: this.modifiers,
+        onFirstUpdate: async state => {
+          if (this.popperOptions.onFirstUpdate) {
+            this.popperOptions.onFirstUpdate(state)
+          }
+          await this.$_applyShowEffect()
+        },
       }
 
       if (!popperOptions.modifiers) {
@@ -390,9 +403,9 @@ export default () => ({
       return popperOptions
     },
 
-    $_refreshPopperOptions () {
+    async $_refreshPopperOptions () {
       if (this.popperInstance) {
-        this.popperInstance.setOptions(this.$_getPopperOptions())
+        await this.popperInstance.setOptions(this.$_getPopperOptions())
       }
     },
 
@@ -433,7 +446,7 @@ export default () => ({
       return parseInt((delay && delay[type]) || delay || 0)
     },
 
-    $_applyShow (skipTransition = false) {
+    async $_applyShow (skipTransition = false) {
       clearTimeout(this.$_disposeTimer)
       clearTimeout(this.$_scheduleTimer)
       this.skipTransition = skipTransition
@@ -451,43 +464,53 @@ export default () => ({
       if (!this.popperInstance) {
         this.popperInstance = createPopper(this.referenceNode(), this.$_popperNode, this.$_getPopperOptions())
       } else {
-        this.popperInstance.update()
-      }
-
-      // Allow fade-in animations
-      this.isShown = false
-      requestAnimationFrame(() => {
-        if (this.$_hideInProgress) return
-
-        this.isShown = true
-
+        await this.popperInstance.update()
         // Enable event listeners
-        this.$_refreshPopperOptions()
-
-        this.$_applyAttrsToTarget({
-          'aria-describedby': this.popperId,
-          'data-popper-shown': '',
-        })
-
-        const showGroup = this.showGroup
-        if (showGroup) {
-          let popover
-          for (let i = 0; i < shownPoppers.length; i++) {
-            popover = shownPoppers[i]
-            if (popover.showGroup !== showGroup) {
-              popover.hide()
-              popover.$emit('close-group')
-            }
-          }
-        }
-
-        shownPoppers.push(this)
-
-        this.$emit('apply-show')
-      })
+        await this.$_refreshPopperOptions()
+        await this.$_applyShowEffect()
+      }
     },
 
-    $_applyHide (skipTransition = false) {
+    async $_applyShowEffect () {
+      if (this.$_hideInProgress) return
+
+      this.isShown = true
+
+      this.$_applyAttrsToTarget({
+        'aria-describedby': this.popperId,
+        'data-popper-shown': '',
+      })
+
+      const showGroup = this.showGroup
+      if (showGroup) {
+        let popover
+        for (let i = 0; i < shownPoppers.length; i++) {
+          popover = shownPoppers[i]
+          if (popover.showGroup !== showGroup) {
+            popover.hide()
+            popover.$emit('close-group')
+          }
+        }
+      }
+
+      shownPoppers.push(this)
+
+      this.$emit('apply-show')
+
+      // Fix popper not applying the attribute on initial render :(
+      this.$_popperNode.setAttribute('data-popper-placement', this.popperInstance.state.placement)
+
+      // Advanced classes
+      this.classes.showFrom = true
+      this.classes.showTo = false
+      this.classes.hideFrom = false
+      this.classes.hideTo = false
+      await nextFrame()
+      this.classes.showFrom = false
+      this.classes.showTo = true
+    },
+
+    async $_applyHide (skipTransition = false) {
       clearTimeout(this.$_scheduleTimer)
 
       // Already hidden
@@ -506,7 +529,7 @@ export default () => ({
 
       if (this.popperInstance) {
         // Disable event listeners
-        this.$_refreshPopperOptions()
+        await this.$_refreshPopperOptions()
       }
 
       this.$_applyAttrsToTarget({
@@ -527,6 +550,15 @@ export default () => ({
       }
 
       this.$emit('apply-hide')
+
+      // Advanced classes
+      this.classes.showFrom = false
+      this.classes.showTo = false
+      this.classes.hideFrom = true
+      this.classes.hideTo = false
+      await nextFrame()
+      this.classes.hideFrom = false
+      this.classes.hideTo = true
     },
 
     $_autoShowHide () {
@@ -690,4 +722,8 @@ function handleGlobalClose (event, touch = false) {
       }
     })
   }
+}
+
+function nextFrame () {
+  return new Promise(resolve => requestAnimationFrame(resolve))
 }

@@ -7,6 +7,11 @@
       themeClass,
       {
         'v-popper__popper--shown': shown,
+        'v-popper__popper--hidden': !shown,
+        'v-popper__popper--show-from': classes.showFrom,
+        'v-popper__popper--show-to': classes.showTo,
+        'v-popper__popper--hide-from': classes.hideFrom,
+        'v-popper__popper--hide-to': classes.hideTo,
         'v-popper__popper--skip-transition': skipTransition,
       },
     ]"
@@ -64,6 +69,7 @@ export default {
     skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean,
+    classes: Object,
   },
 }
 </script>
@@ -71,6 +77,9 @@ export default {
 <style>
 .v-popper__popper {
   z-index: 10000;
+}
+
+.v-popper__popper.v-popper__popper--hidden {
   visibility: hidden;
   opacity: 0;
   transition: opacity .15s, visibility .15s;
@@ -82,7 +91,8 @@ export default {
   transition: opacity .15s;
 }
 
-.v-popper__popper.v-popper__popper--skip-transition {
+.v-popper__popper.v-popper__popper--skip-transition,
+.v-popper__popper.v-popper__popper--skip-transition > .v-popper__wrapper {
   transition: none !important;
 }
 

@@ -10,6 +10,7 @@
       hide,
       handleResize,
       onResize,
+      classes,
     }"
     v-bind="$attrs"
     :theme="theme"
@@ -32,6 +33,7 @@
         :skip-transition="skipTransition"
         :auto-hide="autoHide"
         :handle-resize="handleResize"
+        :classes="classes"
         @hide="hide"
         @resize="onResize"
       >
