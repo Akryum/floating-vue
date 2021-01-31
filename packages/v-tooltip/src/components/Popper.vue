@@ -287,7 +287,7 @@ export default {
       this.$_preventShow = false
 
       // Nodes
-      this.$_targetNodes = this.targetNodes()
+      this.$_targetNodes = this.targetNodes().filter(e => e.nodeType === e.ELEMENT_NODE)
       this.$_popperNode = this.popperNode()
 
       this.$_swapTargetAttrs('title', 'data-original-title')
