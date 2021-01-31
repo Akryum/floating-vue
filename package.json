@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build --ignore demo"
+    "build": "lerna run build --ignore demo",
+    "release": "lerna publish"
   },
   "devDependencies": {
     "lerna": "^3.22.1"
