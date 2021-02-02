@@ -377,6 +377,7 @@ By default, the popover will have the `tooltip` and `popover` classes, so you ca
 - `container` - *(see above)*
 - `boundariesElement` - *(see above)*
 - `popperOptions` - *(see above)*
+- `triggerClass` - Classes applied to the trigger element.
 - `popoverClass` - Classes applied to the popover element. Use this to apply different themes to the popover.
 - `popoverBaseClass` - Base classes applied to the popover element (defaults to `'tooltip popover'`).
 - `popoverWrapperClass` - Class of the element that contains the arrow and inner content.
