@@ -6,6 +6,7 @@
     <div
       ref="trigger"
       class="trigger"
+      :class="[triggerClass]"
       style="display: inline-block;"
       :aria-describedby="isOpen ? popoverId : undefined"
       :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
@@ -128,6 +129,11 @@ export default {
     popperOptions: {
       type: Object,
       default: () => getDefault('defaultPopperOptions'),
+    },
+    
+    triggerClass: {
+      type: [String, Array],
+      default: '',
     },
 
     popoverClass: {
