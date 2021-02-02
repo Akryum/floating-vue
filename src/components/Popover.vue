@@ -133,7 +133,7 @@ export default {
     
     triggerClass: {
       type: [String, Array],
-      default: '',
+      default: () => getDefault('defaultTriggerClass'),
     },
 
     popoverClass: {
