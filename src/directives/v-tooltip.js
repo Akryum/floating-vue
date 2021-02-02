@@ -70,6 +70,8 @@ export const defaultOptions = {
     defaultInnerClass: 'tooltip-inner popover-inner',
     // Arrow class
     defaultArrowClass: 'tooltip-arrow popover-arrow',
+    // Use to style the Trigger's slot wrapper
+    defaultTriggerClass: '',
     // Class added when popover is open
     defaultOpenClass: 'open',
     defaultDelay: 0,
