@@ -505,10 +505,10 @@ export default {
 
       const events = typeof this.trigger === 'string'
         ? this.trigger
-            .split(' ')
-            .filter(
-              trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1,
-            )
+          .split(' ')
+          .filter(
+            trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1,
+          )
         : []
 
       events.forEach(event => {
