@@ -12,6 +12,7 @@ const config = Object.assign({}, base, {
     'lodash/isEqual',
     'popper.js',
     'vue-resize',
+    /@babel\/runtime/,
   ],
 })
 

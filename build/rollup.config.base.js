@@ -19,6 +19,7 @@ export default {
     }),
     babel({
       exclude: 'node_modules/**',
+      babelHelpers: 'runtime',
       extensions: ['.js', '.vue'],
     }),
     cjs(),

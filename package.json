@@ -21,6 +21,7 @@
   "module": "dist/v-tooltip.esm.js",
   "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
+    "@babel/runtime": "^7.13.10",
     "lodash": "^4.17.21",
     "popper.js": "^1.16.1",
     "vue-resize": "^1.0.1"
@@ -29,7 +30,7 @@
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.2",
     "@rollup/plugin-babel": "^5.2.1",
