@@ -11,7 +11,7 @@
     "demo:build": "vue-cli-service build",
     "demo:serve": "vue-cli-service serve",
     "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
-    "prepublishOnly": "npm run test && npm run build",
+    "prepublishOnly": "npm run lint && npm run test && npm run build",
     "test": "npm run test:types && npm run test:unit",
     "lint": "eslint . --ext .js,.vue",
     "test:unit": "vue-cli-service test:unit",
