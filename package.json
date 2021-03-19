@@ -21,9 +21,9 @@
   "module": "dist/v-tooltip.esm.js",
   "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
-    "lodash": "^4.17.15",
-    "popper.js": "^1.16.0",
-    "vue-resize": "^1.0.0"
+    "lodash": "^4.17.21",
+    "popper.js": "^1.16.1",
+    "vue-resize": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
