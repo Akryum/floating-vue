@@ -25,6 +25,7 @@ export default {
     cjs(),
     replace({
       VERSION: JSON.stringify(config.version),
+      preventAssignment: false,
     }),
     postcss(),
     analyze(),
