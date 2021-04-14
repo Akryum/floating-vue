@@ -216,9 +216,9 @@ export function bind (el, { value, oldValue, modifiers }) {
 
 export const directive = {
   options: defaultOptions,
-  bind,
-  update: bind,
-  unbind (el) {
+  beforeMount: bind,
+  updated: bind,
+  unmounted (el) {
     destroyTooltip(el)
   },
 }

@@ -6,7 +6,7 @@ import 'vue-resize/dist/vue-resize.css'
 
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 
-export function install (Vue, options = {}) {
+export function install (app, options = {}) {
   if (install.installed) return
   install.installed = true
 
@@ -16,9 +16,9 @@ export function install (Vue, options = {}) {
   plugin.options = finalOptions
   vtooltip.options = finalOptions
 
-  Vue.directive('tooltip', vtooltip)
-  Vue.directive('close-popover', vclosepopover)
-  Vue.component('VPopover', Popover)
+  app.directive('tooltip', vtooltip)
+  app.directive('close-popover', vclosepopover)
+  app.component('VPopover', Popover)
 }
 
 export const VTooltip = vtooltip
