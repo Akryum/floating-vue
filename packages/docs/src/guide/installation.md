@@ -5,30 +5,31 @@
 <code-group>
 <code-block title="npm">
 ```shell
-npm i -S v-tooltip@next
+npm i -S v-tooltip@vue3
 ```
 </code-block>
 
 <code-block title="yarn">
 ```shell
-yarn add v-tooltip@next
+yarn add v-tooltip@vue3
 ```
 </code-block>
 </code-group>
 
-Install the plugin into Vue:
+Install the plugin into your Vue app:
 
 ```javascript
-import Vue from 'vue'
+import { createApp } from 'vue'
 import VTooltipPlugin from 'v-tooltip'
+import App from './App.vue'
 
-Vue.use(VTooltipPlugin)
+const app = createApp(App)
+app.use(VTooltipPlugin)
 ```
 
 Or use the directives and components directly:
 
 ```javascript
-import Vue from 'vue'
 import {
   // Directives
   VTooltip,
@@ -39,12 +40,12 @@ import {
   Menu
 } from 'v-tooltip'
 
-Vue.directive('tooltip', VTooltip)
-Vue.directive('close-popper', VClosePopper)
+app.directive('tooltip', VTooltip)
+app.directive('close-popper', VClosePopper)
 
-Vue.component('VDropdown', Dropdown)
-Vue.component('VTooltip', Tooltip)
-Vue.component('VMenu', Menu)
+app.component('VDropdown', Dropdown)
+app.component('VTooltip', Tooltip)
+app.component('VMenu', Menu)
 ```
 
 Add the default CSS:
@@ -58,31 +59,29 @@ import 'v-tooltip/dist/v-tooltip.css'
 Include [v-tooltip](/dist/v-tooltip.min.js) in the page:
 
 ```vue
-<script src="https://unpkg.com/v-tooltip@^3.0.0-alpha.1"></script>
+<script src="https://unpkg.com/v-tooltip@^4.0.0-alpha.1"></script>
 ```
 
 Also include the default CSS:
 
 ```vue
-<link rel="stylsheet" href="https://unpkg.com/v-tooltip@^3.0.0-alpha.1/dist/v-tooltip.css">
+<link rel="stylsheet" href="https://unpkg.com/v-tooltip@^4.0.0-alpha.1/dist/v-tooltip.css">
 ```
 
-**If Vue is detected in the Page, the plugin is installed automatically.**
-
-Manually install the plugin into Vue:
+Install the plugin into your Vue app:
 
 ```javascript
-Vue.use(VTooltip)
+app.use(VTooltip)
 ```
 
 Or use the directives and components directly:
 
 ```javascript
 // Directives
-Vue.directive('tooltip', VTooltip.VTooltip)
-Vue.directive('close-popper', VTooltip.VClosePopper)
+app.directive('tooltip', VTooltip.VTooltip)
+app.directive('close-popper', VTooltip.VClosePopper)
 // Components
-Vue.component('VDropdown', VTooltip.Dropdown)
-Vue.component('VTooltip', VTooltip.Tooltip)
-Vue.component('VMenu', VTooltip.Menu)
+app.component('VDropdown', VTooltip.Dropdown)
+app.component('VTooltip', VTooltip.Tooltip)
+app.component('VMenu', VTooltip.Menu)
 ```

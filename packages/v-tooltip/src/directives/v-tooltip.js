@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { createApp, h } from 'vue'
 import { placements } from '@popperjs/core'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
@@ -42,36 +42,23 @@ export function getOptions (el, value, modifiers) {
 export function createTooltip (el, value, modifiers) {
   const options = getOptions(el, value, modifiers)
 
-  const tooltipApp = el.$_popper = new Vue({
+  const tooltipApp = el.$_popper = createApp({
+    name: 'VTooltipDirective',
     data () {
       return {
         options,
       }
     },
-    render (h) {
-      const {
-        theme,
-        html,
-        content,
-        loadingContent,
-        ...otherOptions
-      } = this.options
-
+    render () {
       return h(TooltipDirective, {
-        props: {
-          theme,
-          html,
-          content,
-          loadingContent,
-        },
-        attrs: otherOptions,
+        ...this.options,
         ref: 'tooltip',
       })
     },
   })
   const mountTarget = document.createElement('div')
   document.body.appendChild(mountTarget)
-  tooltipApp.$mount(mountTarget)
+  tooltipApp.mount(mountTarget)
 
   // Class on target
   if (el.classList) {
@@ -83,7 +70,7 @@ export function createTooltip (el, value, modifiers) {
 
 export function destroyTooltip (el) {
   if (el.$_popper) {
-    el.$_popper.$destroy()
+    el.$_popper.unmount()
     delete el.$_popper
     delete el.$_popperOldShown
   }
@@ -93,7 +80,7 @@ export function destroyTooltip (el) {
   }
 }
 
-export function bind (el, { value, oldValue, modifiers }) {
+export function bind (el, { value, modifiers }) {
   const options = getOptions(el, value, modifiers)
   if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
     destroyTooltip(el)
@@ -115,9 +102,9 @@ export function bind (el, { value, oldValue, modifiers }) {
 }
 
 export default {
-  bind,
-  update: bind,
-  unbind (el) {
+  beforeMount: bind,
+  updated: bind,
+  beforeUnmount (el) {
     destroyTooltip(el)
   },
 }

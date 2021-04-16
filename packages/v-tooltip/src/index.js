@@ -35,25 +35,25 @@ export const TooltipDirective = PrivateTooltipDirective
 
 /* Vue plugin */
 
-export function install (Vue, options = {}) {
+export function install (app, options = {}) {
   if (install.installed) return
   install.installed = true
 
   assign(config, options)
 
   // Directive
-  Vue.directive('tooltip', PrivateVTooltip)
-  Vue.directive('close-popper', PrivateVClosePopper)
+  app.directive('tooltip', PrivateVTooltip)
+  app.directive('close-popper', PrivateVClosePopper)
   // Components
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-tooltip', PrivateTooltip)
-  Vue.component('VTooltip', PrivateTooltip)
+  app.component('v-tooltip', PrivateTooltip)
+  app.component('VTooltip', PrivateTooltip)
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-dropdown', PrivateDropdown)
-  Vue.component('VDropdown', PrivateDropdown)
+  app.component('v-dropdown', PrivateDropdown)
+  app.component('VDropdown', PrivateDropdown)
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-menu', PrivateMenu)
-  Vue.component('VMenu', PrivateMenu)
+  app.component('v-menu', PrivateMenu)
+  app.component('VMenu', PrivateMenu)
 }
 
 const plugin = {
@@ -61,17 +61,6 @@ const plugin = {
   version: VERSION,
   install,
   options: config,
-}
-
-// Auto-install
-let GlobalVue = null
-if (typeof window !== 'undefined') {
-  GlobalVue = window.Vue
-} else if (typeof global !== 'undefined') {
-  GlobalVue = global.Vue
-}
-if (GlobalVue) {
-  GlobalVue.use(plugin)
 }
 
 export default plugin

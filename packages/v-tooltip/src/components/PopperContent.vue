@@ -71,6 +71,11 @@ export default {
     handleResize: Boolean,
     classes: Object,
   },
+
+  emits: [
+    'hide',
+    'resize',
+  ],
 }
 </script>
 

@@ -13,12 +13,11 @@
       classes,
     }"
     v-bind="$attrs"
-    :theme="theme"
+    :theme="finalTheme"
     :target-nodes="getTargetNodes"
     :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
-    v-on="$listeners"
   >
     <div
       ref="reference"
@@ -35,7 +34,7 @@
       <PopperContent
         ref="popperContent"
         :popper-id="popperId"
-        :theme="theme"
+        :theme="finalTheme"
         :shown="isShown"
         :mounted="shouldMountContent"
         :skip-transition="skipTransition"
@@ -78,15 +77,20 @@ export default {
   props: {
     theme: {
       type: String,
-      default () {
-        return this.$options.vPopperTheme
-      },
+      default: null,
+    },
+  },
+
+  computed: {
+    finalTheme () {
+      return this.theme ?? this.$options.vPopperTheme
     },
   },
 
   methods: {
     getTargetNodes () {
-      return this.$slots.default.map(vnode => vnode.elm).filter(Boolean)
+      const children = [...this.$refs.reference.children]
+      return children.slice(0, children.length - 1).filter(Boolean)
     },
   },
 }

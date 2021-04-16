@@ -8,7 +8,7 @@ You can change the configuration options during install with the arguments:
 
 ```javascript
 import VTooltip from 'v-tooltip'
-Vue.use(VTooltip, options)
+app.use(VTooltip, options)
 ```
 
 Or directly on `VTooltip`:

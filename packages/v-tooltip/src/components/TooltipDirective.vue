@@ -16,7 +16,6 @@
     :theme="theme"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
-    v-on="$listeners"
     @apply-show="onShow"
     @apply-hide="onHide"
   >
@@ -76,8 +75,8 @@ export default {
 
     html: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'html')
+      default (props) {
+        return getDefaultConfig(props.theme, 'html')
       },
     },
 
@@ -88,8 +87,8 @@ export default {
 
     loadingContent: {
       type: String,
-      default () {
-        return getDefaultConfig(this.theme, 'loadingContent')
+      default (props) {
+        return getDefaultConfig(props.theme, 'loadingContent')
       },
     },
   },

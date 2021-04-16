@@ -41,6 +41,5 @@ export default {
     v-model="valueModel"
     v-bind="$attrs"
     class="border border-gray-300 rounded px-3 py-2 w-full"
-    v-on="$listeners"
   >
 </template>

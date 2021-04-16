@@ -50,7 +50,7 @@ The directive also support all the [Component props](#component-props).
 
 ## Component events
 
-- `update:shown(Boolean)` - This allow you to use the `.sync` modifier on the `show` prop.
+- `update:shown(Boolean)` - This allow you to use the `vmodel:shown` directive.
 - `show`
 - `apply-show` - Emitted after the show delay
 - `hide`

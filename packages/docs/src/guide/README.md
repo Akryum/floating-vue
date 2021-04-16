@@ -17,13 +17,13 @@ Thank you to my sponsors allowing me to spend more time on Open Source projects!
 <code-group>
 <code-block title="npm">
 ```shell
-npm i -S v-tooltip@next
+npm i -S v-tooltip@vue3
 ```
 </code-block>
 
 <code-block title="yarn">
 ```shell
-yarn add v-tooltip@next
+yarn add v-tooltip@vue3
 ```
 </code-block>
 </code-group>
@@ -31,10 +31,9 @@ yarn add v-tooltip@next
 2. Add the plugin into your app:
 
 ```js
-import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 
-Vue.use(VTooltip)
+app.use(VTooltip)
 ```
 
 3. Add the default style:

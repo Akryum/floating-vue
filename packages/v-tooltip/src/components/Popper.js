@@ -62,139 +62,152 @@ export default () => ({
 
     disabled: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'disabled')
+      default (props) {
+        return getDefaultConfig(props.theme, 'disabled')
       },
     },
 
     placement: {
       type: String,
-      default () {
-        return getDefaultConfig(this.theme, 'placement')
+      default (props) {
+        return getDefaultConfig(props.theme, 'placement')
       },
       validator: value => placements.includes(value),
     },
 
     delay: {
       type: [String, Number, Object],
-      default () {
-        return getDefaultConfig(this.theme, 'delay')
+      default (props) {
+        return getDefaultConfig(props.theme, 'delay')
       },
     },
 
     offset: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'offset')
+      default (props) {
+        return getDefaultConfig(props.theme, 'offset')
       },
     },
 
     triggers: {
       type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'triggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'triggers')
       },
     },
 
     showTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'showTriggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'showTriggers')
       },
     },
 
     hideTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'hideTriggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'hideTriggers')
       },
     },
 
     popperTriggers: {
       type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'popperTriggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'popperTriggers')
       },
     },
 
     popperShowTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'popperShowTriggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'popperShowTriggers')
       },
     },
 
     popperHideTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'popperHideTriggers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'popperHideTriggers')
       },
     },
 
     container: {
       type: [String, Object, Element, Boolean],
-      default () {
-        return getDefaultConfig(this.theme, 'container')
+      default (props) {
+        return getDefaultConfig(props.theme, 'container')
       },
     },
 
     boundary: {
       type: [String, Element],
-      default () {
-        return getDefaultConfig(this.theme, 'boundary')
+      default (props) {
+        return getDefaultConfig(props.theme, 'boundary')
       },
     },
 
     strategy: {
       type: String,
       validator: value => ['absolute', 'fixed'].includes(value),
-      default () {
-        return getDefaultConfig(this.theme, 'strategy')
+      default (props) {
+        return getDefaultConfig(props.theme, 'strategy')
       },
     },
 
     modifiers: {
       type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'modifiers')
+      default (props) {
+        return getDefaultConfig(props.theme, 'modifiers')
       },
     },
 
     popperOptions: {
       type: Object,
-      default () {
-        return getDefaultConfig(this.theme, 'popperOptions')
+      default (props) {
+        return getDefaultConfig(props.theme, 'popperOptions')
       },
     },
 
     autoHide: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'autoHide')
+      default (props) {
+        return getDefaultConfig(props.theme, 'autoHide')
       },
     },
 
     handleResize: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'handleResize')
+      default (props) {
+        return getDefaultConfig(props.theme, 'handleResize')
       },
     },
 
     instantMove: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'instantMove')
+      default (props) {
+        return getDefaultConfig(props.theme, 'instantMove')
       },
     },
 
     eagerMount: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'eagerMount')
+      default (props) {
+        return getDefaultConfig(props.theme, 'eagerMount')
       },
     },
   },
+
+  emits: [
+    'show',
+    'hide',
+    'update:shown',
+    'apply-show',
+    'apply-hide',
+    'close-group',
+    'close-directive',
+    'auto-hide',
+    'resize',
+    'dispose',
+  ],
 
   data () {
     return {
@@ -284,7 +297,7 @@ export default () => ({
     this.hide()
   },
 
-  beforeDestroy () {
+  beforeUnmount () {
     this.dispose()
   },
 
@@ -684,8 +697,8 @@ export default () => ({
     },
   },
 
-  render (h) {
-    return this.$scopedSlots.default(this.slotData)[0]
+  render () {
+    return this.$slots.default(this.slotData)
   },
 })
 

@@ -28,7 +28,7 @@ Each theme is described by an object that can contain default values of all [ava
 For example, this `info-tooltip` theme:
 
 ```js
-Vue.use(VTooltip, {
+app.use(VTooltip, {
   themes: {
     'info-tooltip': {
       offset: [0, 24],
@@ -45,7 +45,7 @@ See the [global configuration](./config.md#default-values) for the values used i
 To customize your tooltips and other popovers, you can create themes:
 
 ```js
-Vue.use(VTooltip, {
+app.use(VTooltip, {
   themes: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -60,7 +60,7 @@ Here, `$extend: 'tooltip'` extends the `tooltip` theme defined by default inside
 If you don't want to inherit the CSS classes, use `$resetCss`:
 
 ```js
-Vue.use(VTooltip, {
+app.use(VTooltip, {
   themes: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -92,7 +92,7 @@ Then you can customize the CSS for this theme:
 TODO
 
 ```js
-Vue.use(VTooltip, {
+app.use(VTooltip, {
   themes: {
     'info-dropdown': {
       $extend: 'dropdown',

@@ -19,10 +19,10 @@
   "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
     "@popperjs/core": "^2.6.0",
-    "vue-resize": "^1.0.0"
+    "vue-resize": "^2.0.0-alpha.1"
   },
   "peerDependencies": {
-    "vue": "^2.6.10"
+    "vue": "^3.0.11"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -35,6 +35,7 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@rollup/plugin-replace": "^2.3.1",
+    "@vue/compiler-sfc": "^3.0.11",
     "@vue/eslint-config-standard": "^6.0.0",
     "@vue/test-utils": "^1.1.2",
     "babel-core": "7.0.0-bridge.0",
@@ -56,9 +57,8 @@
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-string": "^3.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-vue": "^5.0.0",
-    "vue-jest": "^3.0.7",
-    "vue-template-compiler": "^2.6.10"
+    "rollup-plugin-vue": "^6.0.0",
+    "vue-jest": "^3.0.7"
   },
   "browserslist": [
     "> 1%",
