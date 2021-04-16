@@ -10,7 +10,7 @@
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
     "prepublishOnly": "yarn run lint && yarn run test && yarn run build",
-    "test": "yarn run test:unit",
+    "test": "echo \"TODO tests\"",
     "lint": "eslint . --ext .js,.vue",
     "test:unit": "jest"
   },
