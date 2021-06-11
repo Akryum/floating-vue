@@ -60,6 +60,10 @@ import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
 
 export default {
+  compatConfig: {
+    MODE: 3,
+  },
+  
   name: 'VPopperWrapper',
 
   components: {
