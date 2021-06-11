@@ -54,6 +54,10 @@ import { getDefaultConfig } from '../config'
 import PopperMethods from './PopperMethods'
 
 export default {
+  compatConfig: {
+    MODE: 3,
+  },
+  
   name: 'VTooltipDirective',
 
   components: {
