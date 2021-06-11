@@ -53,6 +53,9 @@ function onTouchCancel (event) {
 }
 
 export default {
+  compatConfig: {
+    MODE: 3,
+  },
   beforeMount (el, { value, modifiers }) {
     el.$_closePopoverModifiers = modifiers
     if (typeof value === 'undefined' || value) {
