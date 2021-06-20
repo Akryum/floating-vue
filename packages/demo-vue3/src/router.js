@@ -24,6 +24,13 @@ export const demos = [
     },
   },
   {
+    path: '/directive/demo4',
+    component: () => import('./views/directive/VTooltipDemo4Manual.vue'),
+    meta: {
+      label: 'VTooltip 4 Manual',
+    },
+  },
+  {
     path: '/component/demo1',
     component: () => import('./views/component/DropdownDemo1.vue'),
     meta: {
