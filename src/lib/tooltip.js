@@ -288,7 +288,7 @@ export default class Tooltip {
 
   _show (reference, options) {
     if (options) {
-      const container = this._findContainer(options.container);
+      const container = this._findContainer(options.container, reference)
       if (!container) return
     }
 

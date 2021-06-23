@@ -22,7 +22,7 @@ export default {
   data () {
     return {
       msg: 'This is a button within shadowDOM',
-      el: this.$root.$el.parentElement,
+      el: (targetElement) => this.$root.$el.parentElement,
     }
   },
 
