@@ -1,4 +1,4 @@
-import { createApp, h } from 'vue'
+import { createApp, h, ref } from 'vue'
 import { placements } from '@popperjs/core'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
@@ -40,8 +40,6 @@ export function getOptions (el, value, modifiers) {
 }
 
 export function createTooltip (el, value, modifiers) {
-  const options = getOptions(el, value, modifiers)
-
   const tooltipApp = el.$_popper = createApp({
     name: 'VTooltipDirective',
     data () {
@@ -49,9 +47,18 @@ export function createTooltip (el, value, modifiers) {
         options,
       }
     },
-    render () {
-      return h(TooltipDirective, {
-        ...this.options,
+    setup () {
+      const optionsRef = ref(getOptions(el, value, modifiers))
+      
+      // Little hack to expose a function on tooltipApp to change the options from the outside
+      Object.assign(tooltipApp, {
+        setOptions: (options) => {
+          optionsRef.value = options
+        }
+      })
+      
+      return () => h(TooltipDirective, {
+        ...optionsRef.value,
         ref: 'tooltip',
       })
     },
@@ -88,7 +95,7 @@ export function bind (el, { value, modifiers }) {
     let tooltipApp
     if (el.$_popper) {
       tooltipApp = el.$_popper
-      tooltipApp.options = options
+      tooltipApp.setOptions(options)
     } else {
       tooltipApp = createTooltip(el, value, modifiers)
     }
