@@ -285,7 +285,6 @@ export default {
     show ({ event, skipDelay = false, force = false } = {}) {
       if (force || !this.disabled) {
         this.$_scheduleShow(event)
-        this.$emit('show')
       }
       this.$emit('update:open', true)
       this.$_beingShowed = true
@@ -416,6 +415,7 @@ export default {
 
               if (!this.$_isDisposed) {
                 this.isOpen = true
+                this.$emit("show")
               } else {
                 this.dispose()
               }
