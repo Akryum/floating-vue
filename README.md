@@ -25,7 +25,7 @@ Easy tooltips, popovers and dropdown with <a href="https://github.com/FezVrasta/
 <br>
 
 **Useful Links**
-
+- [Documentation for v4](https://v-tooltip.netlify.app/guide/directive.html#html-content)
 - [Live Demo](https://akryum.github.io/v-tooltip/)
 - [JSFiddle](https://jsfiddle.net/Akryum/tsjco74e/)
 
