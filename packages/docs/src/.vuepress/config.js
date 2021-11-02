@@ -46,6 +46,15 @@ module.exports = {
         link: '/theme-editor',
       },
       {
+        text: 'Migration',
+        items: [
+          {
+            text: 'From v2',
+            link: '/migration/migration-from-v2',
+          },
+        ],
+      },
+      {
         text: '💚️ Sponsor',
         link: 'https://github.com/sponsors/Akryum',
       },
@@ -63,7 +72,6 @@ module.exports = {
             'config',
             'themes',
             'custom-component',
-            'migration',
           ],
         },
       ],
