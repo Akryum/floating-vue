@@ -2,6 +2,8 @@
 
 v-tooltip is a library helping you add tooltips, dropdowns and other poppers into your Vue application.
 
+[Looking for the old docs?](../legacy/v2/)
+
 ## Sponsors
 
 Thank you to my sponsors allowing me to spend more time on Open Source projects! 🙏️

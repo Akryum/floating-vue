@@ -18,7 +18,7 @@
   "module": "dist/v-tooltip.esm.js",
   "unpkg": "dist/v-tooltip.min.js",
   "dependencies": {
-    "@popperjs/core": "^2.6.0",
+    "@popperjs/core": "^2.10.2",
     "vue-resize": "^2.0.0-alpha.1"
   },
   "peerDependencies": {

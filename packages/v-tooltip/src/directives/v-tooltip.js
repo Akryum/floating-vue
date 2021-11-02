@@ -55,6 +55,9 @@ export function createTooltip (el, value, modifiers) {
         ref: 'tooltip',
       })
     },
+    devtools: {
+      hide: true,
+    },
   })
   const mountTarget = document.createElement('div')
   document.body.appendChild(mountTarget)

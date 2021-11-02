@@ -1,15 +1,17 @@
 {
   "name": "v-tooltip-monorepo",
-  "version": "0.0.0",
+  "version": "3.0.0-beta.1",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "lerna run build --ignore demo",
-    "release": "lerna publish"
+    "release": "lerna publish --dist-tag next && yarn run changelog",
+    "changelog": "node ./scripts/update-version.mjs && conventional-changelog -p angular -i CHANGELOG.md -s -r 2 && (git add CHANGELOG.md && git add package.json && git commit -m \"chore: changelog\" && git push || exit 0)"
   },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "conventional-changelog-cli": "^2.1.1",
+    "lerna": "^4.0.0"
   }
 }

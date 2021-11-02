@@ -221,3 +221,23 @@ Close all the dropdowns in the page with the `all` modifier:
 ```vue
 <a v-close-popper.all>Close All</a>
 ```
+
+## Modifiers
+
+Modifiers should now always be specified with the `modifiers` prop instead of the `popperOptions` because additional processing is done on them before passing them to PopperJS.
+
+`modifiers` is an array of objects configuring the PopperJS modifiers, [learn more here](https://popper.js.org/docs/v2/modifiers/).
+
+Example:
+
+```html
+<VDropdown
+  :modifiers="[
+    {
+      name: 'flip',
+      enabled: false,
+    },
+  ]"
+/>
+```
+
