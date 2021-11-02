@@ -52,6 +52,10 @@ module.exports = {
             text: 'From v2',
             link: '/migration/migration-from-v2',
           },
+          {
+            text: 'Docs v2',
+            link: '/legacy/v2/',
+          },
         ],
       },
       {
