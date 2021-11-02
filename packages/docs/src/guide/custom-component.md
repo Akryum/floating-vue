@@ -19,19 +19,22 @@ The `<Popper>` component should receive all attributes and event listeners (don'
 It also expects the following props:
 
 - `theme`: currently applied theme
-- `targetNode`: a function that returns the target HTML element that should trigger the popper
+- `targetNodes`: a function that returns the target HTML elements that should trigger the popper
+- `referenceNode`: a function that returns the reference HTML element that should be used as the Popper JS reference for positionning
 - `popperNode`: a function that returns the popper HTML element that will be displayed inside the popper (recommended to target the `<PopperContent>` root element)
 - `arrowNode`: a function that returns the arrow HTML element that will represent the popper arrow (recommended to use the `<PopperContent>` arrow ref: `$refs.arrow`)
 
 It exposes the following to the default slot:
 
 - `popperId`: a unique ID for the popper, usefull for accessibility (should be passed to `<PopperContent>`)
-- `isOpen`: boolean to know if the popper is open or not (should be passed to `<PopperContent>`)
-- `trigger`: the trigger events
+- `isShown`: boolean to know if the popper is open or not (should be passed to `<PopperContent>`)
+- `shouldMountContent`: boolean to know if the popper content should be mounted or not (should be passed to `<PopperContent>`)
+- `skipTransition`: boolean to disable animations and transitions (should be passed to `<PopperContent>`)
 - `autoHide`: if auto hidding is enabled (should be passed to `<PopperContent>`)
 - `hide`: method to hide the popper (should be handled with `<PopperContent>`'s `hide` event)
 - `handleResize`: is resizing detection enabled (should be passed to `<PopperContent>`)
 - `onResize`: method to handle a change of the size of the popper content (should be handled with `<PopperContent>`'s `resize` event)
+- `classes`: object with boolean flags to toggle CSS classes (should be passed to `<PopperContent>`)
 
 ## PopperContent
 
@@ -39,9 +42,12 @@ It expects the following props:
 
 - `popperId`
 - `theme`
-- `isOpen`
+- `shown`
+- `mounted`
+- `skipTransition`
 - `autoHide`
 - `handleResize`
+- `classes`
 
 Events:
 
@@ -61,50 +67,52 @@ Refs:
     ref="popper"
     v-slot="{
       popperId,
-      isOpen,
-      trigger,
+      isShown,
+      shouldMountContent,
+      skipTransition,
       autoHide,
       hide,
       handleResize,
       onResize,
+      classes,
     }"
     v-bind="$attrs"
     :theme="theme"
-    :target-node="() => $refs.trigger"
+    :target-nodes="getTargetNodes"
+    :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
     :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
   >
     <div
+      ref="reference"
       class="v-popper"
       :class="[
         themeClass,
         {
-          'v-popper--open': isOpen,
+          'v-popper--shown': isShown,
         },
       ]"
     >
-      <div
-        ref="trigger"
-        :aria-describedby="popperId"
-        :tabindex="trigger.indexOf('focus') !== -1 ? 0 : undefined"
-        class="v-popper__trigger"
-        style="display: inline-block;"
-      >
-        <slot />
-      </div>
+      <slot />
 
       <PopperContent
         ref="popperContent"
         :popper-id="popperId"
         :theme="theme"
-        :is-open="isOpen"
+        :shown="isShown"
+        :mounted="shouldMountContent"
+        :skip-transition="skipTransition"
         :auto-hide="autoHide"
         :handle-resize="handleResize"
+        :classes="classes"
         @hide="hide"
         @resize="onResize"
       >
-        <slot name="popper" />
+        <slot
+          name="popper"
+          :shown="isShown"
+        />
       </PopperContent>
     </div>
   </Popper>
@@ -119,10 +127,10 @@ import {
 } from 'v-tooltip'
 
 export default {
-  name: 'MyPopper',
+  name: 'VPopperWrapper',
 
   components: {
-    Popper,
+    Popper: Popper(),
     PopperContent,
   },
 
@@ -139,6 +147,12 @@ export default {
       default () {
         return this.$options.vPopperTheme
       },
+    },
+  },
+
+  methods: {
+    getTargetNodes () {
+      return this.$slots.default.map(vnode => vnode.elm).filter(Boolean)
     },
   },
 }
