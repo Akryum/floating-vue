@@ -87,6 +87,10 @@ Then you can customize the CSS for this theme:
 }
 ```
 
+::: tip
+You can use the [Theme Editor](../theme-editor.md) to build your v-tooltip themes!
+:::
+
 ## Theme component
 
 TODO
