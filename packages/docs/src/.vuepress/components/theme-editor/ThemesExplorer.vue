@@ -61,7 +61,7 @@ export default {
       <input
         v-model="searchText"
         placeholder="Filter themes..."
-        class="flex-1 pl-8 py-2"
+        class="flex-1 w-0 pl-8 py-2"
       >
 
       <button
