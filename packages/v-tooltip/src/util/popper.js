@@ -6,6 +6,8 @@ export function applyModifier (modifiers, name, options) {
       options: {},
     }
     modifiers.push(modifier)
+  } else if (!modifier.options) {
+    modifier.options = {}
   }
   Object.assign(modifier.options, options)
 }
