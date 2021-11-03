@@ -9,6 +9,12 @@
         <div class="my-menu">
           ✌️ Hello from v-tooltip + Vue 3
         </div>
+
+        <div>
+          <button v-close-popper>Close</button>
+          <button v-close-popper="true">Close</button>
+          <button v-close-popper="false">Don't close</button>
+        </div>
       </template>
     </VDropdown>
 
