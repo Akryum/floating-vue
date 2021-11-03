@@ -6,21 +6,28 @@ export const demos = [
     path: '/directive/demo1',
     component: () => import('./views/directive/VTooltipDemo1.vue'),
     meta: {
-      label: 'VTooltip 1',
+      label: 'Directive simple',
     },
   },
   {
     path: '/directive/demo2',
     component: () => import('./views/directive/VTooltipDemo2Html.vue'),
     meta: {
-      label: 'VTooltip 2',
+      label: 'Directive HTML',
     },
   },
   {
     path: '/directive/demo3',
     component: () => import('./views/directive/VTooltipDemo3Async.vue'),
     meta: {
-      label: 'VTooltip 3',
+      label: 'Directive async',
+    },
+  },
+  {
+    path: '/directive/demo4',
+    component: () => import('./views/directive/VTooltipDemo4Input.vue'),
+    meta: {
+      label: 'Directive input',
     },
   },
   {

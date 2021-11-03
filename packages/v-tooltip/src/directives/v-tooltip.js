@@ -1,4 +1,4 @@
-import { createApp, h } from 'vue'
+import { createApp, h, ref } from 'vue'
 import { placements } from '@popperjs/core'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
@@ -40,13 +40,14 @@ export function getOptions (el, value, modifiers) {
 }
 
 export function createTooltip (el, value, modifiers) {
-  const options = getOptions(el, value, modifiers)
-
-  const tooltipApp = el.$_popper = createApp({
+  const options = ref(getOptions(el, value, modifiers))
+  const component = ref()
+  const tooltipApp = createApp({
     name: 'VTooltipDirective',
-    data () {
+    setup () {
       return {
         options,
+        tooltip: component,
       }
     },
     render () {
@@ -69,12 +70,24 @@ export function createTooltip (el, value, modifiers) {
     el.classList.add(TARGET_CLASS)
   }
 
-  return tooltipApp
+  const result = el.$_popper = {
+    app: tooltipApp,
+    options,
+    component,
+    show () {
+      component.value.show()
+    },
+    hide () {
+      component.value.hide()
+    },
+  }
+
+  return result
 }
 
 export function destroyTooltip (el) {
   if (el.$_popper) {
-    el.$_popper.unmount()
+    el.$_popper.app.unmount()
     if (el.$_popperMountTarget.parentElement) {
       el.$_popperMountTarget.parentElement.removeChild(el.$_popperMountTarget)
     }
@@ -97,7 +110,7 @@ export function bind (el, { value, modifiers }) {
     let tooltipApp
     if (el.$_popper) {
       tooltipApp = el.$_popper
-      tooltipApp.options = options
+      tooltipApp.options.value = options
     } else {
       tooltipApp = createTooltip(el, value, modifiers)
     }
@@ -105,7 +118,7 @@ export function bind (el, { value, modifiers }) {
     // Manual show
     if (typeof value.shown !== 'undefined' && value.shown !== el.$_popperOldShown) {
       el.$_popperOldShown = value.shown
-      value.shown ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide()
+      value.shown ? tooltipApp.show() : tooltipApp.hide()
     }
   }
 }
