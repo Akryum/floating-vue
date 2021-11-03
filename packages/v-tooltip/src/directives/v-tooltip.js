@@ -62,6 +62,7 @@ export function createTooltip (el, value, modifiers) {
   const mountTarget = document.createElement('div')
   document.body.appendChild(mountTarget)
   tooltipApp.mount(mountTarget)
+  el.$_popperMountTarget = mountTarget
 
   // Class on target
   if (el.classList) {
@@ -74,8 +75,13 @@ export function createTooltip (el, value, modifiers) {
 export function destroyTooltip (el) {
   if (el.$_popper) {
     el.$_popper.unmount()
+    if (el.$_popperMountTarget.parentElement) {
+      el.$_popperMountTarget.parentElement.removeChild(el.$_popperMountTarget)
+    }
+
     delete el.$_popper
     delete el.$_popperOldShown
+    delete el.$_popperMountTarget
   }
 
   if (el.classList) {
