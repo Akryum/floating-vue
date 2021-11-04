@@ -31,6 +31,7 @@
     "@babel/plugin-transform-runtime": "^7.4.0",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.2",
+    "@nuxt/kit": "^0.7.0-edge",
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
