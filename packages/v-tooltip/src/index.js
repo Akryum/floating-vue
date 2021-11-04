@@ -36,8 +36,8 @@ export const TooltipDirective = PrivateTooltipDirective
 /* Vue plugin */
 
 export function install (app, options = {}) {
-  if (install.installed) return
-  install.installed = true
+  if (app.$_vTooltipInstalled) return
+  app.$_vTooltipInstalled = true
 
   assign(config, options)
 
