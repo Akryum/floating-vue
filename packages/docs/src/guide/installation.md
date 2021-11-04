@@ -147,3 +147,31 @@ Add the default CSS:
 ```js
 import 'v-tooltip/dist/v-tooltip.css'
 ```
+
+## Nuxt 3
+
+<code-group>
+<code-block title="npm">
+```shell
+npm i -S v-tooltip@vue3
+```
+</code-block>
+
+<code-block title="yarn">
+```shell
+yarn add v-tooltip@vue3
+```
+</code-block>
+</code-group>
+
+Add the `v-tooltip/nuxt` module to your Nuxt config file:
+
+```js
+import { defineNuxtConfig } from 'nuxt3'
+
+export default defineNuxtConfig({
+  buildModules: [
+    'v-tooltip/nuxt',
+  ],
+})
+```
