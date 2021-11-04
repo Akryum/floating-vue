@@ -1,3 +1,17 @@
+# [4.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2021-11-04)
+
+
+### Bug Fixes
+
+* **ssr:** check installation on app ([c20cad3](https://github.com/Akryum/v-tooltip/commit/c20cad3e6e3a5860a7eb8ae3dc09cad88d661910))
+
+
+### Features
+
+* nuxt 3 module ([7cb5d1b](https://github.com/Akryum/v-tooltip/commit/7cb5d1b73c13a5ba8e916f3e497c3ad77ee74875))
+
+
+
 # [4.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.1...v4.0.0-beta.1) (2021-11-03)
 
 
