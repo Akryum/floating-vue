@@ -87,9 +87,15 @@ Then you can customize the CSS for this theme:
 }
 ```
 
-## Theme component
+::: tip
+You can use the [Theme Editor](../theme-editor.md) to build your v-tooltip themes!
+:::
 
-TODO
+## Themed component
+
+After youve have created your new theme, you can use it with the `theme` prop like we saw above, or you can create a reusable component that directly use it. It's also a good way to organize your code by putting the theme's relevant CSS in the component `<style>` block.
+
+Let's have this example custom theme called `info-dropdown`:
 
 ```js
 Vue.use(VTooltip, {
@@ -103,6 +109,8 @@ Vue.use(VTooltip, {
   },
 })
 ```
+
+We can then create a Themed Component by using the `PopperWrapper` component from `v-tooltip` and overriding the `vPopperTheme` option:
 
 ```vue
 <script>
@@ -125,6 +133,10 @@ export default {
 }
 </style>
 ```
+
+Notice how we also add some CSS here related to our `info-dropdown` theme.
+
+Here is an example of using our new component in the rest of our code:
 
 ```vue
 <VInfoDropdown>

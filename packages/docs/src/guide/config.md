@@ -15,7 +15,7 @@ Or directly on `VTooltip`:
 
 ```javascript
 import VTooltip from 'v-tooltip'
-VTooltip.options.offset = 12
+VTooltip.options.offset = [0, 12]
 ```
 
 For a specific theme:
@@ -23,7 +23,7 @@ For a specific theme:
 
 ```js
 import VTooltip from 'v-tooltip'
-VTooltip.options.themes.dropdown.offset = 12
+VTooltip.options.themes.dropdown.offset = [0, 12]
 ```
 
 ## Default values

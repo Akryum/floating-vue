@@ -29,7 +29,8 @@ module.exports = {
   themeConfig: {
     repo: 'https://github.com/Akryum/v-tooltip',
     editLinks: true,
-    docsDir: 'packages/docs',
+    docsDir: 'packages/docs/src',
+    docsBranch: 'next',
     editLinkText: '',
     lastUpdated: true,
     nav: [
@@ -44,6 +45,19 @@ module.exports = {
       {
         text: 'Theme editor',
         link: '/theme-editor',
+      },
+      {
+        text: 'Migration',
+        items: [
+          {
+            text: 'From v2',
+            link: '/migration/migration-from-v2',
+          },
+          {
+            text: 'Docs v2',
+            link: '/legacy/v2/',
+          },
+        ],
       },
       {
         text: '💚️ Sponsor',
@@ -63,7 +77,6 @@ module.exports = {
             'config',
             'themes',
             'custom-component',
-            'migration',
           ],
         },
       ],

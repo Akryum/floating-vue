@@ -39,14 +39,14 @@ The directive also support all the [Component props](#component-props).
 - `instantMove`: Boolean: skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
 - `eagerMount`: Boolean: mount the popper content without waiting for the popper to be displayed.
 - `disposeTimeout`: Number of ms after hide when the popper instance is destroyed.
-- `airaId`: Id used for the `aria-describedby` attribute. By default a random id.
+- `ariaId`: Id used for the `aria-describedby` attribute. By default a random id.
 - `modifiers`: Array of Popper.js [modifier objects](https://popper.js.org/docs/v2/modifiers/).
 - `popperOptions`: Other Popper.js options.
 
 ## Component slots
 
 - `default`: Content put in the trigger part of the popper, typically a button.
-- `popper`: Content pu inside the popper of the popper.
+- `popper`: Content put inside the popper of the popper.
 
 ## Component events
 
