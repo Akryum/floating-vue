@@ -132,7 +132,7 @@ export default () => ({
     },
 
     container: {
-      type: [String, Object, Element, Boolean],
+      type: [String, Object, Element, Boolean, Function],
       default () {
         return getDefaultConfig(this.theme, 'container')
       },
@@ -571,6 +571,10 @@ export default () => ({
 
     $_ensureContainer () {
       let container = this.container
+      // if container is a callback, resolve it
+      if (typeof container === 'function') {
+        container = container(this.$_targetNodes[0])
+      }
       // if container is a query, get the relative element
       if (typeof container === 'string') {
         container = window.document.querySelector(container)

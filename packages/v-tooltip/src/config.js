@@ -3,11 +3,11 @@ export const config = {
   disabled: false,
   // Default position offset [skidding, distance] (px)
   offset: [0, 5],
-  // Default container where the tooltip will be appended
+  // Default container where the tooltip will be appended, can accept a callback that should return an element or a query selector
   container: 'body',
   // Element used to compute position and size boundaries
   boundary: undefined,
-  // Skip delay & CSS transitions when another popper is shown, so that the popper appear to instanly move to the new position.
+  // Skip delay & CSS transitions when another popper is shown, so that the popper appear to instantly move to the new position.
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
   disposeTimeout: 5000,
