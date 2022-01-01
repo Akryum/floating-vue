@@ -46,7 +46,7 @@ The directive also support all the [Component props](#component-props).
 ## Component slots
 
 - `default`: Content put in the trigger part of the popper, typically a button.
-- `popper`: Content pu inside the popper of the popper.
+- `popper`: Content put inside the popper of the popper.
 
 ## Component events
 

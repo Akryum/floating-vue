@@ -29,7 +29,8 @@ module.exports = {
   themeConfig: {
     repo: 'https://github.com/Akryum/v-tooltip',
     editLinks: true,
-    docsDir: 'packages/docs',
+    docsDir: 'packages/docs/src',
+    docsBranch: 'next',
     editLinkText: '',
     lastUpdated: true,
     nav: [

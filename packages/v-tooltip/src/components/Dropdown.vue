@@ -14,10 +14,16 @@ export default {
   color: black;
   padding: 24px;
   border-radius: 6px;
+  border: 1px solid #ddd;
   box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
 }
 
 .v-popper--theme-dropdown .v-popper__arrow {
   border-color: #fff;
+}
+
+.v-popper--theme-dropdown .v-popper__arrow-border {
+  visibility: visible;
+  border-color: #ddd;
 }
 </style>

@@ -391,18 +391,24 @@ export default () => ({
       }
 
       applyModifier(popperOptions.modifiers, 'arrow', {
-        element: (this.arrowNode && this.arrowNode()) || '[data-popper-arrow]',
+        options: {
+          element: (this.arrowNode && this.arrowNode()) || '[data-popper-arrow]',
+        },
       })
 
       if (this.offset) {
         applyModifier(popperOptions.modifiers, 'offset', {
-          offset: this.offset,
+          options: {
+            offset: this.offset,
+          },
         })
       }
 
       if (this.boundary) {
         applyModifier(popperOptions.modifiers, 'preventOverflow', {
-          boundary: this.boundary,
+          options: {
+            boundary: this.boundary,
+          },
         })
       }
 
