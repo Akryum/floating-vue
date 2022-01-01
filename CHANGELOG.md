@@ -1,3 +1,12 @@
+# [3.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2022-01-01)
+
+
+### Features
+
+* popper slot: hide prop ([14000eb](https://github.com/Akryum/v-tooltip/commit/14000eb2675414294a73c22547fb92a36ad9d8f6))
+
+
+
 # [3.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2022-01-01)
 
 
