@@ -48,6 +48,7 @@
         <slot
           name="popper"
           :shown="isShown"
+          :hide="hide"
         />
       </PopperContent>
     </div>

@@ -47,6 +47,9 @@ The directive also support all the [Component props](#component-props).
 
 - `default`: Content put in the trigger part of the popper, typically a button.
 - `popper`: Content put inside the popper of the popper.
+  - Props:
+    - `shown`: boolean indicating if the popper is shown
+    - `hide`: method to hide the popper
 
 ## Component events
 
