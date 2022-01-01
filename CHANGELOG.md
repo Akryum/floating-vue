@@ -1,3 +1,12 @@
+# [3.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2022-01-01)
+
+
+### Bug Fixes
+
+* arrow regression ([067aa4b](https://github.com/Akryum/v-tooltip/commit/067aa4ba459a568af43f70f968dc64b8aa680076))
+
+
+
 # [3.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2022-01-01)
 
 
