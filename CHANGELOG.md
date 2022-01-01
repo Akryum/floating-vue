@@ -1,3 +1,17 @@
+# [3.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2022-01-01)
+
+
+### Bug Fixes
+
+* applyModifier ([6f54d1b](https://github.com/Akryum/v-tooltip/commit/6f54d1bd270b60e7666e4bc598a6b2745332dc1e))
+
+
+### Features
+
+* border + arrow border ([73c3a1e](https://github.com/Akryum/v-tooltip/commit/73c3a1e07a9b6f85757cf8b6cd5b6cf94c89035a))
+
+
+
 # [3.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v3.0.0-alpha.21...v3.0.0-beta.1) (2021-11-02)
 
 
