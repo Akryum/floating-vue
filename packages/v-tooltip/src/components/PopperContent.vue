@@ -135,9 +135,9 @@ export default {
 .v-popper__popper[data-popper-placement^="top"] .v-popper__arrow,
 .v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-border {
   border-bottom-width: 0;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
 }
 
 .v-popper__popper[data-popper-placement^="top"] .v-popper__arrow {
@@ -151,9 +151,9 @@ export default {
 .v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow,
 .v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-border {
   border-top-width: 0;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
 }
 
 .v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow {
