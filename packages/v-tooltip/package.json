@@ -4,8 +4,8 @@
   "description": "Easy Vue tooltips, dropdowns & popovers using Popper.js",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development rollup --config build/rollup.config.es.js --watch",
-    "build": "NODE_ENV=production yarn run build:browser && yarn run build:es && yarn run build:umd",
+    "dev": "cross-env NODE_ENV=development nodemon --exec \"rollup --config build/rollup.config.es.js\" --watch src -e js,vue",
+    "build": "crpss-env NODE_ENV=production yarn run build:browser && yarn run build:es && yarn run build:umd",
     "build:browser": "rollup --config build/rollup.config.browser.js",
     "build:es": "rollup --config build/rollup.config.es.js",
     "build:umd": "rollup --config build/rollup.config.umd.js",
@@ -51,6 +51,7 @@
     "jest": "^24.7.1",
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
+    "nodemon": "^2.0.15",
     "rollup": "^2.35.1",
     "rollup-plugin-analyzer": "^4.0.0",
     "rollup-plugin-css-only": "^3.1.0",
