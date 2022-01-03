@@ -18,6 +18,9 @@ const shown = ref(false)
     v-model:shown="shown"
     :triggers="[]"
     :auto-hide="false"
+    :style="{
+      marginLeft: '400px',
+    }"
   >
     <button id="dropdown-btn">Click me</button>
 

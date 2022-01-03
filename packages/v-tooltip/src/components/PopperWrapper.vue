@@ -12,7 +12,7 @@
       onResize,
       classes,
     }"
-    v-bind="$attrs"
+    v-bind="popperAttrs"
     :theme="finalTheme"
     :target-nodes="getTargetNodes"
     :reference-node="() => $refs.reference"
@@ -23,11 +23,13 @@
       ref="reference"
       class="v-popper"
       :class="[
+        $attrs.class,
         themeClass,
         {
           'v-popper--shown': isShown,
         },
       ]"
+      :style="$attrs.style"
     >
       <slot />
 
@@ -85,6 +87,13 @@ export default {
   computed: {
     finalTheme () {
       return this.theme ?? this.$options.vPopperTheme
+    },
+
+    popperAttrs () {
+      const result = { ...this.$attrs }
+      delete result.class
+      delete result.style
+      return result
     },
   },
 
