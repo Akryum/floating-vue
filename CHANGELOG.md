@@ -1,3 +1,12 @@
+# [4.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* allow passing class and style to reference div ([449cd45](https://github.com/Akryum/v-tooltip/commit/449cd45e22969b00477c2ca0327d9e79df777bd5))
+
+
+
 # [4.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.4...v4.0.0-beta.5) (2022-01-01)
 
 
