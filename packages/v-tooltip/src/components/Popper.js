@@ -194,6 +194,13 @@ export default () => ({
         return getDefaultConfig(this.theme, 'eagerMount')
       },
     },
+
+    popperClass: {
+      type: String,
+      default () {
+        return getDefaultConfig(this.theme, 'popperClass')
+      },
+    },
   },
 
   data () {
@@ -229,7 +236,10 @@ export default () => ({
         hide: this.hide,
         handleResize: this.handleResize,
         onResize: this.onResize,
-        classes: { ...this.classes },
+        classes: {
+          ...this.classes,
+          popperClass: this.popperClass
+        },
       }
     },
   },

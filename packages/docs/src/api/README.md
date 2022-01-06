@@ -135,6 +135,16 @@ Same as `content`, used when the actual tooltip content is loading.
 
 The popper theme applied to the popper  (default: `'dropdown'`).
 
+[Learn more](../guide/themes.md)
+
+### `popperClass`
+
+Quick way to add one-time classes to the popper container, for example to limit its width in a specific situation.
+
+::: tip
+It's recommended to use [themes](../guide/themes.md) to style the poppers.
+:::
+
 ### `placement`
 
 Popper placement (default: `'bottom'`).
