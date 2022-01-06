@@ -238,7 +238,7 @@ export default () => ({
         onResize: this.onResize,
         classes: {
           ...this.classes,
-          popperClass: this.popperClass
+          popperClass: this.popperClass,
         },
       }
     },
