@@ -720,22 +720,37 @@ export default () => ({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchstart', handleGlobalTouchstart, supportsPassive
+    document.addEventListener('touchstart', handleGlobalMousedown, supportsPassive
+      ? {
+          passive: true,
+          capture: true,
+        }
+      : true)
+    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
       ? {
           passive: true,
           capture: true,
         }
       : true)
   } else {
-    window.addEventListener('mousedown', handleGlobalMouseDown, true)
+    window.addEventListener('mousedown', handleGlobalMousedown, true)
+    window.addEventListener('click', handleGlobalClick, true)
   }
 }
 
-function handleGlobalMouseDown (event) {
+function handleGlobalMousedown (event) {
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
+    const popperContent = popper.popperNode()
+    popper.$_mouseDownContains = popperContent.contains(event.target)
+  }
+}
+
+function handleGlobalClick (event) {
   handleGlobalClose(event)
 }
 
-function handleGlobalTouchstart (event) {
+function handleGlobalTouchend (event) {
   handleGlobalClose(event, true)
 }
 
@@ -744,7 +759,7 @@ function handleGlobalClose (event, touch = false) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
     const popperContent = popper.popperNode()
-    const contains = popperContent.contains(event.target)
+    const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
     requestAnimationFrame(() => {
       if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
         popper.$_handleGlobalClose(event, touch)
