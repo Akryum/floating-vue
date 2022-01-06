@@ -15028,10 +15028,10 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-v-tooltip@^3.0.0-beta.7:
-  version "3.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-3.0.0-beta.7.tgz#250b6904d0946682de2d31c74f077edcf33eda0b"
-  integrity sha512-rMWE7LK9FlTXWTDY8+eWlehc5K936coyTGJzxmDeI7jQEuy/eWfQLFWddSons+RT71NP7+Wab1nDs6Bx4HdiaA==
+v-tooltip@^3.0.0-beta.8:
+  version "3.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-3.0.0-beta.8.tgz#20a6d9c304d938b12c689a5bdaeb2b08a679ccb4"
+  integrity sha512-x1BRVHQLBIV5U5c0bwXpqr1QvsbOa39JqjlONAAntIgBHk7aiCUQhuF/rU08dMZvAgLCmxH8vGZpYUGq7DDoLw==
   dependencies:
     "@popperjs/core" "^2.11.0"
     vue-resize "^1.0.0"
