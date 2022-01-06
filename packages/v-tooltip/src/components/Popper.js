@@ -617,7 +617,11 @@ export default () => ({
           const eventType = eventMap[trigger]
           if (eventType) {
             this.$_events.push({ targetNodes, eventType, handler })
-            targetNodes.forEach(node => node.addEventListener(eventType, handler))
+            targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
+              ? {
+                  passive: true,
+                }
+              : undefined))
           }
         })
       }
@@ -675,6 +679,12 @@ export default () => ({
       }
     },
 
+    async $_handleGlobalResize (event) {
+      if (this.popperInstance) {
+        await this.popperInstance.update()
+      }
+    },
+
     $_detachPopperNode () {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
     },
@@ -710,22 +720,22 @@ export default () => ({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
+    document.addEventListener('touchstart', handleGlobalTouchstart, supportsPassive
       ? {
           passive: true,
           capture: true,
         }
       : true)
   } else {
-    window.addEventListener('click', handleGlobalClick, true)
+    window.addEventListener('mousedown', handleGlobalMouseDown, true)
   }
 }
 
-function handleGlobalClick (event) {
+function handleGlobalMouseDown (event) {
   handleGlobalClose(event)
 }
 
-function handleGlobalTouchend (event) {
+function handleGlobalTouchstart (event) {
   handleGlobalClose(event, true)
 }
 
@@ -740,6 +750,15 @@ function handleGlobalClose (event, touch = false) {
         popper.$_handleGlobalClose(event, touch)
       }
     })
+  }
+}
+
+window.addEventListener('resize', handleGlobalResize)
+
+function handleGlobalResize (event) {
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
+    popper.$_handleGlobalResize(event)
   }
 }
 
