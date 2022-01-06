@@ -1,3 +1,17 @@
+# [3.0.0-beta.8](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2022-01-06)
+
+
+### Bug Fixes
+
+* better global close logic, fixes v-close-popper ([3939fe0](https://github.com/Akryum/v-tooltip/commit/3939fe0ef80d1c39c40b5478fa1ba1596bd977e5))
+
+
+### Reverts
+
+* Revert "fix: use global mouse down instead of click, closes #530" ([cfa740b](https://github.com/Akryum/v-tooltip/commit/cfa740b241a4c997ce043765b066ba9ab508bc6c)), closes [#530](https://github.com/Akryum/v-tooltip/issues/530)
+
+
+
 # [3.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2022-01-06)
 
 
