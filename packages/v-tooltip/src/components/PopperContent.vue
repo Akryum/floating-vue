@@ -5,6 +5,7 @@
     class="v-popper__popper"
     :class="[
       themeClass,
+      classes.popperClass,
       {
         'v-popper__popper--shown': shown,
         'v-popper__popper--hidden': !shown,

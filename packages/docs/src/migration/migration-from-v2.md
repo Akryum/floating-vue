@@ -122,17 +122,17 @@ You can use the example above to replicate the default config of v-tooltip v2.
 
 ### Directive
 
-The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has a few additional props tough.
+The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has [a few additional props](../api/README.md#directive-options) tough.
 
 Renamed props:
 
 - `trigger` to `triggers` (see [Trigger](#trigger))
 - `show` to `shown`
 - `boundariesElement` to `boundary`
+- `classes` to `popperClass`
 
 The following directive options were also removed:
 
-- `classes`
 - `targetClasses`
 - `template`
 - `arrowSelector`
@@ -231,6 +231,7 @@ After:
 - `boundariesElement` to `boundary`
 - `open` to `shown`
 - `openGroup` to `showGroup`
+- `popoverClass` to `popperClass`
 
 Plus the default component slot props:
 
@@ -304,7 +305,6 @@ After:
 
 The following props were removed and are no longer available:
 
-- `popoverClass`
 - `popoverBaseClass`
 - `popoverWrapperClass`
 - `popoverArrowClass`

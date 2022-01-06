@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.8.1",
     "screenfull": "^4.2.0",
-    "v-tooltip": "^3.0.0-beta.10",
+    "v-tooltip": "^3.0.0-beta.11",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1"
   },
