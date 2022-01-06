@@ -216,7 +216,7 @@ data () {
 }
 ```
 
-Close all the dropdowns in the page with the `all` modifier:
+Close all the poppers in the page with the `all` modifier:
 
 ```vue
 <a v-close-popper.all>Close All</a>
