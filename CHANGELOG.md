@@ -1,3 +1,12 @@
+# [3.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2022-01-06)
+
+
+### Features
+
+* hideAllPoppers ([a29afe5](https://github.com/Akryum/v-tooltip/commit/a29afe5cf3c4a39de7813e8d58e1907277fdbd1c))
+
+
+
 # [3.0.0-beta.8](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2022-01-06)
 
 
