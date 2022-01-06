@@ -1,3 +1,12 @@
+# [3.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.9...v3.0.0-beta.10) (2022-01-06)
+
+
+### Bug Fixes
+
+* window not defined in non-browser envs ([4e12598](https://github.com/Akryum/v-tooltip/commit/4e125984b0e75dc18309461ad91ce340988c492d))
+
+
+
 # [3.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2022-01-06)
 
 
