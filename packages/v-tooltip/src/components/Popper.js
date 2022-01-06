@@ -707,6 +707,12 @@ export default () => ({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
+    document.addEventListener('touchstart', handleGlobalMousedown, supportsPassive
+      ? {
+          passive: true,
+          capture: true,
+        }
+      : true)
     document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
       ? {
           passive: true,
@@ -714,7 +720,16 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
         }
       : true)
   } else {
+    window.addEventListener('mousedown', handleGlobalMousedown, true)
     window.addEventListener('click', handleGlobalClick, true)
+  }
+}
+
+function handleGlobalMousedown (event) {
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
+    const popperContent = popper.popperNode()
+    popper.$_mouseDownContains = popperContent.contains(event.target)
   }
 }
 
@@ -731,7 +746,7 @@ function handleGlobalClose (event, touch = false) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
     const popperContent = popper.popperNode()
-    const contains = popperContent.contains(event.target)
+    const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
     requestAnimationFrame(() => {
       if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
         popper.$_handleGlobalClose(event, touch)
