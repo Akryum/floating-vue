@@ -666,6 +666,12 @@ export default () => ({
       }
     },
 
+    async $_handleGlobalResize (event) {
+      if (this.popperInstance) {
+        await this.popperInstance.update()
+      }
+    },
+
     $_detachPopperNode () {
       this.$_popperNode.parentNode && this.$_popperNode.parentNode.removeChild(this.$_popperNode)
     },
@@ -731,6 +737,15 @@ function handleGlobalClose (event, touch = false) {
         popper.$_handleGlobalClose(event, touch)
       }
     })
+  }
+}
+
+window.addEventListener('resize', handleGlobalResize)
+
+function handleGlobalResize (event) {
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
+    popper.$_handleGlobalResize(event)
   }
 }
 
