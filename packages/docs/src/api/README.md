@@ -1,8 +1,50 @@
 ---
 sidebar: auto
+depth: 3
 ---
 
 # API Reference
+
+## Global
+
+### `hideAllPoppers`
+
+Hides all shown poppers.
+
+```js
+import { hideAllPoppers } from 'v-tooltip'
+
+hideAllPoppers()
+```
+
+### `createTooltip`
+
+`createTooltip(el, valueOrOptions, directiveModifiers)` create a tooltip on a given element.
+
+```js
+import { createTooltip, destroyTooltip } from 'v-tooltip'
+
+export function clipboardSuccess (el) {
+  const tooltip = createTooltip(el, {
+    triggers: [],
+    content: 'Text copied!',
+  })
+  tooltip.show()
+  setTimeout(() => {
+    tooltip.hide()
+    // Transition
+    setTimeout(() => {
+      destroyTooltip(el)
+    }, 400)
+  }, 600)
+}
+```
+
+### `destroyTooltip`
+
+`destroyTooltip(el)` destroys a tooltip on a given element.
+
+See example above.
 
 ## Directive options
 
