@@ -122,7 +122,7 @@ You can use the example above to replicate the default config of v-tooltip v2.
 
 ### Directive
 
-The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has a few additional props tough.
+The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has [a few additional props](../api/README.md#directive-options) tough.
 
 Renamed props:
 
