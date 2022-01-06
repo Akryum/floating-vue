@@ -39,7 +39,7 @@ function arrayToSourceLines (array, indentCount = 0) {
       lines.push('[]')
     } else if (contentLines.length <= MAX_SINGLE_LINE_ARRAY_LENGTH) {
       const [first] = contentLines
-      first.line = contentLines.map(({ line }) => line.substr(0, line.length - 1)).join(', ')
+      first.line = contentLines.map(({ line }) => line.substring(0, line.length - 1)).join(', ')
       first.line = `[${first.line}]`
       first.spaces--
       lines.push(first)

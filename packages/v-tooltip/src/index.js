@@ -32,6 +32,8 @@ export const PopperWrapper = PrivatePopperWrapper
 export const ThemeClass = PrivateThemeClass
 export const Tooltip = PrivateTooltip
 export const TooltipDirective = PrivateTooltipDirective
+// Utils
+export { hideAllPoppers } from './components/Popper'
 
 /* Vue plugin */
 

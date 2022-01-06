@@ -282,7 +282,7 @@ export default () => ({
   },
 
   created () {
-    this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substr(2, 10)).join('_')}`
+    this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`
   },
 
   mounted () {
@@ -779,4 +779,11 @@ function handleGlobalResize (event) {
 
 function nextFrame () {
   return new Promise(resolve => requestAnimationFrame(resolve))
+}
+
+export function hideAllPoppers () {
+  for (let i = 0; i < shownPoppers.length; i++) {
+    const popper = shownPoppers[i]
+    popper.hide()
+  }
 }
