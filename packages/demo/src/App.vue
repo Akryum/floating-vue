@@ -189,7 +189,7 @@ label input {
     max-width: 250px;
   }
 
-  .v-popper__arrow {
+  .v-popper__arrow-inner {
     border-color: $color;
   }
 }
@@ -204,7 +204,7 @@ label input {
   background: #f9f9f9;
 }
 
-.v-popper--theme-dropdown .v-popper__arrow {
+.v-popper--theme-dropdown .v-popper__arrow-inner {
   border-color: #f9f9f9;
 }
 
