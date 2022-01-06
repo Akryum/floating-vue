@@ -128,7 +128,7 @@ export default {
   background: #004499;
 }
 
-.v-popper--theme-info-dropdown .v-popper__arrow {
+.v-popper--theme-info-dropdown .v-popper__arrow-inner {
   border-color: #004499;
 }
 </style>

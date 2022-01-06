@@ -566,7 +566,7 @@ const styleSnippet2 = `
     max-width: 250px;
   }
 
-  .v-popper__arrow {
+  .v-popper__arrow-inner {
     border-color: $color;
   }
 }

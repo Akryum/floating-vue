@@ -22,7 +22,7 @@
   "dependencies": {
     "@kawarimidoll/vuepress-plugin-tailwind": "^2.0.0",
     "color": "^3.1.3",
-    "v-tooltip": "^3.0.0-beta.4",
+    "v-tooltip": "^3.0.0-beta.6",
     "vue-feather-icons": "^5.1.0",
     "vue-github-button": "^1.3.0"
   },

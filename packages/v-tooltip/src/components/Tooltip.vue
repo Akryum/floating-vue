@@ -16,7 +16,7 @@ export default {
   padding: 7px 12px 6px;
 }
 
-.v-popper--theme-tooltip .v-popper__arrow {
+.v-popper--theme-tooltip .v-popper__arrow-outer {
   border-color: rgba(0, 0, 0, .8);
 }
 </style>

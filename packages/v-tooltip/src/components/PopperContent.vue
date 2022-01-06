@@ -40,8 +40,8 @@
         ref="arrow"
         class="v-popper__arrow-container"
       >
-        <div class="v-popper__arrow-border" />
-        <div class="v-popper__arrow" />
+        <div class="v-popper__arrow-outer" />
+        <div class="v-popper__arrow-inner" />
       </div>
     </div>
   </div>
@@ -111,8 +111,8 @@ export default {
   height: 10px;
 }
 
-.v-popper__arrow,
-.v-popper__arrow-border {
+.v-popper__arrow-inner,
+.v-popper__arrow-outer {
   border-style: solid;
   position: absolute;
   top: 0;
@@ -121,31 +121,31 @@ export default {
   height: 0;
 }
 
-.v-popper__arrow {
-  border-width: 6px;
-}
-
-.v-popper__arrow-border {
+.v-popper__arrow-inner {
   visibility: hidden;
   border-width: 6px;
 }
 
-.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-border,
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-border {
+.v-popper__arrow-outer {
+  border-width: 6px;
+}
+
+.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-outer,
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-outer {
   left: -1px;
 }
 
-.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-outer {
   border-bottom-width: 0;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
 }
 
-.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow {
+.v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-inner {
   top: -1px;
 }
 
@@ -153,42 +153,42 @@ export default {
   top: 0;
 }
 
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-outer {
   border-top-width: 0;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   border-top-color: transparent !important;
 }
 
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow {
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-inner {
   top: -5px;
 }
 
-.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="bottom"] .v-popper__arrow-outer {
   top: -6px;
 }
 
-.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-border,
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-outer,
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-outer {
   top: -1px;
 }
 
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-outer {
   border-left-width: 0;
   border-left-color: transparent !important;
   border-top-color: transparent !important;
   border-bottom-color: transparent !important;
 }
 
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow {
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-inner {
   left: -5px;
 }
 
-.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="right"] .v-popper__arrow-outer {
   left: -6px;
 }
 
@@ -196,15 +196,15 @@ export default {
   right: -10px;
 }
 
-.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow,
-.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-border {
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-inner,
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-outer {
   border-right-width: 0;
   border-top-color: transparent !important;
   border-right-color: transparent !important;
   border-bottom-color: transparent !important;
 }
 
-.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow {
+.v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-inner {
   left: -1px;
 }
 
