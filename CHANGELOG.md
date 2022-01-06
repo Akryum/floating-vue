@@ -1,3 +1,18 @@
+# [3.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2022-01-06)
+
+
+### Features
+
+* switch classes to v-popper__arrow-inner and v-popper__arrow-outer ([3f48173](https://github.com/Akryum/v-tooltip/commit/3f48173ca02202b8b500cc7060d8ef40ba5bfeb6))
+
+
+### BREAKING CHANGES
+
+* - replace all `v-popper__arrow-border` to `v-popper__arrow-outer`
+- replace all `v-popper__arrow` to `v-popper__arrow-inner`
+
+
+
 # [3.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2022-01-06)
 
 
