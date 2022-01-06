@@ -1,3 +1,12 @@
+# [3.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2022-01-06)
+
+
+### Bug Fixes
+
+* tooltip style with transparent background ([233af18](https://github.com/Akryum/v-tooltip/commit/233af18aa01d2b65c5425cd3bd968fa790ec4148))
+
+
+
 # [3.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2022-01-01)
 
 
