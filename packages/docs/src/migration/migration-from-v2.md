@@ -129,10 +129,10 @@ Renamed props:
 - `trigger` to `triggers` (see [Trigger](#trigger))
 - `show` to `shown`
 - `boundariesElement` to `boundary`
+- `classes` to `popperClass`
 
 The following directive options were also removed:
 
-- `classes`
 - `targetClasses`
 - `template`
 - `arrowSelector`
@@ -231,6 +231,7 @@ After:
 - `boundariesElement` to `boundary`
 - `open` to `shown`
 - `openGroup` to `showGroup`
+- `popoverClass` to `popperClass`
 
 Plus the default component slot props:
 
@@ -304,7 +305,6 @@ After:
 
 The following props were removed and are no longer available:
 
-- `popoverClass`
 - `popoverBaseClass`
 - `popoverWrapperClass`
 - `popoverArrowClass`
