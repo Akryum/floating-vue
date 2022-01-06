@@ -604,7 +604,7 @@ export default () => ({
           const eventType = eventMap[trigger]
           if (eventType) {
             this.$_events.push({ targetNodes, eventType, handler })
-            targetNodes.forEach(node => node.addEventListener(eventType, handler,  supportsPassive
+            targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
               ? {
                   passive: true,
                 }
