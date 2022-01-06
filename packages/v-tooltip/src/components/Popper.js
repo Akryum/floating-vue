@@ -707,22 +707,22 @@ export default () => ({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
+    document.addEventListener('touchstart', handleGlobalTouchstart, supportsPassive
       ? {
           passive: true,
           capture: true,
         }
       : true)
   } else {
-    window.addEventListener('click', handleGlobalClick, true)
+    window.addEventListener('mousedown', handleGlobalMouseDown, true)
   }
 }
 
-function handleGlobalClick (event) {
+function handleGlobalMouseDown (event) {
   handleGlobalClose(event)
 }
 
-function handleGlobalTouchend (event) {
+function handleGlobalTouchstart (event) {
   handleGlobalClose(event, true)
 }
 
