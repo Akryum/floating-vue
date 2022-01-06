@@ -1,3 +1,12 @@
+# [3.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.10...v3.0.0-beta.11) (2022-01-06)
+
+
+### Features
+
+* popperClass ([6e5b319](https://github.com/Akryum/v-tooltip/commit/6e5b3190457b4e1321a4de3ed47918637ee32add))
+
+
+
 # [3.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.9...v3.0.0-beta.10) (2022-01-06)
 
 
