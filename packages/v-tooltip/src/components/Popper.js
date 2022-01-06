@@ -736,6 +736,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     window.addEventListener('mousedown', handleGlobalMousedown, true)
     window.addEventListener('click', handleGlobalClick, true)
   }
+  window.addEventListener('resize', handleGlobalResize)
 }
 
 function handleGlobalMousedown (event) {
@@ -767,8 +768,6 @@ function handleGlobalClose (event, touch = false) {
     })
   }
 }
-
-window.addEventListener('resize', handleGlobalResize)
 
 function handleGlobalResize (event) {
   for (let i = 0; i < shownPoppers.length; i++) {
