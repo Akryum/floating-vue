@@ -8,8 +8,10 @@
 
 ### BREAKING CHANGES
 
-* - replace all `v-popper__arrow-border` to `v-popper__arrow-outer`
+- replace all `v-popper__arrow-border` to `v-popper__arrow-outer`
 - replace all `v-popper__arrow` to `v-popper__arrow-inner`
+- `v-popper__arrow-inner` (previously `v-popper__arrow`) is now hidden by default (tooltip or custom themes)
+- `v-popper__arrow-outer` (previously `v-popper__arrow-border`) is now visible by default (tooltip or custom themes)
 
 
 
