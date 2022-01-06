@@ -117,11 +117,11 @@ export default {
 }
 
 .v-popper__arrow {
+  visibility: hidden;
   border-width: 6px;
 }
 
 .v-popper__arrow-border {
-  visibility: hidden;
   border-width: 6px;
 }
 

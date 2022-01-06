@@ -19,11 +19,11 @@ export default {
 }
 
 .v-popper--theme-dropdown .v-popper__arrow {
+  visibility: visible;
   border-color: #fff;
 }
 
 .v-popper--theme-dropdown .v-popper__arrow-border {
-  visibility: visible;
   border-color: #ddd;
 }
 </style>
