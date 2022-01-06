@@ -1,3 +1,15 @@
+# [3.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2022-01-06)
+
+
+### Bug Fixes
+
+* bigger inner arrow to prevent visual seams between the arrow and the background ([5b2e76f](https://github.com/Akryum/v-tooltip/commit/5b2e76f5f787edffef8c37c6bf8b5bde721c073c))
+* update popper position on window resize ([5f5aa5d](https://github.com/Akryum/v-tooltip/commit/5f5aa5d2014100e585f9a3b56fc8d841284f7917))
+* use global mouse down instead of click, closes [#530](https://github.com/Akryum/v-tooltip/issues/530) ([fedfc9b](https://github.com/Akryum/v-tooltip/commit/fedfc9baa3ffe5263df633c3521b9649aa61dc1f))
+* use passive: true for events, closes [#776](https://github.com/Akryum/v-tooltip/issues/776) ([6f9e7d1](https://github.com/Akryum/v-tooltip/commit/6f9e7d1823543c629e75bcf81a3b80d7ac372ac8))
+
+
+
 # [3.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2022-01-06)
 
 
