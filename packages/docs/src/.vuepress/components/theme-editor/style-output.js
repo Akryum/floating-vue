@@ -67,7 +67,7 @@ function generateCSSForComponent (theme, key, handler) {
   const isDark = key.endsWith('-dark')
   let classKey = key
   if (isDark) {
-    classKey = classKey.substr(0, classKey.indexOf('-dark'))
+    classKey = classKey.substring(0, classKey.indexOf('-dark'))
   }
   let className = `.v-popper--theme-${theme.name} .v-popper__${classKey}`
   if (isDark) {
