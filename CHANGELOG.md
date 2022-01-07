@@ -1,3 +1,12 @@
+# [3.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.11...v3.0.0-beta.12) (2022-01-07)
+
+
+### Bug Fixes
+
+* popperClass prop type ([9ffd7a4](https://github.com/Akryum/v-tooltip/commit/9ffd7a43683ce7c01de6e7c9dacdc495bf194a49))
+
+
+
 # [3.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.10...v3.0.0-beta.11) (2022-01-06)
 
 
