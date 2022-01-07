@@ -124,6 +124,10 @@ You can use the example above to replicate the default config of v-tooltip v2.
 
 The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has [a few additional props](../api/README.md#directive-options) tough.
 
+Changed defaults:
+
+- `html` is now `false` by default to help you void XSS attacks.
+
 Renamed props:
 
 - `trigger` to `triggers` (see [Trigger](#trigger))
@@ -315,19 +319,185 @@ CSS classes [were changed](#css-classes) and in most case you should be fine not
 
 ### CSS classes
 
-@TODO
+The structure of the HTML produced by the library has changed. Most classes are now using a BEM-like notation with the `v-popper` prefix. They are no longer customizable since they don't conflict with other libraries such as boostrap. You can add your own classes to the poppers with [themes](../guide/themes.md) (recommended) or the `popperClass` prop.  
+[Learn more about CSS classes](../guide/css.md)
 
-### Popper content
+Changed classes:
 
-The popper HTML content has been simplified. The event listeners (especially `focus`) and attributes (such as `aria-described-by`) are now applied to all the top-level elements found in the default slot instead of an internal div.
-
-The component root element now has `width: max-content` set by default to use the content size instead of the browser default (usually the page width or available space).
-
-The Popper content has changed too, see [CSS Classes](#css-classes) for more information.
+- `v-popover` to `v-popper`
+- `open` (default value) to `v-popper--shown`
 
 Before:
 
 ```html
+<div class="v-popover open">
+  <div
+    class="trigger"
+    style="display: inline-block;"
+  >
+    <!-- Default slot -->
+  </div>
+</div>
+```
+
+After:
+
+```html
+<div class="v-popper v-popper--shown">
+  <!-- Default slot -->
+</div>
+```
+
+#### Popper content
+
+Changed classes:
+
+- `tooltip popover` (default value) to `v-popper__popper`.
+- `vue-tooltip-theme` (default value) is replaced by [theme classes](../guide/css.md#theme-classes).
+- `open` (default value) to `v-popper__popper--shown` and `v-popper__popper--hidden`.
+- `wrapper` (default value) to `v-popper__wrapper`.
+- `tooltip-inner popover-inner` (default value) to `v-popper__inner`.
+- `tooltip-arrow popover-arrow` (default value) to `v-popper__arrow-outer` and `v-popper__arrow-inner`.
+
+New classes:
+
+- `v-popper__arrow-container`
+- on `v-popper__popper`:
+  - `v-popper__popper--skip-transition`
+  - `v-popper__popper--show-from`
+  - `v-popper__popper--show-to`
+  - `v-popper__popper--hide-from`
+  - `v-popper__popper--hide-to`
+
+Before:
+
+```html
+<div
+  class="tooltip popover vue-tooltip-theme open"
+  :style="{
+    visibility: isOpen ? 'visible' : 'hidden',
+  }"
+>
+  <div class="wrapper">
+    <div
+      class="tooltip-inner popover-inner"
+      style="position: relative;"
+    >
+      <div>
+        <!-- Popover slot -->
+      </div>
+    </div>
+    <div class="tooltip-arrow popover-arrow" />
+  </div>
+</div>
+```
+
+After:
+
+```html
+<div class="v-popper__popper">
+  <div class="v-popper__wrapper">
+    <div class="v-popper__inner">
+      <div>
+        <!-- Popper slot -->
+      </div>
+    </div>
+
+    <div class="v-popper__arrow-container">
+      <div class="v-popper__arrow-outer" />
+      <div class="v-popper__arrow-inner" />
+    </div>
+  </div>
+</div>
+```
+
+#### Directive
+
+The `v-tooltip` directive now uses the same component and thus has the same HTML result as the other components such as `VDropdown`.
+
+Before (default):
+
+```html
+<div class="tooltip" role="tooltip">
+  <div class="tooltip-arrow"></div>
+  <div class="tooltip-inner">Text here</div>
+</div>
+```
+
+After:
+
+```html
+<div class="v-popper__popper v-popper--theme-tooltip">
+  <div class="v-popper__wrapper">
+    <div class="v-popper__inner">
+      <div>
+        Text here
+      </div>
+    </div>
+
+    <div class="v-popper__arrow-container">
+      <div class="v-popper__arrow-outer" />
+      <div class="v-popper__arrow-inner" />
+    </div>
+  </div>
+</div>
+```
+
+The loading class on the popper element changed from `tooltip-loading` (default value) to `v-popper--tooltip-loading`.
+
+Before:
+
+```html
+<div class="tooltip tooltip-loading" role="tooltip">
+  <div class="tooltip-arrow"></div>
+  <div class="tooltip-inner">Loading...</div>
+</div>
+```
+
+After:
+
+```html
+<div class="v-popper__popper v-popper--theme-tooltip v-popper--tooltip-loading">
+  <div class="v-popper__wrapper">
+    <div class="v-popper__inner">
+      <div>
+        Loading...
+      </div>
+    </div>
+
+    <div class="v-popper__arrow-container">
+      <div class="v-popper__arrow-outer" />
+      <div class="v-popper__arrow-inner" />
+    </div>
+  </div>
+</div>
+```
+
+On the target element, the `has-tooltip` (default value) is now `v-popper--has-tooltip` and is no longer customizable.
+
+Before:
+
+```html
+<button class="has-tooltip">
+```
+
+After:
+
+```html
+<button class="v-popper--has-tooltip">
+```
+
+[Learn more](../guide/css.md)
+
+### Default slot
+
+The way the default slot works has been simplified. The event listeners (especially `focus`) and attributes (such as `aria-described-by`) are now applied to all the top-level elements found in the default slot instead of an internal div.
+
+The component root element now has `width: max-content` set by default to use the content size instead of the browser default (usually the page width or available space).
+
+Before:
+
+```vue
 <v-popper> <!-- Listeners & attributes added to internal div -->
   <button>Click me!</button>
   <button>Hey I'm another button!</button>
@@ -340,7 +510,7 @@ Before:
 
 After:
 
-```html
+```vue
 <VDropdown>
   <button>Click me!</button> <!-- Listeners & attributes added here -->
   <button>Hey I'm another button!</button> <!-- Listeners & attributes added here -->

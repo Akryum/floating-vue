@@ -83,7 +83,13 @@ Then you can customize the CSS for this theme:
 
 ```css
 .v-popper--theme-info-tooltip {
-  $color: rgba(#004499, .9);
+  .v-popper__inner {
+    background: #004499;
+  }
+
+  .v-popper__arrow-inner {
+    border-color: #004499;
+  }
 }
 ```
 
