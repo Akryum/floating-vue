@@ -1,3 +1,13 @@
+# [4.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v4.0.0-beta.12...v4.0.0-beta.13) (2022-01-07)
+
+
+### Bug Fixes
+
+* "this is null" in Popper.js ([#815](https://github.com/Akryum/v-tooltip/issues/815)) ([c03206b](https://github.com/Akryum/v-tooltip/commit/c03206b4a34ad54c470321e9b8109cf6b0a571fd))
+* null error in popperClass ([078929e](https://github.com/Akryum/v-tooltip/commit/078929e4b73fe6ea0c5dd7c6c3640fe29ff81cc8))
+
+
+
 # [4.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.12...v4.0.0-beta.12) (2022-01-07)
 
 
