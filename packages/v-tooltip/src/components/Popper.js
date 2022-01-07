@@ -198,7 +198,7 @@ export default () => ({
     popperClass: {
       type: String,
       default () {
-        return getDefaultConfig(this.theme, 'popperClass')
+        return getDefaultConfig(props.theme, 'popperClass')
       },
     },
   },
