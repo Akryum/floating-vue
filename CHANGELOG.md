@@ -1,3 +1,12 @@
+# [3.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2022-01-10)
+
+
+### Bug Fixes
+
+* default Dropdown padding too big ([a89155f](https://github.com/Akryum/v-tooltip/commit/a89155f0449aae2583598b552401d8e98a4d1704))
+
+
+
 # [3.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.11...v3.0.0-beta.12) (2022-01-07)
 
 
