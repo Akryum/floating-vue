@@ -16,11 +16,8 @@
 
 
 
-# [4.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.11...v4.0.0-beta.11) (2022-01-06)
-
-
-
-# [4.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.10...v4.0.0-beta.10) (2022-01-06)
+# [4.0.0-b
+ta.10](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.10...v4.0.0-beta.10) (2022-01-06)
 
 
 

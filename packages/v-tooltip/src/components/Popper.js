@@ -201,6 +201,13 @@ export default () => ({
         return getDefaultConfig(props.theme, 'popperClass')
       },
     },
+
+    computeTransformOrigin: {
+      type: Boolean,
+      default (props) {
+        return getDefaultConfig(props.theme, 'computeTransformOrigin')
+      },
+    },
   },
 
   emits: [
@@ -503,6 +510,15 @@ export default () => ({
     async $_applyShowEffect () {
       if (this.$_hideInProgress) return
 
+      if (this.computeTransformOrigin) {
+        const referenceBounds = this.referenceNode().getBoundingClientRect()
+        const popperWrapper = this.$_popperNode.querySelector('.v-popper__wrapper')
+        const parentBounds = popperWrapper.parentNode.getBoundingClientRect()
+        const x = (referenceBounds.left + referenceBounds.width / 2) - (parentBounds.left + popperWrapper.offsetLeft)
+        const y = (referenceBounds.top + referenceBounds.height / 2) - (parentBounds.top + popperWrapper.offsetTop)
+        popperWrapper.style.transformOrigin = `${x}px ${y}px`
+      }
+
       this.isShown = true
 
       this.$_applyAttrsToTarget({
@@ -787,7 +803,9 @@ function handleGlobalResize (event) {
 }
 
 function nextFrame () {
-  return new Promise(resolve => requestAnimationFrame(resolve))
+  return new Promise(resolve => requestAnimationFrame(() => {
+    requestAnimationFrame(resolve)
+  }))
 }
 
 export function hideAllPoppers () {
