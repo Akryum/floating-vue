@@ -1,3 +1,12 @@
+# [3.0.0-beta.14](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-10)
+
+
+### Features
+
+* computeTransformOrigin ([49cd871](https://github.com/Akryum/v-tooltip/commit/49cd87128f625942577950e20cb9a8b86384c732))
+
+
+
 # [3.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2022-01-10)
 
 
