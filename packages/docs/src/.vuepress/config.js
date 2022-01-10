@@ -76,6 +76,7 @@ module.exports = {
             'component',
             'config',
             'themes',
+            'css',
             'custom-component',
           ],
         },

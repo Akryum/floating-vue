@@ -12,7 +12,7 @@ export default {
 .v-popper--theme-dropdown .v-popper__inner {
   background: #fff;
   color: black;
-  padding: 24px;
+  padding: 6px;
   border-radius: 6px;
   border: 1px solid #ddd;
   box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
