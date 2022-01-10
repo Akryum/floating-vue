@@ -209,6 +209,25 @@ Hidding:
 | `v-popper__popper--hidden-from` | **true** | false |
 | `v-popper__popper--hidden-to` | false | **true** |
 
+#### Zoom show only example
+
+```vue
+<VDropdown compute-transform-origin />
+```
+
+```css
+.v-popper__popper.v-popper__popper--show-from .v-popper__wrapper {
+  transform: scale(.5);
+}
+
+.v-popper__popper.v-popper__popper--show-to .v-popper__wrapper {
+  transform: none;
+  transition: transform .15s;
+}
+```
+
+<ZoomShowOnlyExample />
+
 ## Tooltip directive
 
 The `v-tooltip` directive adds the `v-popper--has-tooltip` to the target element. For example:

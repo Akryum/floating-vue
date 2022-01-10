@@ -347,6 +347,28 @@ Boolean: mount the popper content without waiting for the popper to be displayed
 
 Number of ms after hide when the popper instance is destroyed.
 
+### `computeTransformOrigin`
+
+Computes the transform origin of the `.v-popper__wrapper` to allow zooming effects relative to the reference element.
+
+Example:
+
+```vue
+<template>
+  <VDropdown compute-transform-origin />
+</template>
+
+<style>
+.v-popper__wrapper {
+  transition: transform .15s;
+}
+
+.v-popper__popper.v-popper__popper--hidden .v-popper__wrapper {
+  transform: scale(.5);
+}
+</style>
+```
+
 ### `ariaId`
 
 Id used for the `aria-describedby` attribute. By default a random id.
