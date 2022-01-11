@@ -1,3 +1,12 @@
+# [3.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-11)
+
+
+### Features
+
+* add props to default slot ([1f003f4](https://github.com/Akryum/v-tooltip/commit/1f003f4808e87c75006f4a3eac1f120464f24e69))
+
+
+
 # [3.0.0-beta.14](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-10)
 
 
