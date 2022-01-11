@@ -407,6 +407,10 @@ Other [Popper.js options](https://popper.js.org/docs/v2/constructors/). It's rec
 ### `default`
 
 Content put in the trigger part of the popper, typically a button.
+  - Props:
+    - `shown`: boolean indicating if the popper is shown
+    - `show`: method to show the popper
+    - `hide`: method to hide the popper
 
 ```vue
 <VDropdown>
