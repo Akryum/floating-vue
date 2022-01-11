@@ -240,6 +240,7 @@ export default () => ({
         shouldMountContent: this.shouldMountContent,
         skipTransition: this.skipTransition,
         autoHide: this.autoHide,
+        show: this.show,
         hide: this.hide,
         handleResize: this.handleResize,
         onResize: this.onResize,

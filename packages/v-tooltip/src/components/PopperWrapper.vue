@@ -7,6 +7,7 @@
       shouldMountContent,
       skipTransition,
       autoHide,
+      show,
       hide,
       handleResize,
       onResize,
@@ -30,7 +31,11 @@
         },
       ]"
     >
-      <slot />
+      <slot
+        :shown="isShown"
+        :show="show"
+        :hide="hide"
+      />
 
       <PopperContent
         ref="popperContent"
