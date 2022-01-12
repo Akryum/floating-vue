@@ -1,3 +1,12 @@
+# [3.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.17...v3.0.0-beta.18) (2022-01-12)
+
+
+### Bug Fixes
+
+* getTargetNodes ([abe7272](https://github.com/Akryum/v-tooltip/commit/abe7272861e9e34fbbab2036c583e2877d5582d6))
+
+
+
 # [3.0.0-beta.17](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-12)
 
 
