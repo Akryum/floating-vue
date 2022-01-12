@@ -1,3 +1,12 @@
+# [3.0.0-beta.17](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-12)
+
+
+### Bug Fixes
+
+* handle vnodes might be in scoped slot ([066602a](https://github.com/Akryum/v-tooltip/commit/066602ad1ad3c84ef3fea82e78861383abd4904f))
+
+
+
 # [3.0.0-beta.16](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-12)
 
 
