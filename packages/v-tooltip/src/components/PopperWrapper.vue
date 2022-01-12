@@ -92,8 +92,7 @@ export default {
 
   methods: {
     getTargetNodes () {
-      const vnodes = (this.$scopedSlots.default ? this.$scopedSlots.default() : this.$slots.default) ?? []
-      return vnodes.map(vnode => vnode.elm).filter(Boolean)
+      return Array.from(this.$refs.reference.children)
     },
   },
 }
