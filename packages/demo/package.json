@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "3.0.0-beta.17",
+  "version": "3.0.0-beta.18",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.8.1",
     "screenfull": "^4.2.0",
-    "v-tooltip": "^3.0.0-beta.17",
+    "v-tooltip": "^3.0.0-beta.18",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1"
   },
