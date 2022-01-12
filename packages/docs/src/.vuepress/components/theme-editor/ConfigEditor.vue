@@ -252,22 +252,6 @@ export default {
           <span>{{ value != null ? value : '(inherit)' }}</span>
         </label>
       </div>
-
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
-        <span>Compute transform origin:</span>
-        <label
-          v-for="value of [undefined, true, false]"
-          :key="value"
-          class="flex items-center space-x-1"
-        >
-          <input
-            v-model="theme.config.computeTransformOrigin"
-            type="radio"
-            :value="value"
-          >
-          <span>{{ value != null ? value : '(inherit)' }}</span>
-        </label>
-      </div>
     </template>
 
     <template v-if="tab === 'position'">
@@ -375,6 +359,38 @@ export default {
         >
           <input
             v-model="theme.config.handleResize"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Compute transform origin:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.computeTransformOrigin"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Auto min size:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.autoMinSize"
             type="radio"
             :value="value"
           >

@@ -369,6 +369,18 @@ Example:
 </style>
 ```
 
+### `autoMinSize`
+
+Boolean: set a minimum size to the popper `inner` container depending on the size of the reference.
+
+If the final placement is `top-*` or `bottom-*`, the `minWidth` will be the reference width.
+
+If the final placement is `left-*` or `right-*`, the `minHeight` will be the reference height.
+
+```vue
+<VDropdown auto-min-size />
+```
+
 ### `ariaId`
 
 Id used for the `aria-describedby` attribute. By default a random id.

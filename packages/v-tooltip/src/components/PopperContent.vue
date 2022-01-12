@@ -105,6 +105,7 @@ export default {
 
 .v-popper__inner {
   position: relative;
+  box-sizing: border-box;
 }
 
 .v-popper__arrow-container {
