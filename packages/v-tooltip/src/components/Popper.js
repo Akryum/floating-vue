@@ -208,6 +208,13 @@ export default () => ({
         return getDefaultConfig(this.theme, 'computeTransformOrigin')
       },
     },
+
+    autoMinSize: {
+      type: Boolean,
+      default () {
+        return getDefaultConfig(this.theme, 'autoMinSize')
+      },
+    },
   },
 
   data () {
@@ -498,13 +505,27 @@ export default () => ({
     async $_applyShowEffect () {
       if (this.$_hideInProgress) return
 
+      let _referenceBounds
+      const getReferenceBounds = () => _referenceBounds || (_referenceBounds = this.referenceNode().getBoundingClientRect())
+
       if (this.computeTransformOrigin) {
-        const referenceBounds = this.referenceNode().getBoundingClientRect()
+        const referenceBounds = getReferenceBounds()
         const popperWrapper = this.$_popperNode.querySelector('.v-popper__wrapper')
         const parentBounds = popperWrapper.parentNode.getBoundingClientRect()
         const x = (referenceBounds.left + referenceBounds.width / 2) - (parentBounds.left + popperWrapper.offsetLeft)
         const y = (referenceBounds.top + referenceBounds.height / 2) - (parentBounds.top + popperWrapper.offsetTop)
         popperWrapper.style.transformOrigin = `${x}px ${y}px`
+      }
+
+      if (this.autoMinSize) {
+        const referenceBounds = getReferenceBounds()
+        const popperInner = this.$_popperNode.querySelector('.v-popper__inner')
+        const [mainPosition] = this.$_popperNode.dataset.popperPlacement.split('-')
+        if (mainPosition === 'left' || mainPosition === 'right') {
+          popperInner.style.minHeight = `${referenceBounds.height}px`
+        } else {
+          popperInner.style.minWidth = `${referenceBounds.width}px`
+        }
       }
 
       this.isShown = true
