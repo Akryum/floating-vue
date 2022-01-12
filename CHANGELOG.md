@@ -1,3 +1,12 @@
+# [3.0.0-beta.16](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-12)
+
+
+### Features
+
+* autoMinSize ([f45b95a](https://github.com/Akryum/v-tooltip/commit/f45b95a4406a2a93b10182661facda1a7455d1f4))
+
+
+
 # [3.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-11)
 
 
