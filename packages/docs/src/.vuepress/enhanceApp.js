@@ -5,7 +5,7 @@
  */
 
 import 'v-tooltip/dist/v-tooltip.css'
-import VTooltipPlugin from 'v-tooltip'
+import VTooltipPlugin, { createTooltip } from 'v-tooltip'
 
 export default ({
   Vue, // the version of Vue being used in the VuePress app
@@ -30,4 +30,8 @@ export default ({
       },
     },
   })
+
+  if (typeof window !== 'undefined') {
+    window.createTooltip = createTooltip
+  }
 }

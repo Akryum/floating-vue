@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { placements } from '@popperjs/core'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
+import PopperMethods from '../components/PopperMethods'
 
 const TARGET_CLASS = 'v-popper--has-tooltip'
 
@@ -43,6 +44,9 @@ export function createTooltip (el, value, modifiers) {
   const options = getOptions(el, value, modifiers)
 
   const tooltipApp = el.$_popper = new Vue({
+    mixins: [
+      PopperMethods,
+    ],
     data () {
       return {
         options,
@@ -65,7 +69,7 @@ export function createTooltip (el, value, modifiers) {
           loadingContent,
         },
         attrs: otherOptions,
-        ref: 'tooltip',
+        ref: 'popper',
       })
     },
     devtools: {
