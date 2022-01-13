@@ -1,3 +1,17 @@
+# [3.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.19...v3.0.0-beta.20) (2022-01-13)
+
+
+### Bug Fixes
+
+* exclude popper content from target nodes ([dcd6159](https://github.com/Akryum/v-tooltip/commit/dcd61598f8294394883d0565159a3cffc3126c39))
+
+
+### Features
+
+* add popper methods show/hide to createTooltip() ([bf2bb49](https://github.com/Akryum/v-tooltip/commit/bf2bb494743fb01601881ab927cac6772bb06cd2))
+
+
+
 # [3.0.0-beta.19](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.18...v3.0.0-beta.19) (2022-01-13)
 
 
