@@ -1,3 +1,12 @@
+# [3.0.0-beta.19](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.18...v3.0.0-beta.19) (2022-01-13)
+
+
+### Bug Fixes
+
+* prevent multiple init() ([dc2600d](https://github.com/Akryum/v-tooltip/commit/dc2600dcec3d73d7b6bd0a736d33d8b076555137))
+
+
+
 # [3.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.17...v3.0.0-beta.18) (2022-01-12)
 
 
