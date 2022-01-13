@@ -294,6 +294,7 @@ export default () => ({
   },
 
   created () {
+    this.$_isDisposed = true
     this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`
   },
 
@@ -336,6 +337,7 @@ export default () => ({
     },
 
     init () {
+      if (!this.$_isDisposed) return
       this.$_isDisposed = false
       this.isMounted = false
       this.$_events = []
@@ -359,6 +361,7 @@ export default () => ({
     },
 
     dispose () {
+      if (this.$_isDisposed) return
       this.$_isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
