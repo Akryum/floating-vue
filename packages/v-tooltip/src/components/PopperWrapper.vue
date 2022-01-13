@@ -93,6 +93,7 @@ export default {
   methods: {
     getTargetNodes () {
       return Array.from(this.$refs.reference.children)
+        .filter(node => node !== this.$refs.popperContent.$el)
     },
   },
 }
