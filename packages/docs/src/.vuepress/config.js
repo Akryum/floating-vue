@@ -50,11 +50,15 @@ module.exports = {
         text: 'Migration',
         items: [
           {
-            text: 'From v2',
+            text: 'From v-tooltip 2',
             link: '/migration/migration-from-v2',
           },
           {
-            text: 'Docs v2',
+            text: 'From v-tooltip 3 & 4',
+            link: '/migration/migration-from-v3',
+          },
+          {
+            text: 'v-tooltip docs',
             link: '/legacy/v2/',
           },
         ],

@@ -1,13 +1,23 @@
 <script>
 import { builtinThemes } from './builtin-themes'
 import { mapState, state } from './state'
-import { placements } from '@popperjs/core'
-import { SHOW_EVENT_MAP } from 'floating-vue'
+import { SHOW_EVENT_MAP, placements } from 'floating-vue'
 import { ToolIcon } from 'vue-feather-icons'
 import Tabs from './Tabs.vue'
 import { loadValue, storeValue } from './util'
 
 const TAB_KEY = 'v-tooltip.theme-editor.config-tab'
+
+function inheritFactory (prop, defaultFactory) {
+  return {
+    get () {
+      return this.theme.config[prop] == null
+    },
+    set (value) {
+      this.theme.config[prop] = value ? undefined : defaultFactory()
+    },
+  }
+}
 
 export default {
   components: {
@@ -33,41 +43,19 @@ export default {
       ]
     },
 
-    inheritTriggers: {
-      get () {
-        return this.theme.config.triggers == null
-      },
-      set (value) {
-        this.theme.config.triggers = value ? undefined : []
-      },
-    },
+    inheritTriggers: inheritFactory('triggers', () => []),
 
-    inheritOffset: {
-      get () {
-        return this.theme.config.offset == null
-      },
-      set (value) {
-        this.theme.config.offset = value ? undefined : [0, 0]
-      },
-    },
+    inheritDistance: inheritFactory('distance', () => 0),
 
-    inheritDelay: {
-      get () {
-        return this.theme.config.delay == null
-      },
-      set (value) {
-        this.theme.config.delay = value ? undefined : { show: 0, hide: 0 }
-      },
-    },
+    inheritSkidding: inheritFactory('skidding', () => 0),
 
-    inheritLoadingContent: {
-      get () {
-        return this.theme.config.loadingContent == null
-      },
-      set (value) {
-        this.theme.config.loadingContent = value ? undefined : '...'
-      },
-    },
+    inheritDelay: inheritFactory('delay', () => ({ show: 0, hide: 0 })),
+
+    inheritLoadingContent: inheritFactory('loadingContent', () => '...'),
+
+    inheritArrowPadding: inheritFactory('arrowPadding', () => 0),
+
+    inheritOverflowPadding: inheritFactory('overflowPadding', () => 0),
   },
 
   watch: {
@@ -294,41 +282,78 @@ export default {
       </div>
 
       <div class="flex space-x-3 hover:bg-gray-50 p-2">
-        <span>Offset (px):</span>
+        <span>Distance (px):</span>
         <label class="flex items-center space-x-1">
           <input
-            v-model="inheritOffset"
+            v-model="inheritDistance"
             type="checkbox"
           >
           <span>(inherit)</span>
         </label>
-        <template v-if="!inheritOffset">
-          <label for="skidding">Skidding:</label>
-          <input
-            id="skidding"
-            v-model.number="theme.config.offset[0]"
-            type="number"
-            class="w-0 flex-1"
-          >
-          <input
-            v-model.number="theme.config.offset[0]"
-            type="range"
-            min="-32"
-            max="64"
-            class="w-0 flex-1"
-          >
-          <label for="distance">Distance:</label>
+        <template v-if="!inheritDistance">
           <input
             id="distance"
-            v-model.number="theme.config.offset[1]"
+            v-model.number="theme.config.distance"
             type="number"
             class="w-0 flex-1"
           >
           <input
-            v-model.number="theme.config.offset[1]"
+            v-model.number="theme.config.distance"
+            type="range"
+            min="-64"
+            max="64"
+            class="w-0 flex-1"
+          >
+        </template>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Skidding (px):</span>
+        <label class="flex items-center space-x-1">
+          <input
+            v-model="inheritSkidding"
+            type="checkbox"
+          >
+          <span>(inherit)</span>
+        </label>
+        <template v-if="!inheritSkidding">
+          <input
+            id="skidding"
+            v-model.number="theme.config.skidding"
+            type="number"
+            class="w-0 flex-1"
+          >
+          <input
+            v-model.number="theme.config.skidding"
+            type="range"
+            min="-64"
+            max="64"
+            class="w-0 flex-1"
+          >
+        </template>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Arrow padding (px):</span>
+        <label class="flex items-center space-x-1">
+          <input
+            v-model="inheritArrowPadding"
+            type="checkbox"
+          >
+          <span>(inherit)</span>
+        </label>
+        <template v-if="!inheritArrowPadding">
+          <input
+            id="arrowPadding"
+            v-model.number="theme.config.arrowPadding"
+            type="number"
+            class="w-0 flex-1"
+          >
+          <input
+            v-model.number="theme.config.arrowPadding"
             type="range"
             min="-32"
-            max="64"
+            max="32"
             class="w-0 flex-1"
           >
         </template>
@@ -383,6 +408,96 @@ export default {
       </div>
 
       <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Prevent overflow:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.preventOverflow"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Overflow padding (px):</span>
+        <label class="flex items-center space-x-1">
+          <input
+            v-model="inheritOverflowPadding"
+            type="checkbox"
+          >
+          <span>(inherit)</span>
+        </label>
+        <template v-if="!inheritOverflowPadding">
+          <input
+            id="arrowPadding"
+            v-model.number="theme.config.overflowPadding"
+            type="number"
+            class="w-0 flex-1"
+          >
+          <input
+            v-model.number="theme.config.overflowPadding"
+            type="range"
+            min="0"
+            max="128"
+            class="w-0 flex-1"
+          >
+        </template>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Flip:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.flip"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Shift:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.shift"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Shift cross axis:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.shiftCrossAxis"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
         <span>Auto min size:</span>
         <label
           v-for="value of [undefined, true, false]"
@@ -391,6 +506,22 @@ export default {
         >
           <input
             v-model="theme.config.autoMinSize"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Auto max size:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.autoMaxSize"
             type="radio"
             :value="value"
           >

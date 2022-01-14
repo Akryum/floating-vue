@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { placements } from '@popperjs/core'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 import PopperMethods from '../components/PopperMethods'
+import { placements } from '../util/popper'
 
 const TARGET_CLASS = 'v-popper--has-tooltip'
 
@@ -117,7 +117,7 @@ export function bind (el, { value, oldValue, modifiers }) {
     // Manual show
     if (typeof value.shown !== 'undefined' && value.shown !== el.$_popperOldShown) {
       el.$_popperOldShown = value.shown
-      value.shown ? tooltipApp.$refs.tooltip.show() : tooltipApp.$refs.tooltip.hide()
+      value.shown ? tooltipApp.show() : tooltipApp.hide()
     }
   }
 }

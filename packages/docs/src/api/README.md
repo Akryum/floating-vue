@@ -283,12 +283,28 @@ Boolean that shows or hide the popper. You should probably use no trigger events
 <VDropdown :shown="isMenuShown" :triggers="[]" />
 ```
 
-### `offset`
+### `distance`
 
-An array to modify the position of the popper with relative pixels: `[skidding, distance]`
+Distance along the main axis relative to the reference (pixels).
 
 ```vue
-<VDropdown :offset="[0, 12]" />
+<VDropdown :distance="12" />
+```
+
+### `skidding`
+
+Skidding along the cross axis relative to the reference (pixels).
+
+```vue
+<VDropdown :distance="12" />
+```
+
+### `arrowPadding`
+
+Padding of the arrow relative to the popper bounds to prevent it from overflowing if you have rounded borders on the popper (pixels).
+
+```vue
+<VDropdown :arrow-padding="12" />
 ```
 
 ### `container`
@@ -369,6 +385,8 @@ Example:
 </style>
 ```
 
+[Live example](../guide/css.md#zoom-show-only-example)
+
 ### `autoMinSize`
 
 Boolean: set a minimum size to the popper `inner` container depending on the size of the reference.
@@ -381,38 +399,57 @@ If the final placement is `left-*` or `right-*`, the `minHeight` will be the ref
 <VDropdown auto-min-size />
 ```
 
+### `autoMaxSize`
+
+Boolean: let floating vue resize the popper inner container to the available size (using `max-width` and `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
+
+```vue
+<VDropdown auto-max-size />
+```
+
+### `preventOverflow`
+
+Boolean: prevent the popper from overflowing the `boundary`.
+
+```vue
+<VDropdown :prevent-overflow="false" />
+```
+
+### `overflowPadding`
+
+Virtual padding in the `boundary` used to prevent the popper overflow (pixels).
+
+```vue
+<VDropdown :overflow-padding="10" />
+```
+
+### `flip`
+
+Boolean: prevent the popper from overflowing the `boundary` by using an opposite placement if needed.
+
+```vue
+<VDropdown :flip="false" />
+```
+
+### `shift`
+
+Boolean: prevent the popper from overflowing the `boundary` by adjusting its position.
+
+```vue
+<VDropdown :shift="false" />
+```
+
+### `shiftCrossAxis`
+
+Boolean: prevent the popper from overflowing the `boundary` by adjusting its position.
+
+```vue
+<VDropdown shift-cross-axis />
+```
+
 ### `ariaId`
 
 Id used for the `aria-describedby` attribute. By default a random id.
-
-### `modifiers`
-
-Array of Popper.js [modifier objects](https://popper.js.org/docs/v2/modifiers/).
-
-For example, to disable the `flip` modifier:
-
-```vue
-<VDropdown
-  :modifiers="[
-    {
-      name: 'flip',
-      enabled: false,
-    },
-  ]"
-/>
-```
-
-### `popperOptions`
-
-Other [Popper.js options](https://popper.js.org/docs/v2/constructors/). It's recommended to use props when available instead of the popper options to optimize the component updates.
-
-```vue
-<VDropdown
-  :popper-options="{
-    onFirstUpdate: (state) => {},
-  }"
-/>
-```
 
 ## Component slots
 

@@ -15,7 +15,7 @@
   "module": "dist/floating-vue.esm.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@popperjs/core": "^2.11.0",
+    "@floating-ui/dom": "^0.1.10",
     "vue-resize": "^1.0.0"
   },
   "peerDependencies": {

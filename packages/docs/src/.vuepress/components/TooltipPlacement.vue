@@ -6,10 +6,8 @@
         placement,
         triggers: [],
         shown: true,
-        modifiers: [
-          { name: 'preventOverflow', enabled: false },
-          { name: 'arrow', options: { padding: 8 } },
-        ],
+        preventOverflow: false,
+        arrowPadding: 8,
       }"
       class="border border-gray-300 rounded px-4 py-3 text-xl"
     >

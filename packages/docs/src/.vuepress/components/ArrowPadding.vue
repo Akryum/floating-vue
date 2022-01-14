@@ -4,11 +4,10 @@
       :triggers="[]"
       :shown="true"
       placement="right"
-      :offset="offset"
-      :modifiers="[
-        { name: 'preventOverflow', enabled: false },
-        { name: 'arrow', options: { padding: tempPadding } },
-      ]"
+      :distance="offset[1]"
+      :skidding="offset[0]"
+      :prevent-overflow="false"
+      :arrow-padding="tempPadding"
     >
       <button class="px-4 py-6 bg-gray-500 text-white rounded-lg !md:text-sm">
         Reference
@@ -24,8 +23,8 @@
       <input
         v-model.number="offset[0]"
         type="range"
-        min="-32"
-        max="32"
+        min="-64"
+        max="64"
         class="w-full"
       >
 

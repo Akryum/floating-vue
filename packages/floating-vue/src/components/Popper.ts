@@ -1,12 +1,21 @@
-import { createPopper, placements } from '@popperjs/core'
-import { supportsPassive, isIOS } from '../util/env'
-import { applyModifier } from '../util/popper'
 import {
-  SHOW_EVENT_MAP,
-  HIDE_EVENT_MAP,
-} from '../util/events'
+  autoPlacement,
+  computePosition,
+  offset,
+  shift,
+  flip,
+  arrow,
+  getScrollParents,
+  size,
+} from '@floating-ui/dom'
+import { supportsPassive, isIOS } from '../util/env'
+import { placements } from '../util/popper'
+import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
+import { nextFrame } from '../util/frame'
 import { getDefaultConfig } from '../config'
+
+export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 
 const shownPoppers = []
 let hidingPopper = null
@@ -14,6 +23,13 @@ let hidingPopper = null
 let Element: any = function () {}
 if (typeof window !== 'undefined') {
   Element = window.Element
+}
+
+function defaultPropFactory (prop: string) {
+  return function (this: any) {
+    const props = this.$props
+    return getDefaultConfig(props.theme, prop)
+  }
 }
 
 export default () => ({
@@ -40,11 +56,6 @@ export default () => ({
       required: true,
     },
 
-    arrowNode: {
-      type: Function,
-      default: null,
-    },
-
     shown: {
       type: Boolean,
       default: false,
@@ -62,158 +73,144 @@ export default () => ({
 
     disabled: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'disabled')
-      },
+      default: defaultPropFactory('disabled'),
     },
 
     placement: {
       type: String,
-      default () {
-        return getDefaultConfig(this.theme, 'placement')
-      },
+      default: defaultPropFactory('placement'),
       validator: value => placements.includes(value),
     },
 
     delay: {
       type: [String, Number, Object],
-      default () {
-        return getDefaultConfig(this.theme, 'delay')
-      },
+      default: defaultPropFactory('delay'),
     },
 
-    offset: {
-      type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'offset')
-      },
+    distance: {
+      type: [Number, String],
+      default: defaultPropFactory('distance'),
+    },
+
+    skidding: {
+      type: [Number, String],
+      default: defaultPropFactory('skidding'),
     },
 
     triggers: {
       type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'triggers')
-      },
+      default: defaultPropFactory('triggers'),
     },
 
     showTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'showTriggers')
-      },
+      default: defaultPropFactory('showTriggers'),
     },
 
     hideTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'hideTriggers')
-      },
+      default: defaultPropFactory('hideTriggers'),
     },
 
     popperTriggers: {
       type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'popperTriggers')
-      },
+      default: defaultPropFactory('popperTriggers'),
     },
 
     popperShowTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'popperShowTriggers')
-      },
+      default: defaultPropFactory('popperShowTriggers'),
     },
 
     popperHideTriggers: {
       type: [Array, Function],
-      default () {
-        return getDefaultConfig(this.theme, 'popperHideTriggers')
-      },
+      default: defaultPropFactory('popperHideTriggers'),
     },
 
     container: {
       type: [String, Object, Element, Boolean],
-      default () {
-        return getDefaultConfig(this.theme, 'container')
-      },
+      default: defaultPropFactory('container'),
     },
 
     boundary: {
       type: [String, Element],
-      default () {
-        return getDefaultConfig(this.theme, 'boundary')
-      },
+      default: defaultPropFactory('boundary'),
     },
 
     strategy: {
       type: String,
       validator: value => ['absolute', 'fixed'].includes(value),
-      default () {
-        return getDefaultConfig(this.theme, 'strategy')
-      },
-    },
-
-    modifiers: {
-      type: Array,
-      default () {
-        return getDefaultConfig(this.theme, 'modifiers')
-      },
-    },
-
-    popperOptions: {
-      type: Object,
-      default () {
-        return getDefaultConfig(this.theme, 'popperOptions')
-      },
+      default: defaultPropFactory('strategy'),
     },
 
     autoHide: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'autoHide')
-      },
+      default: defaultPropFactory('autoHide'),
     },
 
     handleResize: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'handleResize')
-      },
+      default: defaultPropFactory('handleResize'),
     },
 
     instantMove: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'instantMove')
-      },
+      default: defaultPropFactory('instantMove'),
     },
 
     eagerMount: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'eagerMount')
-      },
+      default: defaultPropFactory('eagerMount'),
     },
 
     popperClass: {
       type: [String, Array, Object],
-      default () {
-        return getDefaultConfig(this.theme, 'popperClass')
-      },
+      default: defaultPropFactory('popperClass'),
     },
 
     computeTransformOrigin: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'computeTransformOrigin')
-      },
+      default: defaultPropFactory('computeTransformOrigin'),
     },
 
     autoMinSize: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'autoMinSize')
-      },
+      default: defaultPropFactory('autoMinSize'),
+    },
+
+    autoMaxSize: {
+      type: Boolean,
+      default: defaultPropFactory('autoMaxSize'),
+    },
+
+    preventOverflow: {
+      type: Boolean,
+      default: defaultPropFactory('preventOverflow'),
+    },
+
+    overflowPadding: {
+      type: [Number, String],
+      default: defaultPropFactory('overflowPadding'),
+    },
+
+    arrowPadding: {
+      type: [Number, String],
+      default: defaultPropFactory('arrowPadding'),
+    },
+
+    flip: {
+      type: Boolean,
+      default: defaultPropFactory('flip'),
+    },
+
+    shift: {
+      type: Boolean,
+      default: defaultPropFactory('shift'),
+    },
+
+    shiftCrossAxis: {
+      type: Boolean,
+      default: defaultPropFactory('shiftCrossAxis'),
     },
   },
 
@@ -227,6 +224,18 @@ export default () => ({
         showTo: false,
         hideFrom: false,
         hideTo: true,
+      },
+      result: {
+        x: 0,
+        y: 0,
+        placement: '',
+        strategy: this.strategy,
+        arrow: {
+          x: 0,
+          y: 0,
+          centerOffset: 0,
+        },
+        transformOrigin: null,
       },
     }
   },
@@ -255,6 +264,7 @@ export default () => ({
           ...this.classes,
           popperClass: this.popperClass,
         },
+        result: this.result,
       }
     },
   },
@@ -271,26 +281,35 @@ export default () => ({
     },
 
     async container () {
-      if (this.isShown && this.popperInstance) {
-        this.$_ensureContainer()
-        await this.popperInstance.update()
+      if (this.isShown) {
+        this.$_ensureTeleport()
+        await this.$_computePosition()
       }
     },
 
     triggers () {
-      this.$_removeEventListeners()
-      this.$_addEventListeners()
+      if (!this.$_isDisposed) {
+        this.$_removeEventListeners()
+        this.$_addEventListeners()
+      }
     },
 
-    placement: '$_refreshPopperOptions',
-    offset: '$_refreshPopperOptions',
-    boundary: '$_refreshPopperOptions',
-    strategy: '$_refreshPopperOptions',
-    modifiers: '$_refreshPopperOptions',
-    popperOptions: {
-      handler: '$_refreshPopperOptions',
-      deep: true,
-    },
+    ...[
+      'placement',
+      'distance',
+      'skidding',
+      'boundary',
+      'strategy',
+      'overflowPadding',
+      'arrowPadding',
+      'preventOverflow',
+      'shift',
+      'shiftCrossAxis',
+      'flip',
+    ].reduce((acc, prop) => {
+      acc[prop] = '$_computePosition'
+      return acc
+    }, {}),
   },
 
   created () {
@@ -300,6 +319,7 @@ export default () => ({
 
   mounted () {
     this.init()
+    this.$_detachPopperNode()
   },
 
   activated () {
@@ -344,8 +364,11 @@ export default () => ({
       this.$_preventShow = false
 
       // Nodes
+      this.$_referenceNode = this.referenceNode()
       this.$_targetNodes = this.targetNodes().filter(e => e.nodeType === e.ELEMENT_NODE)
       this.$_popperNode = this.popperNode()
+      this.$_innerNode = this.$_popperNode.querySelector('.v-popper__inner')
+      this.$_arrowNode = this.$_popperNode.querySelector('.v-popper__arrow-container')
 
       this.$_swapTargetAttrs('title', 'data-original-title')
 
@@ -365,14 +388,9 @@ export default () => ({
       this.$_isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
-
-      if (this.popperInstance) {
-        this.popperInstance.destroy()
-        this.$_detachPopperNode()
-      }
+      this.$_detachPopperNode()
 
       this.isMounted = false
-      this.popperInstance = null
       this.isShown = false
 
       this.$_swapTargetAttrs('data-original-title', 'title')
@@ -381,66 +399,136 @@ export default () => ({
     },
 
     async onResize () {
-      if (this.isShown && this.popperInstance) {
-        await this.popperInstance.update()
+      if (this.isShown) {
+        await this.$_computePosition()
         this.$emit('resize')
       }
     },
 
-    $_getPopperOptions () {
-      const popperOptions = {
-        ...this.popperOptions,
-        placement: this.placement,
-        strategy: this.strategy,
-        modifiers: this.modifiers,
-        onFirstUpdate: async state => {
-          if (this.popperOptions.onFirstUpdate) {
-            this.popperOptions.onFirstUpdate(state)
+    async $_computePosition () {
+      if (this.$_isDisposed) return
+
+      const options: ComputePositionConfig = {
+        middleware: [],
+      }
+
+      // Offset
+      if (this.distance || this.skidding) {
+        options.middleware.push(offset({
+          mainAxis: this.distance,
+          crossAxis: this.skidding,
+        }))
+      }
+
+      // Placement
+      const isPlacementAuto = this.placement.startsWith('auto')
+      if (isPlacementAuto) {
+        options.middleware.push(autoPlacement({
+          alignment: this.placement.split('-')[1] ?? '',
+        }))
+      } else {
+        options.placement = this.placement
+      }
+
+      if (this.preventOverflow) {
+        // Shift
+        if (this.shift) {
+          options.middleware.push(shift({
+            padding: this.overflowPadding,
+            boundary: this.boundary,
+            crossAxis: this.shiftCrossAxis,
+          }))
+        }
+
+        // Flip
+        if (!isPlacementAuto && this.flip) {
+          options.middleware.push(flip({
+            padding: this.overflowPadding,
+            boundary: this.boundary,
+          }))
+        }
+      }
+
+      // Arrow
+      options.middleware.push(arrow({
+        element: this.$_arrowNode,
+        padding: this.arrowPadding,
+      }))
+
+      // Arrow overflow
+      options.middleware.push({
+        name: 'arrowOverflow',
+        fn: ({ placement, rects, middlewareData }) => {
+          let overflow: boolean
+          const { centerOffset } = middlewareData.arrow
+          if (placement.startsWith('top') || placement.startsWith('bottom')) {
+            overflow = Math.abs(centerOffset) > rects.reference.width / 2
+          } else {
+            overflow = Math.abs(centerOffset) > rects.reference.height / 2
           }
-          await this.$_applyShowEffect()
-        },
-      }
-
-      if (!popperOptions.modifiers) {
-        popperOptions.modifiers = []
-      }
-
-      applyModifier(popperOptions.modifiers, 'arrow', {
-        options: {
-          element: (this.arrowNode && this.arrowNode()) || '[data-popper-arrow]',
+          return {
+            data: {
+              overflow,
+            },
+          }
         },
       })
 
-      if (this.offset) {
-        applyModifier(popperOptions.modifiers, 'offset', {
-          options: {
-            offset: this.offset,
+      // Auto min size for the popper inner
+      if (this.autoMinSize) {
+        options.middleware.push({
+          name: 'autoMinSize',
+          fn: ({ rects, placement, middlewareData }) => {
+            if (middlewareData.autoMinSize?.skip) {
+              return {}
+            }
+            let width: number
+            let height: number
+            if (placement.startsWith('top') || placement.startsWith('bottom')) {
+              width = rects.reference.width
+            } else {
+              height = rects.reference.height
+            }
+            // Apply and re-compute
+            this.$_innerNode.style.minWidth = width != null ? `${width}px` : null
+            this.$_innerNode.style.minHeight = height != null ? `${height}px` : null
+            return {
+              data: {
+                skip: true,
+              },
+              reset: {
+                rects: true,
+              },
+            }
           },
         })
       }
 
-      if (this.boundary) {
-        applyModifier(popperOptions.modifiers, 'preventOverflow', {
-          options: {
-            boundary: this.boundary,
+      // Auto max size for the popper inner
+      if (this.autoMaxSize) {
+        options.middleware.push(size({
+          boundary: this.boundary,
+          padding: this.overflowPadding,
+          apply: ({ width, height }) => {
+            // Apply and re-compute
+            this.$_innerNode.style.maxWidth = width != null ? `${width}px` : null
+            this.$_innerNode.style.maxHeight = height != null ? `${height}px` : null
           },
-        })
+        }))
       }
 
-      if (!this.isShown) {
-        // Disable event listeners
-        applyModifier(popperOptions.modifiers, 'eventListeners', {
-          enabled: false,
-        })
-      }
+      const data = await computePosition(this.$_referenceNode, this.$_popperNode, options)
 
-      return popperOptions
-    },
-
-    async $_refreshPopperOptions () {
-      if (this.popperInstance) {
-        await this.popperInstance.setOptions(this.$_getPopperOptions())
-      }
+      Object.assign(this.result, {
+        x: data.x,
+        y: data.y,
+        placement: data.placement,
+        strategy: data.strategy,
+        arrow: {
+          ...data.middlewareData.arrow,
+          ...data.middlewareData.arrowOverflow,
+        },
+      })
     },
 
     $_scheduleShow (event = null, skipDelay = false) {
@@ -490,45 +578,23 @@ export default () => ({
         return
       }
 
-      if (!this.isMounted) {
-        this.$_ensureContainer()
-        this.isMounted = true
-      }
-
-      if (!this.popperInstance) {
-        this.popperInstance = createPopper(this.referenceNode(), this.$_popperNode, this.$_getPopperOptions())
-      } else {
-        await this.popperInstance.update()
-        // Enable event listeners
-        await this.$_refreshPopperOptions()
-        await this.$_applyShowEffect()
-      }
+      this.$_ensureTeleport()
+      await nextFrame()
+      await this.$_computePosition()
+      await this.$_applyShowEffect()
     },
 
     async $_applyShowEffect () {
       if (this.$_hideInProgress) return
 
-      let _referenceBounds
-      const getReferenceBounds = () => _referenceBounds || (_referenceBounds = this.referenceNode().getBoundingClientRect())
-
+      // Advanced animations
       if (this.computeTransformOrigin) {
-        const referenceBounds = getReferenceBounds()
+        const bounds = this.$_referenceNode.getBoundingClientRect()
         const popperWrapper = this.$_popperNode.querySelector('.v-popper__wrapper')
         const parentBounds = popperWrapper.parentNode.getBoundingClientRect()
-        const x = (referenceBounds.left + referenceBounds.width / 2) - (parentBounds.left + popperWrapper.offsetLeft)
-        const y = (referenceBounds.top + referenceBounds.height / 2) - (parentBounds.top + popperWrapper.offsetTop)
-        popperWrapper.style.transformOrigin = `${x}px ${y}px`
-      }
-
-      if (this.autoMinSize) {
-        const referenceBounds = getReferenceBounds()
-        const popperInner = this.$_popperNode.querySelector('.v-popper__inner')
-        const [mainPosition] = this.$_popperNode.dataset.popperPlacement.split('-')
-        if (mainPosition === 'left' || mainPosition === 'right') {
-          popperInner.style.minHeight = `${referenceBounds.height}px`
-        } else {
-          popperInner.style.minWidth = `${referenceBounds.width}px`
-        }
+        const x = (bounds.x + bounds.width / 2) - (parentBounds.left + popperWrapper.offsetLeft)
+        const y = (bounds.y + bounds.height / 2) - (parentBounds.top + popperWrapper.offsetTop)
+        this.result.transformOrigin = `${x}px ${y}px`
       }
 
       this.isShown = true
@@ -553,9 +619,6 @@ export default () => ({
       shownPoppers.push(this)
 
       this.$emit('apply-show')
-
-      // Fix popper not applying the attribute on initial render :(
-      this.$_popperNode.setAttribute('data-popper-placement', this.popperInstance.state.placement)
 
       // Advanced classes
       this.classes.showFrom = true
@@ -583,11 +646,6 @@ export default () => ({
       }
 
       this.isShown = false
-
-      if (this.popperInstance) {
-        // Disable event listeners
-        await this.$_refreshPopperOptions()
-      }
 
       this.$_applyAttrsToTarget({
         'aria-describedby': undefined,
@@ -626,7 +684,9 @@ export default () => ({
       }
     },
 
-    $_ensureContainer () {
+    $_ensureTeleport () {
+      if (this.$_isDisposed) return
+
       let container = this.container
       // if container is a query, get the relative element
       if (typeof container === 'string') {
@@ -641,9 +701,19 @@ export default () => ({
       }
 
       container.appendChild(this.$_popperNode)
+      this.isMounted = true
     },
 
     $_addEventListeners () {
+      const addListeners = (targetNodes: any[], eventType: string, handler: (event: Event) => void) => {
+        this.$_events.push({ targetNodes, eventType, handler })
+        targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
+          ? {
+            passive: true,
+          }
+          : undefined))
+      }
+
       const addEvents = (targetNodes, eventMap, commonTriggers, customTrigger, handler) => {
         let triggers = commonTriggers
 
@@ -654,12 +724,7 @@ export default () => ({
         triggers.forEach(trigger => {
           const eventType = eventMap[trigger]
           if (eventType) {
-            this.$_events.push({ targetNodes, eventType, handler })
-            targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
-              ? {
-                passive: true,
-              }
-              : undefined))
+            addListeners(targetNodes, eventType, handler)
           }
         })
       }
@@ -689,6 +754,14 @@ export default () => ({
 
       addEvents(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
       addEvents([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
+
+      // Scroll
+      addListeners([
+        ...getScrollParents(this.$_referenceNode),
+        ...getScrollParents(this.$_popperNode),
+      ], 'scroll', () => {
+        this.$_computePosition()
+      })
     },
 
     $_removeEventListeners () {
@@ -714,12 +787,6 @@ export default () => ({
         setTimeout(() => {
           this.$_preventShow = false
         }, 300)
-      }
-    },
-
-    async $_handleGlobalResize (event) {
-      if (this.popperInstance) {
-        await this.popperInstance.update()
       }
     },
 
@@ -751,7 +818,7 @@ export default () => ({
     },
   },
 
-  render (h) {
+  render () {
     return this.$scopedSlots.default(this.slotData)[0]
   },
 })
@@ -774,7 +841,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     window.addEventListener('mousedown', handleGlobalMousedown, true)
     window.addEventListener('click', handleGlobalClick, true)
   }
-  window.addEventListener('resize', handleGlobalResize)
+  window.addEventListener('resize', computePositionAllShownPoppers)
 }
 
 function handleGlobalMousedown (event) {
@@ -807,17 +874,11 @@ function handleGlobalClose (event, touch = false) {
   }
 }
 
-function handleGlobalResize (event) {
+function computePositionAllShownPoppers (event) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    popper.$_handleGlobalResize(event)
+    popper.$_computePosition(event)
   }
-}
-
-function nextFrame () {
-  return new Promise(resolve => requestAnimationFrame(() => {
-    requestAnimationFrame(resolve)
-  }))
 }
 
 export function hideAllPoppers () {

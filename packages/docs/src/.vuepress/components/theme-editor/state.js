@@ -90,13 +90,22 @@ const emptyTheme = [
   'eagerMount',
   'placement',
   'strategy',
-  'offset',
+  'distance',
+  'skidding',
   'instantMove',
   'handleResize',
   'container',
   'boundary',
   'html',
   'loadingContent',
+  'arrowPadding',
+  'overflowPadding',
+  'preventOverflow',
+  'autoMinSize',
+  'autoMaxSize',
+  'flip',
+  'shift',
+  'shiftCrossAxis',
 ].reduce((obj, key) => {
   obj[key] = undefined
   return obj

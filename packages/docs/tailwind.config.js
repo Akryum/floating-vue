@@ -28,16 +28,11 @@ module.exports = {
 
   darkMode: 'class',
 
+  mode: 'jit',
+
   purge: {
     content: [
       'src/.vuepress/components/**/*.vue',
     ],
-
-    options: {
-      safelist: [
-        /bg-\w+-(2|3)00/,
-        /text-\w+-900/,
-      ],
-    },
   },
 }

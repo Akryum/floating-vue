@@ -35,6 +35,8 @@ export const TooltipDirective = PrivateTooltipDirective
 // Utils
 export { hideAllPoppers } from './components/Popper'
 export * from './util/events'
+export { placements } from './util/popper'
+export type { Placement } from './util/popper'
 
 /* Vue plugin */
 

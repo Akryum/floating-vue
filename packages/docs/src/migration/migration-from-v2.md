@@ -2,7 +2,7 @@
 sidebar: auto
 ---
 
-# Migration from v-tooltip
+# Migration from v-tooltip 2
 
 floating-vue is a complete rewrite compared to v-tooltip. This migration guide will help you upgrade!
 
@@ -19,9 +19,9 @@ floating-vue is a complete rewrite compared to v-tooltip. This migration guide w
 | 2.x          | latest  | 3.x               |
 | 1.x          | vue2    | 2.x               |
 
-### PopperJS 2
+### Floating UI
 
-The underlying positionning library called PopperJS got upgraded from v1 to v2 which includes [a lot of breaking changes](https://popper.js.org/docs/v2/migration-guide/). This is a rewrite of the library so behavior might not be strictly identical to PopperJS v1.
+The positionning library has changed from `popperjs` to [`floating-ui`](https://floating-ui.com/) which is the spiritual successor.
 
 ### Global configuration
 
@@ -39,7 +39,7 @@ The global configuration object has completly changed. Instead of having a lot o
 - `defaultOffset`: use `offset`
 - `defaultContainer`: use `container`
 - `defaultBoundariesElement`: use `boundary`
-- `defaultPopperOptions`: use `popperOptions`
+- `defaultPopperOptions`: removed
 - `defaultLoadingClass`: removed
 - `defaultLoadingContent`: use `loadingContent` in the `tooltip` theme (or any theme that you use with the directive)
 - `autoHide`: unchanged
@@ -215,11 +215,7 @@ There are a range of new props accompanying `triggers`:
 
 ### Offset
 
-The `offset` is now an array in the following format:
-
-```js
-[skidding, distance]
-```
+The `offset` is now two separate props: `distance` and `skidding`.
 
 Before:
 
@@ -233,7 +229,8 @@ After:
 
 ```html
 <VDropdown
-  :offset="[0, 10]"
+  distance="10"
+  skidding="0"
 />
 ```
 
@@ -323,8 +320,8 @@ The following props were removed and are no longer available:
 - `popoverArrowClass`
 - `popoverInnerClass`
 - `openClass`
-
-CSS classes [were changed](#css-classes) and in most case you should be fine not customizing them.
+- `modifiers`
+- `popperOptions`
 
 ### CSS classes
 
@@ -532,34 +529,180 @@ After:
 
 ### Modifiers
 
-Modifiers should now always be specified with the `modifiers` prop instead of the `popperOptions` because additional processing is done on them before passing them to PopperJS.
+`floating-ui` doesn't have a modifier system like popperjs. It has been replaced with new props.
 
-The modifiers syntax changed and is now an array of objects, [learn more here](https://popper.js.org/docs/v2/modifiers/).
+#### Prevent overflow
 
-Before:
+New props: 
 
-```html
-<v-popper
-  :popper-options="{
-    modifiers: {
-      flip: {
-        enabled: false,
-      },
-    },
-  }"
-/>
+- `preventOverflow` (boolean)
+- `overflowPadding` (px)
+- `shiftCrossAxis` (boolean)
+
+```vue
+<!-- Before -->
+<VDropdown :popper-options="{
+  modifiers: { preventOverflow: { enabled: false } }
+}" />
+
+<!-- After -->
+<VDropdown :prevent-overflow="false" />
 ```
 
-After:
+```vue
+<!-- Before -->
+<VDropdown :popper-options="{
+  modifiers: { preventOverflow: { options: { padding: 10 } } }
+}" />
 
-```html
-<VDropdown
-  :modifiers="[
-    {
-      name: 'flip',
-      enabled: false,
-    },
-  ]"
-/>
+<!-- After -->
+<VDropdown :overflow-padding="10" />
 ```
 
+```vue
+<!-- Before -->
+<VDropdown :popper-options="{
+  modifiers: { preventOverflow: { options: { altAxis: true } } }
+}" />
+
+<!-- After -->
+<VDropdown shift-cross-axis />
+```
+
+#### Flip
+
+New prop:
+
+- `flip` (boolean)
+
+```vue
+<!-- Before -->
+<VDropdown :popper-options="{
+  modifiers: { flip: { enabled: false } }
+}" />
+
+<!-- After -->
+<VDropdown :flip="false" />
+```
+
+#### Arrow
+
+New prop:
+
+- `arrowPadding` (px)
+
+```vue
+<!-- Before -->
+<VDropdown :popper-options="{
+  modifiers: { arrow: { options: { padding: 12 } } }
+}" />
+
+<!-- After -->
+<VDropdown :arrow-padding="12" />
+```
+
+## New features
+
+The new package supports Vue 3 in addition to Vue 2.
+
+### Themes
+
+Themes are a powerful and simple way to create multiple kinds of floating components. Application usually have many of them: tooltip, dropdown, menus, selects, etc. Each theme specify the default props values or/and the styling through the associated CSS classes.
+
+Themes can extend each other:
+
+```js
+app.use(FloatingVue, {
+  themes: {
+    select: {
+      $extend: 'dropdown', // builtin theme
+      triggers: ['click', 'touch', 'hover', 'focus'],
+      distance: 6,
+      delay: 0,
+    },
+    'multi-select': {
+      $extend: 'select',
+      triggers: ['click', 'touch'],
+      distance: 10,
+    },
+  },
+})
+```
+
+[Learn more](../guide/themes.md)
+
+### Global configuration
+
+The global configuration is now simply an object of the popper props (except special properties starting with `$` such as `$extend` and `$resetCss`, in addition to `themes`). The values will be used by default.
+
+[Learn more](../guide/config.md)
+
+### Unified API
+
+Everything is simpler! The direct and the components now shares the same underlying `Popper` component with the same props (plus a few specific ones for the directive).
+
+```vue
+<button v-tooltip="{
+  triggers: ['click'],
+  distance: 12,
+}">Action</button>
+```
+
+```vue
+<VTooltip
+  :triggers="['click']"
+  :distance="12"
+>
+  <button>Action</button>
+</VTooltip>
+```
+
+### Built-in components
+
+floating-ui ships with pre-built component and a minimal CSS file to help you get started:
+
+```js
+import 'floating-vue/dist/style.css'
+```
+
+```vue
+<!-- 'dropdown' theme -->
+<VDropdown>
+  <button>Click me!</button>
+  <template #popper>
+    Nice job!
+  </template>
+</VDropdown>
+
+<!-- 'menu' theme -->
+<VMenu>
+  <button>Hover me!</button>
+  <template #popper>
+    More buttons here
+  </template>
+</VMenu>
+
+<!-- 'tooltip' theme -->
+<VTooltip>
+  <button>Hover me!</button>
+  <template #popper>
+    Some information
+  </template>
+</VTooltip>
+```
+
+### Auto min size
+
+You can now let floating vue restrict the popper inner container to the reference size (using `min-width` or `min-height`). Usually when creating form inputs such as selects, you probably want to apply the minimum width of the input to the popper.
+
+```vue
+<VDropdown auto-min-size />
+```
+
+### Auto max size
+
+You can now let floating vue resize the popper inner container to the available size (using `max-width` or `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
+
+```vue
+<VDropdown auto-max-size />
+```

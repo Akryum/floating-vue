@@ -7,9 +7,7 @@
         placement: 'right',
         triggers: [],
         shown: true,
-        modifiers: [
-          { name: 'preventOverflow', enabled: false },
-        ],
+        preventOverflow: false,
       }"
       class="border border-gray-300 rounded px-4 py-2"
     >

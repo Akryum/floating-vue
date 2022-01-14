@@ -11,6 +11,23 @@ export default {
       default: false,
     },
   },
+
+  created () {
+    this.colors = {
+      green: {
+        normal: 'bg-green-300 text-green-900',
+        hover: 'hover:bg-green-200 hover:text-green-900',
+      },
+      red: {
+        normal: 'bg-red-300 text-red-900',
+        hover: 'hover:bg-red-200 hover:text-red-900',
+      },
+      gray: {
+        normal: 'bg-gray-300 text-gray-900',
+        hover: 'hover:bg-gray-200 hover:text-gray-900',
+      },
+    }
+  },
 }
 </script>
 
@@ -18,9 +35,9 @@ export default {
   <button
     class="flex items-center justify-center rounded text-center"
     :class="[
-      `hover:bg-${color}-200 hover:text-${color}-900`,
+      colors[color].hover,
       {
-        [`bg-${color}-300 text-${color}-900`]: !flat,
+        [colors[color].normal]: !flat,
       },
     ]"
     @click="$emit('click', $event)"

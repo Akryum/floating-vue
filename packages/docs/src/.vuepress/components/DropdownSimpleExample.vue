@@ -6,7 +6,9 @@
       </button>
 
       <template #popper>
-        This is awesome!
+        <div class="p-6">
+          This is awesome!
+        </div>
       </template>
     </VDropdown>
   </div>

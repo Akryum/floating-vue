@@ -7,7 +7,7 @@
 
       <template #popper>
         <button
-          class="border border-gray-300 rounded px-4 py-2"
+          class="border border-gray-300 rounded px-4 py-2 m-4"
           @click="count++"
         >
           +{{ count }}

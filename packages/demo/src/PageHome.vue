@@ -95,7 +95,7 @@
             theme: 'info-tooltip',
             // Inline override
             placement,
-            offset: [0, 100],
+            distance: 100,
             ariaId: 'test-id',
           }"
           class="tooltip-target b2"
@@ -293,7 +293,7 @@
         </div>
 
         <VDropdown
-          :offset="[0, offset]"
+          :distance="offset"
           :placement="placement"
           :auto-hide="isAutoHiding"
           :disabled="!isEnabled"
@@ -461,7 +461,7 @@
           <VDropdown
             :triggers="[]"
             :shown="isOpen"
-            :offset="[0, 16]"
+            :distance="16"
             :auto-hide="false"
           >
             <button class="tooltip-target b1 popover-btn">

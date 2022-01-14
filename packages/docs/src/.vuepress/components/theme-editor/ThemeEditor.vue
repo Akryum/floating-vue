@@ -163,7 +163,7 @@ export default {
     <!-- Footer -->
     <div class="footer flex-none flex items-center border-t border-gray-200 text-xs">
       <div class="px-4 py-1 text-gray-600">
-        v-tooltip <span class="text-black">v{{ version }}</span>
+        floating-vue <span class="text-black">v{{ version }}</span>
       </div>
 
       <div

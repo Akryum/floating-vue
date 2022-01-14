@@ -12,13 +12,13 @@
       handleResize,
       onResize,
       classes,
+      result,
     }"
     v-bind="$attrs"
     :theme="theme"
     :target-nodes="getTargetNodes"
     :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
-    :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
   >
     <div
@@ -47,6 +47,7 @@
         :auto-hide="autoHide"
         :handle-resize="handleResize"
         :classes="classes"
+        :result="result"
         @hide="hide"
         @resize="onResize"
       >

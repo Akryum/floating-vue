@@ -5,10 +5,10 @@
       :shown="true"
       :auto-hide="false"
       placement="right"
-      :offset="tempOffset"
-      :modifiers="[
-        { name: 'preventOverflow', enabled: false }
-      ]"
+      :distance="tempOffset[1]"
+      :skidding="tempOffset[0]"
+      :prevent-overflow="false"
+      :arrow-padding="6"
     >
       <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">
         Reference

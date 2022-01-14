@@ -14,12 +14,12 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'vue',
-        '@popperjs/core',
+        '@floating-ui/dom',
       ],
       output: {
         globals: {
           vue: 'Vue',
-          '@popperjs/core': 'Popper',
+          '@floating-ui/dom': 'FloatingUIDOM',
         },
       },
     },

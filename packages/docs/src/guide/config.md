@@ -31,11 +31,13 @@ FloatingVue.options.themes.dropdown.offset = [0, 12]
 The default global options are:
 
 ```js
-export const config = {
+export const config: FloatingVueConfig = {
   // Disable popper components
   disabled: false,
-  // Default position offset [skidding, distance] (px)
-  offset: [0, 5],
+  // Default position offset along main axis (px)
+  distance: 5,
+  // Default position offset along cross axis (px)
+  skidding: 0,
   // Default container where the tooltip will be appended
   container: 'body',
   // Element used to compute position and size boundaries
@@ -48,10 +50,16 @@ export const config = {
   popperTriggers: [],
   // Positioning strategy
   strategy: 'absolute',
-  // Popperjs modifiers
-  modifiers: [],
-  // Other options passed to Popperjs constructor
-  popperOptions: {},
+  // Prevent overflow
+  preventOverflow: true,
+  // Flip to the opposite placement if needed
+  flip: true,
+  // Shift on the cross axis to prevent the popper from overflowing
+  shift: true,
+  // Overflow padding (px)
+  overflowPadding: 0,
+  // Arrow padding (px)
+  arrowPadding: 0,
   // Themes
   themes: {
     tooltip: {

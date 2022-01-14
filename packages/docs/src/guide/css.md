@@ -115,6 +115,7 @@ HTML result:
                                     'v-popper__popper--shown',
                                     'v-popper__popper--hidden',
                                     'v-popper__popper--skip-transition',
+                                    'v-popper__popper--arrow-overflow',
                                     'v-popper__popper--show-from',
                                     'v-popper__popper--show-to',
                                     'v-popper__popper--hide-from',
@@ -134,13 +135,23 @@ HTML result:
 </div>
 ```
 
+You probably want to put a default padding on all dropdowns and menus:
+
+```css
+.v-popper--theme-dropdown .v-popper__inner {
+  padding: 6px;
+}
+```
+
 The `popper` element has several dynamic classes:
 
 - `v-popper__popper--shown`: the popper is shown.
 - `v-popper__popper--hidden`: the popper is hidden.
 - `v-popper__popper--skip-transition`: the transition should be skipped.
+- `v-popper__popper--arrow-overflow`: the arrow is overflowing past the reference, and should probably be hidden.
 
-Example style:
+
+Full example style:
 
 ```css
 .v-popper--theme-my-theme .v-popper__inner {

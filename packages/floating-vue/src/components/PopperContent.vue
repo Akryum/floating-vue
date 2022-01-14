@@ -14,13 +14,24 @@
         'v-popper__popper--hide-from': classes.hideFrom,
         'v-popper__popper--hide-to': classes.hideTo,
         'v-popper__popper--skip-transition': skipTransition,
+        'v-popper__popper--arrow-overflow': result.arrow.overflow,
       },
     ]"
+    :style="{
+      position: result.strategy,
+      transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
+    }"
     :aria-hidden="shown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
+    :data-popper-placement="result.placement"
     @keyup.esc="autoHide && $emit('hide')"
   >
-    <div class="v-popper__wrapper">
+    <div
+      class="v-popper__wrapper"
+      :style="{
+        transformOrigin: result.transformOrigin,
+      }"
+    >
       <div
         ref="inner"
         class="v-popper__inner"
@@ -40,6 +51,10 @@
       <div
         ref="arrow"
         class="v-popper__arrow-container"
+        :style="{
+          left: toPx(result.arrow.x),
+          top: toPx(result.arrow.y),
+        }"
       >
         <div class="v-popper__arrow-outer" />
         <div class="v-popper__arrow-inner" />
@@ -72,6 +87,16 @@ export default {
     autoHide: Boolean,
     handleResize: Boolean,
     classes: Object,
+    result: Object,
+  },
+
+  methods: {
+    toPx (value) {
+      if (value != null && !isNaN(value)) {
+        return `${value}px`
+      }
+      return null
+    },
   },
 }
 </script>
@@ -79,6 +104,8 @@ export default {
 <style>
 .v-popper__popper {
   z-index: 10000;
+  top: 0;
+  left: 0;
 }
 
 .v-popper__popper.v-popper__popper--hidden {
@@ -101,11 +128,17 @@ export default {
 .v-popper__inner {
   position: relative;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .v-popper__arrow-container {
+  position: absolute;
   width: 10px;
   height: 10px;
+}
+
+.v-popper__popper--arrow-overflow .v-popper__arrow-container {
+  visibility: hidden;
 }
 
 .v-popper__arrow-inner,

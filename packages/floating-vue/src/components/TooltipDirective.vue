@@ -11,6 +11,7 @@
       handleResize,
       onResize,
       classes,
+      result,
     }"
     v-bind="$attrs"
     :theme="theme"
@@ -33,6 +34,7 @@
       :auto-hide="autoHide"
       :handle-resize="handleResize"
       :classes="classes"
+      :result="result"
       @hide="hide"
       @resize="onResize"
     >
@@ -125,10 +127,9 @@ export default {
       immediate: true,
     },
 
-    finalContent (value) {
-      this.$nextTick(() => {
-        this.$refs.popper.onResize()
-      })
+    async finalContent (value) {
+      await this.$nextTick()
+      this.$refs.popper.onResize()
     },
   },
 

@@ -108,9 +108,7 @@ To fix this, specify the `padding` option of the `arrow` modifier. In the follow
 ```vue
 <button v-tooltip="{
   content: 'Hello',
-  modifiers: [
-    { name: 'arrow', options: { padding: 8 } },
-  ],
+  arrowPadding: 8,
 }">
 ```
 
