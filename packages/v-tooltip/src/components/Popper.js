@@ -291,8 +291,10 @@ export default () => ({
     },
 
     triggers () {
-      this.$_removeEventListeners()
-      this.$_addEventListeners()
+      if (Array.isArray(this.$_events)) {
+        this.$_removeEventListeners()
+        this.$_addEventListeners()
+      }
     },
 
     placement: '$_refreshPopperOptions',
