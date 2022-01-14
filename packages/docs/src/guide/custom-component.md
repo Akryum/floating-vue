@@ -22,7 +22,6 @@ It also expects the following props:
 - `targetNodes`: a function that returns the target HTML elements that should trigger the popper
 - `referenceNode`: a function that returns the reference HTML element that should be used as the Popper JS reference for positionning
 - `popperNode`: a function that returns the popper HTML element that will be displayed inside the popper (recommended to target the `<PopperContent>` root element)
-- `arrowNode`: a function that returns the arrow HTML element that will represent the popper arrow (recommended to use the `<PopperContent>` arrow ref: `$refs.arrow`)
 
 It exposes the following to the default slot:
 
@@ -35,6 +34,7 @@ It exposes the following to the default slot:
 - `handleResize`: is resizing detection enabled (should be passed to `<PopperContent>`)
 - `onResize`: method to handle a change of the size of the popper content (should be handled with `<PopperContent>`'s `resize` event)
 - `classes`: object with boolean flags to toggle CSS classes (should be passed to `<PopperContent>`)
+- `result`: object with positioning data computed for the popper (should be passed to `<PopperContent>`)
 
 ## PopperContent
 
@@ -48,6 +48,7 @@ It expects the following props:
 - `autoHide`
 - `handleResize`
 - `classes`
+- `result`
 
 Events:
 
@@ -75,13 +76,13 @@ Refs:
       handleResize,
       onResize,
       classes,
+      result,
     }"
     v-bind="$attrs"
     :theme="theme"
     :target-nodes="getTargetNodes"
     :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
-    :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
   >
     <div
@@ -106,6 +107,7 @@ Refs:
         :auto-hide="autoHide"
         :handle-resize="handleResize"
         :classes="classes"
+        :result="result"
         @hide="hide"
         @resize="onResize"
       >

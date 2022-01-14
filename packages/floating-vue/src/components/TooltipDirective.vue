@@ -16,7 +16,6 @@
     v-bind="$attrs"
     :theme="theme"
     :popper-node="() => $refs.popperContent.$el"
-    :arrow-node="() => $refs.popperContent.$refs.arrow"
     v-on="$listeners"
     @apply-show="onShow"
     @apply-hide="onHide"
