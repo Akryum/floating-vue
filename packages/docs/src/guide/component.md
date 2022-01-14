@@ -8,7 +8,7 @@ The most basic component included by default is the `VDropdown` component:
 
 ```vue
 <VDropdown
-  :offset="[0, 16]"
+  :distance="6"
 >
   <!-- This will be the popover reference (for the events and position) -->
   <button>Click me</button>

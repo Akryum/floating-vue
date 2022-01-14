@@ -15,7 +15,7 @@ Or directly on `FloatingVue`:
 
 ```javascript
 import FloatingVue from 'floating-vue'
-FloatingVue.options.offset = [0, 12]
+FloatingVue.options.distance = 12
 ```
 
 For a specific theme:
@@ -23,7 +23,7 @@ For a specific theme:
 
 ```js
 import FloatingVue from 'floating-vue'
-FloatingVue.options.themes.dropdown.offset = [0, 12]
+FloatingVue.options.themes.dropdown.distance = 12
 ```
 
 ## Default values

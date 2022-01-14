@@ -95,10 +95,9 @@ After:
 {
   placement: 'top',
   delay: 0,
-  offset: [0, 0],
+  distance: 0,
   container: 'body',
   boundary: undefined,
-  popperOptions: {},
   autoHide: true,
   disposeTimeout: 5000,
   themes: {
@@ -112,12 +111,11 @@ After:
       placement: 'bottom',
       delay: 0,
       triggers: ['click'],
-      offset: [0, 0],
+      distance: 0,
       container: 'body',
       boundary: undefined,
       autoHide: true,
       handleResize: true,
-      popperOptions: {},
     },
   },
 }

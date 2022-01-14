@@ -31,7 +31,7 @@ For example, this `info-tooltip` theme:
 Vue.use(FloatingVue, {
   themes: {
     'info-tooltip': {
-      offset: [0, 24],
+      distance: 24,
       delay: { show: 1000, hide: 0 },
     },
   },
