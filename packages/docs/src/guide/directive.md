@@ -6,35 +6,19 @@ In the template, use the `v-tooltip` directive:
 <button v-tooltip="'You have ' + count + ' new messages.'">
 ```
 
-Of course, you can use a reactive property:
+You can use a reactive property for the tooltip content:
 
 ```vue
 <button v-tooltip="tooltipContent">
 ```
+
+## Placement modifier
 
 You can specify the tooltip placement as a modifier:
 
 ```vue
 <button v-tooltip.bottom-start="'You have ' + count + ' new messages.'">
 ```
-
-The available placements are:
-
- - `'auto'`
- - `'auto-start'`
- - `'auto-end'`
- - `'top'`
- - `'top-start'`
- - `'top-end'`
- - `'right'`
- - `'right-start'`
- - `'right-end'`
- - `'bottom'`
- - `'bottom-start'`
- - `'bottom-end'`
- - `'left'`
- - `'left-start'`
- - `'left-end'`
 
 <TooltipPlacement />
 
@@ -90,29 +74,6 @@ To pass custom arguments to the async method, use an arrow function:
   }"
 >Hover me!</button>
 ```
-
-## Arrow padding
-
-If you use tooltips that are positionned on the edge of the reference, you may need to specify an "arrow padding". This padding will prevent the arrow from glitch out of the tooltip:
-
-```vue
-<button v-tooltip="{
-  content: 'Hello',
-}">
-```
-
-<ArrowPadding />
-
-To fix this, specify the `padding` option of the `arrow` modifier. In the following example, we prevent the arrow from going to the edges of the tooltip with a 8px limit:
-
-```vue
-<button v-tooltip="{
-  content: 'Hello',
-  arrowPadding: 8,
-}">
-```
-
-<ArrowPadding :padding="8" />
 
 ## Manual trigger example
 

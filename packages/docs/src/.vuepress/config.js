@@ -76,8 +76,8 @@ module.exports = {
           children: [
             '',
             'installation',
-            'directive',
             'component',
+            'directive',
             'config',
             'themes',
             'css',

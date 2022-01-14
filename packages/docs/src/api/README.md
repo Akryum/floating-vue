@@ -307,6 +307,8 @@ Padding of the arrow relative to the popper bounds to prevent it from overflowin
 <VDropdown :arrow-padding="12" />
 ```
 
+[Learn more](../guide/component.md#arrow-padding)
+
 ### `container`
 
 Selector: Container where the popper will be appended (e.g. `'body'`).

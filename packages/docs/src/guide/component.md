@@ -65,6 +65,28 @@ There is a `VMenu` variant with the `menu` theme which extends the `dropdown` th
 
 <MenuSimpleExample />
 
+## Placements
+
+The available placements are:
+
+ - `'auto'`
+ - `'auto-start'`
+ - `'auto-end'`
+ - `'top'`
+ - `'top-start'`
+ - `'top-end'`
+ - `'right'`
+ - `'right-start'`
+ - `'right-end'`
+ - `'bottom'`
+ - `'bottom-start'`
+ - `'bottom-end'`
+ - `'left'`
+ - `'left-start'`
+ - `'left-end'`
+
+<DropdownPlacement />
+
 ## Triggers
 
 Triggering a popper means either showing it or hiding it. A trigger describes events that should toggle the popper visibility.
@@ -133,13 +155,13 @@ This can be useful if you want to popper to stay open when the mouse hovers it:
 
 ## Offset
 
-Offsetting the popper means moving it relative to its computed position on the page. You can do this with the `offset` prop which must be an array of the form `[skidding, distance]`.
+Offsetting the popper means moving it relative to its computed position on the page. You can do this with the `distance` and `skidding` props.
 
 This example will move the popper away from the reference by `64` pixels:
 
 ```vue
 <VDropdown
-  :offset="[0, 64]"
+  :distance="64"
 >
 ```
 
@@ -149,7 +171,7 @@ This example will move the popper `32` pixels alongside the reference:
 
 ```vue
 <VDropdown
-  :offset="[32, 0]"
+  :skidding="32"
 >
 ```
 
@@ -159,11 +181,33 @@ You can also use negative value, since it's a relative offset.
 
 ```vue
 <VDropdown
-  :offset="[-16, 32]"
+  :distance="32"
+  :skidding="-16"
 >
 ```
 
 <OffsetExample :offset="[-16, 32]" info="(Negative skidding and positive distance)"/>
+
+## Arrow padding
+
+If you use tooltips that are positionned on the edge of the reference, you may need to specify an "arrow padding". This padding will prevent the arrow from glitch out of the tooltip:
+
+```vue
+<VDropdown :skidding="-32" />
+```
+
+<ArrowPadding />
+
+To fix this, specify the `padding` option of the `arrow` modifier. In the following example, we prevent the arrow from going to the edges of the tooltip with a 8px limit:
+
+```vue
+<VDropdown
+  :skidding="-32"
+  :arrow-padding="8"
+/>
+```
+
+<ArrowPadding :padding="8" />
 
 ## Disable popper
 
@@ -181,6 +225,20 @@ data () {
 }
 ```
 
+## Hide from slot
+
+Use the `hide` slot prop to close the popper:
+
+```vue
+<VDropdown>
+  <button>Click me</button>
+
+  <template #popper="{ hide }">
+    <a @click="hide()">Close</a>
+  </template>
+</VDropdown>
+```
+
 ## Close directive
 
 Use the `v-close-popper` directive on an element inside the dropdown to close it when the element is clicked (or touched on mobile):
@@ -194,6 +252,8 @@ Use the `v-close-popper` directive on an element inside the dropdown to close it
   </template>
 </VDropdown>
 ```
+
+The directive works even in nested components in the `popper` slot.
 
 You can also set it to true or false to enable or disable the directive (enabled by default):
 

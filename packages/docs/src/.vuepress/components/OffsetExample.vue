@@ -15,27 +15,29 @@
       </button>
 
       <template #popper>
-        <div>Offset: {{ tempOffset }}</div>
-        <div
-          v-if="info"
-          class="text-sm text-gray-500 !md:max-w-32"
-        >
-          {{ info }}
+        <div class="p-3">
+          <div>Distance: {{ tempOffset[1] }} Skidding: {{ tempOffset[0] }}</div>
+          <div
+            v-if="info"
+            class="text-sm text-gray-500 !md:max-w-32"
+          >
+            {{ info }}
+          </div>
         </div>
       </template>
     </VDropdown>
 
     <div class="flex !md:flex-col items-center !md:space-y-6 md:space-x-6">
       <input
-        v-model.number="tempOffset[0]"
+        v-model.number="tempOffset[1]"
         type="range"
-        min="-32"
-        max="32"
+        min="-64"
+        max="128"
         class="w-full"
       >
 
       <input
-        v-model.number="tempOffset[1]"
+        v-model.number="tempOffset[0]"
         type="range"
         min="-64"
         max="64"

@@ -1,6 +1,6 @@
 <template>
   <div class="example space-y-12 md:space-y-6">
-    <VTooltip
+    <VDropdown
       :triggers="[]"
       :shown="true"
       placement="right"
@@ -8,23 +8,26 @@
       :skidding="offset[0]"
       :prevent-overflow="false"
       :arrow-padding="tempPadding"
+      :auto-hide="false"
     >
-      <button class="px-4 py-6 bg-gray-500 text-white rounded-lg !md:text-sm">
+      <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">
         Reference
       </button>
 
       <template #popper>
-        Offset: {{ offset }}<br>
-        Arrow Padding: {{ tempPadding }}
+        <div class="p-3">
+          Distance: {{ offset[1] }} Skidding: {{ offset[0] }}<br>
+          Arrow Padding: {{ tempPadding }}
+        </div>
       </template>
-    </VTooltip>
+    </VDropdown>
 
     <div class="flex !md:flex-col items-center !md:space-y-6 md:space-x-6">
       <input
         v-model.number="offset[0]"
         type="range"
-        min="-64"
-        max="64"
+        min="-128"
+        max="128"
         class="w-full"
       >
 
@@ -32,7 +35,7 @@
         v-model.number="tempPadding"
         type="range"
         min="0"
-        max="12"
+        max="24"
         class="w-full"
       >
 
