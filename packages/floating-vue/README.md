@@ -1,11 +1,11 @@
 <p align="center">
-<img src="./logo.png" alt="v-tooltip logo"/>
+<img src="./logo.png" alt="floating-vue logo"/>
 </p>
 
-<h1 align="center">v-tooltip</h1>
+<h1 align="center">Floating Vue</h1>
 
 <p align="center">
-<a href="https://www.npmjs.com/package/v-tooltip"><img src="https://img.shields.io/npm/v/v-tooltip.svg"/> <img src="https://img.shields.io/npm/dm/v-tooltip.svg"/></a> <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-2.x-brightgreen.svg"/></a>
+<a href="https://www.npmjs.com/package/floating-vue"><img src="https://img.shields.io/npm/v/floating-vue.svg"/> <img src="https://img.shields.io/npm/dm/floating-vue.svg"/></a> <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/vue-3|2-brightgreen.svg"/></a>
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@ Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta
 </p>
 
 <p align="center">
-  <a href="https://v-tooltip.netlify.app/">Documentation</a>
+  <a href="https://floating-vue.starpad.dev/">Documentation</a>
 </p>
 
 [💚️ Become a Sponsor](https://github.com/sponsors/Akryum)
