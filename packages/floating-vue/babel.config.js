@@ -1,29 +1,12 @@
 module.exports = {
   presets: [
     [
-      '@babel/env', {
+      require('@babel/preset-env'), {
         modules: false,
-        exclude: [
-          '@babel/plugin-transform-regenerator',
-        ],
+        // exclude: [
+        //   '@babel/plugin-transform-regenerator',
+        // ],
       },
     ],
   ],
-  plugins: [
-    '@babel/plugin-proposal-class-properties',
-  ],
-  env: {
-    test: {
-      presets: [
-        [
-          '@babel/env', {
-            targets: { node: 'current' },
-          },
-        ],
-      ],
-      plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-      ],
-    },
-  },
 }
