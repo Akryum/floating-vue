@@ -138,7 +138,7 @@ export default {
 }
 
 .v-popper__popper--arrow-overflow .v-popper__arrow-container {
-  visibility: hidden;
+  display: none;
 }
 
 .v-popper__arrow-inner,

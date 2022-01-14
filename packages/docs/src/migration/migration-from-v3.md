@@ -127,7 +127,7 @@ New prop:
 
 ### `v-popper__popper--arrow-overflow`
 
-The `v-popper__popper--arrow-overflow` class is added on the `v-popper_popper` element when the arrow is overflowing past the reference bounds. By default, `v-popper__arrow-container` has `visibility: hidden` which hides the arrow.
+The `v-popper__popper--arrow-overflow` class is added on the `v-popper_popper` element when the arrow is overflowing past the reference bounds. By default, `v-popper__arrow-container` has `display: none;` which hides the arrow.
 
 ### Auto max size
 
