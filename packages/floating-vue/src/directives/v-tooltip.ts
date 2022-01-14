@@ -72,6 +72,7 @@ export function createTooltip (el, value, modifiers) {
         ref: 'popper',
       })
     },
+    // @ts-expect-error custom option
     devtools: {
       hide: true,
     },

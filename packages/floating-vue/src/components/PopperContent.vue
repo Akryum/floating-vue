@@ -48,7 +48,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ResizeObserver } from 'vue-resize'
 import ThemeClass from './ThemeClass'
 

@@ -14,5 +14,6 @@ if (typeof window !== 'undefined') {
 
 export let isIOS = false
 if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+  // @ts-expect-error MSStream is missing in window type
   isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }

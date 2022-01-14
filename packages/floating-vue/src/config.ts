@@ -1,4 +1,6 @@
-export const config = {
+export type FloatingVueConfig = any // @TODO
+
+export const config: FloatingVueConfig = {
   // Disable popper components
   disabled: false,
   // Default position offset [skidding, distance] (px)
@@ -67,7 +69,7 @@ export const config = {
 /**
  * Get default config value depending on theme
  */
-export function getDefaultConfig (theme, key) {
+export function getDefaultConfig (theme: string, key: string): any {
   let themeConfig = config.themes[theme] || {}
   let value
   do {
@@ -91,7 +93,7 @@ export function getDefaultConfig (theme, key) {
 /**
  * Theme CSS inheritance
  */
-export function getThemeClasses (theme) {
+export function getThemeClasses (theme: string): string[] {
   const result = [theme]
   let themeConfig = config.themes[theme] || {}
   do {

@@ -1,5 +1,5 @@
 import { assign } from './util/assign-deep'
-import { config } from './config'
+import { config, FloatingVueConfig } from './config'
 import 'vue-resize/dist/vue-resize.css'
 // Components
 import PrivateDropdown from './components/Dropdown.vue'
@@ -34,28 +34,29 @@ export const Tooltip = PrivateTooltip
 export const TooltipDirective = PrivateTooltipDirective
 // Utils
 export { hideAllPoppers } from './components/Popper'
+export * from './util/events'
 
 /* Vue plugin */
 
-export function install (Vue, options = {}) {
-  if (install.installed) return
-  install.installed = true
+export function install (app, options: FloatingVueConfig = {}) {
+  if (app.$_vTooltipInstalled) return
+  app.$_vTooltipInstalled = true
 
   assign(config, options)
 
   // Directive
-  Vue.directive('tooltip', PrivateVTooltip)
-  Vue.directive('close-popper', PrivateVClosePopper)
+  app.directive('tooltip', PrivateVTooltip)
+  app.directive('close-popper', PrivateVClosePopper)
   // Components
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-tooltip', PrivateTooltip)
-  Vue.component('VTooltip', PrivateTooltip)
+  app.component('v-tooltip', PrivateTooltip)
+  app.component('VTooltip', PrivateTooltip)
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-dropdown', PrivateDropdown)
-  Vue.component('VDropdown', PrivateDropdown)
+  app.component('v-dropdown', PrivateDropdown)
+  app.component('VDropdown', PrivateDropdown)
   // eslint-disable-next-line vue/component-definition-name-casing
-  Vue.component('v-menu', PrivateMenu)
-  Vue.component('VMenu', PrivateMenu)
+  app.component('v-menu', PrivateMenu)
+  app.component('VMenu', PrivateMenu)
 }
 
 const plugin = {

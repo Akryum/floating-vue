@@ -48,7 +48,7 @@
   </Popper>
 </template>
 
-<script>
+<script lang="ts">
 import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import { getDefaultConfig } from '../config'

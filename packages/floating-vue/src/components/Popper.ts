@@ -11,7 +11,7 @@ import { getDefaultConfig } from '../config'
 const shownPoppers = []
 let hidingPopper = null
 
-let Element = function () {}
+let Element: any = function () {}
 if (typeof window !== 'undefined') {
   Element = window.Element
 }
@@ -315,7 +315,7 @@ export default () => ({
   },
 
   methods: {
-    show ({ event, skipDelay = false, force = false } = {}) {
+    show ({ event = null, skipDelay = false, force = false } = {}) {
       if (force || !this.disabled) {
         this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
@@ -329,7 +329,7 @@ export default () => ({
       this.$emit('update:shown', true)
     },
 
-    hide ({ event, skipDelay = false } = {}) {
+    hide ({ event = null, skipDelay = false } = {}) {
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
@@ -657,8 +657,8 @@ export default () => ({
             this.$_events.push({ targetNodes, eventType, handler })
             targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
               ? {
-                  passive: true,
-                }
+                passive: true,
+              }
               : undefined))
           }
         })
@@ -760,15 +760,15 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
     document.addEventListener('touchstart', handleGlobalMousedown, supportsPassive
       ? {
-          passive: true,
-          capture: true,
-        }
+        passive: true,
+        capture: true,
+      }
       : true)
     document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
       ? {
-          passive: true,
-          capture: true,
-        }
+        passive: true,
+        capture: true,
+      }
       : true)
   } else {
     window.addEventListener('mousedown', handleGlobalMousedown, true)

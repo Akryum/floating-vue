@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import PopperWrapper from './PopperWrapper.vue'
 
 export default {

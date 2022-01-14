@@ -4,8 +4,8 @@ function addListeners (el) {
   el.addEventListener('click', onClick)
   el.addEventListener('touchstart', onTouchStart, supportsPassive
     ? {
-        passive: true,
-      }
+      passive: true,
+    }
     : false)
 }
 
