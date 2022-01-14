@@ -9,7 +9,7 @@
     "prepublishOnly": "yarn run lint && yarn run test && yarn run build",
     "test": "yarn run test:unit",
     "lint": "eslint . --ext .js,.vue",
-    "test:unit": "jest"
+    "test:unit": "peeky run"
   },
   "main": "dist/floating-vue.umd.js",
   "module": "dist/floating-vue.esm.js",
@@ -37,13 +37,10 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.4.0",
     "fs-extra": "^9.0.1",
-    "jest": "^24.7.1",
-    "jest-serializer-vue": "^2.0.2",
-    "jest-transform-stub": "^2.0.0",
+    "@peeky/test": "^0.10.2",
     "typescript": "^4.5.4",
     "vite": "^2.7.12",
     "vite-plugin-vue2": "^1.9.2",
-    "vue-jest": "^3.0.7",
     "vue-template-compiler": "^2.6.10",
     "vue-typegen": "^0.2.0"
   },
