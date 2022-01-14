@@ -29,7 +29,7 @@ export default {
     css({
       output: styles => {
         fs.ensureDirSync('dist')
-        fs.writeFileSync('dist/v-tooltip.css', new CleanCSS().minify(styles).styles)
+        fs.writeFileSync('dist/style.css', new CleanCSS().minify(styles).styles)
       },
     }),
     babel({

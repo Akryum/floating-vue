@@ -4,7 +4,7 @@
  * https://v1.vuepress.vuejs.org/guide/basic-config.html#app-level-enhancements
  */
 
-import 'floating-vue/dist/floating-vue.css'
+import 'floating-vue/dist/style.css'
 import FloatingVue, { createTooltip } from 'floating-vue'
 
 export default ({
