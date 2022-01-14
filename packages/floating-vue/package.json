@@ -1,7 +1,7 @@
 {
-  "name": "v-tooltip",
-  "version": "3.0.0-beta.20",
-  "description": "Easy Vue tooltips, dropdowns & popovers using Popper.js",
+  "name": "floating-vue",
+  "version": "1.0.0-beta.1",
+  "description": "Easy Vue tooltips, dropdowns, menus & popovers using floating-ui",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --exec \"rollup --config build/rollup.config.es.js\" --watch src -e js,vue",
@@ -67,9 +67,9 @@
     "not dead"
   ],
   "bugs": {
-    "url": "https://github.com/Akryum/vue-tooltip/issues"
+    "url": "https://github.com/Akryum/floating-vue/issues"
   },
-  "homepage": "https://github.com/Akryum/vue-tooltip#readme",
+  "homepage": "https://github.com/Akryum/floating-vue#readme",
   "keywords": [
     "vue",
     "popper",
@@ -81,7 +81,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Akryum/vue-tooltip.git",
-    "directory": "packages/v-tooltip"
+    "url": "git+https://github.com/Akryum/floating-vue.git",
+    "directory": "packages/floating-vue"
   }
 }

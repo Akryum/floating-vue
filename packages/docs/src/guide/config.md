@@ -7,23 +7,23 @@ It also describes the available [themes](./themes.md).
 You can change the configuration options during install with the arguments:
 
 ```javascript
-import VTooltip from 'v-tooltip'
-Vue.use(VTooltip, options)
+import FloatingVue from 'floating-vue'
+Vue.use(FloatingVue, options)
 ```
 
-Or directly on `VTooltip`:
+Or directly on `FloatingVue`:
 
 ```javascript
-import VTooltip from 'v-tooltip'
-VTooltip.options.offset = [0, 12]
+import FloatingVue from 'floating-vue'
+FloatingVue.options.offset = [0, 12]
 ```
 
 For a specific theme:
 
 
 ```js
-import VTooltip from 'v-tooltip'
-VTooltip.options.themes.dropdown.offset = [0, 12]
+import FloatingVue from 'floating-vue'
+FloatingVue.options.themes.dropdown.offset = [0, 12]
 ```
 
 ## Default values

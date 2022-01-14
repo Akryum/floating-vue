@@ -124,7 +124,7 @@ import {
   PopperContent,
   PopperMethods,
   ThemeClass
-} from 'v-tooltip'
+} from 'floating-vue'
 
 export default {
   name: 'VPopperWrapper',

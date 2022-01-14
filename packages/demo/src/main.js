@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VTooltip, { createTooltip, destroyTooltip } from 'v-tooltip'
-import 'v-tooltip/dist/v-tooltip.css'
+import FloatingVue, { createTooltip, destroyTooltip } from 'floating-vue'
+import 'floating-vue/dist/style.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
 
-Vue.use(VTooltip, {
+Vue.use(FloatingVue, {
   disposeTimeout: 5000,
   themes: {
     dropdown: {
@@ -29,12 +29,12 @@ Vue.use(VTooltip, {
   },
 })
 
-VTooltip.options.delay = {
+FloatingVue.options.delay = {
   show: 300,
   hide: 0,
 }
 
-console.log(VTooltip.options)
+console.log(FloatingVue.options)
 
 Vue.use(VueRouter)
 

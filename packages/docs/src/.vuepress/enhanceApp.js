@@ -4,8 +4,8 @@
  * https://v1.vuepress.vuejs.org/guide/basic-config.html#app-level-enhancements
  */
 
-import 'v-tooltip/dist/v-tooltip.css'
-import VTooltipPlugin, { createTooltip } from 'v-tooltip'
+import 'floating-vue/dist/floating-vue.css'
+import FloatingVue, { createTooltip } from 'floating-vue'
 
 export default ({
   Vue, // the version of Vue being used in the VuePress app
@@ -15,7 +15,7 @@ export default ({
 }) => {
   // ...apply enhancements for the site.
 
-  Vue.use(VTooltipPlugin, {
+  Vue.use(FloatingVue, {
     boundary: 'body',
     themes: {
       '_editor-tooltip': {

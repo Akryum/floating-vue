@@ -2,7 +2,7 @@
 import { builtinThemes } from './builtin-themes'
 import { mapState, state } from './state'
 import { placements } from '@popperjs/core'
-import { SHOW_EVENT_MAP } from 'v-tooltip/src/util/events'
+import { SHOW_EVENT_MAP } from 'floating-vue/src/util/events'
 import { ToolIcon } from 'vue-feather-icons'
 import Tabs from './Tabs.vue'
 import { loadValue, storeValue } from './util'

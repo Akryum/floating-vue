@@ -4,8 +4,8 @@ Themes categorizes the different kinds of popper you want to have in your applic
 
 Each kind of popper look and behave differently. Themes allow you to easily configure your popper components for a specific purpose.
 
-By default, v-tooltip provides three themes:
-- `tooltip` (used by the `v-tooltip` directive and the `VTooltip` component)
+By default, floating-vue provides three themes:
+- `tooltip` (used by the `v-tooltip` directive and the `FloatingVue` component)
 - `dropdown` (used by the `VDropdown` component)
 - `menu` (used by the `VMenu` component)
 
@@ -28,7 +28,7 @@ Each theme is described by an object that can contain default values of all [ava
 For example, this `info-tooltip` theme:
 
 ```js
-Vue.use(VTooltip, {
+Vue.use(FloatingVue, {
   themes: {
     'info-tooltip': {
       offset: [0, 24],
@@ -45,7 +45,7 @@ See the [global configuration](./config.md#default-values) for the values used i
 To customize your tooltips and other popovers, you can create themes:
 
 ```js
-Vue.use(VTooltip, {
+Vue.use(FloatingVue, {
   themes: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -55,12 +55,12 @@ Vue.use(VTooltip, {
 })
 ```
 
-Here, `$extend: 'tooltip'` extends the `tooltip` theme defined by default inside `v-tooltip`, so all its options and CSS classes are inherited.
+Here, `$extend: 'tooltip'` extends the `tooltip` theme defined by default inside `floating-vue`, so all its options and CSS classes are inherited.
 
 If you don't want to inherit the CSS classes, use `$resetCss`:
 
 ```js
-Vue.use(VTooltip, {
+Vue.use(FloatingVue, {
   themes: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -94,7 +94,7 @@ Then you can customize the CSS for this theme:
 ```
 
 ::: tip
-You can use the [Theme Editor](../theme-editor.md) to build your v-tooltip themes!
+You can use the [Theme Editor](../theme-editor.md) to build your floating-vue themes!
 :::
 
 ## Themed component
@@ -104,7 +104,7 @@ After youve have created your new theme, you can use it with the `theme` prop li
 Let's have this example custom theme called `info-dropdown`:
 
 ```js
-Vue.use(VTooltip, {
+Vue.use(FloatingVue, {
   themes: {
     'info-dropdown': {
       $extend: 'dropdown',
@@ -116,11 +116,11 @@ Vue.use(VTooltip, {
 })
 ```
 
-We can then create a Themed Component by using the `PopperWrapper` component from `v-tooltip` and overriding the `vPopperTheme` option:
+We can then create a Themed Component by using the `PopperWrapper` component from `floating-vue` and overriding the `vPopperTheme` option:
 
 ```vue
 <script>
-import { PopperWrapper } from 'v-tooltip'
+import { PopperWrapper } from 'floating-vue'
 
 export default {
   ...PopperWrapper,

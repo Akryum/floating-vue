@@ -12,7 +12,7 @@ depth: 3
 Hides all shown poppers.
 
 ```js
-import { hideAllPoppers } from 'v-tooltip'
+import { hideAllPoppers } from 'floating-vue'
 
 hideAllPoppers()
 ```
@@ -22,7 +22,7 @@ hideAllPoppers()
 `createTooltip(el, valueOrOptions, directiveModifiers)` creates a tooltip on a given element.
 
 ```js
-import { createTooltip, destroyTooltip } from 'v-tooltip'
+import { createTooltip, destroyTooltip } from 'floating-vue'
 
 export function clipboardSuccess (el) {
   const tooltip = createTooltip(el, {

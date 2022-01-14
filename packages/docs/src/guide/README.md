@@ -1,6 +1,6 @@
 # Getting started
 
-v-tooltip is a library helping you add tooltips, dropdowns and other poppers into your Vue application.
+floating-vue is a library helping you add tooltips, dropdowns and other poppers into your Vue application.
 
 [Looking for the old docs?](../legacy/v2/)
 
@@ -19,13 +19,13 @@ Thank you to my sponsors allowing me to spend more time on Open Source projects!
 <code-group>
 <code-block title="npm">
 ```shell
-npm i -S v-tooltip@next
+npm i -S floating-vue
 ```
 </code-block>
 
 <code-block title="yarn">
 ```shell
-yarn add v-tooltip@next
+yarn add floating-vue
 ```
 </code-block>
 </code-group>
@@ -33,16 +33,15 @@ yarn add v-tooltip@next
 2. Add the plugin into your app:
 
 ```js
-import Vue from 'vue'
-import VTooltip from 'v-tooltip'
+import FloatingVue from 'floating-vue'
 
-Vue.use(VTooltip)
+app.use(FloatingVue)
 ```
 
 3. Add the default style:
 
 ```js
-import 'v-tooltip/dist/v-tooltip.css'
+import 'floating-vue/dist/style.css'
 ```
 
 [Learn more about installation](./installation.md)

@@ -2,7 +2,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'v-tooltip',
+  title: 'Floating Vue',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -27,7 +27,7 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
-    repo: 'https://github.com/Akryum/v-tooltip',
+    repo: 'https://github.com/Akryum/floating-vue',
     editLinks: true,
     docsDir: 'packages/docs/src',
     docsBranch: 'next',

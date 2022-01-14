@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VTooltipPlugin from 'v-tooltip'
+import FloatingVue from 'floating-vue'
 import { formatObjectToSource } from './format-object'
 import { generateCSS } from './style-output'
 import { loadValue, storeValue } from './util'
@@ -41,7 +41,7 @@ export const state = new Vue({
     theme: {
       handler (value) {
         if (value) {
-          VTooltipPlugin.options.themes[value.name] = value.config
+          FloatingVue.options.themes[value.name] = value.config
           state.error = ''
         }
       },

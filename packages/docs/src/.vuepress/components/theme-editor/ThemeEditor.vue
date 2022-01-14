@@ -1,6 +1,6 @@
 
 <script>
-import VTooltipPlugin from 'v-tooltip'
+import FloatingVue from 'floating-vue'
 import {
   AlertTriangleIcon,
   SettingsIcon,
@@ -62,7 +62,7 @@ export default {
   },
 
   created () {
-    this.version = VTooltipPlugin.version
+    this.version = FloatingVue.version
 
     Object.assign(this, {
       EyeIcon,

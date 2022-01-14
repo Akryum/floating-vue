@@ -1,4 +1,4 @@
-# [3.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.19...v3.0.0-beta.20) (2022-01-13)
+# [1.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.19...v1.0.0-beta.1) (2022-01-13)
 
 
 ### Bug Fixes

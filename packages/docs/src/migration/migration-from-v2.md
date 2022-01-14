@@ -2,13 +2,22 @@
 sidebar: auto
 ---
 
-# Migration from V2
+# Migration from v-tooltip
 
-v-tooltip V3 and V4 (for Vue 3) are complete rewrites compared to V2. This migration guide will help you upgrade!
+floating-vue is a complete rewrite compared to v-tooltip. This migration guide will help you upgrade!
 
 [GitHub discussion](https://github.com/Akryum/v-tooltip/discussions/603)
 
 ## Breaking changes
+
+### Package renamed
+
+`v-tooltip` => `floating-vue`
+
+| floating-vue | NPM Tag | Vue compatibility |
+| ------------ | ------- | ----------------- |
+| 2.x          | latest  | 3.x               |
+| 1.x          | vue2    | 2.x               |
 
 ### PopperJS 2
 
