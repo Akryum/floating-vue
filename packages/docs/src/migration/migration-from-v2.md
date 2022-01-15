@@ -704,3 +704,27 @@ You can now let floating vue resize the popper inner container to the available 
 ```vue
 <VDropdown auto-max-size />
 ```
+
+### Compute Transform Origin
+
+Computes the transform origin of the `.v-popper__wrapper` to allow zooming effects relative to the reference element.
+
+Example:
+
+```vue
+<template>
+  <VDropdown compute-transform-origin />
+</template>
+
+<style>
+.v-popper__wrapper {
+  transition: transform .15s;
+}
+
+.v-popper__popper.v-popper__popper--hidden .v-popper__wrapper {
+  transform: scale(.5);
+}
+</style>
+```
+
+<ZoomShowOnlyExample />
