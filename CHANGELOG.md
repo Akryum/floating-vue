@@ -1,3 +1,12 @@
+# [1.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2022-01-15)
+
+
+### Bug Fixes
+
+* strategy prop not taken into account ([ab840b2](https://github.com/Akryum/v-tooltip/commit/ab840b2c0ef78729455520fb988c8dc210b2a404))
+
+
+
 # [1.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2022-01-15)
 
 
