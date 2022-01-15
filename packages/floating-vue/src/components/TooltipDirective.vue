@@ -16,7 +16,6 @@
     v-bind="$attrs"
     :theme="theme"
     :popper-node="() => $refs.popperContent.$el"
-    v-on="$listeners"
     @apply-show="onShow"
     @apply-hide="onHide"
   >
@@ -50,12 +49,13 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import { getDefaultConfig } from '../config'
 import PopperMethods from './PopperMethods'
 
-export default {
+export default defineComponent({
   name: 'VTooltipDirective',
 
   components: {
@@ -77,9 +77,7 @@ export default {
 
     html: {
       type: Boolean,
-      default () {
-        return getDefaultConfig(this.theme, 'html')
-      },
+      default: props => getDefaultConfig(props.theme, 'html'),
     },
 
     content: {
@@ -89,28 +87,26 @@ export default {
 
     loadingContent: {
       type: String,
-      default () {
-        return getDefaultConfig(this.theme, 'loadingContent')
-      },
+      default: props => getDefaultConfig(props.theme, 'loadingContent'),
     },
   },
 
   data () {
     return {
-      asyncContent: null,
+      asyncContent: null as string,
     }
   },
 
   computed: {
-    isContentAsync () {
+    isContentAsync (): boolean {
       return typeof this.content === 'function'
     },
 
-    loading () {
+    loading (): boolean {
       return this.isContentAsync && this.asyncContent == null
     },
 
-    finalContent () {
+    finalContent (): string {
       if (this.isContentAsync) {
         return this.loading ? this.loadingContent : this.asyncContent
       }
@@ -126,7 +122,7 @@ export default {
       immediate: true,
     },
 
-    async finalContent (value) {
+    async finalContent () {
       await this.$nextTick()
       this.$refs.popper.onResize()
     },
@@ -137,7 +133,7 @@ export default {
   },
 
   methods: {
-    fetchContent (force) {
+    fetchContent (force: boolean) {
       if (typeof this.content === 'function' && this.$_isShown &&
         (force || (!this.$_loading && this.asyncContent == null))) {
         this.asyncContent = null
@@ -167,5 +163,5 @@ export default {
       this.$_isShown = false
     },
   },
-}
+})
 </script>

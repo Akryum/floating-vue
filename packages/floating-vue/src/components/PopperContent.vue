@@ -64,10 +64,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import { ResizeObserver } from 'vue-resize'
 import ThemeClass from './ThemeClass'
 
-export default {
+export default defineComponent({
   name: 'VPopperContent',
 
   components: {
@@ -90,6 +91,11 @@ export default {
     result: Object,
   },
 
+  emits: [
+    'hide',
+    'resize',
+  ],
+
   methods: {
     toPx (value) {
       if (value != null && !isNaN(value)) {
@@ -98,7 +104,7 @@ export default {
       return null
     },
   },
-}
+})
 </script>
 
 <style>

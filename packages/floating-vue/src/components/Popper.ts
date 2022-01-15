@@ -1,3 +1,4 @@
+import { defineComponent } from 'vue'
 import {
   autoPlacement,
   computePosition,
@@ -9,7 +10,7 @@ import {
   size,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
-import { placements } from '../util/popper'
+import { placements, Placement } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { nextFrame } from '../util/frame'
@@ -26,13 +27,12 @@ if (typeof window !== 'undefined') {
 }
 
 function defaultPropFactory (prop: string) {
-  return function (this: any) {
-    const props = this.$props
+  return function (props) {
     return getDefaultConfig(props.theme, prop)
   }
 }
 
-export default () => ({
+export default () => defineComponent({
   name: 'VPopper',
 
   props: {
@@ -79,7 +79,7 @@ export default () => ({
     placement: {
       type: String,
       default: defaultPropFactory('placement'),
-      validator: value => placements.includes(value),
+      validator: (value: Placement) => placements.includes(value),
     },
 
     delay: {
@@ -139,7 +139,7 @@ export default () => ({
 
     strategy: {
       type: String,
-      validator: value => ['absolute', 'fixed'].includes(value),
+      validator: (value: string) => ['absolute', 'fixed'].includes(value),
       default: defaultPropFactory('strategy'),
     },
 
@@ -218,6 +218,19 @@ export default () => ({
       default: defaultPropFactory('shiftCrossAxis'),
     },
   },
+
+  emits: [
+    'show',
+    'hide',
+    'update:shown',
+    'apply-show',
+    'apply-hide',
+    'close-group',
+    'close-directive',
+    'auto-hide',
+    'resize',
+    'dispose',
+  ],
 
   data () {
     return {
@@ -335,7 +348,7 @@ export default () => ({
     this.hide()
   },
 
-  beforeDestroy () {
+  beforeUnmount () {
     this.dispose()
   },
 
@@ -827,7 +840,7 @@ export default () => ({
   },
 
   render () {
-    return this.$scopedSlots.default(this.slotData)[0]
+    return this.$slots.default(this.slotData)
   },
 })
 

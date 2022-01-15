@@ -1,11 +1,12 @@
 <script lang="ts">
+import { defineComponent } from 'vue'
 import PopperWrapper from './PopperWrapper.vue'
 
-export default {
+export default defineComponent({
   ...PopperWrapper,
   name: 'VTooltip',
   vPopperTheme: 'tooltip',
-}
+})
 </script>
 
 <style>

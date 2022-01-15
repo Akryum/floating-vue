@@ -1,7 +1,6 @@
-import Vue from 'vue'
+import { createApp, h, ref } from 'vue'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
-import PopperMethods from '../components/PopperMethods'
 import { placements } from '../util/popper'
 
 const TARGET_CLASS = 'v-popper--has-tooltip'
@@ -41,59 +40,62 @@ export function getOptions (el, value, modifiers) {
 }
 
 export function createTooltip (el, value, modifiers) {
-  const options = getOptions(el, value, modifiers)
+  const options = ref(getOptions(el, value, modifiers))
+  const component = ref()
 
-  const tooltipApp = el.$_popper = new Vue({
-    mixins: [
-      PopperMethods,
-    ],
-    data () {
+  const tooltipApp = createApp({
+    name: 'VTooltipDirective',
+    setup () {
       return {
         options,
+        tooltip: component,
       }
     },
-    render (h) {
-      const {
-        theme,
-        html,
-        content,
-        loadingContent,
-        ...otherOptions
-      } = this.options
-
+    render () {
       return h(TooltipDirective, {
-        props: {
-          theme,
-          html,
-          content,
-          loadingContent,
-        },
-        attrs: otherOptions,
-        ref: 'popper',
+        ...this.options,
+        ref: 'tooltip',
       })
     },
-    // @ts-expect-error custom option
     devtools: {
       hide: true,
     },
   })
   const mountTarget = document.createElement('div')
   document.body.appendChild(mountTarget)
-  tooltipApp.$mount(mountTarget)
+  tooltipApp.mount(mountTarget)
+  el.$_popperMountTarget = mountTarget
 
   // Class on target
   if (el.classList) {
     el.classList.add(TARGET_CLASS)
   }
 
-  return tooltipApp
+  const result = el.$_popper = {
+    app: tooltipApp,
+    options,
+    component,
+    show () {
+      component.value.show()
+    },
+    hide () {
+      component.value.hide()
+    },
+  }
+
+  return result
 }
 
 export function destroyTooltip (el) {
   if (el.$_popper) {
-    el.$_popper.$destroy()
+    el.$_popper.app.unmount()
+    if (el.$_popperMountTarget.parentElement) {
+      el.$_popperMountTarget.parentElement.removeChild(el.$_popperMountTarget)
+    }
+
     delete el.$_popper
     delete el.$_popperOldShown
+    delete el.$_popperMountTarget
   }
 
   if (el.classList) {
@@ -109,7 +111,7 @@ export function bind (el, { value, oldValue, modifiers }) {
     let tooltipApp
     if (el.$_popper) {
       tooltipApp = el.$_popper
-      tooltipApp.options = options
+      tooltipApp.options.value = options
     } else {
       tooltipApp = createTooltip(el, value, modifiers)
     }
@@ -123,9 +125,9 @@ export function bind (el, { value, oldValue, modifiers }) {
 }
 
 export default {
-  bind,
-  update: bind,
-  unbind (el) {
+  beforeMount: bind,
+  updated: bind,
+  beforeUnmount (el) {
     destroyTooltip(el)
   },
 }
