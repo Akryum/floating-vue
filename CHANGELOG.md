@@ -1,3 +1,12 @@
+# [1.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2022-01-15)
+
+
+### Bug Fixes
+
+* inner content behind inner arrow ([3ed3d30](https://github.com/Akryum/v-tooltip/commit/3ed3d302a9c4ea5b32d88eba7d4acb9fb265e737))
+
+
+
 # [1.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v3.0.0-beta.20...v1.0.0-beta.2) (2022-01-15)
 
 
