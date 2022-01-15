@@ -414,6 +414,7 @@ export default () => ({
       if (this.$_isDisposed) return
 
       const options: ComputePositionConfig = {
+        strategy: this.strategy,
         middleware: [],
       }
 
