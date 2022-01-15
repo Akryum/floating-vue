@@ -30,9 +30,7 @@ module.exports = {
 
   mode: 'jit',
 
-  purge: {
-    content: [
-      'src/.vuepress/components/**/*.vue',
-    ],
-  },
+  purge: [
+    'src/.vuepress/components/**/*.vue',
+  ],
 }

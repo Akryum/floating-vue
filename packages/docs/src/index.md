@@ -5,8 +5,8 @@ tagline: Tooltips & dropdowns made easy
 actionText: Quick Start →
 actionLink: /guide/
 features:
-- title: Popper that works
-  details: Create pretty tooltips that position themselves perfectily on the page thanks to PopperJS
+- title: Pop it easy
+  details: Create floating components that position themselves perfectly
 - title: Flexible configuration
   details: Tailor the library to you need with the extensive configuration capabilities
 - title: Powerful theming
