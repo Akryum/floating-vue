@@ -1,3 +1,12 @@
+# [1.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2022-01-15)
+
+
+### Bug Fixes
+
+* typo in module entry ([1b972d8](https://github.com/Akryum/v-tooltip/commit/1b972d8939aaf7851408f830966a23b4010789ce))
+
+
+
 # [1.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2022-01-15)
 
 
