@@ -8,7 +8,7 @@
   "scripts": {
     "build": "lerna run build --ignore demo",
     "lint": "lerna run lint",
-    "release": "yarn run lint && lerna publish --dist-tag vue2 && yarn run changelog",
+    "release": "yarn run lint && lerna publish && yarn run changelog",
     "changelog": "node ./scripts/update-version.mjs && conventional-changelog -p angular -i CHANGELOG.md -s -r 2 && (git add CHANGELOG.md && git add package.json && git commit -m \"chore: changelog\" && git push || exit 0)"
   },
   "devDependencies": {
