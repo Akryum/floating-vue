@@ -12,7 +12,7 @@
     "test:unit": "peeky run"
   },
   "main": "dist/floating-vue.umd.js",
-  "module": "dist/floating-vue.esm.js",
+  "module": "dist/floating-vue.es.js",
   "types": "dist/index.d.ts",
   "dependencies": {
     "@floating-ui/dom": "^0.1.10",
