@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-Easy tooltips, popovers and dropdowns with <a href="https://github.com/FezVrasta/popper.js">Popper.js</a>
+Easy tooltips, dropdowns, menus... with <a href="https://github.com/floating-ui/floating-ui">Floating UI</a>
 </p>
 
 <p align="center">
