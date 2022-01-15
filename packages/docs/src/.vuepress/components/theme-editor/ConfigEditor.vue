@@ -450,6 +450,22 @@ export default {
       </div>
 
       <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <span>Arrow overflow:</span>
+        <label
+          v-for="value of [undefined, true, false]"
+          :key="value"
+          class="flex items-center space-x-1"
+        >
+          <input
+            v-model="theme.config.arrowOverflow"
+            type="radio"
+            :value="value"
+          >
+          <span>{{ value != null ? value : '(inherit)' }}</span>
+        </label>
+      </div>
+
+      <div class="flex space-x-3 hover:bg-gray-50 p-2">
         <span>Flip:</span>
         <label
           v-for="value of [undefined, true, false]"

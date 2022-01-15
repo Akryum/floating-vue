@@ -99,6 +99,7 @@ const emptyTheme = [
   'html',
   'loadingContent',
   'arrowPadding',
+  'arrowOverflow',
   'overflowPadding',
   'preventOverflow',
   'autoMinSize',

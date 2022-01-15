@@ -198,6 +198,11 @@ export default () => ({
       default: defaultPropFactory('arrowPadding'),
     },
 
+    arrowOverflow: {
+      type: Boolean,
+      default: defaultPropFactory('arrowOverflow'),
+    },
+
     flip: {
       type: Boolean,
       default: defaultPropFactory('flip'),
@@ -456,23 +461,25 @@ export default () => ({
       }))
 
       // Arrow overflow
-      options.middleware.push({
-        name: 'arrowOverflow',
-        fn: ({ placement, rects, middlewareData }) => {
-          let overflow: boolean
-          const { centerOffset } = middlewareData.arrow
-          if (placement.startsWith('top') || placement.startsWith('bottom')) {
-            overflow = Math.abs(centerOffset) > rects.reference.width / 2
-          } else {
-            overflow = Math.abs(centerOffset) > rects.reference.height / 2
-          }
-          return {
-            data: {
-              overflow,
-            },
-          }
-        },
-      })
+      if (this.arrowOverflow) {
+        options.middleware.push({
+          name: 'arrowOverflow',
+          fn: ({ placement, rects, middlewareData }) => {
+            let overflow: boolean
+            const { centerOffset } = middlewareData.arrow
+            if (placement.startsWith('top') || placement.startsWith('bottom')) {
+              overflow = Math.abs(centerOffset) > rects.reference.width / 2
+            } else {
+              overflow = Math.abs(centerOffset) > rects.reference.height / 2
+            }
+            return {
+              data: {
+                overflow,
+              },
+            }
+          },
+        })
+      }
 
       // Auto min size for the popper inner
       if (this.autoMinSize) {

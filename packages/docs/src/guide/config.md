@@ -60,6 +60,8 @@ export const config: FloatingVueConfig = {
   overflowPadding: 0,
   // Arrow padding (px)
   arrowPadding: 0,
+  // Compute arrow overflow (useful to hide it)
+  arrowOverflow: true,
   // Themes
   themes: {
     tooltip: {
