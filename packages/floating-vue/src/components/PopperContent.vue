@@ -131,6 +131,11 @@ export default {
   overflow-y: auto;
 }
 
+.v-popper__inner > div {
+  position: relative;
+  z-index: 1;
+}
+
 .v-popper__arrow-container {
   position: absolute;
   width: 10px;
