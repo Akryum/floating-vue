@@ -10,6 +10,6 @@
 
   Et consectetur voluptates magnam quia dolor fugiat quod aliquid. Nihil sunt quasi provident qui ea et beatae est. Dolorem dicta optio deserunt.
 
-  Saepe neque quaerat sint architecto labore quos consequatur. Sequi perspiciatis dolores sunt occaecati quas ratione aut aliquam. Repellat iusto et et cum fuga.
+  Saepe neque quaerat sint architecto labore quos consequatur. Sequi perspiciatis <b v-tooltip="'Hello!'">dolores</b> sunt occaecati quas ratione aut aliquam. Repellat iusto et et cum fuga.
   </div>
 </template>

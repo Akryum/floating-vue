@@ -1,4 +1,4 @@
-import { createApp, h, ref } from 'vue'
+import { App, createApp, h, Ref, ref } from 'vue'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
@@ -39,32 +39,54 @@ export function getOptions (el, value, modifiers) {
   return options
 }
 
-export function createTooltip (el, value, modifiers) {
-  const options = ref(getOptions(el, value, modifiers))
-  const component = ref()
+interface Directive {
+  options: Ref<any>
+  shown: Ref<boolean>
+}
 
-  const tooltipApp = createApp({
-    name: 'VTooltipDirective',
+let directiveApp: App
+let directives: Ref<Directive[]>
+
+function ensureDirectiveApp () {
+  if (directiveApp) return
+
+  directives = ref([])
+
+  directiveApp = createApp({
+    name: 'VTooltipDirectiveApp',
     setup () {
       return {
-        options,
-        tooltip: component,
+        directives,
       }
     },
     render () {
-      return h(TooltipDirective, {
-        ...this.options,
-        ref: 'tooltip',
+      return this.directives.map((directive) => {
+        return h(TooltipDirective, {
+          ...directive.options,
+          shown: directive.shown.value || directive.options.shown,
+        })
       })
     },
     devtools: {
       hide: true,
     },
   })
+
   const mountTarget = document.createElement('div')
   document.body.appendChild(mountTarget)
-  tooltipApp.mount(mountTarget)
-  el.$_popperMountTarget = mountTarget
+  directiveApp.mount(mountTarget)
+}
+
+export function createTooltip (el, value, modifiers) {
+  ensureDirectiveApp()
+  const options = ref(getOptions(el, value, modifiers))
+  const shown = ref(false)
+
+  const item = {
+    options,
+    shown,
+  }
+  directives.value.push(item)
 
   // Class on target
   if (el.classList) {
@@ -72,14 +94,13 @@ export function createTooltip (el, value, modifiers) {
   }
 
   const result = el.$_popper = {
-    app: tooltipApp,
     options,
-    component,
+    item,
     show () {
-      component.value.show()
+      shown.value = true
     },
     hide () {
-      component.value.hide()
+      shown.value = false
     },
   }
 
@@ -88,10 +109,8 @@ export function createTooltip (el, value, modifiers) {
 
 export function destroyTooltip (el) {
   if (el.$_popper) {
-    el.$_popper.app.unmount()
-    if (el.$_popperMountTarget.parentElement) {
-      el.$_popperMountTarget.parentElement.removeChild(el.$_popperMountTarget)
-    }
+    const index = directives.value.indexOf(el.$_popper.item)
+    if (index !== -1) directives.value.splice(index, 1)
 
     delete el.$_popper
     delete el.$_popperOldShown
@@ -108,18 +127,18 @@ export function bind (el, { value, oldValue, modifiers }) {
   if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
     destroyTooltip(el)
   } else {
-    let tooltipApp
+    let directive
     if (el.$_popper) {
-      tooltipApp = el.$_popper
-      tooltipApp.options.value = options
+      directive = el.$_popper
+      directive.options.value = options
     } else {
-      tooltipApp = createTooltip(el, value, modifiers)
+      directive = createTooltip(el, value, modifiers)
     }
 
     // Manual show
     if (typeof value.shown !== 'undefined' && value.shown !== el.$_popperOldShown) {
       el.$_popperOldShown = value.shown
-      value.shown ? tooltipApp.show() : tooltipApp.hide()
+      value.shown ? directive.show() : directive.hide()
     }
   }
 }
