@@ -124,6 +124,9 @@ export function bind (el, { value, modifiers }) {
 }
 
 export default {
+  compatConfig: {
+    MODE: 3,
+  },
   beforeMount: bind,
   updated: bind,
   beforeUnmount (el) {

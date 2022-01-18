@@ -53,6 +53,10 @@ import { ResizeObserver } from 'vue-resize'
 import ThemeClass from './ThemeClass'
 
 export default {
+  compatConfig: {
+    MODE: 3,
+  },
+  
   name: 'VPopperContent',
 
   components: {
