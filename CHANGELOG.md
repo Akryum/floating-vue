@@ -1,3 +1,12 @@
+# [2.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-01-18)
+
+
+### Features
+
+* single app for v-tooltip directives ([649c38d](https://github.com/Akryum/v-tooltip/commit/649c38d650fe32a9f5433f9b0349fe6a588dde12))
+
+
+
 # [2.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v2.0.0-beta.1) (2022-01-15)
 
 
