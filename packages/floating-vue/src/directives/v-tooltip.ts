@@ -40,12 +40,14 @@ export function getOptions (el, value, modifiers) {
 }
 
 interface Directive {
+  id: number
   options: Ref<any>
   shown: Ref<boolean>
 }
 
 let directiveApp: App
 let directives: Ref<Directive[]>
+let uid = 0
 
 function ensureDirectiveApp () {
   if (directiveApp) return
@@ -64,6 +66,7 @@ function ensureDirectiveApp () {
         return h(TooltipDirective, {
           ...directive.options,
           shown: directive.shown.value || directive.options.shown,
+          key: directive.id,
         })
       })
     },
@@ -83,6 +86,7 @@ export function createTooltip (el, value, modifiers) {
   const shown = ref(false)
 
   const item = {
+    id: uid++,
     options,
     shown,
   }
