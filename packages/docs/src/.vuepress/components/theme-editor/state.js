@@ -189,7 +189,7 @@ function getThemeParents (theme) {
   do {
     // Support theme extend
     if (themeConfig.config.$extend) {
-      themeConfig = state.themeMap[themeConfig.config.$extend] || {}
+      themeConfig = state.themeMap[themeConfig.config.$extend]
     } else {
       themeConfig = null
     }

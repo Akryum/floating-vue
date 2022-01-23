@@ -113,7 +113,7 @@ function generateArrowInnerCSS (theme, key) {
 function generateCSSForComponent (theme, key, classKey, handler) {
   const styles = theme.styles[key]
   if (!styles) return []
-  const inherited = getInheritedStyleOptions(theme.name)[key]
+  const inherited = getInheritedStyleOptions(theme)[key]
   const merged = assign(assign({}, inherited), styles)
 
   const isDark = key === 'dark'
@@ -142,8 +142,8 @@ function generateColorCSS ({ color, opacity }) {
   }
 }
 
-function getInheritedStyleOptions (themeName) {
-  let themeConfig = state.themeMap[themeName] || {}
+function getInheritedStyleOptions (theme) {
+  let themeConfig = theme
   const value = {}
   for (const key of keys) {
     value[key] = assign({}, baseStyles)
@@ -160,7 +160,7 @@ function getInheritedStyleOptions (themeName) {
         parentStyles.push(obj)
         break
       }
-      themeConfig = state.themeMap[themeConfig.config.$extend] || {}
+      themeConfig = state.themeMap[themeConfig.config.$extend]
     } else {
       themeConfig = null
     }
