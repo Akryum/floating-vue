@@ -82,7 +82,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col items-stretch">
+  <div class="overflow-hidden flex flex-col items-stretch">
     <div class="flex items-center border-b border-gray-100">
       <div class="flex-1 flex items-center p-2 text-gray-500">
         <PenToolIcon class="w-4 h-4 mr-2" />
