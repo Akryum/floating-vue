@@ -134,12 +134,10 @@ export default {
             class="border-b border-gray-100"
           />
 
-          <keep-alive>
-            <Sandbox
-              v-if="outputTab === 'sandbox'"
-              class="flex-1"
-            />
-          </keep-alive>
+          <Sandbox
+            v-show="outputTab === 'sandbox'"
+            class="flex-1"
+          />
 
           <div
             v-if="outputTab === 'source'"
