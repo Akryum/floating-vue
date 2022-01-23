@@ -35,6 +35,18 @@ export const state = new Vue({
     styleOutput () {
       return '/* Style */\n' + generateCSS(this.theme)
     },
+
+    allStyleOutput () {
+      const parents = getThemeParents(this.theme)
+      return parents.concat(this.theme).map(t => generateCSS(t)).join('\n')
+    },
+
+    themeMap () {
+      return this.themes.reduce((acc, theme) => {
+        acc[theme.name] = theme
+        return acc
+      }, {})
+    },
   },
 
   watch: {
@@ -120,6 +132,15 @@ export function loadTheme (themeName) {
       ...emptyTheme,
       ...theme.config,
     }
+
+    // Migrate styles
+    if ('inner' in theme.styles) {
+      theme.styles.normal = { ...theme.styles.inner }
+    }
+    if ('inner-dark' in theme.styles) {
+      theme.styles.dark = { ...theme.styles['inner-dark'] }
+    }
+
     state.theme = theme
     storeValue(LAST_THEME_KEY, themeName)
   } else {
@@ -160,4 +181,23 @@ export function deleteTheme (theme) {
   if (index !== -1) {
     state.themes.splice(index, 1)
   }
+}
+
+function getThemeParents (theme) {
+  let themeConfig = theme
+  const parentThemes = []
+  do {
+    // Support theme extend
+    if (themeConfig.config.$extend) {
+      themeConfig = state.themeMap[themeConfig.config.$extend] || {}
+    } else {
+      themeConfig = null
+    }
+    if (themeConfig) {
+      parentThemes.push(themeConfig)
+    }
+  } while (themeConfig)
+
+  parentThemes.reverse()
+  return parentThemes
 }
