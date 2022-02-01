@@ -357,11 +357,13 @@ body.no-scroll {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0 0 0 / 90%);
-  pointer-events: none;
   display: flex;
   align-items: flex-end;
-  padding: 12px;
+}
+
+.v-popper__popper--no-positioning .v-popper__backdrop {
+  display: block;
+  background: rgba(0 0 0 / 90%);
 }
 
 .v-popper__popper--no-positioning .v-popper__wrapper {
