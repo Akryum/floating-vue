@@ -51,7 +51,7 @@ export default {
 
           <div v-if="isMobile">
             <button
-              class="bg-gray-300 rounded px-4 py-2"
+              class="bg-gray-300 rounded px-4 py-2 w-full"
               @click="hide()"
             >
               Cancel
@@ -75,17 +75,20 @@ body.no-scroll {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0 0 0 / 90%);
-  pointer-events: none;
   display: flex;
   align-items: flex-end;
-  padding: 12px;
+}
+
+.v-popper__popper--no-positioning .v-popper__backdrop {
+  display: block;
+  background: rgba(0 0 0 / 90%);
 }
 
 .v-popper__popper--no-positioning .v-popper__wrapper {
   width: 100%;
   pointer-events: auto;
   transition: transform .15s ease-out;
+  padding: 12px;
 }
 
 .v-popper__popper--no-positioning.v-popper__popper--hidden .v-popper__wrapper {
