@@ -28,6 +28,10 @@
     @keyup.esc="autoHide && $emit('hide')"
   >
     <div
+      class="v-popper__backdrop"
+      @click="autoHide && $emit('hide')"
+    />
+    <div
       class="v-popper__wrapper"
       :style="result ? {
         transformOrigin: result.transformOrigin,
@@ -113,6 +117,7 @@ export default {
   visibility: hidden;
   opacity: 0;
   transition: opacity .15s, visibility .15s;
+  pointer-events: none;
 }
 
 .v-popper__popper.v-popper__popper--shown {
@@ -124,6 +129,15 @@ export default {
 .v-popper__popper.v-popper__popper--skip-transition,
 .v-popper__popper.v-popper__popper--skip-transition > .v-popper__wrapper {
   transition: none !important;
+}
+
+.v-popper__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
 
 .v-popper__inner {
@@ -250,5 +264,4 @@ export default {
 .v-popper__popper[data-popper-placement^="left"] .v-popper__arrow-inner {
   left: -2px;
 }
-
 </style>
