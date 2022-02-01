@@ -1,3 +1,12 @@
+# [1.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2022-02-01)
+
+
+### Features
+
+* positioningDisabled + mobile example ([433118a](https://github.com/Akryum/v-tooltip/commit/433118a54be7762941c1eb09fec1a8e8e39dc556))
+
+
+
 # [1.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2022-01-15)
 
 
