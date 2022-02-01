@@ -116,6 +116,7 @@ HTML result:
                                     'v-popper__popper--hidden',
                                     'v-popper__popper--skip-transition',
                                     'v-popper__popper--arrow-overflow',
+                                    'v-popper__popper--no-positioning',
                                     'v-popper__popper--show-from',
                                     'v-popper__popper--show-to',
                                     'v-popper__popper--hide-from',
@@ -149,6 +150,7 @@ The `popper` element has several dynamic classes:
 - `v-popper__popper--hidden`: the popper is hidden.
 - `v-popper__popper--skip-transition`: the transition should be skipped.
 - `v-popper__popper--arrow-overflow`: the arrow is overflowing past the reference, and should probably be hidden.
+- `v-popper__popper--no-positioning`: positioning is disabled with `positioningDisabled` prop.
 
 
 Full example style:

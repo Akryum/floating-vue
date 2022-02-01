@@ -14,23 +14,24 @@
         'v-popper__popper--hide-from': classes.hideFrom,
         'v-popper__popper--hide-to': classes.hideTo,
         'v-popper__popper--skip-transition': skipTransition,
-        'v-popper__popper--arrow-overflow': result.arrow.overflow,
+        'v-popper__popper--arrow-overflow': result && result.arrow.overflow,
+        'v-popper__popper--no-positioning': !result,
       },
     ]"
-    :style="{
+    :style="result ? {
       position: result.strategy,
       transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
-    }"
+    } : undefined"
     :aria-hidden="shown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
-    :data-popper-placement="result.placement"
+    :data-popper-placement="result ? result.placement : undefined"
     @keyup.esc="autoHide && $emit('hide')"
   >
     <div
       class="v-popper__wrapper"
-      :style="{
+      :style="result ? {
         transformOrigin: result.transformOrigin,
-      }"
+      } : undefined"
     >
       <div
         ref="inner"
@@ -51,10 +52,10 @@
       <div
         ref="arrow"
         class="v-popper__arrow-container"
-        :style="{
+        :style="result ? {
           left: toPx(result.arrow.x),
           top: toPx(result.arrow.y),
-        }"
+        } : undefined"
       >
         <div class="v-popper__arrow-outer" />
         <div class="v-popper__arrow-inner" />
@@ -142,7 +143,8 @@ export default {
   height: 10px;
 }
 
-.v-popper__popper--arrow-overflow .v-popper__arrow-container {
+.v-popper__popper--arrow-overflow .v-popper__arrow-container,
+.v-popper__popper--no-positioning .v-popper__arrow-container {
   display: none;
 }
 

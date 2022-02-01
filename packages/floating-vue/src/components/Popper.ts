@@ -76,6 +76,11 @@ export default () => ({
       default: defaultPropFactory('disabled'),
     },
 
+    positioningDisabled: {
+      type: Boolean,
+      default: defaultPropFactory('positioningDisabled'),
+    },
+
     placement: {
       type: String,
       default: defaultPropFactory('placement'),
@@ -269,7 +274,7 @@ export default () => ({
           ...this.classes,
           popperClass: this.popperClass,
         },
-        result: this.result,
+        result: this.positioningDisabled ? null : this.result,
       }
     },
   },
@@ -292,12 +297,13 @@ export default () => ({
       }
     },
 
-    triggers () {
-      if (!this.$_isDisposed) {
-        this.$_removeEventListeners()
-        this.$_addEventListeners()
-      }
-    },
+    ...[
+      'triggers',
+      'positioningDisabled',
+    ].reduce((acc, prop) => {
+      acc[prop] = '$_refreshListeners'
+      return acc
+    }, {}),
 
     ...[
       'placement',
@@ -411,7 +417,7 @@ export default () => ({
     },
 
     async $_computePosition () {
-      if (this.$_isDisposed) return
+      if (this.$_isDisposed || this.positioningDisabled) return
 
       const options: ComputePositionConfig = {
         strategy: this.strategy,
@@ -764,12 +770,14 @@ export default () => ({
       addEvents([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
 
       // Scroll
-      addListeners([
-        ...getScrollParents(this.$_referenceNode),
-        ...getScrollParents(this.$_popperNode),
-      ], 'scroll', () => {
-        this.$_computePosition()
-      })
+      if (!this.positioningDisabled) {
+        addListeners([
+          ...getScrollParents(this.$_referenceNode),
+          ...getScrollParents(this.$_popperNode),
+        ], 'scroll', () => {
+          this.$_computePosition()
+        })
+      }
     },
 
     $_removeEventListeners () {
@@ -777,6 +785,13 @@ export default () => ({
         targetNodes.forEach(node => node.removeEventListener(eventType, handler))
       })
       this.$_events = []
+    },
+
+    $_refreshListeners () {
+      if (!this.$_isDisposed) {
+        this.$_removeEventListeners()
+        this.$_addEventListeners()
+      }
     },
 
     $_handleGlobalClose (event, touch = false) {
