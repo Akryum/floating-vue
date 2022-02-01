@@ -1,40 +1,22 @@
 # [2.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.7...v2.0.0-beta.5) (2022-02-01)
 
-
-
-# [2.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.6...v2.0.0-beta.4) (2022-02-01)
-
-
-
-# [2.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-01-20)
-
-
-### Bug Fixes
-
-* some directive tooltips not working ([d3c3b3d](https://github.com/Akryum/v-tooltip/commit/d3c3b3d2d2d0c0cff3d50a0f643b4a922314f0d9))
-
-
-
-# [2.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-01-18)
+Included changes from `v1.0.0-beta.7`:
 
 
 ### Features
 
-* single app for v-tooltip directives ([649c38d](https://github.com/Akryum/v-tooltip/commit/649c38d650fe32a9f5433f9b0349fe6a588dde12))
-
-
-
-# [2.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v2.0.0-beta.1) (2022-01-15)
-
-
-### Features
-
-* vue3 version ([872feef](https://github.com/Akryum/v-tooltip/commit/872feef42f01e44ce522b960b8eaf973b43649a3))
+* backdrop element to improve autohide on mobile ([803dcca](https://github.com/Akryum/v-tooltip/commit/803dcca0bb655ab6201a6ab6063308bae91842a6))
 
 
 
 # [2.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.6...v2.0.0-beta.4) (2022-02-01)
 
+Included changes from `v1.0.0-beta.6`:
+
+### Features
+
+* positioningDisabled + mobile example ([433118a](https://github.com/Akryum/v-tooltip/commit/433118a54be7762941c1eb09fec1a8e8e39dc556))
+
 
 
 # [2.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-01-20)
@@ -64,30 +46,21 @@
 
 
 
-# [2.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-01-20)
-
-
-### Bug Fixes
-
-* some directive tooltips not working ([d3c3b3d](https://github.com/Akryum/v-tooltip/commit/d3c3b3d2d2d0c0cff3d50a0f643b4a922314f0d9))
-
-
-
-# [2.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-01-18)
+# [1.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2022-02-01)
 
 
 ### Features
 
-* single app for v-tooltip directives ([649c38d](https://github.com/Akryum/v-tooltip/commit/649c38d650fe32a9f5433f9b0349fe6a588dde12))
+* backdrop element to improve autohide on mobile ([803dcca](https://github.com/Akryum/v-tooltip/commit/803dcca0bb655ab6201a6ab6063308bae91842a6))
 
 
 
-# [2.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v2.0.0-beta.1) (2022-01-15)
+# [1.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2022-02-01)
 
 
 ### Features
 
-* vue3 version ([872feef](https://github.com/Akryum/v-tooltip/commit/872feef42f01e44ce522b960b8eaf973b43649a3))
+* positioningDisabled + mobile example ([433118a](https://github.com/Akryum/v-tooltip/commit/433118a54be7762941c1eb09fec1a8e8e39dc556))
 
 
 
