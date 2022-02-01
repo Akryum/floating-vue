@@ -329,6 +329,10 @@ Hide the popper if clicked outside.
 
 Boolean that disables the popper. If it was already open, it will be closed.
 
+### `positioningDisabled`
+
+Boolean that disables the automatic positioning of the popper. You can then style it manually. Useful for mobile version of the popper.
+
 ### `handleResize`
 
 Boolean: Automatically update the popper position if its size changes.

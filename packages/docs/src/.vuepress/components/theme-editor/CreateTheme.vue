@@ -2,7 +2,8 @@
 import Button from './Button.vue'
 import Input from './Input.vue'
 import Modal from './Modal.vue'
-import { createNewTheme } from './state'
+import { createNewTheme, state } from './state'
+import { builtinThemes } from './builtin-themes'
 
 export default {
   components: { Modal, Button, Input },
@@ -10,12 +11,23 @@ export default {
   data () {
     return {
       name: '',
+      error: null,
     }
   },
 
   methods: {
     createNewTheme () {
+      this.error = null
       if (!this.name) return
+
+      // Validation
+      if (builtinThemes.includes(this.name)) {
+        this.error = 'This name is reserved for built-in themes.'
+      } else if (this.name in state.themeMap) {
+        this.error = 'A theme with this name already exists.'
+      }
+
+      if (this.error) return
       createNewTheme({
         name: this.name,
       })
@@ -42,6 +54,13 @@ export default {
         auto-focus
         @keyup.enter="createNewTheme()"
       />
+
+      <div
+        v-if="error"
+        class="text-red-500"
+      >
+        {{ error }}
+      </div>
     </div>
 
     <template #actions>

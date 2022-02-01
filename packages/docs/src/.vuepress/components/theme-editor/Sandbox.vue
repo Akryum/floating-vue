@@ -1,5 +1,6 @@
 <script>
 import { mapState, state } from './state'
+
 export default {
   data () {
     return {
@@ -13,7 +14,7 @@ export default {
     ...mapState([
       'theme',
       'settings',
-      'styleOutput',
+      'allStyleOutput',
     ]),
   },
 
@@ -134,6 +135,6 @@ export default {
       </div>
     </div>
 
-    <style v-text="styleOutput" />
+    <style v-text="allStyleOutput" />
   </div>
 </template>

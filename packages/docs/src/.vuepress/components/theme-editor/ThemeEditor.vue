@@ -84,7 +84,7 @@ export default {
 
 <template>
   <div class="h-full flex flex-col items-stretch text-sm">
-    <div class="flex-1 flex items-stretch !md:flex-col md:divide-x divide-gray-200">
+    <div class="flex-1 flex items-stretch !md:flex-col md:divide-x divide-gray-200 overflow-hidden">
       <ThemesExplorer
         class="w-1/6"
         @create="openCreateTheme()"
@@ -134,12 +134,10 @@ export default {
             class="border-b border-gray-100"
           />
 
-          <keep-alive>
-            <Sandbox
-              v-if="outputTab === 'sandbox'"
-              class="flex-1"
-            />
-          </keep-alive>
+          <Sandbox
+            v-show="outputTab === 'sandbox'"
+            class="flex-1"
+          />
 
           <div
             v-if="outputTab === 'source'"

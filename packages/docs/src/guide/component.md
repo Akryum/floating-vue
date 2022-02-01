@@ -209,22 +209,6 @@ To fix this, specify the `padding` option of the `arrow` modifier. In the follow
 
 <ArrowPadding :padding="8" />
 
-## Disable popper
-
-Disabling a popper will prevent it from being shown.
-
-```vue
-<VDropdown :disabled="isDisabled"></VDropdown>
-```
-
-```js
-data () {
-  return {
-    isDisabled: true,
-  }
-}
-```
-
 ## Hide from slot
 
 Use the `hide` slot prop to close the popper:
@@ -280,4 +264,114 @@ Close all the poppers in the page with the `all` modifier:
 
 ```vue
 <a v-close-popper.all>Close All</a>
+```
+
+## Disable popper
+
+Disabling a popper will prevent it from being shown.
+
+```vue
+<VDropdown :disabled="isDisabled"></VDropdown>
+```
+
+```js
+data () {
+  return {
+    isDisabled: true,
+  }
+}
+```
+
+## Mobile
+
+You can also just disable the positioning of the popper with `positioningDisabled`:
+
+```vue
+<VDropdown :positioning-disabled="isMobile"></VDropdown>
+```
+
+It can for example be useful on the mobile version of your app if you want to apply a fixed position to the popper with CSS.
+
+<DropdownMobileDemo />
+
+```vue
+<script>
+let count = 0
+
+export default {
+  data () {
+    return {
+      isMobile: false,
+    }
+  },
+
+  methods: {
+    onShow () {
+      if (count === 0) {
+        document.body.classList.add('no-scroll')
+      }
+      count++
+    },
+
+    onHide () {
+      count--
+      if (count === 0) {
+        document.body.classList.remove('no-scroll')
+      }
+    },
+  },
+}
+</script>
+
+<template>
+  <div class="example">
+    <label>
+      <input v-model="isMobile" type="checkbox">
+      Is mobile
+    </label>
+
+    <VDropdown
+      :positioning-disabled="isMobile"
+      @apply-show="isMobile && onShow()"
+      @apply-hide="isMobile && onHide()"
+    >
+      <button>Click me</button>
+
+      <template #popper="{ hide }">
+        <div>This is awesome!</div>
+        <button v-if="isMobile" @click="hide()">Cancel</button>
+      </template>
+    </VDropdown>
+  </div>
+</template>
+
+<style>
+body.no-scroll {
+  overflow: hidden;
+}
+
+.v-popper__popper--no-positioning {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0 0 0 / 90%);
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+}
+
+.v-popper__popper--no-positioning .v-popper__wrapper {
+  width: 100%;
+  pointer-events: auto;
+  transition: transform .15s ease-out;
+}
+
+.v-popper__popper--no-positioning.v-popper__popper--hidden .v-popper__wrapper {
+  transform: translateY(100%);
+}
+</style>
 ```

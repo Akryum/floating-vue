@@ -1,8 +1,27 @@
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
 
-.home .hero img
-  max-width 450px!important
+#main-title,
+.site-name
+  @apply font-extrabold leading-normal
+  
+@supports (background-clip: text)
+  #main-title,
+  .site-name
+    background linear-gradient(to right, #00aad8 0%, #3eaf7c 100%)
+    background-clip text
+    color transparent !important
+
+
+.home .hero
+  img
+    max-width 450px!important
+  
+  .action
+    a
+      @apply rounded-lg
+      background linear-gradient(to right, #00aad8 0%, #3eaf7c 100%)
 
 h1
   @apply text-4xl font-medium
@@ -36,5 +55,3 @@ ul:not(.sidebar-sub-headers)
 
 .v-popper--theme-_editor-dropdown .v-popper__inner
   @apply p-2
-
-@tailwind utilities;
