@@ -296,7 +296,7 @@ Distance along the main axis relative to the reference (pixels).
 Skidding along the cross axis relative to the reference (pixels).
 
 ```vue
-<VDropdown :distance="12" />
+<VDropdown :skidding="12" />
 ```
 
 ### `arrowPadding`
