@@ -149,6 +149,8 @@ export default {
 .v-popper__inner > div {
   position: relative;
   z-index: 1;
+  max-width: inherit;
+  max-height: inherit;
 }
 
 .v-popper__arrow-container {
