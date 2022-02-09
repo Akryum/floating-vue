@@ -533,6 +533,10 @@ export default () => defineComponent({
 
       // Auto max size for the popper inner
       if (this.autoMaxSize) {
+        // Reset size to bestFit strategy can apply
+        this.$_innerNode.style.maxWidth = null
+        this.$_innerNode.style.maxHeight = null
+
         options.middleware.push(size({
           boundary: this.boundary,
           padding: this.overflowPadding,

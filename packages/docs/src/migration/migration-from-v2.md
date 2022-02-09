@@ -25,7 +25,7 @@ The positionning library has changed from `popperjs` to [`floating-ui`](https://
 
 ### Global configuration
 
-The global configuration object has completly changed. Instead of having a lot of specific options it is now an object of default values for the [props](../api/#component-props) (like `placement` or `offset`). Additionally, it has a `themes` option to define [themes](../guide/themes.md).
+The global configuration object has completly changed. Instead of having a lot of specific options it is now an object of default values for the [props](../api/#component-props) (like `placement` or `distance`). Additionally, it has a `themes` option to define [themes](../guide/themes.md).
 
 - `defaultPlacement`: use `placement`
 - `defaultClass`: removed
@@ -36,7 +36,7 @@ The global configuration object has completly changed. Instead of having a lot o
 - `defaultInnerSelector`: removed
 - `defaultDelay`: use `delay`
 - `defaultTrigger`: use `triggers`, `showTriggers`, `hideTriggers`
-- `defaultOffset`: use `offset`
+- `defaultOffset`: use `distance` and/or `skidding`
 - `defaultContainer`: use `container`
 - `defaultBoundariesElement`: use `boundary`
 - `defaultPopperOptions`: removed

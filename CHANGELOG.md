@@ -45,6 +45,23 @@ Included changes from `v1.0.0-beta.6`:
 * vue3 version ([872feef](https://github.com/Akryum/v-tooltip/commit/872feef42f01e44ce522b960b8eaf973b43649a3))
 
 
+# [1.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2022-02-09)
+
+
+### Bug Fixes
+
+* autoMaxSize - reset size to allow bestFit ([40dae98](https://github.com/Akryum/v-tooltip/commit/40dae98d01932beee568db0e071c6e77f2c83882))
+
+
+
+# [1.0.0-beta.8](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2022-02-04)
+
+
+### Bug Fixes
+
+* max-size on inner > div ([3699726](https://github.com/Akryum/v-tooltip/commit/3699726e214e5b5dcfaf027037f6a5280f9505e2))
+
+
 
 # [1.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2022-02-01)
 
