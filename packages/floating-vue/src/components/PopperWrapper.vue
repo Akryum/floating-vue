@@ -99,9 +99,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.v-popper {
-  width: max-content;
-}
-</style>
