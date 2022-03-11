@@ -112,9 +112,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style>
-.v-popper {
-  width: max-content;
-}
-</style>

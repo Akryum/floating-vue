@@ -56,6 +56,48 @@ Included changes from `v1.0.0-beta.6`:
 * vue3 version ([872feef](https://github.com/Akryum/v-tooltip/commit/872feef42f01e44ce522b960b8eaf973b43649a3))
 
 
+
+# [1.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2022-03-11)
+
+
+### Bug Fixes
+
+* remove internal style on `.v-popper` ([2698d84](https://github.com/Akryum/v-tooltip/commit/2698d849807e19c001c5e2f11f9b6ae9d37028ca))
+
+
+### BREAKING CHANGES
+
+* - The following internal style on `.v-popper` has been removed:
+```css
+.v-popper {
+  width: max-content;
+}
+```
+
+
+
+# [1.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2022-03-11)
+
+### BREAKING CHANGES
+
+- `autoMinSize` is deprecated, use `autoSize="min"` instead
+- `autoMaxSize` is deprecated, use `autoBoundaryMaxSize` instead
+
+
+### Bug Fixes
+
+* don't compute position on scroll if hidden, closes [#835](https://github.com/Akryum/v-tooltip/issues/835) ([f2199da](https://github.com/Akryum/v-tooltip/commit/f2199da0f113dcdfb6a43382acf6bc17a8733727))
+* duplicate hide events, closes [#376](https://github.com/Akryum/v-tooltip/issues/376) ([5a4ff05](https://github.com/Akryum/v-tooltip/commit/5a4ff05f6c15a2f9ea91b664c2322d047ce20554))
+* silence popperNode() errors, closes [#828](https://github.com/Akryum/v-tooltip/issues/828) ([490600c](https://github.com/Akryum/v-tooltip/commit/490600c3fc0d90cfb5666c6ac26817a757acfb6c))
+
+
+### Features
+
+* autoMinSize => autoSize, autoMaxSize => autoBoundaryMaxSize, closes [#834](https://github.com/Akryum/v-tooltip/issues/834) ([b198353](https://github.com/Akryum/v-tooltip/commit/b198353f781a4a1552c2bf23b6fcf8ad48810536))
+
+
+
+
 # [1.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2022-02-09)
 
 

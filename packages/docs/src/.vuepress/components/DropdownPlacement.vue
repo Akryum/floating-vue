@@ -9,6 +9,11 @@
         arrowPadding: 8,
         autoHide: false,
       }"
+      @show="log('show')"
+      @apply-show="log('apply-show')"
+      @hide="log('hide')"
+      @apply-hide="log('apply-hide')"
+      @update:shown="log('update:shown', $event)"
     >
       <button
         class="border border-gray-300 rounded px-4 py-3 text-xl"
@@ -57,6 +62,12 @@ export default {
         }
       }
       return list
+    },
+  },
+
+  methods: {
+    log (...args) {
+      console.log(...args)
     },
   },
 }

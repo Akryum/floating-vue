@@ -114,8 +114,8 @@ const emptyTheme = [
   'arrowOverflow',
   'overflowPadding',
   'preventOverflow',
-  'autoMinSize',
-  'autoMaxSize',
+  'autoSize',
+  'autoBoundaryMaxSize',
   'flip',
   'shift',
   'shiftCrossAxis',
@@ -139,6 +139,14 @@ export function loadTheme (themeName) {
     }
     if ('inner-dark' in theme.styles) {
       theme.styles.dark = { ...theme.styles['inner-dark'] }
+    }
+
+    // Migrate deprecated settings
+    if (theme.config.autoMinSize != null) {
+      theme.config.autoSize = theme.config.autoMinSize ? 'min' : false
+    }
+    if (theme.config.autoMaxSize != null) {
+      theme.config.autoBoundaryMaxSize = theme.config.autoMaxSize
     }
 
     state.theme = theme

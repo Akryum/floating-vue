@@ -515,14 +515,14 @@ export default {
         </div>
 
         <div class="flex space-x-3 hover:bg-gray-50 p-2">
-          <span>Auto min size:</span>
+          <span>Auto size:</span>
           <label
-            v-for="value of [undefined, true, false]"
+            v-for="value of [undefined, true, false, 'min', 'max']"
             :key="value"
             class="flex items-center space-x-1"
           >
             <input
-              v-model="theme.config.autoMinSize"
+              v-model="theme.config.autoSize"
               type="radio"
               :value="value"
             >
@@ -531,14 +531,14 @@ export default {
         </div>
 
         <div class="flex space-x-3 hover:bg-gray-50 p-2">
-          <span>Auto max size:</span>
+          <span>Auto boundary max size:</span>
           <label
             v-for="value of [undefined, true, false]"
             :key="value"
             class="flex items-center space-x-1"
           >
             <input
-              v-model="theme.config.autoMaxSize"
+              v-model="theme.config.autoBoundaryMaxSize"
               type="radio"
               :value="value"
             >

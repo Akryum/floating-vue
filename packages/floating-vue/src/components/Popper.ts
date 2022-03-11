@@ -178,14 +178,30 @@ export default () => defineComponent({
       default: defaultPropFactory('computeTransformOrigin'),
     },
 
+    /**
+     * @deprecated
+     */
     autoMinSize: {
       type: Boolean,
       default: defaultPropFactory('autoMinSize'),
     },
 
+    autoSize: {
+      type: [Boolean, String],
+      default: defaultPropFactory('autoSize'),
+    },
+
+    /**
+     * @deprecated
+     */
     autoMaxSize: {
       type: Boolean,
       default: defaultPropFactory('autoMaxSize'),
+    },
+
+    autoBoundaryMaxSize: {
+      type: Boolean,
+      default: defaultPropFactory('autoBoundaryMaxSize'),
     },
 
     preventOverflow: {
@@ -339,6 +355,12 @@ export default () => defineComponent({
   created () {
     this.$_isDisposed = true
     this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`
+    if (this.autoMinSize) {
+      console.warn('[floating-vue] `autoMinSize` option is deprecated. Use `autoSize="min"` instead.')
+    }
+    if (this.autoMaxSize) {
+      console.warn('[floating-vue] `autoMaxSize` option is deprecated. Use `autoBoundaryMaxSize` instead.')
+    }
   },
 
   mounted () {
@@ -374,6 +396,7 @@ export default () => defineComponent({
     },
 
     hide ({ event = null, skipDelay = false } = {}) {
+      if (this.$_hideInProgress) return
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
@@ -502,11 +525,12 @@ export default () => defineComponent({
       }
 
       // Auto min size for the popper inner
-      if (this.autoMinSize) {
+      if (this.autoMinSize || this.autoSize) {
+        const autoSize = this.autoSize ? this.autoSize : this.autoMinSize ? 'min' : null
         options.middleware.push({
-          name: 'autoMinSize',
+          name: 'autoSize',
           fn: ({ rects, placement, middlewareData }) => {
-            if (middlewareData.autoMinSize?.skip) {
+            if (middlewareData.autoSize?.skip) {
               return {}
             }
             let width: number
@@ -517,8 +541,8 @@ export default () => defineComponent({
               height = rects.reference.height
             }
             // Apply and re-compute
-            this.$_innerNode.style.minWidth = width != null ? `${width}px` : null
-            this.$_innerNode.style.minHeight = height != null ? `${height}px` : null
+            this.$_innerNode.style[autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'] = width != null ? `${width}px` : null
+            this.$_innerNode.style[autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'] = height != null ? `${height}px` : null
             return {
               data: {
                 skip: true,
@@ -532,7 +556,7 @@ export default () => defineComponent({
       }
 
       // Auto max size for the popper inner
-      if (this.autoMaxSize) {
+      if (this.autoMaxSize || this.autoBoundaryMaxSize) {
         // Reset size to bestFit strategy can apply
         this.$_innerNode.style.maxWidth = null
         this.$_innerNode.style.maxHeight = null
@@ -613,6 +637,16 @@ export default () => defineComponent({
       await nextFrame()
       await this.$_computePosition()
       await this.$_applyShowEffect()
+
+      // Scroll
+      if (!this.positioningDisabled) {
+        this.$_registerEventListeners([
+          ...getScrollParents(this.$_referenceNode),
+          ...getScrollParents(this.$_popperNode),
+        ], 'scroll', () => {
+          this.$_computePosition()
+        })
+      }
     },
 
     async $_applyShowEffect () {
@@ -695,6 +729,8 @@ export default () => defineComponent({
         }, disposeTime)
       }
 
+      this.$_removeEventListeners('scroll')
+
       this.$emit('apply-hide')
 
       // Advanced classes
@@ -736,30 +772,6 @@ export default () => defineComponent({
     },
 
     $_addEventListeners () {
-      const addListeners = (targetNodes: any[], eventType: string, handler: (event: Event) => void) => {
-        this.$_events.push({ targetNodes, eventType, handler })
-        targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
-          ? {
-            passive: true,
-          }
-          : undefined))
-      }
-
-      const addEvents = (targetNodes, eventMap, commonTriggers, customTrigger, handler) => {
-        let triggers = commonTriggers
-
-        if (customTrigger != null) {
-          triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
-        }
-
-        triggers.forEach(trigger => {
-          const eventType = eventMap[trigger]
-          if (eventType) {
-            addListeners(targetNodes, eventType, handler)
-          }
-        })
-      }
-
       // Add trigger show events
 
       const handleShow = event => {
@@ -771,8 +783,8 @@ export default () => defineComponent({
         !this.$_preventShow && this.show({ event })
       }
 
-      addEvents(this.$_targetNodes, SHOW_EVENT_MAP, this.triggers, this.showTriggers, handleShow)
-      addEvents([this.$_popperNode], SHOW_EVENT_MAP, this.popperTriggers, this.popperShowTriggers, handleShow)
+      this.$_registerTriggerListeners(this.$_targetNodes, SHOW_EVENT_MAP, this.triggers, this.showTriggers, handleShow)
+      this.$_registerTriggerListeners([this.$_popperNode], SHOW_EVENT_MAP, this.popperTriggers, this.popperShowTriggers, handleShow)
 
       // Add trigger hide events
 
@@ -783,25 +795,45 @@ export default () => defineComponent({
         this.hide({ event })
       }
 
-      addEvents(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
-      addEvents([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
-
-      // Scroll
-      if (!this.positioningDisabled) {
-        addListeners([
-          ...getScrollParents(this.$_referenceNode),
-          ...getScrollParents(this.$_popperNode),
-        ], 'scroll', () => {
-          this.$_computePosition()
-        })
-      }
+      this.$_registerTriggerListeners(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
+      this.$_registerTriggerListeners([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
     },
 
-    $_removeEventListeners () {
-      this.$_events.forEach(({ targetNodes, eventType, handler }) => {
-        targetNodes.forEach(node => node.removeEventListener(eventType, handler))
+    $_registerEventListeners (targetNodes: any[], eventType: string, handler: (event: Event) => void) {
+      this.$_events.push({ targetNodes, eventType, handler })
+      targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
+        ? {
+          passive: true,
+        }
+        : undefined))
+    },
+
+    $_registerTriggerListeners (targetNodes: any[], eventMap: Record<string, string>, commonTriggers, customTrigger, handler: (event: Event) => void) {
+      let triggers = commonTriggers
+
+      if (customTrigger != null) {
+        triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
+      }
+
+      triggers.forEach(trigger => {
+        const eventType = eventMap[trigger]
+        if (eventType) {
+          this.$_registerEventListeners(targetNodes, eventType, handler)
+        }
       })
-      this.$_events = []
+    },
+
+    $_removeEventListeners (filterEventType?: string) {
+      const newList = []
+      this.$_events.forEach(listener => {
+        const { targetNodes, eventType, handler } = listener
+        if (!filterEventType || filterEventType === eventType) {
+          targetNodes.forEach(node => node.removeEventListener(eventType, handler))
+        } else {
+          newList.push(listener)
+        }
+      })
+      this.$_events = newList
     },
 
     $_refreshListeners () {
@@ -887,8 +919,12 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
 function handleGlobalMousedown (event) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    const popperContent = popper.popperNode()
-    popper.$_mouseDownContains = popperContent.contains(event.target)
+    try {
+      const popperContent = popper.popperNode()
+      popper.$_mouseDownContains = popperContent.contains(event.target)
+    } catch (e) {
+      // noop
+    }
   }
 }
 
@@ -904,13 +940,17 @@ function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    const popperContent = popper.popperNode()
-    const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
-    requestAnimationFrame(() => {
-      if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
-        popper.$_handleGlobalClose(event, touch)
-      }
-    })
+    try {
+      const popperContent = popper.popperNode()
+      const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
+      requestAnimationFrame(() => {
+        if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
+          popper.$_handleGlobalClose(event, touch)
+        }
+      })
+    } catch (e) {
+      // noop
+    }
   }
 }
 
