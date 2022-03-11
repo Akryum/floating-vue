@@ -178,14 +178,30 @@ export default () => ({
       default: defaultPropFactory('computeTransformOrigin'),
     },
 
+    /**
+     * @deprecated
+     */
     autoMinSize: {
       type: Boolean,
       default: defaultPropFactory('autoMinSize'),
     },
 
+    autoSize: {
+      type: [Boolean, String],
+      default: defaultPropFactory('autoSize'),
+    },
+
+    /**
+     * @deprecated
+     */
     autoMaxSize: {
       type: Boolean,
       default: defaultPropFactory('autoMaxSize'),
+    },
+
+    autoBoundaryMaxSize: {
+      type: Boolean,
+      default: defaultPropFactory('autoBoundaryMaxSize'),
     },
 
     preventOverflow: {
@@ -326,6 +342,12 @@ export default () => ({
   created () {
     this.$_isDisposed = true
     this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`
+    if (this.autoMinSize) {
+      console.warn('[floating-vue] `autoMinSize` option is deprecated. Use `autoSize="min"` instead.')
+    }
+    if (this.autoMaxSize) {
+      console.warn('[floating-vue] `autoMaxSize` option is deprecated. Use `autoBoundaryMaxSize` instead.')
+    }
   },
 
   mounted () {
@@ -489,11 +511,12 @@ export default () => ({
       }
 
       // Auto min size for the popper inner
-      if (this.autoMinSize) {
+      if (this.autoMinSize || this.autoSize) {
+        const autoSize = this.autoSize ? this.autoSize : this.autoMinSize ? 'min' : null
         options.middleware.push({
-          name: 'autoMinSize',
+          name: 'autoSize',
           fn: ({ rects, placement, middlewareData }) => {
-            if (middlewareData.autoMinSize?.skip) {
+            if (middlewareData.autoSize?.skip) {
               return {}
             }
             let width: number
@@ -504,8 +527,8 @@ export default () => ({
               height = rects.reference.height
             }
             // Apply and re-compute
-            this.$_innerNode.style.minWidth = width != null ? `${width}px` : null
-            this.$_innerNode.style.minHeight = height != null ? `${height}px` : null
+            this.$_innerNode.style[autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'] = width != null ? `${width}px` : null
+            this.$_innerNode.style[autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'] = height != null ? `${height}px` : null
             return {
               data: {
                 skip: true,
@@ -519,7 +542,7 @@ export default () => ({
       }
 
       // Auto max size for the popper inner
-      if (this.autoMaxSize) {
+      if (this.autoMaxSize || this.autoBoundaryMaxSize) {
         // Reset size to bestFit strategy can apply
         this.$_innerNode.style.maxWidth = null
         this.$_innerNode.style.maxHeight = null

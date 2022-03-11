@@ -393,24 +393,31 @@ Example:
 
 [Live example](../guide/css.md#zoom-show-only-example)
 
-### `autoMinSize`
+### `autoSize`
 
-Boolean: set a minimum size to the popper `inner` container depending on the size of the reference.
+`Boolean | 'min' | 'max'`: set the size of the popper `inner` container depending on the size of the reference.
 
-If the final placement is `top-*` or `bottom-*`, the `minWidth` will be the reference width.
+- If the final placement is `top-*` or `bottom-*`, the reference width will be taken into account.
+- If the final placement is `left-*` or `right-*`, the reference height wll be taken into account.
 
-If the final placement is `left-*` or `right-*`, the `minHeight` will be the reference height.
+Possible values:
+
+- `true`: the popper container will be set to the same size as the reference element.
+- `'min'`: the popper container will be set to the minimum size of the reference element.
+- `'max'`: the popper container will be set to the maximum size of the reference element.
 
 ```vue
-<VDropdown auto-min-size />
+<VDropdown auto-size />
+<VDropdown auto-size="min" />
+<VDropdown auto-size="max" />
 ```
 
-### `autoMaxSize`
+### `autoBoundaryMaxSize`
 
 Boolean: let floating vue resize the popper inner container to the available size (using `max-width` and `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
 
 ```vue
-<VDropdown auto-max-size />
+<VDropdown auto-boundary-max-size />
 ```
 
 ### `preventOverflow`
