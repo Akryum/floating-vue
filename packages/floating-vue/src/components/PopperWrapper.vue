@@ -79,7 +79,7 @@ export default defineComponent({
 
   mixins: [
     PopperMethods,
-    ThemeClass,
+    ThemeClass('finalTheme'),
   ],
 
   inheritAttrs: false,

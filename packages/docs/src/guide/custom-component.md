@@ -138,7 +138,7 @@ export default {
 
   mixins: [
     PopperMethods,
-    ThemeClass,
+    ThemeClass(),
   ],
 
   inheritAttrs: false,

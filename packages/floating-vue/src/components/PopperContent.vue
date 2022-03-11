@@ -81,7 +81,7 @@ export default defineComponent({
   },
 
   mixins: [
-    ThemeClass,
+    ThemeClass(),
   ],
 
   props: {
