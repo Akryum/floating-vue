@@ -383,6 +383,7 @@ export default () => ({
     },
 
     hide ({ event = null, skipDelay = false } = {}) {
+      if (this.$_hideInProgress) return
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
