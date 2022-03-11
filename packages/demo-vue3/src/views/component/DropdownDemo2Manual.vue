@@ -31,6 +31,7 @@ const placement = ref('bottom')
     :placement="placement"
     :style="{
       marginLeft: '400px',
+      width: 'max-content',
     }"
     popper-class="zoom-in"
     compute-transform-origin
