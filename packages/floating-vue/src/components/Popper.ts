@@ -600,6 +600,16 @@ export default () => ({
       await nextFrame()
       await this.$_computePosition()
       await this.$_applyShowEffect()
+
+      // Scroll
+      if (!this.positioningDisabled) {
+        this.$_registerEventListeners([
+          ...getScrollParents(this.$_referenceNode),
+          ...getScrollParents(this.$_popperNode),
+        ], 'scroll', () => {
+          this.$_computePosition()
+        })
+      }
     },
 
     async $_applyShowEffect () {
@@ -682,6 +692,8 @@ export default () => ({
         }, disposeTime)
       }
 
+      this.$_removeEventListeners('scroll')
+
       this.$emit('apply-hide')
 
       // Advanced classes
@@ -723,30 +735,6 @@ export default () => ({
     },
 
     $_addEventListeners () {
-      const addListeners = (targetNodes: any[], eventType: string, handler: (event: Event) => void) => {
-        this.$_events.push({ targetNodes, eventType, handler })
-        targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
-          ? {
-            passive: true,
-          }
-          : undefined))
-      }
-
-      const addEvents = (targetNodes, eventMap, commonTriggers, customTrigger, handler) => {
-        let triggers = commonTriggers
-
-        if (customTrigger != null) {
-          triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
-        }
-
-        triggers.forEach(trigger => {
-          const eventType = eventMap[trigger]
-          if (eventType) {
-            addListeners(targetNodes, eventType, handler)
-          }
-        })
-      }
-
       // Add trigger show events
 
       const handleShow = event => {
@@ -758,8 +746,8 @@ export default () => ({
         !this.$_preventShow && this.show({ event })
       }
 
-      addEvents(this.$_targetNodes, SHOW_EVENT_MAP, this.triggers, this.showTriggers, handleShow)
-      addEvents([this.$_popperNode], SHOW_EVENT_MAP, this.popperTriggers, this.popperShowTriggers, handleShow)
+      this.$_registerTriggerListeners(this.$_targetNodes, SHOW_EVENT_MAP, this.triggers, this.showTriggers, handleShow)
+      this.$_registerTriggerListeners([this.$_popperNode], SHOW_EVENT_MAP, this.popperTriggers, this.popperShowTriggers, handleShow)
 
       // Add trigger hide events
 
@@ -770,25 +758,45 @@ export default () => ({
         this.hide({ event })
       }
 
-      addEvents(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
-      addEvents([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
-
-      // Scroll
-      if (!this.positioningDisabled) {
-        addListeners([
-          ...getScrollParents(this.$_referenceNode),
-          ...getScrollParents(this.$_popperNode),
-        ], 'scroll', () => {
-          this.$_computePosition()
-        })
-      }
+      this.$_registerTriggerListeners(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
+      this.$_registerTriggerListeners([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
     },
 
-    $_removeEventListeners () {
-      this.$_events.forEach(({ targetNodes, eventType, handler }) => {
-        targetNodes.forEach(node => node.removeEventListener(eventType, handler))
+    $_registerEventListeners (targetNodes: any[], eventType: string, handler: (event: Event) => void) {
+      this.$_events.push({ targetNodes, eventType, handler })
+      targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
+        ? {
+          passive: true,
+        }
+        : undefined))
+    },
+
+    $_registerTriggerListeners (targetNodes: any[], eventMap: Record<string, string>, commonTriggers, customTrigger, handler: (event: Event) => void) {
+      let triggers = commonTriggers
+
+      if (customTrigger != null) {
+        triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
+      }
+
+      triggers.forEach(trigger => {
+        const eventType = eventMap[trigger]
+        if (eventType) {
+          this.$_registerEventListeners(targetNodes, eventType, handler)
+        }
       })
-      this.$_events = []
+    },
+
+    $_removeEventListeners (filterEventType?: string) {
+      const newList = []
+      this.$_events.forEach(listener => {
+        const { targetNodes, eventType, handler } = listener
+        if (!filterEventType || filterEventType === eventType) {
+          targetNodes.forEach(node => node.removeEventListener(eventType, handler))
+        } else {
+          newList.push(listener)
+        }
+      })
+      this.$_events = newList
     },
 
     $_refreshListeners () {
