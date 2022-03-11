@@ -1,3 +1,12 @@
+# [2.0.0-beta.8](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2022-03-11)
+
+
+### Bug Fixes
+
+* theme null on .v-popper ([25db8e8](https://github.com/Akryum/v-tooltip/commit/25db8e8d403a8991a911ebf725154bee3cb3e4ac))
+
+
+
 # [2.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.11...v2.0.0-beta.7) (2022-03-11)
 
 
