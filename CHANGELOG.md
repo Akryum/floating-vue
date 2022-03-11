@@ -1,5 +1,10 @@
 # [1.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2022-03-11)
 
+### BREAKING CHANGES
+
+- `autoMinSize` is deprecated, use `autoSize="min"` instead
+- `autoMaxSize` is deprecated, use `autoBoundaryMaxSize` instead
+
 
 ### Bug Fixes
 
@@ -11,8 +16,6 @@
 ### Features
 
 * autoMinSize => autoSize, autoMaxSize => autoBoundaryMaxSize, closes [#834](https://github.com/Akryum/v-tooltip/issues/834) ([b198353](https://github.com/Akryum/v-tooltip/commit/b198353f781a4a1552c2bf23b6fcf8ad48810536))
-
-
 
 # [1.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2022-02-09)
 
