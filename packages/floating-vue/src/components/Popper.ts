@@ -905,8 +905,12 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
 function handleGlobalMousedown (event) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    const popperContent = popper.popperNode()
-    popper.$_mouseDownContains = popperContent.contains(event.target)
+    try {
+      const popperContent = popper.popperNode()
+      popper.$_mouseDownContains = popperContent.contains(event.target)
+    } catch (e) {
+      // noop
+    }
   }
 }
 
@@ -922,13 +926,17 @@ function handleGlobalClose (event, touch = false) {
   // Delay so that close directive has time to set values
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    const popperContent = popper.popperNode()
-    const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
-    requestAnimationFrame(() => {
-      if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
-        popper.$_handleGlobalClose(event, touch)
-      }
-    })
+    try {
+      const popperContent = popper.popperNode()
+      const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
+      requestAnimationFrame(() => {
+        if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
+          popper.$_handleGlobalClose(event, touch)
+        }
+      })
+    } catch (e) {
+      // noop
+    }
   }
 }
 
