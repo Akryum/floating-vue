@@ -1,3 +1,22 @@
+# [1.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2022-03-11)
+
+
+### Bug Fixes
+
+* remove internal style on `.v-popper` ([2698d84](https://github.com/Akryum/v-tooltip/commit/2698d849807e19c001c5e2f11f9b6ae9d37028ca))
+
+
+### BREAKING CHANGES
+
+* - The following internal style on `.v-popper` has been removed:
+```css
+.v-popper {
+  width: max-content;
+}
+```
+
+
+
 # [1.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2022-03-11)
 
 ### BREAKING CHANGES
