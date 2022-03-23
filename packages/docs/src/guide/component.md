@@ -272,6 +272,12 @@ Nesting poppers inside other popper will automatically prevent the parents from 
 
 <SubMenuExample />
 
+Floating Vue will automatically fix the [diagonal submenu problem](https://www.google.com/search?q=submenu%20diagonal%20problem) for you be detecting if the mouse is aiming at the popper content from the reference:
+
+<div class="mx-auto" style="max-width:400px">
+  <img alt="popper aim debug example" src="./popper-aim.png" class="border border-gray-200 rounded">
+</div>
+
 ## Disable popper
 
 Disabling a popper will prevent it from being shown.

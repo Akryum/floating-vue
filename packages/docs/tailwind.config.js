@@ -32,5 +32,6 @@ module.exports = {
 
   purge: [
     'src/.vuepress/components/**/*.vue',
+    'src/**/*.md',
   ],
 }
