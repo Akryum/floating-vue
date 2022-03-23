@@ -1,3 +1,17 @@
+# [1.0.0-beta.14](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2022-03-23)
+
+
+### Bug Fixes
+
+* close-popper not working in nested submenu ([980e42b](https://github.com/Akryum/v-tooltip/commit/980e42b29dba901dddc3d476126ed31f977c052d))
+
+
+### Features
+
+* v-close-popper only close closest nested popper ([81af5e5](https://github.com/Akryum/v-tooltip/commit/81af5e544962613cf5355e3a32848f94fb8a5348))
+
+
+
 # [1.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2022-03-23)
 
 
