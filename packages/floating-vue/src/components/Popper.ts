@@ -37,6 +37,18 @@ const PROVIDE_KEY = '__floating-vue__popper'
 export default () => defineComponent({
   name: 'VPopper',
 
+  provide () {
+    return {
+      [PROVIDE_KEY]: {
+        parentPopper: this,
+      },
+    }
+  },
+
+  inject: {
+    [PROVIDE_KEY]: { default: null },
+  },
+
   props: {
     theme: {
       type: String,
@@ -254,18 +266,6 @@ export default () => defineComponent({
     'resize',
     'dispose',
   ],
-
-  provide () {
-    return {
-      [PROVIDE_KEY]: {
-        parentPopper: this,
-      },
-    }
-  },
-
-  inject: {
-    [PROVIDE_KEY]: { default: null },
-  },
 
   data () {
     return {
