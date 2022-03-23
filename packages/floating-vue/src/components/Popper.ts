@@ -1040,24 +1040,38 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose (event, touch = false) {
-  // Delay so that close directive has time to set values
-  for (let i = 0; i < shownPoppers.length; i++) {
+  const preventClose: Record<string, true> = {}
+
+  for (let i = shownPoppers.length - 1; i >= 0; i--) {
     const popper = shownPoppers[i]
     try {
-      const popperContent = popper.popperNode()
-      const contains = popper.$_mouseDownContains || popperContent.contains(event.target)
+      const contains = popper.$_containsGlobalTarget = isContainingEventTarget(popper, event)
+      popper.$_pendingHide = false
+
+      // Delay so that close directive has time to set values (closeAllPopover, closePopover)
       requestAnimationFrame(() => {
-        if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
+        popper.$_pendingHide = false
+        if (preventClose[popper.randomId]) return
+
+        if (shouldAutoHide(popper, contains, event)) {
           popper.$_handleGlobalClose(event, touch)
 
+          // Only close child popper
+          if (!event.closeAllPopover && event.closePopover && contains) {
+            let parent = popper.parentPopper
+            while (parent) {
+              preventClose[parent.randomId] = true
+              parent = parent.parentPopper
+            }
+            return
+          }
+
+          // Auto hide parents
           let parent = popper.parentPopper
           while (parent) {
-            const popperContent = parent.popperNode()
-            const contains = parent.$_mouseDownContains || popperContent.contains(event.target)
-            if (event.closeAllPopover || (event.closePopover && contains) || (parent.autoHide && !contains)) {
+            if (shouldAutoHide(parent, parent.$_containsGlobalTarget, event)) {
               parent.$_handleGlobalClose(event, touch)
             } else {
-              parent.$_pendingHide = false
               break
             }
             parent = parent.parentPopper
@@ -1068,6 +1082,15 @@ function handleGlobalClose (event, touch = false) {
       // noop
     }
   }
+}
+
+function isContainingEventTarget (popper, event): boolean {
+  const popperContent = popper.popperNode()
+  return popper.$_mouseDownContains || popperContent.contains(event.target)
+}
+
+function shouldAutoHide (popper, contains, event): boolean {
+  return event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)
 }
 
 function computePositionAllShownPoppers (event) {
