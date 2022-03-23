@@ -1027,16 +1027,33 @@ function handleGlobalTouchend (event) {
 }
 
 function handleGlobalClose (event, touch = false) {
-  // Delay so that close directive has time to set values
-  for (let i = 0; i < shownPoppers.length; i++) {
+  const preventClose: Record<string, true> = {}
+
+  for (let i = shownPoppers.length - 1; i >= 0; i--) {
     const popper = shownPoppers[i]
     try {
       const contains = popper.$_containsGlobalTarget = isContainingEventTarget(popper, event)
       popper.$_pendingHide = false
+
+      // Delay so that close directive has time to set values (closeAllPopover, closePopover)
       requestAnimationFrame(() => {
+        popper.$_pendingHide = false
+        if (preventClose[popper.randomId]) return
+
         if (shouldAutoHide(popper, contains, event)) {
           popper.$_handleGlobalClose(event, touch)
 
+          // Only close child popper
+          if (!event.closeAllPopover && event.closePopover && contains) {
+            let parent = popper.parentPopper
+            while (parent) {
+              preventClose[parent.randomId] = true
+              parent = parent.parentPopper
+            }
+            return
+          }
+
+          // Auto hide parents
           let parent = popper.parentPopper
           while (parent) {
             if (shouldAutoHide(parent, parent.$_containsGlobalTarget, event)) {
