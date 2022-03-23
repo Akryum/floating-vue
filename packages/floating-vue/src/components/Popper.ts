@@ -912,12 +912,6 @@ export default () => ({
           this.$_preventShow = false
         }, 300)
       }
-
-      let parent = this.parentPopper
-      while (parent) {
-        parent.$_handleGlobalClose(event, touch)
-        parent = parent.parentPopper
-      }
     },
 
     $_detachPopperNode () {
@@ -1042,6 +1036,19 @@ function handleGlobalClose (event, touch = false) {
       requestAnimationFrame(() => {
         if (event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)) {
           popper.$_handleGlobalClose(event, touch)
+
+          let parent = popper.parentPopper
+          while (parent) {
+            const popperContent = parent.popperNode()
+            const contains = parent.$_mouseDownContains || popperContent.contains(event.target)
+            if (event.closeAllPopover || (event.closePopover && contains) || (parent.autoHide && !contains)) {
+              parent.$_handleGlobalClose(event, touch)
+            } else {
+              parent.$_pendingHide = false
+              break
+            }
+            parent = parent.parentPopper
+          }
         }
       })
     } catch (e) {
