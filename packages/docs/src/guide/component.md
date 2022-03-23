@@ -266,6 +266,12 @@ Close all the poppers in the page with the `all` modifier:
 <a v-close-popper.all>Close All</a>
 ```
 
+## Sub menu
+
+Nesting poppers inside other popper will automatically prevent the parents from hiding when any child is shown:
+
+<SubMenuExample />
+
 ## Disable popper
 
 Disabling a popper will prevent it from being shown.

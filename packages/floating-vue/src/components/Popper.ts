@@ -32,6 +32,8 @@ function defaultPropFactory (prop: string) {
   }
 }
 
+const PROVIDE_KEY = '__floating-vue__popper'
+
 export default () => ({
   name: 'VPopper',
 
@@ -240,6 +242,18 @@ export default () => ({
     },
   },
 
+  provide () {
+    return {
+      [PROVIDE_KEY]: {
+        parentPopper: this,
+      },
+    }
+  },
+
+  inject: {
+    [PROVIDE_KEY]: { default: null },
+  },
+
   data () {
     return {
       isShown: false,
@@ -263,6 +277,7 @@ export default () => ({
         },
         transformOrigin: null,
       },
+      shownChildren: new Set(),
     }
   },
 
@@ -292,6 +307,10 @@ export default () => ({
         },
         result: this.positioningDisabled ? null : this.result,
       }
+    },
+
+    parentPopper () {
+      return this[PROVIDE_KEY]?.parentPopper
     },
   },
 
@@ -369,6 +388,7 @@ export default () => ({
 
   methods: {
     show ({ event = null, skipDelay = false, force = false } = {}) {
+      this.$_pendingHide = false
       if (force || !this.disabled) {
         this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
@@ -384,6 +404,11 @@ export default () => ({
 
     hide ({ event = null, skipDelay = false } = {}) {
       if (this.$_hideInProgress) return
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        return
+      }
+      this.$_pendingHide = false
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
@@ -426,6 +451,8 @@ export default () => ({
 
       this.isMounted = false
       this.isShown = false
+
+      this.$_updateParentShownChildren(false)
 
       this.$_swapTargetAttrs('data-original-title', 'title')
 
@@ -574,10 +601,11 @@ export default () => ({
     },
 
     $_scheduleShow (event = null, skipDelay = false) {
+      this.$_updateParentShownChildren(true)
       this.$_hideInProgress = false
       clearTimeout(this.$_scheduleTimer)
 
-      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove && hidingPopper !== this.parentPopper) {
         hidingPopper.$_applyHide(true)
         this.$_applyShow(true)
         return
@@ -591,6 +619,11 @@ export default () => ({
     },
 
     $_scheduleHide (event = null, skipDelay = false) {
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        return
+      }
+      this.$_updateParentShownChildren(false)
       this.$_hideInProgress = true
       clearTimeout(this.$_scheduleTimer)
 
@@ -683,6 +716,11 @@ export default () => ({
     },
 
     async $_applyHide (skipTransition = false) {
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        this.$_hideInProgress = false
+        return
+      }
       clearTimeout(this.$_scheduleTimer)
 
       // Already hidden
@@ -847,6 +885,12 @@ export default () => ({
           this.$_preventShow = false
         }, 300)
       }
+
+      let parent = this.parentPopper
+      while (parent) {
+        parent.$_handleGlobalClose(event, touch)
+        parent = parent.parentPopper
+      }
     },
 
     $_detachPopperNode () {
@@ -873,6 +917,22 @@ export default () => ({
             el.setAttribute(n, value)
           }
         }
+      }
+    },
+
+    $_updateParentShownChildren (value) {
+      let parent = this.parentPopper
+      while (parent) {
+        if (value) {
+          parent.shownChildren.add(this.randomId)
+        } else {
+          parent.shownChildren.delete(this.randomId)
+
+          if (parent.$_pendingHide) {
+            parent.hide()
+          }
+        }
+        parent = parent.parentPopper
       }
     },
   },
