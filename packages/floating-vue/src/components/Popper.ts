@@ -392,6 +392,10 @@ export default () => ({
 
       this.$_pendingHide = false
       if (force || !this.disabled) {
+        if (this.parentPopper?.lockedChild === this) {
+          this.parentPopper.lockedChild = null
+        }
+
         this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
 
@@ -417,6 +421,13 @@ export default () => ({
       if (this.$_isAimingPopper()) {
         if (this.parentPopper) {
           this.parentPopper.lockedChild = this
+          clearTimeout(this.parentPopper.lockedChildTimer)
+          this.parentPopper.lockedChildTimer = setTimeout(() => {
+            if (this.parentPopper.lockedChild === this) {
+              this.parentPopper.lockedChild.hide({ skipDelay })
+              this.parentPopper.lockedChild = null
+            }
+          }, 1000)
         }
         return
       }

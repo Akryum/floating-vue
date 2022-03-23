@@ -278,6 +278,8 @@ Floating Vue will automatically fix the [diagonal submenu problem](https://www.g
   <img alt="popper aim debug example" src="./popper-aim.png" class="border border-gray-200 rounded">
 </div>
 
+After a one second delay, the lock applied because of aiming will expire.
+
 ## Disable popper
 
 Disabling a popper will prevent it from being shown.
