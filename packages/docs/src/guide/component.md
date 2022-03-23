@@ -266,6 +266,20 @@ Close all the poppers in the page with the `all` modifier:
 <a v-close-popper.all>Close All</a>
 ```
 
+## Sub menu
+
+Nesting poppers inside other popper will automatically prevent the parents from hiding when any child is shown:
+
+<SubMenuExample />
+
+Floating Vue will automatically fix the [diagonal submenu problem](https://www.google.com/search?q=submenu%20diagonal%20problem) for you be detecting if the mouse is aiming at the popper content from the reference:
+
+<div class="mx-auto" style="max-width:400px">
+  <img alt="popper aim debug example" src="./popper-aim.png" class="border border-gray-200 rounded">
+</div>
+
+After a one second delay, the lock applied because of aiming will expire.
+
 ## Disable popper
 
 Disabling a popper will prevent it from being shown.

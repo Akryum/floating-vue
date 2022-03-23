@@ -104,6 +104,17 @@ Included changes from `v1.0.0-beta.6`:
 
 
 
+# [1.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2022-03-23)
+
+
+### Features
+
+* add aiming expiration delay ([01ef6f8](https://github.com/Akryum/v-tooltip/commit/01ef6f86aadc43488ade03cffd2158f2825cb416))
+* handle diagonal submenu (aim) ([df5e9e9](https://github.com/Akryum/v-tooltip/commit/df5e9e9f65b2805a0e2d091deddefc02c9661216))
+* nested poppers auto lock ([75694ae](https://github.com/Akryum/v-tooltip/commit/75694aefde5bf2442c219ecae7c5a767d7c525de))
+
+
+
 # [1.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2022-03-11)
 
 

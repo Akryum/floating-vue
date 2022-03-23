@@ -32,6 +32,8 @@ function defaultPropFactory (prop: string) {
   }
 }
 
+const PROVIDE_KEY = '__floating-vue__popper'
+
 export default () => defineComponent({
   name: 'VPopper',
 
@@ -253,6 +255,18 @@ export default () => defineComponent({
     'dispose',
   ],
 
+  provide () {
+    return {
+      [PROVIDE_KEY]: {
+        parentPopper: this,
+      },
+    }
+  },
+
+  inject: {
+    [PROVIDE_KEY]: { default: null },
+  },
+
   data () {
     return {
       isShown: false,
@@ -276,6 +290,7 @@ export default () => defineComponent({
         },
         transformOrigin: null,
       },
+      shownChildren: new Set(),
     }
   },
 
@@ -305,6 +320,10 @@ export default () => defineComponent({
         },
         result: this.positioningDisabled ? null : this.result,
       }
+    },
+
+    parentPopper () {
+      return this[PROVIDE_KEY]?.parentPopper
     },
   },
 
@@ -382,7 +401,14 @@ export default () => defineComponent({
 
   methods: {
     show ({ event = null, skipDelay = false, force = false } = {}) {
+      if (this.parentPopper?.lockedChild && this.parentPopper.lockedChild !== this) return
+
+      this.$_pendingHide = false
       if (force || !this.disabled) {
+        if (this.parentPopper?.lockedChild === this) {
+          this.parentPopper.lockedChild = null
+        }
+
         this.$_scheduleShow(event, skipDelay)
         this.$emit('show')
 
@@ -397,6 +423,32 @@ export default () => defineComponent({
 
     hide ({ event = null, skipDelay = false } = {}) {
       if (this.$_hideInProgress) return
+
+      // Abort if child is shown
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        return
+      }
+
+      // Abort if aiming for the popper
+      if (this.$_isAimingPopper()) {
+        if (this.parentPopper) {
+          this.parentPopper.lockedChild = this
+          clearTimeout(this.parentPopper.lockedChildTimer)
+          this.parentPopper.lockedChildTimer = setTimeout(() => {
+            if (this.parentPopper.lockedChild === this) {
+              this.parentPopper.lockedChild.hide({ skipDelay })
+              this.parentPopper.lockedChild = null
+            }
+          }, 1000)
+        }
+        return
+      }
+      if (this.parentPopper?.lockedChild === this) {
+        this.parentPopper.lockedChild = null
+      }
+
+      this.$_pendingHide = false
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
@@ -439,6 +491,8 @@ export default () => defineComponent({
 
       this.isMounted = false
       this.isShown = false
+
+      this.$_updateParentShownChildren(false)
 
       this.$_swapTargetAttrs('data-original-title', 'title')
 
@@ -587,10 +641,11 @@ export default () => defineComponent({
     },
 
     $_scheduleShow (event = null, skipDelay = false) {
+      this.$_updateParentShownChildren(true)
       this.$_hideInProgress = false
       clearTimeout(this.$_scheduleTimer)
 
-      if (hidingPopper && this.instantMove && hidingPopper.instantMove) {
+      if (hidingPopper && this.instantMove && hidingPopper.instantMove && hidingPopper !== this.parentPopper) {
         hidingPopper.$_applyHide(true)
         this.$_applyShow(true)
         return
@@ -604,6 +659,11 @@ export default () => defineComponent({
     },
 
     $_scheduleHide (event = null, skipDelay = false) {
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        return
+      }
+      this.$_updateParentShownChildren(false)
       this.$_hideInProgress = true
       clearTimeout(this.$_scheduleTimer)
 
@@ -696,6 +756,11 @@ export default () => defineComponent({
     },
 
     async $_applyHide (skipTransition = false) {
+      if (this.shownChildren.size > 0) {
+        this.$_pendingHide = true
+        this.$_hideInProgress = false
+        return
+      }
       clearTimeout(this.$_scheduleTimer)
 
       // Already hidden
@@ -860,6 +925,12 @@ export default () => defineComponent({
           this.$_preventShow = false
         }, 300)
       }
+
+      let parent = this.parentPopper
+      while (parent) {
+        parent.$_handleGlobalClose(event, touch)
+        parent = parent.parentPopper
+      }
     },
 
     $_detachPopperNode () {
@@ -887,6 +958,44 @@ export default () => defineComponent({
           }
         }
       }
+    },
+
+    $_updateParentShownChildren (value) {
+      let parent = this.parentPopper
+      while (parent) {
+        if (value) {
+          parent.shownChildren.add(this.randomId)
+        } else {
+          parent.shownChildren.delete(this.randomId)
+
+          if (parent.$_pendingHide) {
+            parent.hide()
+          }
+        }
+        parent = parent.parentPopper
+      }
+    },
+
+    $_isAimingPopper () {
+      const referenceBounds: DOMRect = this.$el.getBoundingClientRect()
+      if (mouseX >= referenceBounds.left && mouseX <= referenceBounds.right && mouseY >= referenceBounds.top && mouseY <= referenceBounds.bottom) {
+        const popperBounds: DOMRect = this.$_popperNode.getBoundingClientRect()
+        const vectorX = mouseX - mousePreviousX
+        const vectorY = mouseY - mousePreviousY
+        const distance = (popperBounds.left + popperBounds.width / 2) - mousePreviousX + (popperBounds.top + popperBounds.height / 2) - mousePreviousY
+        // Make the vector long enough to be sure that it can intersect with the popper
+        const newVectorLength = distance + popperBounds.width + popperBounds.height
+        const edgeX = mousePreviousX + vectorX * newVectorLength
+        const edgeY = mousePreviousY + vectorY * newVectorLength
+        // Check for collision between the vector and the popper bounds
+        return (
+          lineIntersectsLine(mousePreviousX, mousePreviousY, edgeX, edgeY, popperBounds.left, popperBounds.top, popperBounds.left, popperBounds.bottom) || // Left edge
+          lineIntersectsLine(mousePreviousX, mousePreviousY, edgeX, edgeY, popperBounds.left, popperBounds.top, popperBounds.right, popperBounds.top) || // Top edge
+          lineIntersectsLine(mousePreviousX, mousePreviousY, edgeX, edgeY, popperBounds.right, popperBounds.top, popperBounds.right, popperBounds.bottom) || // Right edge
+          lineIntersectsLine(mousePreviousX, mousePreviousY, edgeX, edgeY, popperBounds.left, popperBounds.bottom, popperBounds.right, popperBounds.bottom) // Bottom edge
+        )
+      }
+      return false
     },
   },
 
@@ -966,4 +1075,30 @@ export function hideAllPoppers () {
     const popper = shownPoppers[i]
     popper.hide()
   }
+}
+
+// Track mouse movement to detect aiming at the popper
+
+let mousePreviousX = 0
+let mousePreviousY = 0
+let mouseX = 0
+let mouseY = 0
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('mousemove', event => {
+    mousePreviousX = mouseX
+    mousePreviousY = mouseY
+    mouseX = event.clientX
+    mouseY = event.clientY
+  }, supportsPassive
+    ? {
+      passive: true,
+    }
+    : undefined)
+}
+
+function lineIntersectsLine (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number) {
+  const uA = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
+  const uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
+  return (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1)
 }
