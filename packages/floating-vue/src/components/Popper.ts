@@ -977,7 +977,7 @@ export default () => defineComponent({
     },
 
     $_isAimingPopper () {
-      const referenceBounds: DOMRect = this.$el.getBoundingClientRect()
+      const referenceBounds: DOMRect = this.$_referenceNode.getBoundingClientRect()
       if (mouseX >= referenceBounds.left && mouseX <= referenceBounds.right && mouseY >= referenceBounds.top && mouseY <= referenceBounds.bottom) {
         const popperBounds: DOMRect = this.$_popperNode.getBoundingClientRect()
         const vectorX = mouseX - mousePreviousX
