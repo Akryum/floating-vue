@@ -3,7 +3,7 @@ import { demos } from './router'
 </script>
 
 <template>
-  <nav class="nav">
+  <nav class="nav divide-x divide-gray-300 mb-4">
     <router-link
       v-for="(route, index) of demos"
       :key="index"
@@ -24,21 +24,10 @@ body {
 
 <style lang="postcss">
 .nav a {
-  text-decoration: none;
-  color: black;
-  padding: 2px 4px;
-}
-
-.nav a:not(:last-child) {
-  border-right: 1px #ddd solid;
-}
-
-.nav a:hover {
-  background: #eee;
+  @apply px-2 py-1 hover:bg-gray-200;
 }
 
 .nav a.router-link-active {
-  background: black;
-  color: white;
+  @apply bg-teal-500 text-white;
 }
 </style>

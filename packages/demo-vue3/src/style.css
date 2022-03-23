@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply m-4;
+}
+
+h1 {
+  @apply text-3xl my-6;
+}
+
+input {
+  @apply px-2 py-1 border border-gray-300 rounded;
+}
