@@ -1,3 +1,12 @@
+# [1.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2022-03-23)
+
+
+### Bug Fixes
+
+* don't auto hide parent if contains click ([98d9449](https://github.com/Akryum/v-tooltip/commit/98d94492c5232c68d20498e9dca52eb79140f4c6))
+
+
+
 # [1.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2022-03-23)
 
 
