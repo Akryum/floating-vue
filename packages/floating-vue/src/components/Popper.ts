@@ -740,6 +740,7 @@ export default () => ({
       await nextFrame()
       this.classes.showFrom = false
       this.classes.showTo = true
+      this.$_popperNode.focus()
     },
 
     async $_applyHide (skipTransition = false) {
