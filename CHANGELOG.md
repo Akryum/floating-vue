@@ -151,6 +151,16 @@ Included changes from `v1.0.0-beta.6`:
 
 
 
+# [1.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2022-03-30)
+
+
+### Features
+
+* add open popper classes on body ([29c9d78](https://github.com/Akryum/v-tooltip/commit/29c9d7862b02aa330c22c582b1e119cd7d86ff90))
+* autofocus popper node ([0a39097](https://github.com/Akryum/v-tooltip/commit/0a39097bb99da8f3e1fd6a9595fbf6468ea17a21))
+
+
+
 # [1.0.0-beta.14](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2022-03-23)
 
 
