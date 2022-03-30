@@ -1,3 +1,81 @@
+# [2.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.15...v2.0.0-beta.12) (2022-03-30)
+
+
+
+# [2.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.14...v2.0.0-beta.11) (2022-03-23)
+
+
+
+# [2.0.0-beta.10](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.13...v2.0.0-beta.10) (2022-03-23)
+
+
+
+# [2.0.0-beta.9](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.12...v2.0.0-beta.9) (2022-03-23)
+
+
+### Bug Fixes
+
+* don't use $el ([29e9992](https://github.com/Akryum/v-tooltip/commit/29e99924f681e2b77fdfd7c87da2e5ea62ab7a50))
+
+
+
+# [2.0.0-beta.8](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2022-03-11)
+
+
+### Bug Fixes
+
+* theme null on .v-popper ([25db8e8](https://github.com/Akryum/v-tooltip/commit/25db8e8d403a8991a911ebf725154bee3cb3e4ac))
+
+
+
+# [2.0.0-beta.7](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.11...v2.0.0-beta.7) (2022-03-11)
+
+
+### Bug Fixes
+
+* restore nuxt 3 support, closes [#820](https://github.com/Akryum/v-tooltip/issues/820) ([f6397ea](https://github.com/Akryum/v-tooltip/commit/f6397ea2adcb54241393f928a239a4f8fe70f04e))
+
+
+
+# [2.0.0-beta.6](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.9...v2.0.0-beta.6) (2022-02-09)
+
+
+
+# [2.0.0-beta.5](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.7...v2.0.0-beta.5) (2022-02-01)
+
+
+
+# [2.0.0-beta.4](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.6...v2.0.0-beta.4) (2022-02-01)
+
+
+
+# [2.0.0-beta.3](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-01-20)
+
+
+### Bug Fixes
+
+* some directive tooltips not working ([d3c3b3d](https://github.com/Akryum/v-tooltip/commit/d3c3b3d2d2d0c0cff3d50a0f643b4a922314f0d9))
+
+
+
+# [2.0.0-beta.2](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-01-18)
+
+
+### Features
+
+* single app for v-tooltip directives ([649c38d](https://github.com/Akryum/v-tooltip/commit/649c38d650fe32a9f5433f9b0349fe6a588dde12))
+
+
+
+# [2.0.0-beta.1](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.5...v2.0.0-beta.1) (2022-01-15)
+
+
+### Features
+
+* vue3 version ([872feef](https://github.com/Akryum/v-tooltip/commit/872feef42f01e44ce522b960b8eaf973b43649a3))
+
+
+
 # [2.0.0-beta.11](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.14...v2.0.0-beta.11) (2022-03-23)
 
 Included changes from `v1.0.0-beta.14`:
