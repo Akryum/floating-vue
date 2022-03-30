@@ -13,12 +13,21 @@ import { placements } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { nextFrame } from '../util/frame'
-import { getDefaultConfig } from '../config'
+import { getDefaultConfig, getAllParentThemes } from '../config'
 
 export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 
 const shownPoppers = []
 let hidingPopper = null
+
+const shownPoppersByTheme: Record<string, any[]> = {}
+function getShownPoppersByTheme (theme: string) {
+  let list = shownPoppersByTheme[theme]
+  if (!list) {
+    list = shownPoppersByTheme[theme] = []
+  }
+  return list
+}
 
 let Element: any = function () {}
 if (typeof window !== 'undefined') {
@@ -729,6 +738,11 @@ export default () => ({
       }
 
       shownPoppers.push(this)
+      document.body.classList.add('v-popper--some-open')
+      for (const theme of getAllParentThemes(this.theme)) {
+        getShownPoppersByTheme(theme).push(this)
+        document.body.classList.add(`v-popper--some-open--${theme}`)
+      }
 
       this.$emit('apply-show')
 
@@ -758,6 +772,16 @@ export default () => ({
 
       this.skipTransition = skipTransition
       removeFromArray(shownPoppers, this)
+      if (shownPoppers.length === 0) {
+        document.body.classList.remove('v-popper--some-open')
+      }
+      for (const theme of getAllParentThemes(this.theme)) {
+        const list = getShownPoppersByTheme(theme)
+        removeFromArray(list, this)
+        if (list.length === 0) {
+          document.body.classList.remove(`v-popper--some-open--${theme}`)
+        }
+      }
 
       if (hidingPopper === this) {
         hidingPopper = null

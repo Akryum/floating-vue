@@ -117,3 +117,18 @@ export function getThemeClasses (theme: string): string[] {
   } while (themeConfig)
   return result.map(c => `v-popper--theme-${c}`)
 }
+
+export function getAllParentThemes (theme: string): string[] {
+  const result = [theme]
+  let themeConfig = config.themes[theme] || {}
+  do {
+    // Support theme extend
+    if (themeConfig.$extend) {
+      result.push(themeConfig.$extend)
+      themeConfig = config.themes[themeConfig.$extend] || {}
+    } else {
+      themeConfig = null
+    }
+  } while (themeConfig)
+  return result
+}
