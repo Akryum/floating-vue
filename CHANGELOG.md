@@ -1,3 +1,12 @@
+# [2.0.0-beta.13](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2022-04-05)
+
+
+### Bug Fixes
+
+* createTooltip().show() ([56bc9d2](https://github.com/Akryum/v-tooltip/commit/56bc9d29d77cb88346d39357f81749284ade0dc8))
+
+
+
 # [2.0.0-beta.12](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.15...v2.0.0-beta.12) (2022-03-30)
 
 
