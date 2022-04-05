@@ -38,6 +38,13 @@ export const demos = [
     },
   },
   {
+    path: '/directive/create-tooltip',
+    component: () => import('./views/directive/CreateTooltip.vue'),
+    meta: {
+      label: 'createTooltip',
+    },
+  },
+  {
     path: '/component/demo1',
     component: () => import('./views/component/DropdownDemo1.vue'),
     meta: {

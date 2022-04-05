@@ -65,7 +65,7 @@ function ensureDirectiveApp () {
       return this.directives.map((directive) => {
         return h(TooltipDirective, {
           ...directive.options,
-          shown: directive.shown.value || directive.options.shown,
+          shown: directive.shown || directive.options.shown,
           key: directive.id,
         })
       })
@@ -126,7 +126,7 @@ export function destroyTooltip (el) {
   }
 }
 
-export function bind (el, { value, oldValue, modifiers }) {
+export function bind (el, { value, modifiers }) {
   const options = getOptions(el, value, modifiers)
   if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
     destroyTooltip(el)
