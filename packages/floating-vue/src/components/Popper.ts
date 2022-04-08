@@ -334,6 +334,10 @@ export default () => defineComponent({
     parentPopper () {
       return this[PROVIDE_KEY]?.parentPopper
     },
+
+    hasPopperShowTriggerHover () {
+      return this.popperTriggers?.includes('hover') || this.popperShowTriggers?.includes('hover')
+    },
   },
 
   watch: {
@@ -440,7 +444,7 @@ export default () => defineComponent({
       }
 
       // Abort if aiming for the popper
-      if (this.$_isAimingPopper()) {
+      if (this.hasPopperShowTriggerHover && this.$_isAimingPopper()) {
         if (this.parentPopper) {
           this.parentPopper.lockedChild = this
           clearTimeout(this.parentPopper.lockedChildTimer)
