@@ -1,3 +1,12 @@
+# [1.0.0-beta.16](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.15...v1.0.0-beta.16) (2022-04-08)
+
+
+### Bug Fixes
+
+* tooltip not closing when aiming it, closes [#851](https://github.com/Akryum/v-tooltip/issues/851) ([d43f0a5](https://github.com/Akryum/v-tooltip/commit/d43f0a5d7b36930e24755f9bde5ac8df98e75728))
+
+
+
 # [1.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2022-03-30)
 
 
