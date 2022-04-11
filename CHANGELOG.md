@@ -1,3 +1,12 @@
+# [2.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2022-04-11)
+
+
+### Features
+
+* autoHide function prop ([ec3313d](https://github.com/Akryum/v-tooltip/commit/ec3313d9921a1f14bc1614e3341edbb997aa44fa))
+
+
+
 # [2.0.0-beta.14](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2022-04-08)
 
 
