@@ -172,7 +172,7 @@ export default () => defineComponent({
     },
 
     autoHide: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: defaultPropFactory('autoHide'),
     },
 
@@ -300,6 +300,7 @@ export default () => defineComponent({
         transformOrigin: null,
       },
       shownChildren: new Set(),
+      lastAutoHide: true,
     }
   },
 
@@ -318,7 +319,7 @@ export default () => defineComponent({
         isShown: this.isShown,
         shouldMountContent: this.shouldMountContent,
         skipTransition: this.skipTransition,
-        autoHide: this.autoHide,
+        autoHide: typeof this.autoHide === 'function' ? this.lastAutoHide : this.autoHide,
         show: this.show,
         hide: this.hide,
         handleResize: this.handleResize,
@@ -1119,7 +1120,16 @@ function isContainingEventTarget (popper, event): boolean {
 }
 
 function shouldAutoHide (popper, contains, event): boolean {
-  return event.closeAllPopover || (event.closePopover && contains) || (popper.autoHide && !contains)
+  return event.closeAllPopover || (event.closePopover && contains) || (getAutoHideResult(popper, event) && !contains)
+}
+
+function getAutoHideResult (popper, event) {
+  if (typeof popper.autoHide === 'function') {
+    const result = popper.autoHide(event)
+    popper.lastAutoHide = result
+    return result
+  }
+  return popper.autoHide
 }
 
 function computePositionAllShownPoppers (event) {
