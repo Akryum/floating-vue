@@ -329,6 +329,7 @@ export default () => defineComponent({
           popperClass: this.popperClass,
         },
         result: this.positioningDisabled ? null : this.result,
+        attrs: this.$attrs,
       }
     },
 

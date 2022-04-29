@@ -13,6 +13,7 @@
       onResize,
       classes,
       result,
+      attrs,
     }"
     v-bind="popperAttrs"
     :theme="finalTheme"
@@ -23,6 +24,7 @@
     <div
       ref="reference"
       class="v-popper"
+      v-bind="attrs"
       :class="[
         $attrs.class,
         themeClass,
