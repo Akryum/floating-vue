@@ -92,7 +92,7 @@ export const config: FloatingVueConfig = {
       delay: 0,
       // Update popper on content resize
       handleResize: true,
-      // Hide on clock outside
+      // Hide on click outside
       autoHide: true,
     },
     menu: {
