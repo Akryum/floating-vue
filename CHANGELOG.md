@@ -1,3 +1,12 @@
+# [2.0.0-beta.16](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2022-04-29)
+
+
+### Bug Fixes
+
+* **Popper:** add attrs to root div ([4391e5c](https://github.com/Akryum/v-tooltip/commit/4391e5c2f5e454b00fb7754d3e374c4fd95c264a))
+
+
+
 # [2.0.0-beta.15](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2022-04-11)
 
 
