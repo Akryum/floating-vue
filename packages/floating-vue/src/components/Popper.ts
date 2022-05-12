@@ -8,6 +8,7 @@ import {
   arrow,
   getOverflowAncestors,
   size,
+  autoUpdate,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
 import { placements, Placement } from '../util/popper'
@@ -323,7 +324,6 @@ export default () => defineComponent({
         show: this.show,
         hide: this.hide,
         handleResize: this.handleResize,
-        onResize: this.onResize,
         classes: {
           ...this.classes,
           popperClass: this.popperClass,
@@ -484,6 +484,9 @@ export default () => defineComponent({
       this.$_innerNode = this.$_popperNode.querySelector('.v-popper__inner')
       this.$_arrowNode = this.$_popperNode.querySelector('.v-popper__arrow-container')
 
+      // Init autoUpdate
+      this.$_cleanup = autoUpdate(this.$_referenceNode, this.$_popperNode, this.$_computePosition)
+
       this.$_swapTargetAttrs('title', 'data-original-title')
 
       this.$_detachPopperNode()
@@ -500,6 +503,7 @@ export default () => defineComponent({
     dispose () {
       if (this.$_isDisposed) return
       this.$_isDisposed = true
+      this.$_cleanup() // Cleanup autoUpdate
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
       this.$_detachPopperNode()
@@ -512,13 +516,6 @@ export default () => defineComponent({
       this.$_swapTargetAttrs('data-original-title', 'title')
 
       this.$emit('dispose')
-    },
-
-    async onResize () {
-      if (this.isShown) {
-        await this.$_computePosition()
-        this.$emit('resize')
-      }
     },
 
     async $_computePosition () {
@@ -642,6 +639,9 @@ export default () => defineComponent({
       }
 
       const data = await computePosition(this.$_referenceNode, this.$_popperNode, options)
+
+      // Emit resize-Event evevry time position is re-computed to replace onResize.
+      this.$emit('resize')
 
       Object.assign(this.result, {
         x: data.x,

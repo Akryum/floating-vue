@@ -10,7 +10,6 @@
       show,
       hide,
       handleResize,
-      onResize,
       classes,
       result,
       attrs,
@@ -52,7 +51,6 @@
         :classes="classes"
         :result="result"
         @hide="hide"
-        @resize="onResize"
       >
         <slot
           name="popper"
