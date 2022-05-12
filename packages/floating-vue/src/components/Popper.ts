@@ -485,7 +485,12 @@ export default () => defineComponent({
       this.$_arrowNode = this.$_popperNode.querySelector('.v-popper__arrow-container')
 
       // Init autoUpdate
-      this.$_cleanup = autoUpdate(this.$_referenceNode, this.$_popperNode, this.$_computePosition)
+      this.$_cleanup = autoUpdate(this.$_referenceNode, this.$_popperNode, async () => {
+        await this.$_computePosition()
+
+        // Emit resize-Event evevry time position is re-computed to replace onResize.
+        this.$emit('resize')
+      })
 
       this.$_swapTargetAttrs('title', 'data-original-title')
 
@@ -639,9 +644,6 @@ export default () => defineComponent({
       }
 
       const data = await computePosition(this.$_referenceNode, this.$_popperNode, options)
-
-      // Emit resize-Event evevry time position is re-computed to replace onResize.
-      this.$emit('resize')
 
       Object.assign(this.result, {
         x: data.x,
