@@ -6,7 +6,7 @@ import {
   shift,
   flip,
   arrow,
-  getScrollParents,
+  getOverflowAncestors,
   size,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
@@ -633,7 +633,7 @@ export default () => defineComponent({
         options.middleware.push(size({
           boundary: this.boundary,
           padding: this.overflowPadding,
-          apply: ({ width, height }) => {
+          apply: ({ availableWidth: width, availableHeight: height }) => {
             // Apply and re-compute
             this.$_innerNode.style.maxWidth = width != null ? `${width}px` : null
             this.$_innerNode.style.maxHeight = height != null ? `${height}px` : null
@@ -716,8 +716,8 @@ export default () => defineComponent({
       // Scroll
       if (!this.positioningDisabled) {
         this.$_registerEventListeners([
-          ...getScrollParents(this.$_referenceNode),
-          ...getScrollParents(this.$_popperNode),
+          ...getOverflowAncestors(this.$_referenceNode),
+          ...getOverflowAncestors(this.$_popperNode),
         ], 'scroll', () => {
           this.$_computePosition()
         })
