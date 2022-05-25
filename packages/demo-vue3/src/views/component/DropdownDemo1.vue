@@ -1,12 +1,14 @@
 <template>
   <h1>Dropdown demo</h1>
 
-  <div class="row">
-    <VDropdown>
+  <div class="flex gap-4">
+    <VDropdown
+      class="my-dropdown"
+    >
       <button id="dropdown-btn">Click me</button>
 
       <template #popper>
-        <div class="my-menu">
+        <div class="p-5">
           ✌️ Hello from v-tooltip + Vue 3
         </div>
 
@@ -23,11 +25,7 @@
 </template>
 
 <style lang="postcss" scoped>
-.row {
-  display: flex;
-}
-
-.my-menu {
-  padding: 20px;
+.my-dropdown {
+  @apply ring ring-green-500;
 }
 </style>

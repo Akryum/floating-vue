@@ -30,4 +30,8 @@ body {
 .nav a.router-link-active {
   @apply bg-teal-500 text-white;
 }
+
+button {
+  @apply px-3 py-1 rounded bg-gray-100 border border-gray-200;
+}
 </style>

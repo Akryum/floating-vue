@@ -13,60 +13,47 @@
       onResize,
       classes,
       result,
-      attrs,
     }"
-    v-bind="popperAttrs"
     :theme="finalTheme"
     :target-nodes="getTargetNodes"
-    :reference-node="() => $refs.reference"
+    :reference-node="() => $refs.popper.$el"
     :popper-node="() => $refs.popperContent.$el"
+    :class="[
+      themeClass,
+    ]"
   >
-    <div
-      ref="reference"
-      class="v-popper"
-      v-bind="attrs"
-      :class="[
-        $attrs.class,
-        themeClass,
-        {
-          'v-popper--shown': isShown,
-        },
-      ]"
-      :style="$attrs.style"
+    <slot
+      :shown="isShown"
+      :show="show"
+      :hide="hide"
+    />
+
+    <PopperContent
+      ref="popperContent"
+      :popper-id="popperId"
+      :theme="finalTheme"
+      :shown="isShown"
+      :mounted="shouldMountContent"
+      :skip-transition="skipTransition"
+      :auto-hide="autoHide"
+      :handle-resize="handleResize"
+      :classes="classes"
+      :result="result"
+      @hide="hide"
+      @resize="onResize"
     >
       <slot
+        name="popper"
         :shown="isShown"
-        :show="show"
         :hide="hide"
       />
-
-      <PopperContent
-        ref="popperContent"
-        :popper-id="popperId"
-        :theme="finalTheme"
-        :shown="isShown"
-        :mounted="shouldMountContent"
-        :skip-transition="skipTransition"
-        :auto-hide="autoHide"
-        :handle-resize="handleResize"
-        :classes="classes"
-        :result="result"
-        @hide="hide"
-        @resize="onResize"
-      >
-        <slot
-          name="popper"
-          :shown="isShown"
-          :hide="hide"
-        />
-      </PopperContent>
-    </div>
+    </PopperContent>
   </Popper>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Popper from './Popper'
+import Popper from './Popper.vue'
 import PopperContent from './PopperContent.vue'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
@@ -75,7 +62,7 @@ export default defineComponent({
   name: 'VPopperWrapper',
 
   components: {
-    Popper: Popper(),
+    Popper,
     PopperContent,
   },
 
@@ -83,8 +70,6 @@ export default defineComponent({
     PopperMethods,
     ThemeClass('finalTheme'),
   ],
-
-  inheritAttrs: false,
 
   props: {
     theme: {
@@ -97,18 +82,11 @@ export default defineComponent({
     finalTheme (): string {
       return this.theme ?? this.$options.vPopperTheme
     },
-
-    popperAttrs (): Record<string, any> {
-      const result = { ...this.$attrs }
-      delete result.class
-      delete result.style
-      return result
-    },
   },
 
   methods: {
     getTargetNodes () {
-      return Array.from(this.$refs.reference.children)
+      return Array.from(this.$refs.popper.$el.children)
         .filter(node => node !== this.$refs.popperContent.$el)
     },
   },
