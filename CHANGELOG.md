@@ -1,3 +1,13 @@
+# [2.0.0-beta.17](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2022-05-30)
+
+
+### Bug Fixes
+
+* remove browser outline on dropdown, fix [#848](https://github.com/Akryum/v-tooltip/issues/848) ([48508c4](https://github.com/Akryum/v-tooltip/commit/48508c47a84319efd5ebebdc596b32de51fdb528))
+* scoped CSS not working ([0524082](https://github.com/Akryum/v-tooltip/commit/05240825e0f0191d8b30bea650bd7a0aeddd709e))
+
+
+
 # [2.0.0-beta.16](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2022-04-29)
 
 
