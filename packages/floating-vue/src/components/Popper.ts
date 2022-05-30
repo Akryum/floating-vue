@@ -422,7 +422,7 @@ export default () => ({
       this.$emit('update:shown', true)
     },
 
-    hide ({ event = null, skipDelay = false } = {}) {
+    hide ({ event = null, skipDelay = false, skipAiming = false } = {}) {
       if (this.$_hideInProgress) return
 
       // Abort if child is shown
@@ -432,7 +432,7 @@ export default () => ({
       }
 
       // Abort if aiming for the popper
-      if (this.hasPopperShowTriggerHover && this.$_isAimingPopper()) {
+      if (!skipAiming && this.hasPopperShowTriggerHover && this.$_isAimingPopper()) {
         if (this.parentPopper) {
           this.parentPopper.lockedChild = this
           clearTimeout(this.parentPopper.lockedChildTimer)
@@ -870,15 +870,15 @@ export default () => ({
 
       // Add trigger hide events
 
-      const handleHide = event => {
+      const handleHide = (skipAiming: boolean) => event => {
         if (event.usedByTooltip) {
           return
         }
-        this.hide({ event })
+        this.hide({ event, skipAiming })
       }
 
-      this.$_registerTriggerListeners(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide)
-      this.$_registerTriggerListeners([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
+      this.$_registerTriggerListeners(this.$_targetNodes, HIDE_EVENT_MAP, this.triggers, this.hideTriggers, handleHide(false))
+      this.$_registerTriggerListeners([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide(true))
     },
 
     $_registerEventListeners (targetNodes: any[], eventType: string, handler: (event: Event) => void) {
