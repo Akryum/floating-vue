@@ -117,6 +117,7 @@ export default defineComponent({
   z-index: 10000;
   top: 0;
   left: 0;
+  outline: none;
 }
 
 .v-popper__popper.v-popper__popper--hidden {
