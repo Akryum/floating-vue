@@ -1,3 +1,12 @@
+# [1.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.17...v1.0.0-beta.18) (2022-05-30)
+
+
+### Bug Fixes
+
+* skip aiming check for popper events, fix [#860](https://github.com/Akryum/v-tooltip/issues/860) ([4c7c90d](https://github.com/Akryum/v-tooltip/commit/4c7c90d0cbb0f9cb05875c614bd25fe24f76ca86))
+
+
+
 # [1.0.0-beta.17](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.16...v1.0.0-beta.17) (2022-04-11)
 
 
