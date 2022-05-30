@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import FloatingVue, { createTooltip, destroyTooltip } from 'floating-vue'
 import 'floating-vue/dist/style.css'
+import './style/index.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
@@ -44,6 +45,9 @@ const router = new VueRouter({
     { path: '/install', name: 'install', component: PageInstall },
     { path: '/table', name: 'table', component: () => import('./PageTable.vue') },
     { path: '/hover-dropdown', name: 'hover-dropdown', component: () => import('./PageHoverDropdown.vue') },
+    { path: '/test-dropdown', name: 'test-dropdown', component: () => import('./TestDropdown.vue') },
+    { path: '/test-tooltip', name: 'test-tooltip', component: () => import('./TestTooltip.vue') },
+    { path: '/test-menu', name: 'test-menu', component: () => import('./TestSubMenu.vue') },
     { path: '*', redirect: '/' },
   ],
 })
