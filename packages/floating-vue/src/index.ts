@@ -50,14 +50,8 @@ export function install (app, options: FloatingVueConfig = {}) {
   app.directive('tooltip', PrivateVTooltip)
   app.directive('close-popper', PrivateVClosePopper)
   // Components
-  // eslint-disable-next-line vue/component-definition-name-casing
-  app.component('v-tooltip', PrivateTooltip)
   app.component('VTooltip', PrivateTooltip)
-  // eslint-disable-next-line vue/component-definition-name-casing
-  app.component('v-dropdown', PrivateDropdown)
   app.component('VDropdown', PrivateDropdown)
-  // eslint-disable-next-line vue/component-definition-name-casing
-  app.component('v-menu', PrivateMenu)
   app.component('VMenu', PrivateMenu)
 }
 
