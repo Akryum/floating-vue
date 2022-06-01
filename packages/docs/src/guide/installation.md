@@ -161,13 +161,13 @@ yarn add floating-vue
 </code-block>
 </code-group>
 
-Add the `floating-vue/nuxt` module to your Nuxt config file:
+Add the `floating-vue/nuxt` module to your `nuxt.config` file:
 
 ```js
-import { defineNuxtConfig } from 'nuxt3'
+import { defineNuxtConfig } from 'nuxt'
 
 export default defineNuxtConfig({
-  buildModules: [
+  modules: [
     'floating-vue/nuxt',
   ],
 })
