@@ -168,7 +168,7 @@ import { defineNuxtConfig } from 'nuxt'
 
 export default defineNuxtConfig({
   modules: [
-    'floating-vue/nuxt',
-  ],
+    'floating-vue/nuxt'
+  ]
 })
 ```
