@@ -99,10 +99,10 @@ HTML result:
 
 By default, multiple elements are mounted in the popper content:
 
-- `popper`: the root element of the popper. This will positionned by popperjs.
-  - `wrapper`: an intermediary element to allow transforming both the content and the arrow (usefull for zoom transitions).
+- `popper`: the root element of the popper. This will be positioned by popperjs.
+  - `wrapper`: an intermediary element to allow transforming both the content and the arrow (useful for zoom transitions).
     - `inner`: the main popper content. Ideal target for main styles such as background, border, text color...
-    - `arrow-container`: contains the arrow graphics. This will be positionned by popperjs.
+    - `arrow-container`: contains the arrow graphics. This will be positioned by popperjs.
       - `arrow-outer`: the bigger arrow. Visible by default. If you want a border, should use the border color - otherwise, should use the background color.
       - `arrow-inner`: the smaller arrow, useful to simulate a border. Hidden by default. The default `dropdown` theme makes it visible to display the default border. Should use the background color.
 
