@@ -6,6 +6,7 @@ import './style/index.css'
 import App from './App.vue'
 import PageHome from './PageHome.vue'
 import PageInstall from './PageInstall.vue'
+import Performance from './Performance.vue';
 
 Vue.use(FloatingVue, {
   disposeTimeout: 5000,
@@ -42,6 +43,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   routes: [
     { path: '/', name: 'home', component: PageHome },
+    { path: '/perf', name: 'Perf', component: Performance },
     { path: '/install', name: 'install', component: PageInstall },
     { path: '/table', name: 'table', component: () => import('./PageTable.vue') },
     { path: '/hover-dropdown', name: 'hover-dropdown', component: () => import('./PageHoverDropdown.vue') },

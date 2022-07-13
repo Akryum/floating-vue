@@ -52,7 +52,7 @@ export function createTooltip (el, value, modifiers) {
         options,
       }
     },
-    render (h) {
+    render (h) { 
       const {
         theme,
         html,
@@ -60,7 +60,6 @@ export function createTooltip (el, value, modifiers) {
         loadingContent,
         ...otherOptions
       } = this.options
-
       return h(TooltipDirective, {
         props: {
           theme,
@@ -122,9 +121,15 @@ export function bind (el, { value, oldValue, modifiers }) {
   }
 }
 
+export function update (el, { value, oldValue, modifiers }) {
+  if (value !== oldValue) { // avoid unnecessary updates
+    bind(el, {value, oldValue, modifiers})
+  }
+}
+
 export default {
   bind,
-  update: bind,
+  update,
   unbind (el) {
     destroyTooltip(el)
   },

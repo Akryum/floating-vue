@@ -14,6 +14,7 @@
       <a href="https://github.com/Akryum/v-tooltip/issues">Report an issue</a>
       <a @click="toggleFullscreen">Toggle fullscreen</a>
     </section>
+    <l-rich-text-editor v-model="msg" v-content="msg"/>
 
     <section class="demo">
       <div class="section-content">

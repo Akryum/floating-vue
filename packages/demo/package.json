@@ -11,6 +11,7 @@
     "core-js": "^3.8.1",
     "floating-vue": "^1.0.0-beta.18",
     "screenfull": "^4.2.0",
+    "tiptap": "^1.32.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.1"
   },
