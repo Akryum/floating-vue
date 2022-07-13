@@ -52,7 +52,7 @@ export function createTooltip (el, value, modifiers) {
         options,
       }
     },
-    render (h) { 
+    render (h) {
       const {
         theme,
         html,
@@ -60,6 +60,7 @@ export function createTooltip (el, value, modifiers) {
         loadingContent,
         ...otherOptions
       } = this.options
+
       return h(TooltipDirective, {
         props: {
           theme,
