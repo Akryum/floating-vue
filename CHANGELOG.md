@@ -1,3 +1,13 @@
+# [2.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2022-08-02)
+
+
+### Bug Fixes
+
+* duplicate classes ([9740a35](https://github.com/Akryum/v-tooltip/commit/9740a3546fa98bcff28d019ba4502411a5c1589a))
+* remove duplicate component registration ([a27d1a3](https://github.com/Akryum/v-tooltip/commit/a27d1a38cdef8d6eb1588aecb516876c60e94821))
+
+
+
 # [2.0.0-beta.17](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2022-05-30)
 
 
