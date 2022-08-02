@@ -10,7 +10,6 @@ export default {
   <div
     ref="reference"
     class="v-popper"
-    v-bind="$attrs"
     :class="{
       'v-popper--shown': slotData.isShown,
     }"
