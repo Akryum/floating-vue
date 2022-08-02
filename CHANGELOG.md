@@ -1,3 +1,12 @@
+# [2.0.0-beta.19](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2022-08-02)
+
+
+### Bug Fixes
+
+* $refs.popper can be null initially ([4c7f4b9](https://github.com/Akryum/v-tooltip/commit/4c7f4b930aa6fc8bd9db87cf6e1eb821bc09d80e))
+
+
+
 # [2.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2022-08-02)
 
 
