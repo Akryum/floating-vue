@@ -16,7 +16,6 @@
     }"
     :theme="finalTheme"
     :target-nodes="getTargetNodes"
-    :reference-node="() => $refs.popper.$el"
     :popper-node="() => $refs.popperContent.$el"
     :class="[
       themeClass,
@@ -86,7 +85,7 @@ export default defineComponent({
 
   methods: {
     getTargetNodes () {
-      return Array.from(this.$refs.popper.$el.children)
+      return Array.from(this.$el.children)
         .filter(node => node !== this.$refs.popperContent.$el)
     },
   },

@@ -71,7 +71,7 @@ export default () => defineComponent({
 
     referenceNode: {
       type: Function,
-      required: true,
+      default: null,
     },
 
     popperNode: {
@@ -478,7 +478,7 @@ export default () => defineComponent({
       this.$_preventShow = false
 
       // Nodes
-      this.$_referenceNode = this.referenceNode()
+      this.$_referenceNode = this.referenceNode?.() ?? this.$el
       this.$_targetNodes = this.targetNodes().filter(e => e.nodeType === e.ELEMENT_NODE)
       this.$_popperNode = this.popperNode()
       this.$_innerNode = this.$_popperNode.querySelector('.v-popper__inner')
