@@ -249,6 +249,11 @@ export default () => ({
       type: Boolean,
       default: defaultPropFactory('shiftCrossAxis'),
     },
+
+    noAutoFocus: {
+      type: Boolean,
+      default: defaultPropFactory('noAutoFocus'),
+    },
   },
 
   provide () {
@@ -759,7 +764,7 @@ export default () => ({
       await nextFrame()
       this.classes.showFrom = false
       this.classes.showTo = true
-      this.$_popperNode.focus()
+      if (!this.noAutoFocus) this.$_popperNode.focus()
     },
 
     async $_applyHide (skipTransition = false) {
