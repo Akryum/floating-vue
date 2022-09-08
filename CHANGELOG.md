@@ -1,3 +1,12 @@
+# [2.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-09-08)
+
+
+### Features
+
+* noAutoFocus ([919df7c](https://github.com/Akryum/v-tooltip/commit/919df7c71c7c058e36be0e04121adbdc2a8939b9))
+
+
+
 # [2.0.0-beta.19](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2022-08-02)
 
 
