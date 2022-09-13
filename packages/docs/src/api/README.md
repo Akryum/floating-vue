@@ -460,6 +460,14 @@ Boolean: prevent the popper from overflowing the `boundary` by adjusting its pos
 <VDropdown shift-cross-axis />
 ```
 
+### `noAutoFocus`
+
+Boolean: disable the auto focus on the popper DOM node when shown.
+
+```vue
+<VDropdown no-auto-focus />
+```
+
 ### `ariaId`
 
 Id used for the `aria-describedby` attribute. By default a random id.
