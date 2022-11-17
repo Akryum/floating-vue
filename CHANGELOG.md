@@ -1,3 +1,17 @@
+# [1.0.0-beta.19](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.18...v1.0.0-beta.19) (2022-11-17)
+
+
+### Bug Fixes
+
+* remove browser outline on dropdown, fix [#848](https://github.com/Akryum/v-tooltip/issues/848) ([cb1162d](https://github.com/Akryum/v-tooltip/commit/cb1162d18cc61cd473a1b182df51f06aeb7d8515))
+
+
+### Features
+
+* noAutoFocus ([f8d4ed8](https://github.com/Akryum/v-tooltip/commit/f8d4ed85adeb60d02d79f1905cf5eac572ee70f1))
+
+
+
 # [1.0.0-beta.18](https://github.com/Akryum/v-tooltip/compare/v1.0.0-beta.17...v1.0.0-beta.18) (2022-05-30)
 
 
