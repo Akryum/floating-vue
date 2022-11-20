@@ -150,7 +150,7 @@ import 'floating-vue/dist/style.css'
 <code-group>
 <code-block title="npm">
 ```shell
-npm i -S floating-vue
+npm i floating-vue
 ```
 </code-block>
 
@@ -164,8 +164,6 @@ yarn add floating-vue
 Add the `floating-vue/nuxt` module to your `nuxt.config` file:
 
 ```js
-import { defineNuxtConfig } from 'nuxt'
-
 export default defineNuxtConfig({
   modules: [
     'floating-vue/nuxt'
