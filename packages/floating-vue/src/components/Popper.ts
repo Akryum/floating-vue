@@ -266,6 +266,11 @@ export default () => defineComponent({
       type: Boolean,
       default: defaultPropFactory('noAutoFocus'),
     },
+
+    preventDefault: {
+      type: Boolean,
+      default: defaultPropFactory('preventDefault'),
+    },
   },
 
   emits: [
@@ -335,6 +340,7 @@ export default () => defineComponent({
         },
         result: this.positioningDisabled ? null : this.result,
         attrs: this.$attrs,
+        preventDefault: this.preventDefault,
       }
     },
 
