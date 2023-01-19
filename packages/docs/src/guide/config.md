@@ -52,6 +52,8 @@ export const config: FloatingVueConfig = {
   strategy: 'absolute',
   // Prevent overflow
   preventOverflow: true,
+  // Prevent default event when click on outside elements
+  preventDefault: false,
   // Flip to the opposite placement if needed
   flip: true,
   // Shift on the cross axis to prevent the popper from overflowing

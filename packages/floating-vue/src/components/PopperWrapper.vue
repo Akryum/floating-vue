@@ -13,6 +13,7 @@
       onResize,
       classes,
       result,
+      preventDefault,
     }"
     :theme="finalTheme"
     :target-nodes="getTargetNodes"
@@ -47,6 +48,8 @@
         :hide="hide"
       />
     </PopperContent>
+    
+    <PopperMask v-if="isShown && preventDefault"/>
   </Popper>
 </template>
 
@@ -54,6 +57,7 @@
 import { defineComponent } from 'vue'
 import Popper from './Popper.vue'
 import PopperContent from './PopperContent.vue'
+import PopperMask from './PopperMask.vue'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
 
@@ -63,6 +67,7 @@ export default defineComponent({
   components: {
     Popper,
     PopperContent,
+    PopperMask,
   },
 
   mixins: [

@@ -428,6 +428,14 @@ Boolean: prevent the popper from overflowing the `boundary`.
 <VDropdown :prevent-overflow="false" />
 ```
 
+### `preventDefault`
+
+Boolean: prevent default event when click on outside elements.
+
+```vue
+<VDropdown :prevent-default="true" />
+```
+
 ### `overflowPadding`
 
 Virtual padding in the `boundary` used to prevent the popper overflow (pixels).
