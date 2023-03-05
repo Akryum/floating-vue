@@ -10,6 +10,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, './src/index.ts'),
       name: 'FloatingVue',
+      fileName: (format) => `floating-vue.${format}.${format.startsWith('es') ? 'mjs' : 'js'}`,
     },
     rollupOptions: {
       external: [
