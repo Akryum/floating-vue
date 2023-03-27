@@ -14,6 +14,9 @@
   "main": "dist/floating-vue.umd.js",
   "module": "dist/floating-vue.es.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@floating-ui/dom": "^0.1.10",
     "vue-resize": "^2.0.0-alpha.1"
