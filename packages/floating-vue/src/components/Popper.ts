@@ -266,6 +266,11 @@ export default () => defineComponent({
       type: Boolean,
       default: defaultPropFactory('noAutoFocus'),
     },
+
+    disposeTimeout: {
+      type: Number,
+      default: defaultPropFactory('disposeTimeout'),
+    },
   },
 
   emits: [
@@ -819,7 +824,7 @@ export default () => defineComponent({
       })
 
       clearTimeout(this.$_disposeTimer)
-      const disposeTime = getDefaultConfig(this.theme, 'disposeTimeout')
+      const disposeTime = this.disposeTimeout
       if (disposeTime !== null) {
         this.$_disposeTimer = setTimeout(() => {
           if (this.$_popperNode) {
