@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build --ignore demo",
+    "build": "lerna run build --ignore demo --ignore demo-rollup --ignore demo-vue3 --ignore docs",
     "lint": "lerna run lint",
     "release": "yarn run lint && lerna publish && yarn run changelog",
     "changelog": "node ./scripts/update-version.mjs && conventional-changelog -p angular -i CHANGELOG.md -s -r 2 && (git add CHANGELOG.md && git add package.json && git commit -m \"chore: changelog\" && git push || exit 0)"
