@@ -195,7 +195,7 @@ Full example style:
 
 ## Advanced transitions
 
-The `popper` lement also has dynamic classes working similarly to the Vue transition system:
+The `popper` element also has dynamic classes working similarly to the Vue transition system:
 
 - `v-popper__popper--show-from`: (for advanced transition) initial style when shown.
 - `v-popper__popper--show-to`: (for advanced transition) final style when shown.
