@@ -1,10 +1,8 @@
 <script>
-import {
-  SearchIcon,
-  PlusIcon,
-  MoreVerticalIcon,
-  Trash2Icon,
-} from 'vue-feather-icons'
+import SearchIcon from '~icons/lucide/search'
+import PlusIcon from '~icons/lucide/plus'
+import MoreVerticalIcon from '~icons/lucide/more-vertical'
+import Trash2Icon from '~icons/lucide/trash-2'
 import Button from './Button.vue'
 import Modal from './Modal.vue'
 import { mapState, loadTheme, deleteTheme } from './state'

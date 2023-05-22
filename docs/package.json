@@ -21,22 +21,23 @@
   "license": "MIT",
   "dependencies": {
     "color": "^4.2.3",
-    "floating-vue": "workspace:*",
-    "vue-feather-icons": "^5.1.0",
-    "vue-github-button": "^3.1.0"
+    "floating-vue": "workspace:*"
   },
   "devDependencies": {
-    "@types/vue-feather-icons": "^5.0.4",
+    "@floating-ui/dom": "^1.2.8",
+    "@iconify-json/lucide": "^1.1.92",
     "@vue/eslint-config-standard": "^8.0.1",
     "autoprefixer": "^10.4.14",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.41.0",
     "eslint-plugin-vue": "^9.13.0",
+    "github-buttons": "^2.27.0",
     "postcss": "^8.4.23",
-    "stylus": "^0.59.0",
     "tailwindcss": "^3.3.2",
+    "unplugin-icons": "^0.16.1",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.3.8",
-    "vitepress": "1.0.0-beta.1"
+    "vitepress": "1.0.0-beta.1",
+    "vue": "^3.3.4"
   }
 }

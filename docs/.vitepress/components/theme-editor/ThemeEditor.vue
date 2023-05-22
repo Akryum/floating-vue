@@ -1,13 +1,11 @@
 
 <script>
 import FloatingVue from 'floating-vue'
-import {
-  AlertTriangleIcon,
-  SettingsIcon,
-  EyeIcon,
-  CodeIcon,
-  PlusIcon,
-} from 'vue-feather-icons'
+import AlertTriangleIcon from '~icons/lucide/alert-triangle'
+import SettingsIcon from '~icons/lucide/settings'
+import EyeIcon from '~icons/lucide/eye'
+import CodeIcon from '~icons/lucide/code'
+import PlusIcon from '~icons/lucide/plus'
 import { loadSettings, loadLastTheme, mapState, loadThemes } from './state'
 import Sandbox from './Sandbox.vue'
 import StyleEditor from './StyleEditor.vue'

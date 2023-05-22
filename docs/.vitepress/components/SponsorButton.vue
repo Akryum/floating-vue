@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import GithubButton from 'vue-github-button'
+import GithubButton from './GitHubButton'
 
 export default {
   components: {

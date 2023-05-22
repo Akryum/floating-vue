@@ -25,7 +25,7 @@ The positionning library has changed from `popperjs` to [`floating-ui`](https://
 
 ### Global configuration
 
-The global configuration object has completly changed. Instead of having a lot of specific options it is now an object of default values for the [props](../api/#component-props) (like `placement` or `distance`). Additionally, it has a `themes` option to define [themes](../guide/themes.md).
+The global configuration object has completely changed. Instead of having a lot of specific options it is now an object of default values for the [props](/api/#component-props) (like `placement` or `distance`). Additionally, it has a `themes` option to define [themes](/guide/themes).
 
 - `defaultPlacement`: use `placement`
 - `defaultClass`: removed
@@ -125,11 +125,11 @@ After:
 You can use the example above to replicate the default config of v-tooltip v2.
 :::
 
-[Learn more](../guide/config.md)
+[Learn more](/guide/config)
 
 ### Directive
 
-The `v-tooltip` directive now uses a popper [component](../guide/component.md) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has [a few additional props](../api/README.md#directive-options) tough.
+The `v-tooltip` directive now uses a popper [component](/guide/component) internally. This means that there are no longer separate APIs between the components and the directive and you should now be using the components props on the directive object when needed. The directive has [a few additional props](/api/#directive-options) tough.
 
 Changed defaults:
 

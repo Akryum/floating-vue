@@ -7,12 +7,15 @@ importers:
       '@akryum/sheep':
         specifier: ^0.5.0
         version: 0.5.0
+      floating-vue:
+        specifier: workspace:*
+        version: link:packages/floating-vue
 
   demos/demo:
     dependencies:
       core-js:
         specifier: ^3.8.1
-        version: 3.8.1
+        version: 3.30.2
       floating-vue:
         specifier: ^1.0.0-beta.15
         version: 1.0.0-beta.15(vue@2.6.10)
@@ -110,7 +113,7 @@ importers:
         version: 3.3.2
       vite:
         specifier: ^4.3.8
-        version: 4.3.8(stylus@0.59.0)
+        version: 4.3.8
 
   docs:
     dependencies:
@@ -120,16 +123,13 @@ importers:
       floating-vue:
         specifier: workspace:*
         version: link:../packages/floating-vue
-      vue-feather-icons:
-        specifier: ^5.1.0
-        version: 5.1.0
-      vue-github-button:
-        specifier: ^3.1.0
-        version: 3.1.0
     devDependencies:
-      '@types/vue-feather-icons':
-        specifier: ^5.0.4
-        version: 5.0.4
+      '@floating-ui/dom':
+        specifier: ^1.2.8
+        version: 1.2.8
+      '@iconify-json/lucide':
+        specifier: ^1.1.92
+        version: 1.1.92
       '@vue/eslint-config-standard':
         specifier: ^8.0.1
         version: 8.0.1(@typescript-eslint/parser@5.59.6)(eslint-plugin-vue@9.13.0)(eslint@8.41.0)
@@ -145,24 +145,30 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.13.0
         version: 9.13.0(eslint@8.41.0)
+      github-buttons:
+        specifier: ^2.27.0
+        version: 2.27.0
       postcss:
         specifier: ^8.4.23
         version: 8.4.23
-      stylus:
-        specifier: ^0.59.0
-        version: 0.59.0
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
+      unplugin-icons:
+        specifier: ^0.16.1
+        version: 0.16.1
       unplugin-vue-components:
         specifier: ^0.24.1
         version: 0.24.1(vue@3.3.4)
       vite:
         specifier: ^4.3.8
-        version: 4.3.8(stylus@0.59.0)
+        version: 4.3.8
       vitepress:
         specifier: 1.0.0-beta.1
-        version: 1.0.0-beta.1(@algolia/client-search@4.17.0)(stylus@0.59.0)
+        version: 1.0.0-beta.1(@algolia/client-search@4.17.0)
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
 
   packages/floating-vue:
     dependencies:
@@ -229,7 +235,7 @@ importers:
         version: 5.0.4
       vite:
         specifier: ^4.3.8
-        version: 4.3.8(stylus@0.59.0)
+        version: 4.3.8
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -241,10 +247,6 @@ importers:
         version: 0.2.0(typescript@5.0.4)
 
 packages:
-
-  /@adobe/css-tools@4.2.0:
-    resolution: {integrity: sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==}
-    dev: true
 
   /@akryum/sheep@0.5.0:
     resolution: {integrity: sha512-VcJqPUpeAtjiUwuSuwZSkl09LUpcsk7PKgGy4EUMoAM3St05hkT+PaBnQxgBgsJIDl6PfWfq3xRhPxkL0h1REA==}
@@ -1934,7 +1936,6 @@ packages:
 
   /@floating-ui/core@1.2.6:
     resolution: {integrity: sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg==}
-    dev: false
 
   /@floating-ui/dom@0.1.10:
     resolution: {integrity: sha512-4kAVoogvQm2N0XE0G6APQJuCNuErjOfPW8Ux7DFxh8+AfugWflwVJ5LDlHOwrwut7z/30NUvdtHzQ3zSip4EzQ==}
@@ -1946,7 +1947,6 @@ packages:
     resolution: {integrity: sha512-XLwhYV90MxiHDq6S0rzFZj00fnDM+A1R9jhSioZoMsa7G0Q0i+Q4x40ajR8FHSdYDE1bgjG45mIWe6jtv9UPmg==}
     dependencies:
       '@floating-ui/core': 1.2.6
-    dev: false
 
   /@humanwhocodes/config-array@0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
@@ -1966,6 +1966,29 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@iconify-json/lucide@1.1.92:
+    resolution: {integrity: sha512-wuzrWw992ovykJ1af829d33qoan9drb9RXGv1aLcALtVKRoFC5DkGXxS5pIxFRshCIOXOIur7mJdWC28/4/dMQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify/types@2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: true
+
+  /@iconify/utils@2.1.5:
+    resolution: {integrity: sha512-6MvDI+I6QMvXn5rK9KQGdpEE4mmLTcuQdLZEiX5N+uZB+vc4Yw9K1OtnOgkl8mp4d9X0UrILREyZgF1NUwUt+Q==}
+    dependencies:
+      '@antfu/install-pkg': 0.1.1
+      '@antfu/utils': 0.7.2
+      '@iconify/types': 2.0.0
+      debug: 4.3.4
+      kolorist: 1.8.0
+      local-pkg: 0.4.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@istanbuljs/load-nyc-config@1.1.0:
@@ -2419,12 +2442,6 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/vue-feather-icons@5.0.4:
-    resolution: {integrity: sha512-RjPUH3b72YbDu/vfO1RjDgqoSvqTNqldUlVmQsIVUKESCAgITBAwv6VVBLx6gbXNNU9PvWLMZFFqW32aOT3ZAQ==}
-    dependencies:
-      vue: 2.6.10
-    dev: true
-
   /@types/web-bluetooth@0.0.17:
     resolution: {integrity: sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA==}
     dev: true
@@ -2576,7 +2593,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.3.8(stylus@0.59.0)
+      vite: 4.3.8
       vue: 3.3.4
     dev: true
 
@@ -3438,10 +3455,6 @@ packages:
       - supports-color
     dev: true
 
-  /babel-helper-vue-jsx-merge-props@2.0.3:
-    resolution: {integrity: sha512-gsLiKK7Qrb7zYJNgiXKpXblxbV5ffSwR0f5whkPAaBAR4fhi6bwRZxX9wBlIc5M/v8CCkXUbXZL4N/nSE97cqg==}
-    dev: false
-
   /babel-jest@29.5.0(@babel/core@7.21.8):
     resolution: {integrity: sha512-mA4eCDh5mSo2EcA9xQjVTpmbbNk32Zb3Q3QFQsNhaK56Q+yoXowzFodLux30HRgyOho5rsQ6B0P9QpMkvvnJ0Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -4269,12 +4282,6 @@ packages:
 
   /core-js@3.30.2:
     resolution: {integrity: sha512-uBJiDmwqsbJCWHAwjrx3cvjbMXP7xD72Dmsn5LOJpiRmE3WbBbN5rCqQ2Qh6Ek6/eOrjlWngEynBWo4VxerQhg==}
-    requiresBuild: true
-    dev: false
-
-  /core-js@3.8.1:
-    resolution: {integrity: sha512-9Id2xHY1W7m8hCl8NkhQn5CufmF/WuR30BTRewvCXc1aZd3kMECwNZ69ndLbekKfakw9Rf2Xyc+QR6E7Gg+obg==}
-    deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
     requiresBuild: true
     dev: false
 
@@ -5908,7 +5915,7 @@ packages:
 
   /github-buttons@2.27.0:
     resolution: {integrity: sha512-PmfRMI2Rttg/2jDfKBeSl621sEznrsKF019SuoLdoNlO7qRUZaOyEI5Li4uW+79pVqnDtKfIEVuHTIJ5lgy64w==}
-    dev: false
+    dev: true
 
   /glob-parent@3.1.0:
     resolution: {integrity: sha512-E8Ak/2+dZY6fnzlR7+ueWvhsH1SjHr4jjss4YS/h4py44jY9MhK/VFdaZJAWDz6BbL21KeteKxFSFpq8OS5gVA==}
@@ -7469,15 +7476,6 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /postcss@8.4.12:
-    resolution: {integrity: sha512-lg6eITwYe9v6Hr5CncVbK70SoioNQIq81nsaG86ev5hAidQvmOeETBqs7jm43K2F5/Ley3ytDtriImV6TpNiSg==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.6
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
-    dev: true
-
   /postcss@8.4.23:
     resolution: {integrity: sha512-bQ3qMcpF6A/YjR55xtoTr0jGOlnPOKAIMdOWiv0EIT6HVPEaJiJB4NLljSbiHoC2RX7DN5Uvjtpbg1NPdwv1oA==}
     engines: {node: ^10 || ^12 || >=14}
@@ -7816,10 +7814,6 @@ packages:
       - supports-color
     dev: true
 
-  /sax@1.2.4:
-    resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
-    dev: true
-
   /schema-utils@3.1.2:
     resolution: {integrity: sha512-pvjEHOgWc9OWA/f/DE3ohBWTD6EleVLf7iFUkoSwAxttdBhB9QUebQgxER2kWueOvRJXPHNnyrvvh9eZINB8Eg==}
     engines: {node: '>= 10.13.0'}
@@ -8112,19 +8106,6 @@ packages:
   /strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
-    dev: true
-
-  /stylus@0.59.0:
-    resolution: {integrity: sha512-lQ9w/XIOH5ZHVNuNbWW8D822r+/wBSO/d6XvtyHLF7LW4KaCIDeVbvn5DF8fGCJAUCwVhVi/h6J0NUcnylUEjg==}
-    hasBin: true
-    dependencies:
-      '@adobe/css-tools': 4.2.0
-      debug: 4.3.4
-      glob: 7.2.3
-      sax: 1.2.4
-      source-map: 0.7.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /sucrase@3.32.0:
@@ -8483,6 +8464,34 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
+  /unplugin-icons@0.16.1:
+    resolution: {integrity: sha512-qTunFUkpAyDnwzwV7YV1ZgCWRYfLuURcCurhhXOWMy2ipY88qx1pADvral2hJu4Xymh0X0t3Zcll3BIru2AVLQ==}
+    peerDependencies:
+      '@svgr/core': '>=7.0.0'
+      '@vue/compiler-sfc': ^3.0.2 || ^2.7.0
+      vue-template-compiler: ^2.6.12
+      vue-template-es2015-compiler: ^1.9.0
+    peerDependenciesMeta:
+      '@svgr/core':
+        optional: true
+      '@vue/compiler-sfc':
+        optional: true
+      vue-template-compiler:
+        optional: true
+      vue-template-es2015-compiler:
+        optional: true
+    dependencies:
+      '@antfu/install-pkg': 0.1.1
+      '@antfu/utils': 0.7.2
+      '@iconify/utils': 2.1.5
+      debug: 4.3.4
+      kolorist: 1.8.0
+      local-pkg: 0.4.3
+      unplugin: 1.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /unplugin-vue-components@0.24.1(vue@3.3.4):
     resolution: {integrity: sha512-T3A8HkZoIE1Cja95xNqolwza0yD5IVlgZZ1PVAGvVCx8xthmjsv38xWRCtHtwl+rvZyL9uif42SRkDGw9aCfMA==}
     engines: {node: '>=14'}
@@ -8697,7 +8706,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.14.54
-      postcss: 8.4.12
+      postcss: 8.4.23
       resolve: 1.22.2
       rollup: 2.79.1
       sass: 1.18.0
@@ -8738,7 +8747,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vite@4.3.8(stylus@0.59.0):
+  /vite@4.3.8:
     resolution: {integrity: sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -8766,12 +8775,11 @@ packages:
       esbuild: 0.17.19
       postcss: 8.4.23
       rollup: 3.23.0
-      stylus: 0.59.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
 
-  /vitepress@1.0.0-beta.1(@algolia/client-search@4.17.0)(stylus@0.59.0):
+  /vitepress@1.0.0-beta.1(@algolia/client-search@4.17.0):
     resolution: {integrity: sha512-V2yyCwQ+v9fh7rbnGDLp8M7vHa9sLElexXf/JHtBOsOwv7ed9wt1QI4WUagYgKR3TeoJT9v2s6f0UaQSne0EvQ==}
     hasBin: true
     dependencies:
@@ -8786,7 +8794,7 @@ packages:
       mark.js: 8.11.1
       minisearch: 6.1.0
       shiki: 0.14.2
-      vite: 4.3.8(stylus@0.59.0)
+      vite: 4.3.8
       vue: 3.3.4
     transitivePeerDependencies:
       - '@algolia/client-search'
@@ -8871,18 +8879,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /vue-feather-icons@5.1.0:
-    resolution: {integrity: sha512-ZyM2yFGmL9DYLZYHm63KV1zCQOj8czC2LzDSkxoIp9o6zMAOY4yv1FkxbX+XNUwcH3RRrAuvf25Ij7CnUUsQVA==}
-    dependencies:
-      babel-helper-vue-jsx-merge-props: 2.0.3
-    dev: false
-
-  /vue-github-button@3.1.0:
-    resolution: {integrity: sha512-S69NFalucetUW4AjMkLlHY/fgTWu6LEGEtehMewXRNLnjODhDvJj4lwt0u0BSPXLTDB+PLk1tWlwx3pw+ItLgQ==}
-    dependencies:
-      github-buttons: 2.27.0
-    dev: false
 
   /vue-resize@1.0.1(vue@2.6.10):
     resolution: {integrity: sha512-z5M7lJs0QluJnaoMFTIeGx6dIkYxOwHThlZDeQnWZBizKblb99GSejPnK37ZbNE/rVwDcYcHY+Io+AxdpY952w==}

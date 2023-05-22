@@ -1,7 +1,7 @@
 <script>
 import { mapState } from './state'
 import Tabs from './Tabs.vue'
-import { PenToolIcon } from 'vue-feather-icons'
+import PenToolIcon from '~icons/lucide/pen-tool'
 import { loadValue, storeValue } from './util'
 
 const TAB_KEY = 'v-tooltip.theme-editor.style-tab'
@@ -12,7 +12,7 @@ function inherit (key, defaultValue) {
       return this.currentStyle[key] == null
     },
     set (value) {
-      this.$set(this.currentStyle, key, value ? undefined : getDefaultValue(defaultValue))
+      this.currentStyle[key] = value ? undefined : getDefaultValue(defaultValue)
     },
   }
 }
@@ -67,7 +67,7 @@ export default {
       handler (value) {
       // Create new styles
         if (value == null) {
-          this.$set(this.theme.styles, this.tab, {})
+          this.theme.styles[this.tab] = {}
         }
       },
       immediate: true,

@@ -25,10 +25,19 @@ export default {
       },
       deep: true,
     },
+    'allStyleOutput': {
+      handler () {
+        if (this.style)
+          this.style.innerHTML = this.allStyleOutput
+      },
+      immediate: true,
+    }
   },
 
   mounted () {
     this.ready = true
+    this.style = document.createElement('style')
+    document.head.appendChild(this.style)
   },
 
   errorCaptured (e) {
@@ -134,7 +143,5 @@ export default {
         </template>
       </div>
     </div>
-
-    <style v-text="allStyleOutput" />
   </div>
 </template>

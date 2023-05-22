@@ -6,11 +6,12 @@
   "scripts": {
     "build": "pnpm -r --filter=\"./packages/*\" run build",
     "docs": "pnpm -C docs run dev",
-    "docs:build": "pnpm -C docs run build",
+    "docs:build": "pnpm run build && pnpm -C docs run build",
     "lint": "pnpm -r run lint",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
   "devDependencies": {
-    "@akryum/sheep": "^0.5.0"
+    "@akryum/sheep": "^0.5.0",
+    "floating-vue": "workspace:*"
   }
 }

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { reactive, toRefs, computed, watch } from 'vue'
 import FloatingVue from 'floating-vue'
 import { formatObjectToSource } from './format-object'
 import { generateCSS } from './style-output'
@@ -8,87 +8,89 @@ const SETTINGS_KEY = 'v-tooltip.theme-editor.settings.v1'
 const THEMES_KEY = 'v-tootip.theme-editor.themes'
 const LAST_THEME_KEY = 'v-tooltip.theme-editor.last-theme-name'
 
-export const state = new Vue({
-  data () {
-    return {
-      error: '',
-      settings: {
-        darkClass: 'dark',
-        darkBlackBg: false,
-        ignoreAutoHide: false,
-        darkMode: false,
-        editablePopper: false,
-        vertical: false,
-      },
-      themes: [
-        createThemeObject(),
-      ],
-      theme: null,
-    }
+const data = reactive({
+  error: '',
+  settings: {
+    darkClass: 'dark',
+    darkBlackBg: false,
+    ignoreAutoHide: false,
+    darkMode: false,
+    editablePopper: false,
+    vertical: false,
   },
-
-  computed: {
-    sourceOutput () {
-      return '// Config\n' + formatObjectToSource({ themes: { [this.theme.name]: this.theme.config } })
-    },
-
-    styleOutput () {
-      return '/* Style */\n' + generateCSS(this.theme)
-    },
-
-    allStyleOutput () {
-      const parents = getThemeParents(this.theme)
-      return parents.concat(this.theme).map(t => generateCSS(t)).join('\n')
-    },
-
-    themeMap () {
-      return this.themes.reduce((acc, theme) => {
-        acc[theme.name] = theme
-        return acc
-      }, {})
-    },
-  },
-
-  watch: {
-    theme: {
-      handler (value) {
-        if (value) {
-          FloatingVue.options.themes[value.name] = value.config
-          state.error = ''
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-
-    settings: {
-      handler: storeValue.bind(null, SETTINGS_KEY),
-      deep: true,
-    },
-
-    themes: {
-      handler: storeValue.bind(null, THEMES_KEY),
-      deep: true,
-    },
-  },
+  themes: [createThemeObject()],
+  theme: null,
 })
 
-export function loadThemes () {
-  loadValue(THEMES_KEY, value => {
+export const state = reactive({
+  ...toRefs(data),
+  sourceOutput: computed(() => {
+    return '// Config\n' + formatObjectToSource({ themes: { [data.theme.name]: data.theme.config } })
+  }),
+
+  styleOutput: computed(() => {
+    return '/* Style */\n' + generateCSS(data.theme)
+  }),
+
+  allStyleOutput: computed(() => {
+    const parents = getThemeParents(data.theme)
+    return parents
+      .concat(data.theme)
+      .map((t) => generateCSS(t))
+      .join('\n')
+  }),
+
+  themeMap: computed(() => {
+    return data.themes.reduce((acc, theme) => {
+      acc[theme.name] = theme
+      return acc
+    }, {})
+  }),
+})
+
+watch(
+  () => state.theme,
+  (value) => {
+    if (value) {
+      FloatingVue.options.themes[value.name] = value.config
+      state.error = ''
+    }
+  },
+  { deep: true, immediate: true }
+)
+
+watch(
+  () => state.settings,
+  (value) => {
+    storeValue(SETTINGS_KEY, value)
+  },
+  { deep: true }
+)
+
+watch(
+  () => state.themes,
+  (value) => {
+    storeValue(THEMES_KEY, value)
+  },
+  { deep: true }
+)
+
+export function loadThemes() {
+  loadValue(THEMES_KEY, (value) => {
     state.themes = value
   })
 }
 
-export function mapState (propNames) {
+export function mapState(propNames) {
   return propNames.reduce((obj, n) => {
     obj[n] = () => state[n]
     return obj
   }, {})
 }
 
-export function loadSettings () {
+export function loadSettings() {
   state.error = ''
-  loadValue(SETTINGS_KEY, value => {
+  loadValue(SETTINGS_KEY, (value) => {
     Object.assign(state.settings, value)
   })
 }
@@ -124,8 +126,8 @@ const emptyTheme = [
   return obj
 }, {})
 
-export function loadTheme (themeName) {
-  const theme = state.themes.find(t => t.name === themeName)
+export function loadTheme(themeName) {
+  const theme = state.themes.find((t) => t.name === themeName)
   state.error = ''
   if (theme) {
     theme.config = {
@@ -156,13 +158,13 @@ export function loadTheme (themeName) {
   }
 }
 
-export function loadLastTheme () {
-  loadValue(LAST_THEME_KEY, value => {
+export function loadLastTheme() {
+  loadValue(LAST_THEME_KEY, (value) => {
     loadTheme(value)
   })
 }
 
-function createThemeObject () {
+function createThemeObject() {
   return {
     name: 'my-theme',
     config: {
@@ -174,14 +176,14 @@ function createThemeObject () {
   }
 }
 
-export function createNewTheme (options) {
+export function createNewTheme(options) {
   const theme = createThemeObject()
   theme.name = options.name
   state.themes.push(theme)
   loadTheme(theme.name)
 }
 
-export function deleteTheme (theme) {
+export function deleteTheme(theme) {
   if (state.theme === theme) {
     state.theme = null
   }
@@ -191,7 +193,7 @@ export function deleteTheme (theme) {
   }
 }
 
-function getThemeParents (theme) {
+function getThemeParents(theme) {
   let themeConfig = theme
   const parentThemes = []
   do {

@@ -83,7 +83,6 @@ Refs:
     :target-nodes="getTargetNodes"
     :reference-node="() => $refs.reference"
     :popper-node="() => $refs.popperContent.$el"
-    v-on="$listeners"
   >
     <div
       ref="reference"
