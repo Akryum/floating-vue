@@ -16,7 +16,7 @@ Easy tooltips, dropdowns, menus... with <a href="https://github.com/floating-ui/
   <a href="https://floating-vue.starpad.dev/"><b>📚️ Documentation</b></a>
 </p>
 
-The package has been renamed from `v-tooltip` to `floating-vue` and now uses [floating-ui](floating-ui.com/) instead of popperjs. You can find the new changelog for both v1 (for Vue 2) and v2 (for Vue 3) [here](https://github.com/Akryum/floating-vue/blob/main/CHANGELOG.md). The changelog is currently not pushed to GitHub Releases.
+The package has been renamed from `v-tooltip` to `floating-vue` and now uses [floating-ui](https://floating-ui.com) instead of popperjs. You can find the new changelog for both v1 (for Vue 2) and v2 (for Vue 3) [here](https://github.com/Akryum/floating-vue/blob/main/CHANGELOG.md). The changelog is currently not pushed to GitHub Releases.
 
 New versions:
 
