@@ -13,19 +13,19 @@ yarn
 Run the tests:
 
 ```
-yarn run test:unit --watch
+pnpm run test:unit --watch
 ```
 
 Build the library in dev mode:
 
 ```
-yarn run dev
+pnpm run dev
 ```
 
 Build the library for production:
 
 ```
-yarn run build
+pnpm run build
 ```
 
 ### Demo
@@ -35,11 +35,11 @@ Run the demo:
 ```
 cd demo-src
 yarn
-yarn run dev
+pnpm run dev
 ```
 
 Build the demo:
 
 ```
-yarn run build
+pnpm run build
 ```
