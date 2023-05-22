@@ -11,7 +11,7 @@ importers:
         specifier: workspace:*
         version: link:packages/floating-vue
 
-  demos/demo:
+  demos/demo-vue2:
     dependencies:
       core-js:
         specifier: ^3.8.1
