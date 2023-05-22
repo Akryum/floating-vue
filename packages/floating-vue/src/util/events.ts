@@ -3,7 +3,7 @@ export const SHOW_EVENT_MAP = {
   focus: 'focus',
   click: 'click',
   touch: 'touchstart',
-  pointer: 'pointerdown'
+  pointer: 'pointerdown',
 }
 
 export const HIDE_EVENT_MAP = {
@@ -11,5 +11,5 @@ export const HIDE_EVENT_MAP = {
   focus: 'blur',
   click: 'click',
   touch: 'touchend',
-  pointer: 'pointerup'
+  pointer: 'pointerup',
 }
