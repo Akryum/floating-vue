@@ -23,6 +23,9 @@
     "./style.css": "./dist/style.css",
     "./dist/style.css": "./dist/style.css"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@floating-ui/dom": "^1.2.8",
     "vue-resize": "^2.0.0-alpha.1"
