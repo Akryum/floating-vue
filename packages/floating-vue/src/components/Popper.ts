@@ -6,7 +6,7 @@ import {
   shift,
   flip,
   arrow,
-  getScrollParents,
+  getOverflowAncestors,
   size,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
@@ -265,6 +265,11 @@ export default () => defineComponent({
     noAutoFocus: {
       type: Boolean,
       default: defaultPropFactory('noAutoFocus'),
+    },
+
+    disposeTimeout: {
+      type: Number,
+      default: defaultPropFactory('disposeTimeout'),
     },
   },
 
@@ -638,10 +643,10 @@ export default () => defineComponent({
         options.middleware.push(size({
           boundary: this.boundary,
           padding: this.overflowPadding,
-          apply: ({ width, height }) => {
+          apply: ({ availableWidth, availableHeight }) => {
             // Apply and re-compute
-            this.$_innerNode.style.maxWidth = width != null ? `${width}px` : null
-            this.$_innerNode.style.maxHeight = height != null ? `${height}px` : null
+            this.$_innerNode.style.maxWidth = availableWidth != null ? `${availableWidth}px` : null
+            this.$_innerNode.style.maxHeight = availableHeight != null ? `${availableHeight}px` : null
           },
         }))
       }
@@ -688,6 +693,7 @@ export default () => defineComponent({
       clearTimeout(this.$_scheduleTimer)
 
       if (this.isShown) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         hidingPopper = this
       }
 
@@ -721,8 +727,8 @@ export default () => defineComponent({
       // Scroll
       if (!this.positioningDisabled) {
         this.$_registerEventListeners([
-          ...getScrollParents(this.$_referenceNode),
-          ...getScrollParents(this.$_popperNode),
+          ...getOverflowAncestors(this.$_referenceNode),
+          ...getOverflowAncestors(this.$_popperNode),
         ], 'scroll', () => {
           this.$_computePosition()
         })
@@ -819,7 +825,7 @@ export default () => defineComponent({
       })
 
       clearTimeout(this.$_disposeTimer)
-      const disposeTime = getDefaultConfig(this.theme, 'disposeTimeout')
+      const disposeTime = this.disposeTimeout
       if (disposeTime !== null) {
         this.$_disposeTimer = setTimeout(() => {
           if (this.$_popperNode) {
@@ -947,7 +953,7 @@ export default () => defineComponent({
     $_handleGlobalClose (event, touch = false) {
       if (this.$_showFrameLocked) return
 
-      this.hide({ event: event })
+      this.hide({ event })
 
       if (event.closePopover) {
         this.$emit('close-directive')

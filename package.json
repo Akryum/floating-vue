@@ -1,18 +1,17 @@
 {
   "name": "floating-vue-monorepo",
+  "packageManager": "pnpm@8.2.0",
   "version": "2.0.0-beta.20",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build --ignore demo",
-    "lint": "lerna run lint",
-    "release": "yarn run lint && lerna publish && yarn run changelog",
-    "changelog": "node ./scripts/update-version.mjs && conventional-changelog -p angular -i CHANGELOG.md -s -r 2 && (git add CHANGELOG.md && git add package.json && git commit -m \"chore: changelog\" && git push || exit 0)"
+    "build": "pnpm -r --filter=\"./packages/*\" run build",
+    "lint": "pnpm -r run lint",
+    "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "^2.1.1",
-    "lerna": "^4.0.0"
+    "@akryum/sheep": "^0.5.0"
   }
 }

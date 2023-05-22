@@ -15,7 +15,8 @@
     }"
     v-bind="$attrs"
     :theme="theme"
-    :popper-node="() => $refs.popperContent.$el"
+    :target-nodes="targetNodes"
+    :popper-node="() => ($refs as any).popperContent.$el"
     @apply-show="onShow"
     @apply-hide="onHide"
   >
@@ -88,6 +89,11 @@ export default defineComponent({
     loadingContent: {
       type: String,
       default: props => getDefaultConfig(props.theme, 'loadingContent'),
+    },
+
+    targetNodes: {
+      type: Function,
+      required: true,
     },
   },
 
