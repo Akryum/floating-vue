@@ -9,19 +9,21 @@
 
 ## Node
 
-<code-group>
-<code-block title="npm">
-```shell
-npm i -S floating-vue
-```
-</code-block>
+::: code-group
 
-<code-block title="yarn">
-```shell
+```bash [npm]
+npm i floating-vue
+```
+
+```bash [yarn]
 yarn add floating-vue
 ```
-</code-block>
-</code-group>
+
+```bash [pnpm]
+pnpm add floating-vue
+```
+
+:::
 
 Install the plugin into Vue:
 
@@ -62,13 +64,13 @@ import 'floating-vue/dist/style.css'
 
 Include `dist/floating-vue.min.js` in the page:
 
-```vue
+```html
 <script src="https://unpkg.com/floating-vue@^2.0.0-beta.1"></script>
 ```
 
 Also include the default CSS:
 
-```vue
+```html
 <link rel="stylsheet" href="https://unpkg.com/floating-vue@^2.0.0-beta.1/dist/style.css" />
 ```
 
@@ -94,19 +96,22 @@ app.component('VMenu', FloatingVue.Menu)
 
 floating-vue v2 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
 
-<code-group>
-<code-block title="npm">
-```shell
-npm i -S floating-vue@vue2
-```
-</code-block>
 
-<code-block title="yarn">
-```shell
+::: code-group
+
+```bash [npm]
+npm i floating-vue@vue2
+```
+
+```bash [yarn]
 yarn add floating-vue@vue2
 ```
-</code-block>
-</code-group>
+
+```bash [pnpm]
+pnpm add floating-vue@vue2
+```
+
+:::
 
 Install the plugin into Vue:
 
@@ -147,19 +152,21 @@ import 'floating-vue/dist/style.css'
 
 ## Nuxt 3
 
-<code-group>
-<code-block title="npm">
-```shell
+::: code-group
+
+```bash [npm]
 npm i floating-vue
 ```
-</code-block>
 
-<code-block title="yarn">
-```shell
+```bash [yarn]
 yarn add floating-vue
 ```
-</code-block>
-</code-group>
+
+```bash [pnpm]
+pnpm add floating-vue
+```
+
+:::
 
 Add the `floating-vue/nuxt` module to your `nuxt.config` file:
 

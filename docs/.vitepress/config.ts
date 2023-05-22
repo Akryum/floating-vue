@@ -1,4 +1,7 @@
-module.exports = {
+import { defineConfig } from 'vitepress'
+import { getSidebar } from 'vitepress-plugin-auto-sidebar'
+
+export default defineConfig({
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
@@ -7,6 +10,8 @@ module.exports = {
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
   description: 'Tooltips & dropdowns made easy',
+
+  cleanUrls: true,
 
   /**
    * Extra tags to be injected to the page HTML `<head>`
@@ -27,12 +32,17 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
-    repo: 'https://github.com/Akryum/floating-vue',
-    editLinks: true,
-    docsDir: 'packages/docs/src',
-    docsBranch: 'next',
-    editLinkText: '',
-    lastUpdated: true,
+    logo: '/logo.png',
+    editLink: {
+      pattern: 'https://github.com/Akryum/floating-vue/edit/main/docs/:path',
+      text: 'Suggest changes to this page',
+    },
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/Akryum/floating-vue' },
+    ],
+    footer: {
+      message: 'Made by Guillaume Chau with ❤️'
+    },
     nav: [
       {
         text: 'Guide',
@@ -69,29 +79,40 @@ module.exports = {
       },
     ],
     sidebar: {
-      '/guide/': [
+      '/': [
         {
-          title: 'Guide',
-          collapsable: false,
-          children: [
-            '',
-            'installation',
-            'component',
-            'directive',
-            'config',
-            'themes',
-            'css',
-            'custom-component',
-          ],
+          text: 'Guide',
+          items: [
+            { text: 'Getting started', link: '/guide/' },
+            { text: 'Installation', link: '/guide/installation' },
+            { text: 'Components', link: '/guide/component' },
+            { text: 'Directives', link: '/guide/directive' },
+            { text: 'Configuration', link: '/guide/config' },
+            { text: 'Themes', link: '/guide/themes' },
+            { text: 'CSS', link: '/guide/css' },
+            { text: 'Custom popper component', link: '/guide/custom-component' },
+          ]
         },
-      ],
-    },
+        {
+          text: 'Reference',
+          items: [
+            { text: 'API Reference', link: '/api/' },
+          ]
+        },
+        {
+          text: 'Migration',
+          items: [
+            {
+              text: 'From v-tooltip 2',
+              link: '/migration/migration-from-v2',
+            },
+            {
+              text: 'From v-tooltip 3 & 4',
+              link: '/migration/migration-from-v3',
+            },
+          ]
+        },
+      ]
+    }
   },
-
-  postcss: {
-    plugins: [
-      require('tailwindcss'),
-      require('autoprefixer'),
-    ],
-  },
-}
+})

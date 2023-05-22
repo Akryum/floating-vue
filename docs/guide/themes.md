@@ -11,13 +11,13 @@ By default, floating-vue provides three themes:
 
 The theme of a popper directive or component can be changed with the `theme` prop:
 
-```vue
+```html
 <button v-tooltip="{
   theme: 'dropdown'
 }">
 ```
 
-```vue
+```html
 <VDropdown
   theme="menu"
 >
@@ -72,7 +72,7 @@ Vue.use(FloatingVue, {
 
 To use the new theme, specify it on the directive:
 
-```vue
+```html
 <button v-tooltip="{
   content: 'You have ' + count + ' new messages.',
   theme: 'info-tooltip'
@@ -118,7 +118,7 @@ Vue.use(FloatingVue, {
 
 We can then create a Themed Component by using the `PopperWrapper` component from `floating-vue` and overriding the `vPopperTheme` option:
 
-```vue
+```html
 <script>
 import { PopperWrapper } from 'floating-vue'
 
@@ -144,7 +144,7 @@ Notice how we also add some CSS here related to our `info-dropdown` theme.
 
 Here is an example of using our new component in the rest of our code:
 
-```vue
+```html
 <VInfoDropdown>
   <button>My customized dropdown</button>
 

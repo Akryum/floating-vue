@@ -28,10 +28,8 @@ module.exports = {
 
   darkMode: 'class',
 
-  mode: 'jit',
-
-  purge: [
-    'src/.vuepress/components/**/*.vue',
-    'src/**/*.md',
+  content: [
+    './.vitepress/components/**/*.vue',
+    './**/*.md',
   ],
 }

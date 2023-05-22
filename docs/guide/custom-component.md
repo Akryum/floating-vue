@@ -62,7 +62,7 @@ Refs:
 
 ## Full example
 
-```vue
+```html
 <template>
   <Popper
     ref="popper"

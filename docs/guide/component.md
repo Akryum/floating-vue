@@ -6,7 +6,7 @@ For more advanced use cases such as dropdowns, you can use the components instea
 
 The most basic component included by default is the `VDropdown` component:
 
-```vue
+```html
 <VDropdown
   :distance="6"
 >
@@ -36,7 +36,7 @@ The `VDropdown` uses the `dropdown` theme.
 
 If you want to display a tooltip with components and more advanced content, you can use the `VTooltip` component that uses the `tooltip` theme (just like the `v-tooltip` directive).
 
-```vue
+```html
 <VTooltip>
   <a>Sponsor me</a>
 
@@ -52,7 +52,7 @@ If you want to display a tooltip with components and more advanced content, you 
 
 There is a `VMenu` variant with the `menu` theme which extends the `dropdown` theme. It overrides `triggers` and `delay` to be usable on mouse over.
 
-```vue
+```html
 <VMenu>
   <button>Documentation</button>
 
@@ -102,7 +102,7 @@ Those events will be listened on the elements in the default slot inside the pop
 
 To customize how the popper is shown or hidden, use the `triggers` prop. It must be an array of triggers from the list above.
 
-```vue
+```html
 <VDropdown
   :triggers="['hover', 'focus']"
 >
@@ -110,7 +110,7 @@ To customize how the popper is shown or hidden, use the `triggers` prop. It must
 
 If you want to manually trigger the popper, use an empty array: `:triggers="[]"` and the `shown` prop:
 
-```vue
+```html
 <VDropdown
   :triggers="[]"
   :shown="isOpen"
@@ -125,7 +125,7 @@ If `autoHide` is `true`, the popper will be hidden when clicked outside of it. T
 You can specify different triggers for the showing or hiding action of the popper with the `showTriggers`
  and `hideTriggers` props:
 
-```vue
+```html
 <VDropdown
   :showTriggers="['hover']"
   :hideTriggers="['click']"
@@ -134,7 +134,7 @@ You can specify different triggers for the showing or hiding action of the poppe
 
 Using functions allows you to reuse the `triggers` list:
 
-```vue
+```html
 <VDropdown
   :triggers="['focus']"
   :showTriggers="triggers => [...triggers, 'hover']"
@@ -146,7 +146,7 @@ You can also use the `popperTriggers`, `popperShowTriggers` and `popperHideTrigg
 
 This can be useful if you want to popper to stay open when the mouse hovers it:
 
-```vue
+```html
 <VDropdown
   :triggers="['hover']"
   :popperTriggers="['hover']"
@@ -159,7 +159,7 @@ Offsetting the popper means moving it relative to its computed position on the p
 
 This example will move the popper away from the reference by `64` pixels:
 
-```vue
+```html
 <VDropdown
   :distance="64"
 >
@@ -169,7 +169,7 @@ This example will move the popper away from the reference by `64` pixels:
 
 This example will move the popper `32` pixels alongside the reference:
 
-```vue
+```html
 <VDropdown
   :skidding="32"
 >
@@ -179,7 +179,7 @@ This example will move the popper `32` pixels alongside the reference:
 
 You can also use negative value, since it's a relative offset.
 
-```vue
+```html
 <VDropdown
   :distance="32"
   :skidding="-16"
@@ -192,7 +192,7 @@ You can also use negative value, since it's a relative offset.
 
 If you use tooltips that are positionned on the edge of the reference, you may need to specify an "arrow padding". This padding will prevent the arrow from glitch out of the tooltip:
 
-```vue
+```html
 <VDropdown :skidding="-32" />
 ```
 
@@ -200,7 +200,7 @@ If you use tooltips that are positionned on the edge of the reference, you may n
 
 To fix this, specify the `padding` option of the `arrow` modifier. In the following example, we prevent the arrow from going to the edges of the tooltip with a 8px limit:
 
-```vue
+```html
 <VDropdown
   :skidding="-32"
   :arrow-padding="8"
@@ -213,7 +213,7 @@ To fix this, specify the `padding` option of the `arrow` modifier. In the follow
 
 Use the `hide` slot prop to close the popper:
 
-```vue
+```html
 <VDropdown>
   <button>Click me</button>
 
@@ -227,7 +227,7 @@ Use the `hide` slot prop to close the popper:
 
 Use the `v-close-popper` directive on an element inside the dropdown to close it when the element is clicked (or touched on mobile):
 
-```vue
+```html
 <VDropdown>
   <button>Click me</button>
 
@@ -241,14 +241,14 @@ The directive works even in nested components in the `popper` slot.
 
 You can also set it to true or false to enable or disable the directive (enabled by default):
 
-```vue
+```html
 <a v-close-popper="false">Close</a>
 <a v-close-popper="true">Close</a>
 ```
 
 You can also use a property:
 
-```vue
+```html
 <a v-close-popper="myBooleanProp">Close</a>
 ```
 
@@ -262,7 +262,7 @@ data () {
 
 Close all the poppers in the page with the `all` modifier:
 
-```vue
+```html
 <a v-close-popper.all>Close All</a>
 ```
 
@@ -284,7 +284,7 @@ After a one second delay, the lock applied because of aiming will expire.
 
 Disabling a popper will prevent it from being shown.
 
-```vue
+```html
 <VDropdown :disabled="isDisabled"></VDropdown>
 ```
 
@@ -300,7 +300,7 @@ data () {
 
 You can also just disable the positioning of the popper with `positioningDisabled`:
 
-```vue
+```html
 <VDropdown :positioning-disabled="isMobile"></VDropdown>
 ```
 
@@ -308,7 +308,7 @@ It can for example be useful on the mobile version of your app if you want to ap
 
 <DropdownMobileDemo />
 
-```vue
+```html
 <script>
 let count = 0
 

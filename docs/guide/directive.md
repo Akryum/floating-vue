@@ -2,13 +2,13 @@
 
 In the template, use the `v-tooltip` directive:
 
-```vue
+```html
 <button v-tooltip="'You have ' + count + ' new messages.'">
 ```
 
 You can use a reactive property for the tooltip content:
 
-```vue
+```html
 <button v-tooltip="tooltipContent">
 ```
 
@@ -16,7 +16,7 @@ You can use a reactive property for the tooltip content:
 
 You can specify the tooltip placement as a modifier:
 
-```vue
+```html
 <button v-tooltip.bottom-start="'You have ' + count + ' new messages.'">
 ```
 
@@ -26,7 +26,7 @@ You can specify the tooltip placement as a modifier:
 
 You can use an object instead of a simple string:
 
-```vue
+```html
 <button v-tooltip="{ content: 'You have ' + count + ' new messages.' }">
 ```
 
@@ -36,7 +36,7 @@ In this object, you can put any [component props](./component.md) plus the addit
 
 By default, content is displayed as text to help prevent XSS attacks. If the tooltip content is deemed safe, you can turn on HTML with the `html` option:
 
-```vue
+```html
 <button v-tooltip="{ content: '<b>Bold</b>', html: true }">
 ```
 
@@ -46,7 +46,7 @@ By default, content is displayed as text to help prevent XSS attacks. If the too
 
 The `content` option accepts a function that returns a promise:
 
-```vue
+```html
 <button
   v-tooltip="{
     content: asyncMethod,
@@ -67,7 +67,7 @@ You can style the tooltip content when it's loading:
 
 To pass custom arguments to the async method, use an arrow function:
 
-```vue
+```html
 <button
   v-tooltip="{
     content: () => asyncMethod('foo', 'bar'),
@@ -79,7 +79,7 @@ To pass custom arguments to the async method, use an arrow function:
 
 Use the `triggers` and `shown` options from the [popper component](./component.md):
 
-```vue
+```html
 <button
   v-tooltip="{
     content: 'Tooltip content here',
@@ -101,7 +101,7 @@ FloatingVue.options.themes.tooltip.disabled = window.innerWidth <= 768
 
 You can still override this value, just like you would for any other prop which has a default value in the [configuration](./config.md):
 
-```vue
+```html
 <button
   v-tooltip="{
     content: 'Tooltip content here',

@@ -501,7 +501,7 @@ The component root element now has `width: max-content` set by default to use th
 
 Before:
 
-```vue
+```html
 <v-popper> <!-- Listeners & attributes added to internal div -->
   <button>Click me!</button>
   <button>Hey I'm another button!</button>
@@ -514,7 +514,7 @@ Before:
 
 After:
 
-```vue
+```html
 <VDropdown>
   <button>Click me!</button> <!-- Listeners & attributes added here -->
   <button>Hey I'm another button!</button> <!-- Listeners & attributes added here -->
@@ -537,7 +537,7 @@ New props:
 - `overflowPadding` (px)
 - `shiftCrossAxis` (boolean)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :popper-options="{
   modifiers: { preventOverflow: { enabled: false } }
@@ -547,7 +547,7 @@ New props:
 <VDropdown :prevent-overflow="false" />
 ```
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :popper-options="{
   modifiers: { preventOverflow: { options: { padding: 10 } } }
@@ -557,7 +557,7 @@ New props:
 <VDropdown :overflow-padding="10" />
 ```
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :popper-options="{
   modifiers: { preventOverflow: { options: { altAxis: true } } }
@@ -573,7 +573,7 @@ New prop:
 
 - `flip` (boolean)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :popper-options="{
   modifiers: { flip: { enabled: false } }
@@ -589,7 +589,7 @@ New prop:
 
 - `arrowPadding` (px)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :popper-options="{
   modifiers: { arrow: { options: { padding: 12 } } }
@@ -639,14 +639,14 @@ The global configuration is now simply an object of the popper props (except spe
 
 Everything is simpler! The direct and the components now shares the same underlying `Popper` component with the same props (plus a few specific ones for the directive).
 
-```vue
+```html
 <button v-tooltip="{
   triggers: ['click'],
   distance: 12,
 }">Action</button>
 ```
 
-```vue
+```html
 <VTooltip
   :triggers="['click']"
   :distance="12"
@@ -663,7 +663,7 @@ floating-ui ships with pre-built component and a minimal CSS file to help you ge
 import 'floating-vue/dist/style.css'
 ```
 
-```vue
+```html
 <!-- 'dropdown' theme -->
 <VDropdown>
   <button>Click me!</button>
@@ -693,7 +693,7 @@ import 'floating-vue/dist/style.css'
 
 You can now let floating vue restrict the popper inner container to the reference size (using `min-width` or `min-height`). Usually when creating form inputs such as selects, you probably want to apply the minimum width of the input to the popper.
 
-```vue
+```html
 <VDropdown auto-min-size />
 ```
 
@@ -701,7 +701,7 @@ You can now let floating vue restrict the popper inner container to the referenc
 
 You can now let floating vue resize the popper inner container to the available size (using `max-width` or `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
 
-```vue
+```html
 <VDropdown auto-max-size />
 ```
 
@@ -711,7 +711,7 @@ Computes the transform origin of the `.v-popper__wrapper` to allow zooming effec
 
 Example:
 
-```vue
+```html
 <template>
   <VDropdown compute-transform-origin />
 </template>

@@ -71,7 +71,7 @@ New props:
 - `overflowPadding` (px)
 - `shiftCrossAxis` (boolean)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :modifiers="[ { name: 'preventOverflow', enabled: false } ]" />
 
@@ -79,7 +79,7 @@ New props:
 <VDropdown :prevent-overflow="false" />
 ```
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :modifiers="[ { name: 'preventOverflow', options: { padding: 10 } } ]" />
 
@@ -87,7 +87,7 @@ New props:
 <VDropdown :overflow-padding="10" />
 ```
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :modifiers="[ { name: 'preventOverflow', options: { altAxis: true } } ]" />
 
@@ -101,7 +101,7 @@ New prop:
 
 - `flip` (boolean)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :modifiers="[ { name: 'flip', enabled: false } ]" />
 
@@ -115,7 +115,7 @@ New prop:
 
 - `arrowPadding` (px)
 
-```vue
+```html
 <!-- Before -->
 <VDropdown :modifiers="[ { name: 'arrow', options: { padding: 12 } } ]" />
 
@@ -133,6 +133,6 @@ The `v-popper__popper--arrow-overflow` class is added on the `v-popper_popper` e
 
 You can now let floating vue resize the popper inner container to the available size (using `max-width` and `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
 
-```vue
+```html
 <VDropdown auto-max-size />
 ```

@@ -20,19 +20,21 @@ Thank you to my sponsors allowing me to spend more time on Open Source projects!
 
 1. Install the package:
 
-<code-group>
-<code-block title="npm">
-```shell
-npm i -S floating-vue
-```
-</code-block>
+::: code-group
 
-<code-block title="yarn">
-```shell
+```bash [npm]
+npm i floating-vue
+```
+
+```bash [yarn]
 yarn add floating-vue
 ```
-</code-block>
-</code-group>
+
+```bash [pnpm]
+pnpm add floating-vue
+```
+
+:::
 
 2. Add the plugin into your app:
 
@@ -52,7 +54,7 @@ import 'floating-vue/dist/style.css'
 
 4. Use the `v-tooltip` directive:
 
-```vue
+```html
 <button v-tooltip="'You have ' + count + ' new messages.'">
 ```
 
@@ -62,7 +64,7 @@ import 'floating-vue/dist/style.css'
 
 5. Use the `VDropdown` or `VMenu` component:
 
-```vue
+```html
 <VDropdown>
   <!-- This will be the popover target (for the events and position) -->
   <button>Click me</button>

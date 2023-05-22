@@ -1,6 +1,5 @@
 ---
-sidebar: auto
-depth: 3
+outline: deep
 ---
 
 # API Reference
@@ -48,7 +47,7 @@ See example above.
 
 ## Directive options
 
-```vue
+```html
 <button v-tooltip="{
   /* options */
 }">
@@ -60,7 +59,7 @@ The directive also support all the [Component props](#component-props).
 
 HTML text to be displayed in the tooltip. Can also be a function that returns the content or a Promise.
 
-```vue
+```html
 <template>
   <button v-tooltip="{ content: 'Hello world' }">
     Hover me
@@ -70,7 +69,7 @@ HTML text to be displayed in the tooltip. Can also be a function that returns th
 
 If you don't need any other option you can directly put the content in the directive:
 
-```vue
+```html
 <template>
   <button v-tooltip="'Hello world'">
     Hover me
@@ -80,7 +79,7 @@ If you don't need any other option you can directly put the content in the direc
 
 Example with a function that returns a Promise:
 
-```vue
+```html
 <template>
   <button v-tooltip="{ content: fetchTooltip }">
     Hover me
@@ -104,7 +103,7 @@ Do:
 
 Boolean: allow HTML tooltip content.
 
-```vue
+```html
 <template>
   <button v-tooltip="{ content: '<i>Italic</i>', html: true }">
     Hover me
@@ -116,7 +115,7 @@ Boolean: allow HTML tooltip content.
 
 Same as `content`, used when the actual tooltip content is loading.
 
-```vue
+```html
 <template>
   <button
     v-tooltip="{
@@ -183,13 +182,13 @@ Available events:
 
 Example:
 
-```vue
+```html
 <VDropdown :triggers="['hover', 'focus']"/>
 ```
 
 If you want to manually trigger the popper, use an empty array: `:triggers="[]"`:
 
-```vue
+```html
 <!-- Manual -->
 <VDropdown :triggers="[]"/>
 ```
@@ -201,7 +200,7 @@ Override the trigger events for showing.
 
 Can also be a function that gets the `triggers` list, and should return the new list:
 
-```vue
+```html
 <VDropdown
   :showTriggers="triggers => [...triggers, 'click']"
 />
@@ -213,7 +212,7 @@ Override the trigger events for hiding.
 
 Can also be a function that gets the `triggers` list, and should return the new list:
 
-```vue
+```html
 <VDropdown
   :hideTriggers="triggers => [...triggers, 'click']"
 />
@@ -231,7 +230,7 @@ Available events:
 
 For example, it's useful when triggering on `hover` so that the popper stay open when mouse hovering it:
 
-```vue
+```html
 <VDropdown
   :popperTriggers="['hover']"
 />
@@ -243,7 +242,7 @@ Override the trigger events for showing on the popper container itself.
 
 Can also be a function that gets the `triggers` list, and should return the new list:
 
-```vue
+```html
 <VDropdown
   :popperShowTriggers="triggers => [...triggers, 'click']"
 />
@@ -255,7 +254,7 @@ Override the trigger events for hiding on the popper container itself.
 
 Can also be a function that gets the `triggers` list, and should return the new list:
 
-```vue
+```html
 <VDropdown
   :popperHideTriggers="triggers => [...triggers, 'click']"
 />
@@ -267,11 +266,11 @@ Show/Hide delay, or object in ms.
 
 Examples:
 
-```vue
+```html
 <VDropdown :delay="200" />
 ```
 
-```vue
+```html
 <VDropdown :delay="{ show: 500, hide: 100 }" />
 ```
 
@@ -279,7 +278,7 @@ Examples:
 
 Boolean that shows or hide the popper. You should probably use no trigger events (manual mode).
 
-```vue
+```html
 <VDropdown :shown="isMenuShown" :triggers="[]" />
 ```
 
@@ -287,7 +286,7 @@ Boolean that shows or hide the popper. You should probably use no trigger events
 
 Distance along the main axis relative to the reference (pixels).
 
-```vue
+```html
 <VDropdown :distance="12" />
 ```
 
@@ -295,7 +294,7 @@ Distance along the main axis relative to the reference (pixels).
 
 Skidding along the cross axis relative to the reference (pixels).
 
-```vue
+```html
 <VDropdown :skidding="12" />
 ```
 
@@ -303,7 +302,7 @@ Skidding along the cross axis relative to the reference (pixels).
 
 Padding of the arrow relative to the popper bounds to prevent it from overflowing if you have rounded borders on the popper (pixels).
 
-```vue
+```html
 <VDropdown :arrow-padding="12" />
 ```
 
@@ -321,7 +320,7 @@ DOM element for the popper position and size boundaries.
 
 Hide the popper if clicked outside.
 
-```vue
+```html
 <VDropdown auto-hide />
 ```
 
@@ -337,7 +336,7 @@ Boolean that disables the automatic positioning of the popper. You can then styl
 
 Boolean: Automatically update the popper position if its size changes.
 
-```vue
+```html
 <VDropdown handle-resize />
 ```
 
@@ -345,7 +344,7 @@ Boolean: Automatically update the popper position if its size changes.
 
 If set, will close all the open popovers that have a different or unset `showGroup` value.
 
-```vue
+```html
 <VDropdown show-group="my-group-name" />
 ```
 
@@ -353,7 +352,7 @@ If set, will close all the open popovers that have a different or unset `showGro
 
 Boolean: skip delay & CSS transitions when another popper is open, so that the popper appear to instanly move to the new position.
 
-```vue
+```html
 <VDropdown instant-move />
 ```
 
@@ -361,7 +360,7 @@ Boolean: skip delay & CSS transitions when another popper is open, so that the p
 
 Boolean: mount the popper content without waiting for the popper to be displayed.
 
-```vue
+```html
 <VDropdown eager-mount />
 ```
 
@@ -375,7 +374,7 @@ Computes the transform origin of the `.v-popper__wrapper` to allow zooming effec
 
 Example:
 
-```vue
+```html
 <template>
   <VDropdown compute-transform-origin />
 </template>
@@ -406,7 +405,7 @@ Possible values:
 - `'min'`: the popper container will be set to the minimum size of the reference element.
 - `'max'`: the popper container will be set to the maximum size of the reference element.
 
-```vue
+```html
 <VDropdown auto-size />
 <VDropdown auto-size="min" />
 <VDropdown auto-size="max" />
@@ -416,7 +415,7 @@ Possible values:
 
 Boolean: let floating vue resize the popper inner container to the available size (using `max-width` and `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
 
-```vue
+```html
 <VDropdown auto-boundary-max-size />
 ```
 
@@ -424,7 +423,7 @@ Boolean: let floating vue resize the popper inner container to the available siz
 
 Boolean: prevent the popper from overflowing the `boundary`.
 
-```vue
+```html
 <VDropdown :prevent-overflow="false" />
 ```
 
@@ -432,7 +431,7 @@ Boolean: prevent the popper from overflowing the `boundary`.
 
 Virtual padding in the `boundary` used to prevent the popper overflow (pixels).
 
-```vue
+```html
 <VDropdown :overflow-padding="10" />
 ```
 
@@ -440,7 +439,7 @@ Virtual padding in the `boundary` used to prevent the popper overflow (pixels).
 
 Boolean: prevent the popper from overflowing the `boundary` by using an opposite placement if needed.
 
-```vue
+```html
 <VDropdown :flip="false" />
 ```
 
@@ -448,7 +447,7 @@ Boolean: prevent the popper from overflowing the `boundary` by using an opposite
 
 Boolean: prevent the popper from overflowing the `boundary` by adjusting its position.
 
-```vue
+```html
 <VDropdown :shift="false" />
 ```
 
@@ -456,7 +455,7 @@ Boolean: prevent the popper from overflowing the `boundary` by adjusting its pos
 
 Boolean: prevent the popper from overflowing the `boundary` by adjusting its position.
 
-```vue
+```html
 <VDropdown shift-cross-axis />
 ```
 
@@ -464,7 +463,7 @@ Boolean: prevent the popper from overflowing the `boundary` by adjusting its pos
 
 Boolean: disable the auto focus on the popper DOM node when shown.
 
-```vue
+```html
 <VDropdown no-auto-focus />
 ```
 
@@ -482,7 +481,7 @@ Content put in the trigger part of the popper, typically a button.
     - `show`: method to show the popper
     - `hide`: method to hide the popper
 
-```vue
+```html
 <VDropdown>
   <button>Click me</button>
 </VDropdown>
@@ -495,7 +494,7 @@ Content put inside the popper of the popper.
     - `shown`: boolean indicating if the popper is shown
     - `hide`: method to hide the popper
 
-```vue
+```html
 <VDropdown>
   <button>Click me</button>
 
@@ -512,12 +511,12 @@ Content put inside the popper of the popper.
 
 Boolean: This allow you to use the `.sync` modifier on the `show` prop (Vue 2) or the `v-model:shown` directive (Vue 3).
 
-```vue
+```html
 <!-- Vue 3 -->
 <VDropdown v-model:shown="isMenuShown" />
 ```
 
-```vue
+```html
 <!-- Vue 2 -->
 <VDropdown :shown.sync="isMenuShown" />
 ```
@@ -562,7 +561,7 @@ Emitted when the content size changes. You must set the `handleResize` prop to `
 
 Use the `v-close-popper` directive on an element inside the dropdown to close it when the element is clicked (or touched on mobile):
 
-```vue
+```html
 <VDropdown>
   <button>Click me</button>
 

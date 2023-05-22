@@ -224,7 +224,7 @@ Hidding:
 
 #### Zoom show only example
 
-```vue
+```html
 <VDropdown compute-transform-origin />
 ```
 
@@ -245,7 +245,7 @@ Hidding:
 
 The `v-tooltip` directive adds the `v-popper--has-tooltip` to the target element. For example:
 
-```vue
+```html
 <button v-tooltip="'Some info'">
   Click me
 </button>
