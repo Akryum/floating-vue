@@ -27,6 +27,7 @@
     "@floating-ui/dom": "^1.2.8",
     "@iconify-json/lucide": "^1.1.92",
     "@vue/eslint-config-standard": "^8.0.1",
+    "@vue/shared": "^3.3.4",
     "autoprefixer": "^10.4.14",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.41.0",
