@@ -1,10 +1,11 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
 import PopperWrapper from './PopperWrapper.vue'
 
-export default defineComponent({
+const Component = ({
   ...PopperWrapper,
   name: 'VMenu',
   vPopperTheme: 'menu',
-})
+}) as unknown as typeof PopperWrapper
+
+export default Component
 </script>

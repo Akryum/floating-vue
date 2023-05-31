@@ -1,0 +1,43 @@
+{
+  "name": "docs",
+  "version": "2.0.0-beta.20",
+  "description": "floating-vue docs",
+  "private": true,
+  "main": "index.js",
+  "authors": {
+    "name": "Guillaume Chau",
+    "email": "guillaume.b.chau@gmail.com"
+  },
+  "repository": {
+    "url": "https://github.com/Akryum/floating-vue",
+    "type": "git",
+    "directory": "docs"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "lint": "eslint . --ext .js,.vue"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "color": "^4.2.3",
+    "floating-vue": "workspace:*"
+  },
+  "devDependencies": {
+    "@floating-ui/dom": "^1.2.8",
+    "@iconify-json/lucide": "^1.1.92",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "autoprefixer": "^10.4.14",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.41.0",
+    "eslint-plugin-vue": "^9.13.0",
+    "github-buttons": "^2.27.0",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "unplugin-icons": "^0.16.1",
+    "unplugin-vue-components": "^0.24.1",
+    "vite": "^4.3.8",
+    "vitepress": "1.0.0-beta.1",
+    "vue": "^3.3.4"
+  }
+}

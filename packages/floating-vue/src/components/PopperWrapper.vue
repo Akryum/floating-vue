@@ -16,7 +16,7 @@
     }"
     :theme="finalTheme"
     :target-nodes="getTargetNodes"
-    :popper-node="() => $refs.popperContent.$el"
+    :popper-node="() => ($refs as any).popperContent.$el"
     :class="[
       themeClass,
     ]"

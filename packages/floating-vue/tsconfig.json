@@ -12,7 +12,8 @@
     "jsx": "preserve",
     "outDir": "dist",
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "include": [
     "src/**/*.ts",
