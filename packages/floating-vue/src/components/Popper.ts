@@ -377,7 +377,7 @@ export default () => defineComponent({
       acc[prop] = {
         handler: '$_refreshListeners',
         deep: true,
-      };
+      }
       return acc
     }, {}),
 
@@ -397,7 +397,7 @@ export default () => defineComponent({
       acc[prop] = {
         handler: '$_computePosition',
         deep: true,
-      };
+      }
       return acc
     }, {}),
   },
