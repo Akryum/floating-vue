@@ -374,7 +374,10 @@ export default () => defineComponent({
       'triggers',
       'positioningDisabled',
     ].reduce((acc, prop) => {
-      acc[prop] = '$_refreshListeners'
+      acc[prop] = {
+        handler: '$_refreshListeners',
+        deep: true,
+      };
       return acc
     }, {}),
 
@@ -391,7 +394,10 @@ export default () => defineComponent({
       'shiftCrossAxis',
       'flip',
     ].reduce((acc, prop) => {
-      acc[prop] = '$_computePosition'
+      acc[prop] = {
+        handler: '$_computePosition',
+        deep: true,
+      };
       return acc
     }, {}),
   },
