@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import './style.postcss'
-import 'floating-vue/dist/style.css'
+import 'floating-vue/style.css'
 import FloatingVue, { createTooltip } from 'floating-vue'
 
 export default {

@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import { getSidebar } from 'vitepress-plugin-auto-sidebar'
 
 export default defineConfig({
   /**
