@@ -1,5 +1,22 @@
 # Changelog
 
+## v2.0.0-beta.22
+
+
+### 🩹 Fixes
+
+  - Expose nuxt module (aac29fc)
+
+### 🏡 Chore
+
+  - Fix CHANGELOG.md (4dc73f5)
+  - Add title to CHANGELOG.md (b2068dd)
+
+### ❤️  Contributors
+
+- Anthony Fu <anthonyfu117@hotmail.com>
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v2.0.0-beta.21
 
 
