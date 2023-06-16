@@ -25,13 +25,12 @@ export default {
       },
       deep: true,
     },
-    'allStyleOutput': {
+    allStyleOutput: {
       handler () {
-        if (this.style)
-          this.style.innerHTML = this.allStyleOutput
+        if (this.style) { this.style.innerHTML = this.allStyleOutput }
       },
       immediate: true,
-    }
+    },
   },
 
   mounted () {

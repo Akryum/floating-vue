@@ -8,11 +8,21 @@
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm run build && pnpm -C docs run build",
     "dev": "pnpm -C docs run dev",
-    "lint": "pnpm -r run lint",
+    "lint": "eslint --ext .js,.ts,.vue .",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
   "devDependencies": {
     "@akryum/sheep": "^0.5.0",
-    "floating-vue": "workspace:*"
+    "floating-vue": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "eslint": "^8.42.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.14.1",
+    "typescript": "^5.1.3"
   }
 }

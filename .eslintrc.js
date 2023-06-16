@@ -22,6 +22,9 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'comma-dangle': ['error', 'always-multiline'],
     'vue/multi-word-component-names': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/no-v-html': 'off',
+    'vue/require-prop-types': 'off',
     'vue/html-closing-bracket-newline': [
       'error',
       {
@@ -48,6 +51,7 @@ module.exports = {
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     '@typescript-eslint/no-empty-function': 'off',
     indent: 'off',
+    '@typescript-eslint/no-this-alias': 'off',
   },
   ignorePatterns: [
     'node_modules/',

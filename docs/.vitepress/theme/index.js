@@ -5,7 +5,7 @@ import FloatingVue, { createTooltip } from 'floating-vue'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app }) {
+  enhanceApp ({ app }) {
     app.use(FloatingVue, {
       boundary: 'body',
       themes: {
@@ -25,5 +25,5 @@ export default {
     if (typeof window !== 'undefined') {
       window.createTooltip = createTooltip
     }
-  }
+  },
 }

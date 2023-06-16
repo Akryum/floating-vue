@@ -1,12 +1,16 @@
 <script>
-import Button from './Button.vue'
-import Input from './Input.vue'
-import Modal from './Modal.vue'
+import ThemeButton from './ThemeButton.vue'
+import ThemeInput from './ThemeInput.vue'
+import ThemeModal from './ThemeModal.vue'
 import { createNewTheme, state } from './state'
 import { builtinThemes } from './builtin-themes'
 
 export default {
-  components: { Modal, Button, Input },
+  components: {
+    ThemeModal,
+    ThemeButton,
+    ThemeInput,
+  },
 
   data () {
     return {
@@ -42,13 +46,13 @@ export default {
 </script>
 
 <template>
-  <Modal>
+  <ThemeModal>
     <div class="text-lg border-b border-gray-100">
       Create theme
     </div>
 
     <div class="space-y-2 w-96">
-      <Input
+      <ThemeInput
         v-model="name"
         placeholder="Theme name"
         auto-focus
@@ -64,20 +68,20 @@ export default {
     </div>
 
     <template #actions>
-      <Button
+      <ThemeButton
         color="gray"
         class="flex-1 p-2"
         @click="close()"
       >
         Cancel
-      </Button>
+      </ThemeButton>
 
-      <Button
+      <ThemeButton
         class="flex-1 p-2"
         @click="createNewTheme()"
       >
         Create theme
-      </Button>
+      </ThemeButton>
     </template>
-  </Modal>
+  </ThemeModal>
 </template>

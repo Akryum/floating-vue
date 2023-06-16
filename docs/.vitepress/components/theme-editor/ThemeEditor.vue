@@ -13,7 +13,7 @@ import ConfigEditor from './ConfigEditor.vue'
 import Tabs from './Tabs.vue'
 import ThemesExplorer from './ThemesExplorer.vue'
 import CreateTheme from './CreateTheme.vue'
-import Button from './Button.vue'
+import ThemeButton from './ThemeModal.vue'
 import { loadValue, storeValue } from './util'
 
 const OUTPUT_TAB_KEY = 'v-tooltip.theme-editor.output-tab'
@@ -29,7 +29,7 @@ export default {
     Tabs,
     ThemesExplorer,
     CreateTheme,
-    Button,
+    ThemeButton,
   },
 
   data () {
@@ -111,13 +111,13 @@ export default {
           <div class="text-gray-500 text-lg">
             Select a theme or create a new one to get started
           </div>
-          <Button
+          <ThemeButton
             class="px-4 py-3"
             @click="openCreateTheme()"
           >
             <PlusIcon class="w-4 h-4 mr-2" />
             New theme
-          </Button>
+          </ThemeButton>
         </div>
       </div>
 
@@ -178,14 +178,14 @@ export default {
         placement="top-end"
         class="h-full"
       >
-        <button
+        <ThemeButton
           v-tooltip="'Settings'"
           class="px-4 py-1 h-full hover:bg-green-200"
         >
           <SettingsIcon
             class="w-4 h-4"
           />
-        </button>
+        </ThemeButton>
 
         <template #popper>
           <div class="flex flex-col space-y-2 text-sm">

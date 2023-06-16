@@ -56,7 +56,7 @@ watch(
       state.error = ''
     }
   },
-  { deep: true, immediate: true }
+  { deep: true, immediate: true },
 )
 
 watch(
@@ -64,7 +64,7 @@ watch(
   (value) => {
     storeValue(SETTINGS_KEY, value)
   },
-  { deep: true }
+  { deep: true },
 )
 
 watch(
@@ -72,23 +72,23 @@ watch(
   (value) => {
     storeValue(THEMES_KEY, value)
   },
-  { deep: true }
+  { deep: true },
 )
 
-export function loadThemes() {
+export function loadThemes () {
   loadValue(THEMES_KEY, (value) => {
     state.themes = value
   })
 }
 
-export function mapState(propNames) {
+export function mapState (propNames) {
   return propNames.reduce((obj, n) => {
     obj[n] = () => state[n]
     return obj
   }, {})
 }
 
-export function loadSettings() {
+export function loadSettings () {
   state.error = ''
   loadValue(SETTINGS_KEY, (value) => {
     Object.assign(state.settings, value)
@@ -126,7 +126,7 @@ const emptyTheme = [
   return obj
 }, {})
 
-export function loadTheme(themeName) {
+export function loadTheme (themeName) {
   const theme = state.themes.find((t) => t.name === themeName)
   state.error = ''
   if (theme) {
@@ -158,13 +158,13 @@ export function loadTheme(themeName) {
   }
 }
 
-export function loadLastTheme() {
+export function loadLastTheme () {
   loadValue(LAST_THEME_KEY, (value) => {
     loadTheme(value)
   })
 }
 
-function createThemeObject() {
+function createThemeObject () {
   return {
     name: 'my-theme',
     config: {
@@ -176,14 +176,14 @@ function createThemeObject() {
   }
 }
 
-export function createNewTheme(options) {
+export function createNewTheme (options) {
   const theme = createThemeObject()
   theme.name = options.name
   state.themes.push(theme)
   loadTheme(theme.name)
 }
 
-export function deleteTheme(theme) {
+export function deleteTheme (theme) {
   if (state.theme === theme) {
     state.theme = null
   }
@@ -193,7 +193,7 @@ export function deleteTheme(theme) {
   }
 }
 
-function getThemeParents(theme) {
+function getThemeParents (theme) {
   let themeConfig = theme
   const parentThemes = []
   do {

@@ -4,7 +4,7 @@ import { defineComponent, h } from 'vue'
 import { hasOwn, hyphenate } from '@vue/shared'
 
 export default defineComponent({
-  name: 'github-button',
+  name: 'GithubButton',
   props: {
     href: String,
     ariaLabel: String,
@@ -13,18 +13,7 @@ export default defineComponent({
     dataColorScheme: String,
     dataSize: String,
     dataShowCount: String,
-    dataText: String
-  },
-  render: function () {
-    const props = { ref: '_' }
-    for (const key in this.$props) {
-      props[hyphenate(key)] = this.$props[key]
-    }
-    return h('span', [
-      hasOwn(this.$slots, 'default')
-        ? h('a', props, this.$slots.default())
-        : h('a', props)
-    ])
+    dataText: String,
   },
   mounted: function () {
     this.paint()
@@ -52,6 +41,17 @@ export default defineComponent({
     },
     reset: function () {
       this.$el.replaceChild(/** @type {HTMLAnchorElement} */ (this.$refs._), this.$el.lastChild)
+    },
+  },
+  render: function () {
+    const props = { ref: '_' }
+    for (const key in this.$props) {
+      props[hyphenate(key)] = this.$props[key]
     }
-  }
+    return h('span', [
+      hasOwn(this.$slots, 'default')
+        ? h('a', props, this.$slots.default())
+        : h('a', props),
+    ])
+  },
 })

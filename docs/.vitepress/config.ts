@@ -40,7 +40,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/Akryum/floating-vue' },
     ],
     footer: {
-      message: 'Made by Guillaume Chau with ❤️'
+      message: 'Made by Guillaume Chau with ❤️',
     },
     nav: [
       {
@@ -90,13 +90,13 @@ export default defineConfig({
             { text: 'Themes', link: '/guide/themes' },
             { text: 'CSS', link: '/guide/css' },
             { text: 'Custom popper component', link: '/guide/custom-component' },
-          ]
+          ],
         },
         {
           text: 'Reference',
           items: [
             { text: 'API Reference', link: '/api/' },
-          ]
+          ],
         },
         {
           text: 'Migration',
@@ -109,9 +109,9 @@ export default defineConfig({
               text: 'From v-tooltip 3 & 4',
               link: '/migration/migration-from-v3',
             },
-          ]
+          ],
         },
-      ]
-    }
+      ],
+    },
   },
 })

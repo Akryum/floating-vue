@@ -3,8 +3,8 @@ import SearchIcon from '~icons/lucide/search'
 import PlusIcon from '~icons/lucide/plus'
 import MoreVerticalIcon from '~icons/lucide/more-vertical'
 import Trash2Icon from '~icons/lucide/trash-2'
-import Button from './Button.vue'
-import Modal from './Modal.vue'
+import ThemeButton from './ThemeButton.vue'
+import ThemeModal from './ThemeModal.vue'
 import { mapState, loadTheme, deleteTheme } from './state'
 
 export default {
@@ -13,8 +13,8 @@ export default {
     PlusIcon,
     MoreVerticalIcon,
     Trash2Icon,
-    Button,
-    Modal,
+    ThemeButton,
+    ThemeModal,
   },
 
   data () {
@@ -98,7 +98,7 @@ export default {
           </button>
 
           <template #popper>
-            <Button
+            <ThemeButton
               v-close-popper
               color="red"
               flat
@@ -107,13 +107,13 @@ export default {
             >
               <Trash2Icon class="w-4 h-4 mr-2" />
               Delete
-            </Button>
+            </ThemeButton>
           </template>
         </VDropdown>
       </div>
     </div>
 
-    <Modal
+    <ThemeModal
       v-if="confirmDeleteTheme"
     >
       <div class="text-lg">
@@ -122,22 +122,22 @@ export default {
       </div>
 
       <template #actions>
-        <Button
+        <ThemeButton
           color="gray"
           class="flex-1 p-2"
           @click="confirmDeleteTheme = null"
         >
           Cancel
-        </Button>
+        </ThemeButton>
 
-        <Button
+        <ThemeButton
           color="red"
           class="flex-1 p-2"
           @click="deleteTheme()"
         >
           Delete theme
-        </Button>
+        </ThemeButton>
       </template>
-    </Modal>
+    </ThemeModal>
   </div>
 </template>
