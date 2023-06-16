@@ -19,11 +19,13 @@
       "import": "./dist/floating-vue.mjs",
       "types": "./dist/index.d.ts"
     },
+    "./nuxt": "./nuxt.mjs",
     "./style.css": "./dist/style.css",
     "./dist/style.css": "./dist/style.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "*.mjs"
   ],
   "dependencies": {
     "@floating-ui/dom": "~1.1.1",
