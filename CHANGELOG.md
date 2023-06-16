@@ -1,6 +1,3 @@
-# [2.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-09-08)
-
-
 ## v2.0.0-beta.21
 
 
@@ -55,6 +52,8 @@
 - David Hewson <dev@daveid.co.uk>
 - Damian Głowala 
 - Amal Mathew
+
+# [2.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-09-08)
 
 ### Features
 
