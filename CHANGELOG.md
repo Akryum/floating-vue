@@ -1,6 +1,61 @@
 # [2.0.0-beta.20](https://github.com/Akryum/v-tooltip/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-09-08)
 
 
+## v2.0.0-beta.21
+
+
+### 🚀 Enhancements
+
+  - Add pointers event (#855)
+
+### 🩹 Fixes
+
+  - DisposeTimeout not working, closes #941 (#947, #941)
+
+### 💅 Refactors
+
+  - ⚠️  Project maintanace (#959)
+
+### 📖 Documentation
+
+  - Update README (47be706)
+  - Update Nuxt 3 installation guide (#865)
+  - Fix floating-ui.com link (#942)
+  - Typo (#915)
+  - Remove stylus from SponsorButton.vue (fd50931)
+  - Fix build (e1f40af)
+  - Improve styles in dark mode (90d9dd2)
+  - Use src component directly (c2ffed5)
+
+### 📦 Build
+
+  - Exclude sources from published package (#945)
+
+### 🏡 Chore
+
+  - Copy LICENSE (b85e169)
+  - Update deps (5d2448e)
+  - Downgrade floating-ui (113c5ee)
+  - Upgrade `@floating-ui/dom` (6a6c350)
+  - Update for aou changes (5952dda)
+  - Improve lints (081d153)
+  - Clean up (677829c)
+
+#### ⚠️  Breaking Changes
+
+  - ⚠️  Project maintanace (#959)
+
+### ❤️  Contributors
+
+- Anthony Fu <anthonyfu117@hotmail.com>
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Jairo Blatt ([@jairoblatt](http://github.com/jairoblatt))
+- Ari Perkkiö ([@AriPerkkio](http://github.com/AriPerkkio))
+- Y-tomida ([@ty-v1](http://github.com/ty-v1))
+- David Hewson <dev@daveid.co.uk>
+- Damian Głowala 
+- Amal Mathew
+
 ### Features
 
 * noAutoFocus ([919df7c](https://github.com/Akryum/v-tooltip/commit/919df7c71c7c058e36be0e04121adbdc2a8939b9))
