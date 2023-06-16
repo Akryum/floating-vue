@@ -24,7 +24,7 @@
     "floating-vue": "workspace:*"
   },
   "devDependencies": {
-    "@floating-ui/dom": "^0.1.10",
+    "@floating-ui/dom": "~1.1.1",
     "@iconify-json/lucide": "^1.1.101",
     "@vue/eslint-config-standard": "^8.0.1",
     "@vue/shared": "^3.3.4",

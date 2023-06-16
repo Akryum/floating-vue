@@ -6,7 +6,7 @@ import {
   shift,
   flip,
   arrow,
-  getScrollParents,
+  getOverflowAncestors,
   size,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
@@ -727,8 +727,8 @@ export default () => defineComponent({
       // Scroll
       if (!this.positioningDisabled) {
         this.$_registerEventListeners([
-          ...getScrollParents(this.$_referenceNode),
-          ...getScrollParents(this.$_popperNode),
+          ...getOverflowAncestors(this.$_referenceNode),
+          ...getOverflowAncestors(this.$_popperNode),
         ], 'scroll', () => {
           this.$_computePosition()
         })

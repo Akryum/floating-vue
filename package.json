@@ -7,6 +7,7 @@
     "build": "pnpm -r --filter=\"./packages/*\" run build",
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm run build && pnpm -C docs run build",
+    "dev": "pnpm -C docs run dev",
     "lint": "pnpm -r run lint",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
