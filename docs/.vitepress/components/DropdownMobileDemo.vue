@@ -51,7 +51,7 @@ export default {
 
           <div v-if="isMobile">
             <button
-              class="bg-gray-300 rounded px-4 py-2 w-full"
+              class="bg-gray-300/25 rounded px-4 py-2 w-full"
               @click="hide()"
             >
               Cancel

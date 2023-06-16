@@ -23,7 +23,7 @@ export default {
         hover: 'hover:bg-red-200 hover:text-red-900',
       },
       gray: {
-        normal: 'bg-gray-300 text-gray-900',
+        normal: 'bg-gray-300/25 text-gray-900',
         hover: 'hover:bg-gray-200 hover:text-gray-900',
       },
     }
