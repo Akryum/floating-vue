@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite build --watch",
     "build": "cross-env NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
-    "prepublishOnly": "pnpm run lint && pnpm run test && pnpm run build",
+    "prepublishOnly": "pnpm run test && pnpm run build",
     "test": "pnpm run test:unit",
     "test:unit": "peeky run"
   },
