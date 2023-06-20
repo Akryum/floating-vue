@@ -84,7 +84,7 @@ export default {
 
 <template>
   <div class="overflow-hidden flex flex-col items-stretch">
-    <div class="flex items-center border-b border-gray-100">
+    <div class="flex items-center border-b border-gray-100 dark:border-gray-800">
       <div class="flex-1 flex items-center p-2 text-gray-500">
         <PenToolIcon class="w-4 h-4 mr-2" />
         Style
@@ -103,7 +103,7 @@ export default {
       v-if="currentStyle"
       class="flex-1 overflow-auto flex flex-col items-stretch"
     >
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Background color:</label>
         <label class="flex items-center space-x-1">
           <input
@@ -132,7 +132,7 @@ export default {
         </template>
       </div>
 
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Text color:</label>
         <label class="flex items-center space-x-1">
           <input
@@ -161,7 +161,7 @@ export default {
         </template>
       </div>
 
-      <div class="hover:bg-gray-50 p-2 space-y-2">
+      <div class="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 space-y-2">
         <div class="flex space-x-3">
           <label for="backgroundColor">Padding:</label>
           <label class="flex items-center space-x-1">
@@ -279,7 +279,7 @@ export default {
         </div>
       </div>
 
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Border:</label>
         <label class="flex items-center space-x-1">
           <input
@@ -305,7 +305,7 @@ export default {
         </template>
       </div>
 
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Border radius:</label>
         <label class="flex items-center space-x-1">
           <input
@@ -330,7 +330,7 @@ export default {
         </template>
       </div>
 
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Drop shadow:</label>
         <label class="flex items-center space-x-1">
           <input
@@ -392,7 +392,7 @@ export default {
         </template>
       </div>
 
-      <div class="flex space-x-3 hover:bg-gray-50 p-2">
+      <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
         <label for="backgroundColor">Arrow:</label>
         <label class="flex items-center space-x-1">
           <input

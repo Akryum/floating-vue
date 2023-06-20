@@ -75,7 +75,7 @@ export default {
 
 <template>
   <div class="overflow-hidden flex flex-col items-stretch">
-    <div class="text-gray-500 flex items-center border-b border-gray-100">
+    <div class="text-gray-500 flex items-center border-b border-gray-100 dark:border-gray-800">
       <ToolIcon class="w-4 h-4 mx-2" />
       <span class="flex-1">
         Theme Configuration
@@ -94,15 +94,15 @@ export default {
 
     <div class="overflow-auto">
       <template v-if="tab === 'general'">
-        <div class="flex space-x-1 hover:bg-gray-50 p-2">
+        <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Theme name:</span>
           <input
             v-model="theme.name"
-            class="w-0 flex-1 border border-gray-300 rounded px-1"
+            class="w-0 flex-1 border border-gray-300 dark:border-gray-700 rounded px-1"
           >
         </div>
 
-        <div class="flex space-x-1 hover:bg-gray-50 p-2">
+        <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <label for="extend">Inherit another theme:</label>
           <select
             id="extend"
@@ -124,7 +124,7 @@ export default {
           </select>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Reset CSS:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -142,7 +142,7 @@ export default {
       </template>
 
       <template v-if="tab === 'display'">
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Triggers:</span>
           <label class="flex items-center space-x-1">
             <input
@@ -167,7 +167,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Delay (ms):</span>
           <label class="flex items-center space-x-1">
             <input
@@ -210,7 +210,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Auto hide:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -226,7 +226,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Eager mount:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -244,7 +244,7 @@ export default {
       </template>
 
       <template v-if="tab === 'position'">
-        <div class="flex space-x-1 hover:bg-gray-50 p-2">
+        <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <label for="placement">Placement:</label>
           <select
             id="placement"
@@ -266,7 +266,7 @@ export default {
           </select>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Strategy:</span>
           <label
             v-for="value of [undefined, 'absolute', 'fixed']"
@@ -282,7 +282,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Distance (px):</span>
           <label class="flex items-center space-x-1">
             <input
@@ -308,7 +308,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Skidding (px):</span>
           <label class="flex items-center space-x-1">
             <input
@@ -334,7 +334,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Arrow padding (px):</span>
           <label class="flex items-center space-x-1">
             <input
@@ -360,7 +360,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Instant move:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -376,7 +376,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Handle resize:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -392,7 +392,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Compute transform origin:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -408,7 +408,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Prevent overflow:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -424,7 +424,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Overflow padding (px):</span>
           <label class="flex items-center space-x-1">
             <input
@@ -450,7 +450,7 @@ export default {
           </template>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Arrow overflow:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -466,7 +466,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Flip:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -482,7 +482,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Shift:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -498,7 +498,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Shift cross axis:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -514,7 +514,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Auto size:</span>
           <label
             v-for="value of [undefined, true, false, 'min', 'max']"
@@ -530,7 +530,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Auto boundary max size:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -548,7 +548,7 @@ export default {
       </template>
 
       <template v-if="tab === 'directive'">
-        <div class="flex space-x-3 hover:bg-gray-50 p-2">
+        <div class="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Allow HTML content:</span>
           <label
             v-for="value of [undefined, true, false]"
@@ -564,7 +564,7 @@ export default {
           </label>
         </div>
 
-        <div class="flex space-x-1 hover:bg-gray-50 p-2">
+        <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
           <span>Loading placeholder content:</span>
           <label class="flex items-center space-x-1">
             <input
@@ -576,7 +576,7 @@ export default {
           <input
             v-if="!inheritLoadingContent"
             v-model="theme.config.loadingContent"
-            class="w-0 flex-1 border border-gray-300 rounded px-1"
+            class="w-0 flex-1 border border-gray-300 dark:border-gray-700 rounded px-1"
           >
         </div>
       </template>

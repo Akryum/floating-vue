@@ -1,22 +1,30 @@
-<script>
-export default {
-  props: [
-    'value',
-    'tabs',
-  ],
+<script lang="ts" setup>
+export interface Tab {
+  id: string
+  label: string
+  icon?: string
 }
+
+defineProps<{
+  modelValue: string
+  tabs: Tab[]
+}>()
+
+defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 </script>
 
 <template>
-  <div class="flex-none flex">
+  <div class="flex-none flex dark:text-gray-200">
     <button
       v-for="(tab, index) in tabs"
       :key="index"
-      class="px-3 py-2 relative hover:bg-green-100 flex items-center"
+      class="px-3 py-2 relative hover:bg-green-100 dark:hover:bg-green-900 flex items-center"
       :class="{
-        'text-green-500 font-medium': value === tab.id,
+        'text-green-500 font-medium': modelValue === tab.id,
       }"
-      @click="$emit('input', tab.id)"
+      @click="$emit('update:modelValue', tab.id)"
     >
       <component
         :is="tab.icon"
@@ -29,7 +37,7 @@ export default {
       </slot>
 
       <div
-        v-if="value === tab.id"
+        v-if="modelValue === tab.id"
         class="absolute bottom-0 left-0 w-full border-b-2 border-green-500"
       />
     </button>

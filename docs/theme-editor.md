@@ -9,7 +9,7 @@ import VPNav from 'vitepress/dist/client/theme-default/components/VPNav.vue'
 
 <ClientOnly>
   <div class="h-screen grid grid-rows-[max-content_1fr]">
-    <VPNav class="!relative" />
+    <VPNav class="!relative [&_.container>.title]:!pl-6 [&_.container>.content]:!pr-6 [&_.title]:border-none [&_.curtain]:hidden" />
     <ThemeEditorVue />
   </div>
 </ClientOnly>

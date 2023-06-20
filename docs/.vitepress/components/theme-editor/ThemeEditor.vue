@@ -13,7 +13,7 @@ import ConfigEditor from './ConfigEditor.vue'
 import Tabs from './Tabs.vue'
 import ThemesExplorer from './ThemesExplorer.vue'
 import CreateTheme from './CreateTheme.vue'
-import ThemeButton from './ThemeModal.vue'
+import ThemeButton from './ThemeButton.vue'
 import { loadValue, storeValue } from './util'
 
 const OUTPUT_TAB_KEY = 'v-tooltip.theme-editor.output-tab'
@@ -81,14 +81,14 @@ export default {
 </script>
 
 <template>
-  <div class="h-full flex flex-col items-stretch text-sm">
-    <div class="flex-1 flex items-stretch !md:flex-col md:divide-x divide-gray-200 overflow-hidden">
+  <div class="theme-editor h-full flex flex-col items-stretch text-sm border-t border-gray-200 dark:border-gray-700">
+    <div class="flex-1 flex items-stretch !md:flex-col md:divide-x divide-gray-200 dark:divide-gray-700 overflow-hidden">
       <ThemesExplorer
         class="w-1/6"
         @create="openCreateTheme()"
       />
 
-      <div class="flex-1 flex flex-col overflow-hidden divide-y divide-gray-200">
+      <div class="flex-1 flex flex-col overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
         <template v-if="theme">
           <ConfigEditor
             class="flex-1"
@@ -129,7 +129,7 @@ export default {
               { id: 'sandbox', label: 'Preview', icon: EyeIcon },
               { id: 'source', label: 'Code Output', icon: CodeIcon },
             ]"
-            class="border-b border-gray-100"
+            class="border-b border-gray-100 dark:border-gray-800"
           />
 
           <Sandbox
@@ -139,7 +139,7 @@ export default {
 
           <div
             v-if="outputTab === 'source'"
-            class="flex-1 flex flex-col items-stretch divide-y divide-gray-100"
+            class="flex-1 flex flex-col items-stretch divide-y divide-gray-100 dark:divide-gray-900"
           >
             <textarea
               :value="sourceOutput"
@@ -157,9 +157,9 @@ export default {
     </div>
 
     <!-- Footer -->
-    <div class="footer flex-none flex items-center border-t border-gray-200 text-xs">
-      <div class="px-4 py-1 text-gray-600">
-        floating-vue <span class="text-black">v{{ version }}</span>
+    <div class="footer flex-none flex items-center border-t border-gray-200 dark:border-gray-700 text-xs">
+      <div class="px-4 py-1 text-gray-600 dark:text-gray-400">
+        floating-vue <span class="text-black dark:text-white">v{{ version }}</span>
       </div>
 
       <div
@@ -180,7 +180,7 @@ export default {
       >
         <ThemeButton
           v-tooltip="'Settings'"
-          class="px-4 py-1 h-full hover:bg-green-200"
+          class="px-4 py-1 h-full !rounded-none hover:bg-green-200 dark:bg-green-800 dark:text-white dark:hover:bg-green-700"
         >
           <SettingsIcon
             class="w-4 h-4"
@@ -188,7 +188,7 @@ export default {
         </ThemeButton>
 
         <template #popper>
-          <div class="flex flex-col space-y-2 text-sm">
+          <div class="flex flex-col space-y-2 text-sm p-4">
             <div>
               <label
                 for="darkClass"

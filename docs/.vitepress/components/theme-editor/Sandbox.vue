@@ -52,7 +52,7 @@ export default {
       [settings.darkClass]: settings.darkMode,
     }"
   >
-    <div class="flex-none border-b border-gray-100 p-1 flex items-center space-x-2 overflow-x-auto">
+    <div class="flex-none border-b border-gray-100 dark:border-gray-800 p-1 flex items-center space-x-2 overflow-x-auto">
       <span>Shown:</span>
       <label
         v-for="n in 3"

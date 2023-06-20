@@ -52,6 +52,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     indent: 'off',
     '@typescript-eslint/no-this-alias': 'off',
+    'func-call-spacing': 'off',
   },
   ignorePatterns: [
     'node_modules/',

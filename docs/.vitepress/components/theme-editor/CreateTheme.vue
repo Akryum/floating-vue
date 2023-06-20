@@ -47,7 +47,7 @@ export default {
 
 <template>
   <ThemeModal>
-    <div class="text-lg border-b border-gray-100">
+    <div class="text-lg border-b border-gray-100 dark:border-gray-800">
       Create theme
     </div>
 
