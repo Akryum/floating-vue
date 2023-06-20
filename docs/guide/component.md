@@ -1,4 +1,4 @@
-# Component
+# Components
 
 For more advanced use cases such as dropdowns, you can use the components instead of the `v-tooltip` directive.
 

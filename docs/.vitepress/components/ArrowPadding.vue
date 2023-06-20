@@ -9,6 +9,7 @@
       :prevent-overflow="false"
       :arrow-padding="tempPadding"
       :auto-hide="false"
+      class="w-max"
     >
       <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">
         Reference

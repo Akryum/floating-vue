@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --vp-z-index-nav: 10500;
+}
+
 .example {
   @apply border-gray-500/25 border rounded-lg p-6 text-center;
   background-color: var(--vp-c-mute);
@@ -17,4 +21,20 @@
 
 .v-popper--theme-_editor-dropdown .v-popper__inner {
   @apply p-2;
+}
+
+
+/* Fix base styles for Tailwind (vitepress) */
+
+button, input, optgroup, select, textarea {
+  border-style: solid;
+}
+
+.example select {
+  appearance: auto;
+}
+
+.example option {
+  color: black;
+  background: white;
 }

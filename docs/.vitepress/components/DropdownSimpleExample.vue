@@ -7,7 +7,7 @@
       @apply-hide="log('apply-hide')"
       @update:shown="log('update:shown', $event)"
     >
-      <button class="border border-gray-300 rounded px-4 py-2">
+      <button class="border border-gray-500 rounded px-4 py-2">
         Click me
       </button>
 

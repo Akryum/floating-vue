@@ -9,6 +9,7 @@
       :skidding="tempOffset[0]"
       :prevent-overflow="false"
       :arrow-padding="6"
+      class="w-max"
     >
       <button class="px-4 py-12 md:p-16 bg-gray-500 text-white rounded-lg !md:text-sm">
         Reference
