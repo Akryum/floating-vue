@@ -20,9 +20,9 @@ defineEmits<{
     <button
       v-for="(tab, index) in tabs"
       :key="index"
-      class="px-3 py-2 relative hover:bg-green-100 dark:hover:bg-green-900 flex items-center"
+      class="px-3 py-2 relative hover:bg-emerald-100 dark:hover:bg-emerald-900 flex items-center"
       :class="{
-        'text-green-500 font-medium': modelValue === tab.id,
+        'text-emerald-500 font-medium': modelValue === tab.id,
       }"
       @click="$emit('update:modelValue', tab.id)"
     >
@@ -38,7 +38,7 @@ defineEmits<{
 
       <div
         v-if="modelValue === tab.id"
-        class="absolute bottom-0 left-0 w-full border-b-2 border-green-500"
+        class="absolute bottom-0 left-0 w-full border-b-2 border-emerald-500"
       />
     </button>
   </div>

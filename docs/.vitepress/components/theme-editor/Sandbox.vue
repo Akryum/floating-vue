@@ -132,7 +132,7 @@ export default {
               <textarea
                 v-if="settings.editablePopper"
                 rows="1"
-                class="bg-green-50 text-green-900 border border-green-100 p-1 rounded resize"
+                class="bg-emerald-50 text-emerald-900 border border-emerald-100 p-1 rounded resize"
               >Popper content here</textarea>
               <div v-else>
                 Popper content here

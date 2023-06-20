@@ -180,7 +180,7 @@ export default {
       >
         <ThemeButton
           v-tooltip="'Settings'"
-          class="px-4 py-1 h-full !rounded-none hover:bg-green-200 dark:bg-green-800 dark:text-white dark:hover:bg-green-700"
+          class="px-4 py-1 h-full !rounded-none hover:bg-emerald-200 dark:bg-emerald-800 dark:text-white dark:hover:bg-emerald-700"
         >
           <SettingsIcon
             class="w-4 h-4"

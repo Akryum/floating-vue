@@ -64,7 +64,7 @@ export default {
 
       <button
         v-tooltip.bottom="'Create a new theme...'"
-        class="flex-none px-3 h-full text-gray-500 hover:text-black hover:bg-green-100 dark:hover:text-white dark:hover:bg-green-800"
+        class="flex-none px-3 h-full text-gray-500 hover:text-black hover:bg-emerald-100 dark:hover:text-white dark:hover:bg-emerald-800"
         @click="$emit('create')"
       >
         <PlusIcon class="w-4 h-4" />
@@ -75,9 +75,9 @@ export default {
       <div
         v-for="t of filteredThemes"
         :key="t.name"
-        class="flex items-stretch hover:bg-green-100 dark:hover:bg-green-800"
+        class="flex items-stretch hover:bg-emerald-100 dark:hover:bg-emerald-800"
         :class="{
-          'bg-green-50 dark:bg-green-700 text-green-500 dark:text-green-200 font-medium': theme === t,
+          'bg-emerald-50 dark:bg-emerald-700 text-emerald-500 dark:text-emerald-200 font-medium': theme === t,
         }"
       >
         <button

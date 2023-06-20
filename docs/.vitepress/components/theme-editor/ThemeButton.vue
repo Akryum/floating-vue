@@ -3,7 +3,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'green',
+      default: 'emerald',
     },
 
     flat: {
@@ -14,9 +14,9 @@ export default {
 
   created () {
     this.colors = {
-      green: {
-        normal: 'bg-green-300 text-green-900',
-        hover: 'hover:bg-green-200 hover:text-green-900',
+      emerald: {
+        normal: 'bg-emerald-300 text-emerald-900',
+        hover: 'hover:bg-emerald-200 hover:text-emerald-900',
       },
       red: {
         normal: 'bg-red-300 text-red-900',
