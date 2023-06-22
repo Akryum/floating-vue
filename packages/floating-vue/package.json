@@ -15,8 +15,8 @@
   "module": "dist/floating-vue.es.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@floating-ui/dom": "^0.1.10",
-    "vue-resize": "^1.0.0"
+    "@floating-ui/dom": "^1.1.1",
+    "vue-resize": "^1.0.1"
   },
   "peerDependencies": {
     "vue": "^2.6.10"
