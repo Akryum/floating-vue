@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.0.0-beta.24
+
+
+### 🩹 Fixes
+
+  - **nuxt:** Handle `this` can be undefined (d3993c7)
+
+### ❤️  Contributors
+
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v2.0.0-beta.23
 
 
