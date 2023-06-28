@@ -1,7 +1,7 @@
 export default async function (_, _nuxt) {
   const { addPluginTemplate } = await import('@nuxt/kit')
 
-  const nuxt = this.nuxt || _nuxt
+  const nuxt = (this && this.nuxt) || _nuxt
 
   nuxt.options.css.push('floating-vue/dist/style.css')
 
