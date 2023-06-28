@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.23
+
+
+### 🩹 Fixes
+
+  - Nuxt module (5f361fa)
+
+### 📖 Documentation
+
+  - Style fixes (5e106c4)
+  - Fix theme editor (19a7979)
+  - Change theme editor accent color (c87f223)
+
+### ❤️  Contributors
+
+- Anthony Fu <anthonyfu117@hotmail.com>
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v2.0.0-beta.22
 
 
