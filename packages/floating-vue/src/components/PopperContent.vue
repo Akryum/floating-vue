@@ -124,7 +124,6 @@ export default defineComponent({
   visibility: hidden;
   opacity: 0;
   transition: opacity .15s, visibility .15s;
-  pointer-events: none;
 }
 
 .v-popper__popper.v-popper__popper--shown {
