@@ -21,7 +21,7 @@ floating-vue is a complete rewrite compared to v-tooltip. This migration guide w
 
 ### Floating UI
 
-The positionning library has changed from `popperjs` to [`floating-ui`](https://floating-ui.com/) which is the spiritual successor.
+The positioning library has changed from `popperjs` to [`floating-ui`](https://floating-ui.com/) which is the spiritual successor.
 
 ### Global configuration
 
