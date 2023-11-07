@@ -8,7 +8,7 @@ export default async function (_, _nuxt) {
   addPluginTemplate({
     filename: 'floating-vue.mjs',
     getContents: () => `
-      import { defineNuxtPlugin } from '#app'
+      import { defineNuxtPlugin } from '#imports'
       import FloatingVue from 'floating-vue'
       
       export default defineNuxtPlugin((nuxtApp) => {
