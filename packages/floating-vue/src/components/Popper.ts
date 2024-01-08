@@ -282,7 +282,7 @@ export default () => defineComponent({
     'close-group': () => true,
     'close-directive': () => true,
     'auto-hide': () => true,
-    'resize': () => true,
+    resize: () => true,
   },
 
   data () {
