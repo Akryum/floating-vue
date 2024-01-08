@@ -1,3 +1,9 @@
+<script setup lang="ts">
+function log (...args) {
+  console.log(...args)
+}
+</script>
+
 <template>
   <div class="example flex justify-center">
     <VDropdown
@@ -19,13 +25,3 @@
     </VDropdown>
   </div>
 </template>
-
-<script>
-export default {
-  methods: {
-    log (...args) {
-      console.log(...args)
-    },
-  },
-}
-</script>

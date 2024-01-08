@@ -40,6 +40,8 @@ export { hideAllPoppers } from './components/Popper'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'
+// Types
+export type { TriggerEvent } from './components/PopperWrapper.vue'
 
 /* Vue plugin */
 

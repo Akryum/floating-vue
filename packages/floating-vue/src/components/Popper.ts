@@ -273,18 +273,18 @@ export default () => defineComponent({
     },
   },
 
-  emits: [
-    'show',
-    'hide',
-    'update:shown',
-    'apply-show',
-    'apply-hide',
-    'close-group',
-    'close-directive',
-    'auto-hide',
-    'resize',
-    'dispose',
-  ],
+  emits: {
+    show: () => true,
+    hide: () => true,
+    'update:shown': (shown: boolean) => true,
+    'apply-show': () => true,
+    'apply-hide': () => true,
+    'close-group': () => true,
+    'close-directive': () => true,
+    'auto-hide': () => true,
+    'resize': () => true,
+    'dispose': () => true,
+  },
 
   data () {
     return {
