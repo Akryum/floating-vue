@@ -283,7 +283,6 @@ export default () => defineComponent({
     'close-directive': () => true,
     'auto-hide': () => true,
     'resize': () => true,
-    'dispose': () => true,
   },
 
   data () {
@@ -520,8 +519,6 @@ export default () => defineComponent({
       this.$_updateParentShownChildren(false)
 
       this.$_swapTargetAttrs('data-original-title', 'title')
-
-      this.$emit('dispose')
     },
 
     async onResize () {

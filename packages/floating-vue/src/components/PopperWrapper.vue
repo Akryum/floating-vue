@@ -30,7 +30,6 @@
     @close-directive="() => $emit('close-directive')"
     @auto-hide="() => $emit('auto-hide')"
     @resize="() => $emit('resize')"
-    @dispose="() => $emit('dispose')"
   >
     <slot
       :shown="isShown"
@@ -296,7 +295,6 @@ export default defineComponent({
     'close-directive': () => true,
     'auto-hide': () => true,
     'resize': () => true,
-    'dispose': () => true,
   },
 
   computed: {

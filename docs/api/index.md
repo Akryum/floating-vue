@@ -537,10 +537,6 @@ When the popper is going to be hidden.
 
 Emitted after the hide delay.
 
-### `dispose`
-
-Popper instance is destroyed.
-
 ### `auto-hide`
 
 Emitted when the popper is closed if clicked outside.
