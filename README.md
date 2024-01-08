@@ -23,7 +23,7 @@ New versions:
 |Old|New|Target
 |---|---|---|
 |v-tooltip v3|floating-vue v1|Vue 2|
-|v-tooltip v4|floating-vue v2|Vue 3|
+|v-tooltip v4|floating-vue v5|Vue 3|
 
 [💚️ Become a Sponsor](https://github.com/sponsors/Akryum)
 

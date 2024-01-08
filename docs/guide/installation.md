@@ -4,7 +4,7 @@
 
 | floating-vue | NPM Tag | Vue compatibility |
 | ------------ | ------- | ----------------- |
-| 2.x          | latest  | 3.x               |
+| 5.x          | latest  | 3.x               |
 | 1.x          | vue2    | 2.x               |
 
 ## Node
@@ -38,16 +38,16 @@ Or use the directives and components directly:
 ```javascript
 import {
   // Directives
-  VTooltip,
-  VClosePopper,
+  vTooltip,
+  vClosePopper,
   // Components
   Dropdown,
   Tooltip,
   Menu
 } from 'floating-vue'
 
-app.directive('tooltip', VTooltip)
-app.directive('close-popper', VClosePopper)
+app.directive('tooltip', vTooltip)
+app.directive('close-popper', vClosePopper)
 
 app.component('VDropdown', Dropdown)
 app.component('VTooltip', Tooltip)
@@ -84,8 +84,8 @@ Or use the directives and components directly:
 
 ```javascript
 // Directives
-app.directive('tooltip', FloatingVue.VTooltip)
-app.directive('close-popper', FloatingVue.VClosePopper)
+app.directive('tooltip', FloatingVue.vTooltip)
+app.directive('close-popper', FloatingVue.vClosePopper)
 // Components
 app.component('VDropdown', FloatingVue.Dropdown)
 app.component('VTooltip', FloatingVue.Tooltip)
@@ -94,7 +94,7 @@ app.component('VMenu', FloatingVue.Menu)
 
 ## Vue 2
 
-floating-vue v2 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
+floating-vue v5 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
 
 
 ::: code-group
@@ -128,16 +128,16 @@ Or use the directives and components directly:
 import Vue from 'vue'
 import {
   // Directives
-  VTooltip,
-  VClosePopper,
+  vTooltip,
+  vClosePopper,
   // Components
   Dropdown,
   Tooltip,
   Menu
 } from 'floating-vue'
 
-Vue.directive('tooltip', VTooltip)
-Vue.directive('close-popper', VClosePopper)
+Vue.directive('tooltip', vTooltip)
+Vue.directive('close-popper', vClosePopper)
 
 Vue.component('VDropdown', Dropdown)
 Vue.component('VTooltip', Tooltip)
