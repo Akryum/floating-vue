@@ -114,7 +114,10 @@ export default defineConfig({
       ],
     },
     search: {
-      provider: 'local'
+      provider: 'local',
+      options: {
+        detailedView: true,
+      },
     },
   },
 })
