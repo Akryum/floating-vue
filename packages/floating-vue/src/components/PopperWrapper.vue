@@ -69,6 +69,11 @@ import ThemeClass from './ThemeClass'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 
+let Element: any = function () {}
+if (typeof window !== 'undefined') {
+  Element = window.Element
+}
+
 export default defineComponent({
   name: 'VPopperWrapper',
 
