@@ -1,5 +1,20 @@
 # Changelog
 
+## v5.0.2
+
+
+### 🩹 Fixes
+
+  - **menu:** Don't close on popper blur (74b940f)
+
+### 🌊 Types
+
+  - Improved props types (5bf9b74)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.0.1
 
 
