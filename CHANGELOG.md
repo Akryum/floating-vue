@@ -1,5 +1,20 @@
 # Changelog
 
+## v5.0.1
+
+
+### 🩹 Fixes
+
+  - `Element' is not defined on server (47eb20c)
+
+### 📖 Documentation
+
+  - Update to v5 (44d0108)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.0.0
 
 Bumping the version to prevent issues with tags from vue-tooltip v3 and v4 in the repository.
