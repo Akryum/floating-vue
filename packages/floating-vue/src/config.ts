@@ -67,7 +67,7 @@ export const config: FloatingVueConfig = {
     menu: {
       $extend: 'dropdown',
       triggers: ['hover', 'focus'],
-      popperTriggers: ['hover', 'focus'],
+      popperTriggers: ['hover'],
       delay: {
         show: 0,
         hide: 400,
