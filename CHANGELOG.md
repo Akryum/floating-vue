@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.0.0
+
+Bumping the version to prevent issues with tags from vue-tooltip v3 and v4 in the repository.
+
+No changes compared to floating-vue v2.0.0
+
 ## v2.0.0
 
 
