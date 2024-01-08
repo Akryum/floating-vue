@@ -66,6 +66,7 @@ import Popper from './Popper.vue'
 import PopperContent from './PopperContent.vue'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
+import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 
@@ -124,7 +125,7 @@ export default defineComponent({
     },
 
     placement: {
-      type: String,
+      type: String as PropType<Placement>,
       default: undefined,
     },
 
@@ -184,7 +185,7 @@ export default defineComponent({
     },
 
     strategy: {
-      type: String,
+      type: String as PropType<'absolute' | 'fixed'>,
       default: undefined,
     },
 
@@ -227,7 +228,7 @@ export default defineComponent({
     },
 
     autoSize: {
-      type: [Boolean, String],
+      type: [Boolean, String] as PropType<boolean | 'min' | 'max'>,
       default: undefined,
     },
 
