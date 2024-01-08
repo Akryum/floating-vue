@@ -92,6 +92,42 @@ app.component('VTooltip', FloatingVue.Tooltip)
 app.component('VMenu', FloatingVue.Menu)
 ```
 
+## Import directly
+
+If you don't want to install the plugin into your Vue app globally, you can import the directives and components directly:
+
+```vue
+<script setup>
+import { Dropdown, Tooltip, Menu, vTooltip } from 'floating-vue'
+</script>
+
+<template>
+  <Dropdown>
+    <button>Click me</button>
+  </Dropdown>
+
+  <Tooltip>
+    <a>Sponsor me</a>
+  </Tooltip>
+
+  <Menu>
+    <button>Documentation</button>
+  </Menu>
+
+  <button v-tooltip="msg">Hover me</button>
+</template>
+```
+
+You can change the configuration too:
+
+```js
+import { options } from 'floating-vue'
+
+options.themes.myTheme = {
+  // ...
+}
+```
+
 ## Vue 2
 
 floating-vue v5 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
