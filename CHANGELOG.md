@@ -1,5 +1,40 @@
 # Changelog
 
+## v2.0.0
+
+
+### 🚀 Enhancements
+
+  - Export vTooltip and vClosePopper for script setup usage (16b3a9b)
+  - Remove dispose event (4be2062)
+
+### 🩹 Fixes
+
+  - Import nuxt composables from #imports (#998)
+  - Change default disposeTimeout to 0 (0699bf8)
+
+### 💅 Refactors
+
+  - Default components are now simple ts files (6439fce)
+
+### 📖 Documentation
+
+  - Fixed spelling mistake in migration v2 docs (#983)
+
+### 🌊 Types
+
+  - Props and events (ee27b15)
+
+### ✅ Tests
+
+  - **lint:** Fix (942a360)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Yahlieel Jafta <yahlieel@hotmail.com>
+- Daniel Roe <daniel@roe.dev>
+
 ## v2.0.0-beta.24
 
 
