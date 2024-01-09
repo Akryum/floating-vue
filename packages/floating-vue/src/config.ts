@@ -14,7 +14,7 @@ export const config: FloatingVueConfig = {
   // Skip delay & CSS transitions when another popper is shown, so that the popper appear to instanly move to the new position.
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
-  disposeTimeout: 0,
+  disposeTimeout: 150,
   // Triggers on the popper itself
   popperTriggers: [],
   // Positioning strategy
