@@ -1,5 +1,22 @@
 # Changelog
 
+## v5.0.3
+
+
+### 🩹 Fixes
+
+  - Set default disposeTimeout to default transition duration (18e786c)
+
+### 📖 Documentation
+
+  - Import directly (fa626ac)
+  - Upgrade vitepress + search (5a46278)
+  - Enable search detailed view by default (3175a62)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.0.2
 
 
