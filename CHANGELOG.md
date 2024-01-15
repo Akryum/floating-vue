@@ -1,5 +1,25 @@
 # Changelog
 
+## v5.1.0
+
+
+### 🚀 Enhancements
+
+  - Close on mousedown (89258a9)
+
+### 💅 Refactors
+
+  - Improve types (#1011)
+
+### 🏡 Chore
+
+  - Remove vue2 demo (#1009)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v5.0.3
 
 

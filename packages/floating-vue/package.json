@@ -1,6 +1,6 @@
 {
   "name": "floating-vue",
-  "version": "5.0.3",
+  "version": "5.1.0",
   "description": "Easy Vue tooltips, dropdowns, menus & popovers using floating-ui",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
