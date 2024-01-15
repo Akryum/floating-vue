@@ -317,9 +317,9 @@ const createPopper = () => defineComponent({
       randomId: `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`,
       shownChildren: new Set(),
       lastAutoHide: true,
-      $_pendingHide: false,
-      $_containsGlobalTarget: false,
-      $_isDisposed: false,
+      pendingHide: false,
+      containsGlobalTarget: false,
+      isDisposed: true,
     }
   },
 
@@ -406,7 +406,6 @@ const createPopper = () => defineComponent({
   },
 
   created () {
-    this.$_isDisposed = true
     if (this.autoMinSize) {
       console.warn('[floating-vue] `autoMinSize` option is deprecated. Use `autoSize="min"` instead.')
     }
@@ -436,7 +435,7 @@ const createPopper = () => defineComponent({
     show ({ event = null, skipDelay = false, force = false } = {}) {
       if (this.parentPopper?.lockedChild && this.parentPopper.lockedChild !== this) return
 
-      this.$_pendingHide = false
+      this.pendingHide = false
       if (force || !this.disabled) {
         if (this.parentPopper?.lockedChild === this) {
           this.parentPopper.lockedChild = null
@@ -459,7 +458,7 @@ const createPopper = () => defineComponent({
 
       // Abort if child is shown
       if (this.shownChildren.size > 0) {
-        this.$_pendingHide = true
+        this.pendingHide = true
         return
       }
 
@@ -481,7 +480,7 @@ const createPopper = () => defineComponent({
         this.parentPopper.lockedChild = null
       }
 
-      this.$_pendingHide = false
+      this.pendingHide = false
       this.$_scheduleHide(event, skipDelay)
 
       this.$emit('hide')
@@ -489,8 +488,8 @@ const createPopper = () => defineComponent({
     },
 
     init () {
-      if (!this.$_isDisposed) return
-      this.$_isDisposed = false
+      if (!this.isDisposed) return
+      this.isDisposed = false
       this.isMounted = false
       this.$_events = []
       this.$_preventShow = false
@@ -516,8 +515,8 @@ const createPopper = () => defineComponent({
     },
 
     dispose () {
-      if (this.$_isDisposed) return
-      this.$_isDisposed = true
+      if (this.isDisposed) return
+      this.isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
       this.$_detachPopperNode()
@@ -538,7 +537,7 @@ const createPopper = () => defineComponent({
     },
 
     async $_computePosition () {
-      if (this.$_isDisposed || this.positioningDisabled) return
+      if (this.isDisposed || this.positioningDisabled) return
 
       const options: ComputePositionConfig = {
         strategy: this.strategy,
@@ -691,7 +690,7 @@ const createPopper = () => defineComponent({
 
     $_scheduleHide (_event, skipDelay = false) {
       if (this.shownChildren.size > 0) {
-        this.$_pendingHide = true
+        this.pendingHide = true
         return
       }
       this.$_updateParentShownChildren(false)
@@ -795,7 +794,7 @@ const createPopper = () => defineComponent({
 
     async $_applyHide (skipTransition = false) {
       if (this.shownChildren.size > 0) {
-        this.$_pendingHide = true
+        this.pendingHide = true
         this.$_hideInProgress = false
         return
       }
@@ -865,7 +864,7 @@ const createPopper = () => defineComponent({
     },
 
     $_ensureTeleport () {
-      if (this.$_isDisposed) return
+      if (this.isDisposed) return
 
       let container = this.container
       // if container is a query, get the relative element
@@ -950,7 +949,7 @@ const createPopper = () => defineComponent({
     },
 
     $_refreshListeners () {
-      if (!this.$_isDisposed) {
+      if (!this.isDisposed) {
         this.$_removeEventListeners()
         this.$_addEventListeners()
       }
@@ -1010,7 +1009,7 @@ const createPopper = () => defineComponent({
         } else {
           parent.shownChildren.delete(this.randomId)
 
-          if (parent.$_pendingHide) {
+          if (parent.pendingHide) {
             parent.hide()
           }
         }
@@ -1039,10 +1038,6 @@ const createPopper = () => defineComponent({
       }
       return false
     },
-
-    $_mouseDownContains () {
-      // replaced by handleGlobalMousedown
-    },
   },
 
   render () {
@@ -1052,43 +1047,16 @@ const createPopper = () => defineComponent({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchstart', handleGlobalMousedown, supportsPassive
-      ? {
-        passive: true,
-        capture: true,
-      }
-      : true)
-    document.addEventListener('touchend', handleGlobalTouchend, supportsPassive
+    document.addEventListener('touchstart', handleGlobalClose, supportsPassive
       ? {
         passive: true,
         capture: true,
       }
       : true)
   } else {
-    window.addEventListener('mousedown', handleGlobalMousedown, true)
-    window.addEventListener('click', handleGlobalClick, true)
+    window.addEventListener('mousedown', handleGlobalClose, true)
   }
   window.addEventListener('resize', computePositionAllShownPoppers)
-}
-
-function handleGlobalMousedown (event: PopperEvent) {
-  for (let i = 0; i < shownPoppers.length; i++) {
-    const popper = shownPoppers[i]
-    try {
-      const popperContent = popper.popperNode()
-      popper.$_mouseDownContains = popperContent.contains(event.target)
-    } catch (e) {
-      // noop
-    }
-  }
-}
-
-function handleGlobalClick (event: PopperEvent) {
-  handleGlobalClose(event)
-}
-
-function handleGlobalTouchend (event: PopperEvent) {
-  handleGlobalClose(event, true)
 }
 
 function handleGlobalClose (event: PopperEvent, touch = false) {
@@ -1097,12 +1065,12 @@ function handleGlobalClose (event: PopperEvent, touch = false) {
   for (let i = shownPoppers.length - 1; i >= 0; i--) {
     const popper = shownPoppers[i]
     try {
-      const contains = popper.$_containsGlobalTarget = isContainingEventTarget(popper, event)
-      popper.$_pendingHide = false
+      const contains = popper.containsGlobalTarget = popper.popperNode().contains(event.target)
+      popper.pendingHide = false
 
       // Delay so that close directive has time to set values (closeAllPopover, closePopover)
       requestAnimationFrame(() => {
-        popper.$_pendingHide = false
+        popper.pendingHide = false
         if (preventClose[popper.randomId]) return
 
         if (shouldAutoHide(popper, contains, event)) {
@@ -1119,9 +1087,9 @@ function handleGlobalClose (event: PopperEvent, touch = false) {
           }
 
           // Auto hide parents
-          let parent = popper.parentPopper
+          let parent = popper.parentPopper as PopperInstance
           while (parent) {
-            if (shouldAutoHide(parent, parent.$_containsGlobalTarget, event)) {
+            if (shouldAutoHide(parent, parent.containsGlobalTarget, event)) {
               parent.$_handleGlobalClose(event, touch)
             } else {
               break
@@ -1134,11 +1102,6 @@ function handleGlobalClose (event: PopperEvent, touch = false) {
       // noop
     }
   }
-}
-
-function isContainingEventTarget (popper: PopperInstance, event: Event): boolean {
-  const popperContent = popper.popperNode()
-  return popper.$_mouseDownContains || popperContent.contains(event.target)
 }
 
 function shouldAutoHide (popper: PopperInstance, contains, event: PopperEvent): boolean {
