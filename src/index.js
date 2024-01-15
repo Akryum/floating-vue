@@ -35,6 +35,8 @@ const plugin = {
   set enabled (value) {
     state.enabled = value
   },
+
+  options: defaultOptions,
 }
 
 // Auto-install
