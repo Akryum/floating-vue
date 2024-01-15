@@ -18,10 +18,16 @@ import { getDefaultConfig, getAllParentThemes } from '../config'
 
 export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 
-const shownPoppers = []
+interface PopperEvent extends Event {
+  usedByTooltip?: boolean
+  closeAllPopover?: boolean
+  closePopover?: boolean
+}
+
+const shownPoppers: PopperInstance[] = []
 let hidingPopper = null
 
-const shownPoppersByTheme: Record<string, any[]> = {}
+const shownPoppersByTheme: Record<string, PopperInstance[]> = {}
 function getShownPoppersByTheme (theme: string) {
   let list = shownPoppersByTheme[theme]
   if (!list) {
@@ -43,7 +49,7 @@ function defaultPropFactory (prop: string) {
 
 const PROVIDE_KEY = '__floating-vue__popper'
 
-export default () => defineComponent({
+const createPopper = () => defineComponent({
   name: 'VPopper',
 
   provide () {
@@ -308,8 +314,12 @@ export default () => defineComponent({
         },
         transformOrigin: null,
       },
+      randomId: `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`,
       shownChildren: new Set(),
       lastAutoHide: true,
+      $_pendingHide: false,
+      $_containsGlobalTarget: false,
+      $_isDisposed: false,
     }
   },
 
@@ -397,7 +407,6 @@ export default () => defineComponent({
 
   created () {
     this.$_isDisposed = true
-    this.randomId = `popper_${[Math.random(), Date.now()].map(n => n.toString(36).substring(2, 10)).join('_')}`
     if (this.autoMinSize) {
       console.warn('[floating-vue] `autoMinSize` option is deprecated. Use `autoSize="min"` instead.')
     }
@@ -662,7 +671,7 @@ export default () => defineComponent({
       })
     },
 
-    $_scheduleShow (event = null, skipDelay = false) {
+    $_scheduleShow (_event, skipDelay = false) {
       this.$_updateParentShownChildren(true)
       this.$_hideInProgress = false
       clearTimeout(this.$_scheduleTimer)
@@ -680,7 +689,7 @@ export default () => defineComponent({
       }
     },
 
-    $_scheduleHide (event = null, skipDelay = false) {
+    $_scheduleHide (_event, skipDelay = false) {
       if (this.shownChildren.size > 0) {
         this.$_pendingHide = true
         return
@@ -701,7 +710,7 @@ export default () => defineComponent({
       }
     },
 
-    $_computeDelay (type) {
+    $_computeDelay (type: 'show' | 'hide') {
       const delay = this.delay
       return parseInt((delay && delay[type]) || delay || 0)
     },
@@ -878,7 +887,7 @@ export default () => defineComponent({
     $_addEventListeners () {
       // Add trigger show events
 
-      const handleShow = event => {
+      const handleShow = (event: PopperEvent) => {
         if (this.isShown && !this.$_hideInProgress) {
           return
         }
@@ -892,7 +901,7 @@ export default () => defineComponent({
 
       // Add trigger hide events
 
-      const handleHide = event => {
+      const handleHide = (event: PopperEvent) => {
         if (event.usedByTooltip) {
           return
         }
@@ -903,7 +912,7 @@ export default () => defineComponent({
       this.$_registerTriggerListeners([this.$_popperNode], HIDE_EVENT_MAP, this.popperTriggers, this.popperHideTriggers, handleHide)
     },
 
-    $_registerEventListeners (targetNodes: any[], eventType: string, handler: (event: Event) => void) {
+    $_registerEventListeners (targetNodes: Element[], eventType: string, handler: (event: Event) => void) {
       this.$_events.push({ targetNodes, eventType, handler })
       targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
         ? {
@@ -912,7 +921,7 @@ export default () => defineComponent({
         : undefined))
     },
 
-    $_registerTriggerListeners (targetNodes: any[], eventMap: Record<string, string>, commonTriggers, customTrigger, handler: (event: Event) => void) {
+    $_registerTriggerListeners (targetNodes: Element[], eventMap: Record<string, string>, commonTriggers, customTrigger, handler: (event: Event) => void) {
       let triggers = commonTriggers
 
       if (customTrigger != null) {
@@ -1030,6 +1039,10 @@ export default () => defineComponent({
       }
       return false
     },
+
+    $_mouseDownContains () {
+      // replaced by handleGlobalMousedown
+    },
   },
 
   render () {
@@ -1058,7 +1071,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   window.addEventListener('resize', computePositionAllShownPoppers)
 }
 
-function handleGlobalMousedown (event) {
+function handleGlobalMousedown (event: PopperEvent) {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
     try {
@@ -1070,15 +1083,15 @@ function handleGlobalMousedown (event) {
   }
 }
 
-function handleGlobalClick (event) {
+function handleGlobalClick (event: PopperEvent) {
   handleGlobalClose(event)
 }
 
-function handleGlobalTouchend (event) {
+function handleGlobalTouchend (event: PopperEvent) {
   handleGlobalClose(event, true)
 }
 
-function handleGlobalClose (event, touch = false) {
+function handleGlobalClose (event: PopperEvent, touch = false) {
   const preventClose: Record<string, true> = {}
 
   for (let i = shownPoppers.length - 1; i >= 0; i--) {
@@ -1123,16 +1136,16 @@ function handleGlobalClose (event, touch = false) {
   }
 }
 
-function isContainingEventTarget (popper, event): boolean {
+function isContainingEventTarget (popper: PopperInstance, event: Event): boolean {
   const popperContent = popper.popperNode()
   return popper.$_mouseDownContains || popperContent.contains(event.target)
 }
 
-function shouldAutoHide (popper, contains, event): boolean {
+function shouldAutoHide (popper: PopperInstance, contains, event: PopperEvent): boolean {
   return event.closeAllPopover || (event.closePopover && contains) || (getAutoHideResult(popper, event) && !contains)
 }
 
-function getAutoHideResult (popper, event) {
+function getAutoHideResult (popper: PopperInstance, event: Event) {
   if (typeof popper.autoHide === 'function') {
     const result = popper.autoHide(event)
     popper.lastAutoHide = result
@@ -1141,10 +1154,10 @@ function getAutoHideResult (popper, event) {
   return popper.autoHide
 }
 
-function computePositionAllShownPoppers (event) {
+function computePositionAllShownPoppers () {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    popper.$_computePosition(event)
+    popper.$_computePosition()
   }
 }
 
@@ -1180,3 +1193,7 @@ function lineIntersectsLine (x1: number, y1: number, x2: number, y2: number, x3:
   const uB = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
   return (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1)
 }
+
+export default createPopper
+
+export type PopperInstance = ReturnType<typeof createPopper> extends { new (): infer T } ? T : never
