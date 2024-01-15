@@ -305,6 +305,10 @@
       </Collapse>
     </section>
 
+<!--    <section class="demo">
+      <div class="section-content"><TooltipShadowDOMContainer/></div>
+    </section>-->
+
   </div>
 </template>
 
@@ -314,6 +318,7 @@ import screenfull from 'screenfull'
 import CodeSnippet from './CodeSnippet.vue'
 import Collapse from './Collapse.vue'
 import ExampleComponent from './ExampleComponent.vue'
+import TooltipShadowDOMContainer from './shadow/TooltipShadowDOMContainer'
 
 const mainSnippet = `
 import Vue from 'vue'
@@ -612,6 +617,7 @@ export default {
     CodeSnippet,
     Collapse,
     ExampleComponent,
+    TooltipShadowDOMContainer
   },
 
   data () {

@@ -2,7 +2,7 @@
 
 import Popper from 'popper.js'
 import { getOptions, directive } from '../directives/v-tooltip'
-import { addClasses, removeClasses, supportsPassive } from '../utils'
+import { addClasses, isInDocument, removeClasses, supportsPassive } from '../utils'
 import isEqual from 'lodash/isEqual'
 
 const DEFAULT_OPTIONS = {
@@ -287,8 +287,8 @@ export default class Tooltip {
   }
 
   _show (reference, options) {
-    if (options && typeof options.container === 'string') {
-      const container = document.querySelector(options.container)
+    if (options) {
+      const container = this._findContainer(options.container, reference)
       if (!container) return
     }
 
@@ -490,6 +490,9 @@ export default class Tooltip {
     // if container is a query, get the relative element
     if (typeof container === 'string') {
       container = window.document.querySelector(container)
+    } else if (typeof container === 'function') {
+      // if container is function that returns an element, resolve it
+      container = container(reference)
     } else if (container === false) {
       // if container is `false`, set it to reference parent
       container = reference.parentNode
@@ -578,9 +581,7 @@ export default class Tooltip {
       if (this._isOpen === false) {
         return
       }
-      if (!this._tooltipNode.ownerDocument.body.contains(this._tooltipNode)) {
-        return
-      }
+      if (!isInDocument(this._tooltipNode)) return
 
       // if we are hiding because of a mouseleave, we must check that the new
       // reference isn't the tooltip, because in this case we don't want to hide it

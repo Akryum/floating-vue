@@ -11,6 +11,25 @@ export function convertToArray (value) {
 }
 
 /**
+ * Check if an element is in the DOM (Including the Shadow DOM).
+ * @param element
+ * @returns {boolean}
+ */
+export function isInDocument (element) {
+  let currentElement = element
+  while (currentElement && currentElement.parentNode) {
+    if (currentElement.parentNode === document) {
+      return true
+    } else if (currentElement.parentNode instanceof DocumentFragment) {
+      currentElement = currentElement.parentNode.host
+    } else {
+      currentElement = currentElement.parentNode
+    }
+  }
+  return false
+}
+
+/**
  * Add classes to an element.
  * This method checks to ensure that the classes don't already exist before adding them.
  * It uses el.className rather than classList in order to be IE friendly.

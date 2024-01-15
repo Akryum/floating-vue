@@ -251,7 +251,7 @@ Or a reactive property:
 - `trigger` - Events triggering the tooltip separated with spaces: `'hover'`, `'click'`, `'focus'` or `'manual'` (`'manual'` can't be combined with any other event).
 - `show` - Boolean to manually open or hide the tooltip.
 - `offset` - Offset of the position (px).
-- `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`). Set it to `false` to append popover on target parent node.
+- `container` - Selector: Container where the tooltip will be appended (e.g. `'body'`). Set it to `false` to append popover on target parent node. Provide a callback to resolve container dynamically, signature would be `callback(targetElement)`.
 - `boundariesElement` - DOM element for the tooltip boundaries.
 - `template` - HTML template of the tooltip.
 - `arrowSelector` - CSS selector to get the arrow element in the tooltip template.

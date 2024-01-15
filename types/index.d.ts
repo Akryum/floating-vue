@@ -72,8 +72,7 @@ export interface GlobalVTooltipOptions {
    * Default container where the tooltip will be appended
    * @default 'body'
    */
-  defaultContainer: string | HTMLElement | false
-
+  defaultContainer: string | HTMLElement | false | ((targetElement: Element) => Element)
   defaultBoundariesElement: string | HTMLElement
 
   defaultPopperOptions: any
