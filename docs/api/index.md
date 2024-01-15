@@ -16,6 +16,18 @@ import { hideAllPoppers } from 'floating-vue'
 hideAllPoppers()
 ```
 
+### `recomputeAllPoppers`
+
+Recompute the position of all shown poppers.
+
+```js
+import { recomputeAllPoppers } from 'floating-vue'
+
+recomputeAllPoppers()
+```
+
+This function is automatically called when the window is resized.
+
 ### `createTooltip`
 
 `createTooltip(el, valueOrOptions, directiveModifiers)` creates a tooltip on a given element.

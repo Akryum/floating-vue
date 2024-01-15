@@ -1055,7 +1055,7 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     window.addEventListener('mousedown', handleGlobalMousedown, true)
     window.addEventListener('click', handleGlobalClick, true)
   }
-  window.addEventListener('resize', computePositionAllShownPoppers)
+  window.addEventListener('resize', recomputeAllPoppers)
 }
 
 function handleGlobalMousedown (event) {
@@ -1141,10 +1141,10 @@ function getAutoHideResult (popper, event) {
   return popper.autoHide
 }
 
-function computePositionAllShownPoppers (event) {
+export function recomputeAllPoppers () {
   for (let i = 0; i < shownPoppers.length; i++) {
     const popper = shownPoppers[i]
-    popper.$_computePosition(event)
+    popper.$_computePosition()
   }
 }
 
