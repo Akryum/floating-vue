@@ -1,7 +1,7 @@
 import { supportsPassive } from '../util/env'
 
 function addListeners (el) {
-  el.addEventListener('click', onClick)
+  el.addEventListener('mousedown', onMouseDown)
   el.addEventListener('touchstart', onTouchStart, supportsPassive
     ? {
       passive: true,
@@ -10,13 +10,13 @@ function addListeners (el) {
 }
 
 function removeListeners (el) {
-  el.removeEventListener('click', onClick)
+  el.removeEventListener('mousedown', onMouseDown)
   el.removeEventListener('touchstart', onTouchStart)
   el.removeEventListener('touchend', onTouchEnd)
   el.removeEventListener('touchcancel', onTouchCancel)
 }
 
-function onClick (event) {
+function onMouseDown (event) {
   const el = event.currentTarget
   event.closePopover = !el.$_vclosepopover_touch
   event.closeAllPopover = el.$_closePopoverModifiers && !!el.$_closePopoverModifiers.all
