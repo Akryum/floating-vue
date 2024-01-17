@@ -1,5 +1,16 @@
 # Changelog
 
+## v5.1.1
+
+
+### 🩹 Fixes
+
+  - Fix v-close-popper to function on mousedown (#1014)
+
+### ❤️  Contributors
+
+- Giannis Koutsaftakis ([@kouts](http://github.com/kouts))
+
 ## v5.1.0
 
 
