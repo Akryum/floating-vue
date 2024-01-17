@@ -1,5 +1,16 @@
 # Changelog
 
+## v5.2.0
+
+
+### 🚀 Enhancements
+
+  - Expose global `recomputeAllPoppers` helper (#1010)
+
+### ❤️  Contributors
+
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v5.1.1
 
 
