@@ -219,6 +219,12 @@ export default defineComponent({
       default: undefined,
     },
 
+    addPopperClassesToBody: {
+      type: Boolean,
+      default: true,
+    },
+
+
     /**
      * @deprecated
      */

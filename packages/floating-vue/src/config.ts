@@ -31,6 +31,8 @@ export const config: FloatingVueConfig = {
   arrowPadding: 0,
   // Compute arrow overflow (useful to hide it)
   arrowOverflow: true,
+  // Add popper classes to body, allowing more customization but may affect performance
+  addPopperClassesToBody: true,
   // Themes
   themes: {
     tooltip: {
