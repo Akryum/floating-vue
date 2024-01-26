@@ -207,6 +207,11 @@ const createPopper = () => defineComponent({
       default: defaultPropFactory('computeTransformOrigin'),
     },
 
+    addPopperClassesToBody: {
+      type: Boolean,
+      default: defaultPropFactory('addPopperClassesToBody'),
+    },
+
     /**
      * @deprecated
      */
@@ -773,10 +778,15 @@ const createPopper = () => defineComponent({
       }
 
       shownPoppers.push(this)
-      document.body.classList.add('v-popper--some-open')
+      if (this.addPopperClassesToBody) {
+        document.body.classList.add('v-popper--some-open')
+      }
+
       for (const theme of getAllParentThemes(this.theme)) {
         getShownPoppersByTheme(theme).push(this)
-        document.body.classList.add(`v-popper--some-open--${theme}`)
+        if (this.addPopperClassesToBody) {
+          document.body.classList.add(`v-popper--some-open--${theme}`)
+        }
       }
 
       this.$emit('apply-show')
@@ -807,13 +817,13 @@ const createPopper = () => defineComponent({
 
       this.skipTransition = skipTransition
       removeFromArray(shownPoppers, this)
-      if (shownPoppers.length === 0) {
+      if (shownPoppers.length === 0 && this.addPopperClassesToBody) {
         document.body.classList.remove('v-popper--some-open')
       }
       for (const theme of getAllParentThemes(this.theme)) {
         const list = getShownPoppersByTheme(theme)
         removeFromArray(list, this)
-        if (list.length === 0) {
+        if (list.length === 0 && this.addPopperClassesToBody) {
           document.body.classList.remove(`v-popper--some-open--${theme}`)
         }
       }
