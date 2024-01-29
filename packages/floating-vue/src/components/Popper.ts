@@ -380,13 +380,12 @@ const createPopper = () => defineComponent({
       }
     },
 
-    ...[
-      'triggers',
-      'positioningDisabled',
-    ].reduce((acc, prop) => {
-      acc[prop] = '$_refreshListeners'
-      return acc
-    }, {}),
+    triggers: {
+      handler: '$_refreshListeners',
+      deep: true,
+    },
+
+    positioningDisabled: '$_refreshListeners',
 
     ...[
       'placement',
