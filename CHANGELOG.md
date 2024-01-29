@@ -1,5 +1,21 @@
 # Changelog
 
+## v5.2.1
+
+
+### 🚀 Enhancements
+
+  - Add deprecation notice to VTooltip and VClosePopper (abf094f)
+
+### 🩹 Fixes
+
+  - Revert autohide on mousedown, add autoHideOnMousedown in config, fix #1015 (#1015)
+  - Watch triggers array deeply, fix #1018 (#1018)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.2.0
 
 
