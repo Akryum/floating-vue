@@ -20,9 +20,15 @@ import PrivateVClosePopper from './directives/v-close-popper'
 
 export const options = config
 // Directive
+/**
+ * @deprecated Import `vTooltip` instead.
+ */
 export const VTooltip = PrivateVTooltip
 export const vTooltip = PrivateVTooltip // For <script setup>
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
+/**
+ * @deprecated Import `vClosePopper` instead.
+ */
 export const VClosePopper = PrivateVClosePopper
 export const vClosePopper = PrivateVClosePopper // For <script setup>
 // Components
