@@ -14,7 +14,7 @@ import { placements, Placement } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { nextFrame } from '../util/frame'
-import { getDefaultConfig, getAllParentThemes } from '../config'
+import { getDefaultConfig, getAllParentThemes, config } from '../config'
 
 export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 
@@ -320,6 +320,7 @@ const createPopper = () => defineComponent({
       pendingHide: false,
       containsGlobalTarget: false,
       isDisposed: true,
+      mouseDownContains: false,
     }
   },
 
@@ -1047,25 +1048,50 @@ const createPopper = () => defineComponent({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    document.addEventListener('touchstart', handleGlobalClose, supportsPassive
+    const options = supportsPassive
       ? {
         passive: true,
         capture: true,
       }
-      : true)
+      : true
+    document.addEventListener('touchstart', (event) => handleGlobalPointerDown(event, true), options)
+    document.addEventListener('touchend', (event) => handleGlobalPointerUp(event, true), options)
   } else {
-    window.addEventListener('mousedown', handleGlobalClose, true)
+    window.addEventListener('mousedown', (event) => handleGlobalPointerDown(event, false), true)
+    window.addEventListener('click', (event) => handleGlobalPointerUp(event, false), true)
   }
   window.addEventListener('resize', recomputeAllPoppers)
 }
 
-function handleGlobalClose (event: PopperEvent, touch = false) {
+function handleGlobalPointerDown (event: PopperEvent, touch: boolean) {
+  if (config.autoHideOnMousedown) {
+    handleGlobalClose(event, touch)
+  } else {
+    // Compute contains only
+    for (let i = 0; i < shownPoppers.length; i++) {
+      const popper = shownPoppers[i]
+      try {
+        popper.mouseDownContains = popper.popperNode().contains(event.target)
+      } catch (e) {
+        // noop
+      }
+    }
+  }
+}
+
+function handleGlobalPointerUp (event: PopperEvent, touch: boolean) {
+  if (!config.autoHideOnMousedown) {
+    handleGlobalClose(event, touch)
+  }
+}
+
+function handleGlobalClose (event: PopperEvent, touch: boolean) {
   const preventClose: Record<string, true> = {}
 
   for (let i = shownPoppers.length - 1; i >= 0; i--) {
     const popper = shownPoppers[i]
     try {
-      const contains = popper.containsGlobalTarget = popper.popperNode().contains(event.target)
+      const contains = popper.containsGlobalTarget = popper.mouseDownContains || popper.popperNode().contains(event.target)
       popper.pendingHide = false
 
       // Delay so that close directive has time to set values (closeAllPopover, closePopover)

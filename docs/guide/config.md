@@ -62,6 +62,10 @@ export const config: FloatingVueConfig = {
   arrowPadding: 0,
   // Compute arrow overflow (useful to hide it)
   arrowOverflow: true,
+  /**
+   * By default, compute autohide on 'click'.
+   */
+  autoHideOnMousedown: false,
   // Themes
   themes: {
     tooltip: {
