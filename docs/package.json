@@ -34,7 +34,7 @@
     "eslint": "^8.42.0",
     "eslint-plugin-vue": "^9.14.1",
     "github-buttons": "^2.27.0",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.3.2",
     "unplugin-icons": "^0.16.3",
     "unplugin-vue-components": "^0.25.1",
