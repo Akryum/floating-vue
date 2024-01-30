@@ -8,9 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ArrowPadding: typeof import('./.vitepress/components/ArrowPadding.vue')['default']
+    DropdownCloseDirectiveDemo: typeof import('./.vitepress/components/DropdownCloseDirectiveDemo.vue')['default']
     DropdownMobileDemo: typeof import('./.vitepress/components/DropdownMobileDemo.vue')['default']
     DropdownPlacement: typeof import('./.vitepress/components/DropdownPlacement.vue')['default']
     DropdownSimpleExample: typeof import('./.vitepress/components/DropdownSimpleExample.vue')['default']
+    DropdownVClodePopperDemo: typeof import('./.vitepress/components/DropdownVClodePopperDemo.vue')['default']
     MenuSimpleExample: typeof import('./.vitepress/components/MenuSimpleExample.vue')['default']
     OffsetExample: typeof import('./.vitepress/components/OffsetExample.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -218,7 +218,7 @@ Use the `hide` slot prop to close the popper:
   <button>Click me</button>
 
   <template #popper="{ hide }">
-    <a @click="hide()">Close</a>
+    <button @click="hide()">Close</button>
   </template>
 </VDropdown>
 ```
@@ -232,24 +232,26 @@ Use the `v-close-popper` directive on an element inside the dropdown to close it
   <button>Click me</button>
 
   <template #popper>
-    <a v-close-popper>Close</a>
+    <button v-close-popper>Close</button>
   </template>
 </VDropdown>
 ```
+
+<DropdownCloseDirectiveDemo />
 
 The directive works even in nested components in the `popper` slot.
 
 You can also set it to true or false to enable or disable the directive (enabled by default):
 
 ```html
-<a v-close-popper="false">Close</a>
-<a v-close-popper="true">Close</a>
+<button v-close-popper="false">Close</button>
+<button v-close-popper="true">Close</button>
 ```
 
 You can also use a property:
 
 ```html
-<a v-close-popper="myBooleanProp">Close</a>
+<button v-close-popper="myBooleanProp">Close</button>
 ```
 
 ```js
