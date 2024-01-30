@@ -1,5 +1,16 @@
 # Changelog
 
+## v5.2.2
+
+
+### 🩹 Fixes
+
+  - V-close-popper directive, #1022 (#1022)
+
+### ❤️  Contributors
+
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v5.2.1
 
 
