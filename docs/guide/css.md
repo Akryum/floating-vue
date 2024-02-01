@@ -210,17 +210,17 @@ Showing:
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | **true** | false |
 | `v-popper__popper--show-to` | false | **true** |
-| `v-popper__popper--hidden-from` | false | false |
-| `v-popper__popper--hidden-to` | false | false |
+| `v-popper__popper--hide-from` | false | false |
+| `v-popper__popper--hide-to` | false | false |
 
-Hidding:
+Hiding:
 
 | Class | Frame 1 | Frame 2 |
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | false | false |
 | `v-popper__popper--show-to` | false | false |
-| `v-popper__popper--hidden-from` | **true** | false |
-| `v-popper__popper--hidden-to` | false | **true** |
+| `v-popper__popper--hide-from` | **true** | false |
+| `v-popper__popper--hide-to` | false | **true** |
 
 #### Zoom show only example
 
