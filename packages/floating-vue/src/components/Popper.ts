@@ -879,7 +879,10 @@ const createPopper = () => defineComponent({
         throw new Error('No container for popover: ' + this.container)
       }
 
-      container.appendChild(this.$_popperNode)
+      if (!container.contains(this.$_popperNode)) {
+        container.appendChild(this.$_popperNode)
+      }
+
       this.isMounted = true
     },
 
