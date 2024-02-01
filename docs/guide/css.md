@@ -222,6 +222,8 @@ Hiding:
 | `v-popper__popper--hide-from` | **true** | false |
 | `v-popper__popper--hide-to` | false | **true** |
 
+Please note that the default styles for the parent of `.v-popper__wrapper` (i.e. `.v-popper__popper.v-popper__popper--shown` and `.v-popper__popper.v-popper__popper--hidden`) have a transition-duration of .15 seconds. So if your transition of `.v-popper__wrapper` takes longer, you might want to change this transition as well. 
+
 #### Zoom show only example
 
 ```html
