@@ -210,17 +210,19 @@ Showing:
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | **true** | false |
 | `v-popper__popper--show-to` | false | **true** |
-| `v-popper__popper--hidden-from` | false | false |
-| `v-popper__popper--hidden-to` | false | false |
+| `v-popper__popper--hide-from` | false | false |
+| `v-popper__popper--hide-to` | false | false |
 
-Hidding:
+Hiding:
 
 | Class | Frame 1 | Frame 2 |
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | false | false |
 | `v-popper__popper--show-to` | false | false |
-| `v-popper__popper--hidden-from` | **true** | false |
-| `v-popper__popper--hidden-to` | false | **true** |
+| `v-popper__popper--hide-from` | **true** | false |
+| `v-popper__popper--hide-to` | false | **true** |
+
+Please note that the default styles for the parent of `.v-popper__wrapper` (i.e. `.v-popper__popper.v-popper__popper--shown` and `.v-popper__popper.v-popper__popper--hidden`) have a transition-duration of .15 seconds. So if your transition of `.v-popper__wrapper` takes longer, you might want to change this transition as well. 
 
 #### Zoom show only example
 
