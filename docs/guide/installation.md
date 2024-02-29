@@ -172,8 +172,8 @@ import {
   Menu
 } from 'floating-vue'
 
-Vue.directive('tooltip', vTooltip)
-Vue.directive('close-popper', vClosePopper)
+Vue.directive('tooltip', VTooltip)
+Vue.directive('close-popper', VClosePopper)
 
 Vue.component('VDropdown', Dropdown)
 Vue.component('VTooltip', Tooltip)
