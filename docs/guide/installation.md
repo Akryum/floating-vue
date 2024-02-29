@@ -164,8 +164,8 @@ Or use the directives and components directly:
 import Vue from 'vue'
 import {
   // Directives
-  vTooltip,
-  vClosePopper,
+  VTooltip,
+  VClosePopper,
   // Components
   Dropdown,
   Tooltip,
