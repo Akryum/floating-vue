@@ -483,6 +483,14 @@ Boolean: disable the auto focus on the popper DOM node when shown.
 
 Id used for the `aria-describedby` attribute. By default a random id.
 
+### `hideParents`
+
+Boolean: disable the auto closing of parent popups when nested.
+
+```html
+<VDropdown v-bind:hideParents="true" />
+```
+
 ## Component slots
 
 ### `default`

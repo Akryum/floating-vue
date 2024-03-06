@@ -59,6 +59,13 @@ export const demos = [
     },
   },
   {
+    path: '/component/demo3',
+    component: () => import('./views/component/DropdownDemo3.vue'),
+    meta: {
+      label: 'Dropdown 3',
+    },
+  },
+  {
     path: '/component/submenu1',
     component: () => import('./views/component/SubMenuDemo1.vue'),
     meta: {
