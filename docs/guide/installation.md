@@ -213,3 +213,15 @@ export default defineNuxtConfig({
   ]
 })
 ```
+
+To change global configuration options, you can use a Nuxt plugin:
+
+```js
+// plugins/floating-vue.client.ts
+
+import FloatingVue from 'floating-vue'
+
+export default defineNuxtPlugin(() => {
+    FloatingVue.options.themes.tooltip.placement = 'bottom'
+})
+```
