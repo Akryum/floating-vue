@@ -31,6 +31,8 @@ export const config: FloatingVueConfig = {
   arrowPadding: 0,
   // Compute arrow overflow (useful to hide it)
   arrowOverflow: true,
+  // Timeout that will trigger the closing of parent popper in (ms - 0 means disabled)
+  autoCloseTimeout: 1000,
   /**
    * By default, compute autohide on 'click'.
    */

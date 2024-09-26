@@ -277,6 +277,11 @@ const createPopper = () => defineComponent({
       type: Number,
       default: defaultPropFactory('disposeTimeout'),
     },
+
+    autoCloseTimeout: {
+      type: Number,
+      default: defaultPropFactory('autoCloseTimeout'),
+    },
   },
 
   emits: {
@@ -467,12 +472,14 @@ const createPopper = () => defineComponent({
         if (this.parentPopper) {
           this.parentPopper.lockedChild = this
           clearTimeout(this.parentPopper.lockedChildTimer)
-          // this.parentPopper.lockedChildTimer = setTimeout(() => {
-          //   if (this.parentPopper.lockedChild !== this) {
-          //     this.parentPopper.lockedChild.hide({ skipDelay })
-          //     this.parentPopper.lockedChild = null
-          //   }
-          // }, 1000)
+          if (this.autoCloseTimeout > 0) {
+            this.parentPopper.lockedChildTimer = setTimeout(() => {
+              if (this.parentPopper.lockedChild === this) {
+                this.parentPopper.lockedChild.hide({ skipDelay })
+                this.parentPopper.lockedChild = null
+              }
+            }, this.autoCloseTimeout)
+          }
         }
         return
       }
