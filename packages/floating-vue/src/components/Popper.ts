@@ -1090,7 +1090,12 @@ function handleGlobalClose (event: PopperEvent, touch: boolean) {
   for (let i = shownPoppers.length - 1; i >= 0; i--) {
     const popper = shownPoppers[i]
     try {
-      const contains = popper.containsGlobalTarget = popper.mouseDownContains || popper.popperNode().contains(event.target)
+      const childrenContains = Array.from(popper.shownChildren).some(id => {
+        const child = shownPoppers.find(p => p.randomId === id)
+        return child && child.popperNode().contains(event.target)
+      })
+
+      const contains = popper.containsGlobalTarget = popper.mouseDownContains || popper.popperNode().contains(event.target) || childrenContains
       popper.pendingHide = false
 
       // Delay so that close directive has time to set values (closeAllPopover, closePopover)
