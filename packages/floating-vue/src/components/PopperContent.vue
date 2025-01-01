@@ -22,7 +22,7 @@
       position: result.strategy,
       transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
     } : undefined"
-    :aria-hidden="shown ? 'false' : 'true'"
+    :aria-hidden="shown || autoHide ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
     :data-popper-placement="result ? result.placement : undefined"
     @keyup.esc="autoHide && $emit('hide')"
