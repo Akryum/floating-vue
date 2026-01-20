@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "vue": "^3.2.0",
-    "@nuxt/kit": "^3.2.0"
+    "@nuxt/kit": "^3.2.0 || ^4.0.0"
   },
   "peerDependenciesMeta": {
     "@nuxt/kit": {
