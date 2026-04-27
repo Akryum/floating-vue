@@ -29,26 +29,19 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      placement: 'auto',
-    }
-  },
+<script setup>
+import { computed, ref } from 'vue'
 
-  computed: {
-    placements () {
-      const primary = ['auto', 'top', 'right', 'bottom', 'left']
-      const secondary = ['', '-start', '-end']
-      const list = []
-      for (const p of primary) {
-        for (const s of secondary) {
-          list.push(`${p}${s}`)
-        }
-      }
-      return list
-    },
-  },
-}
+const placement = ref('auto')
+const placements = computed(() => {
+  const primary = ['auto', 'top', 'right', 'bottom', 'left']
+  const secondary = ['', '-start', '-end']
+  const list = []
+  for (const p of primary) {
+    for (const s of secondary) {
+      list.push(`${p}${s}`)
+    }
+  }
+  return list
+})
 </script>

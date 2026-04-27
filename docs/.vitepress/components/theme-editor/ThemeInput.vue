@@ -1,34 +1,32 @@
-<script>
-export default {
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+
+defineOptions({
   inheritAttrs: false,
+})
 
-  props: {
-    // eslint-disable-next-line
-    modelValue: {},
-
-    autoFocus: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  modelValue: {
+    default: null,
   },
-
-  computed: {
-    valueModel: {
-      get () {
-        return this.modelValue
-      },
-      set (value) {
-        this.$emit('update:modelValue', value)
-      },
-    },
+  autoFocus: {
+    type: Boolean,
+    default: false,
   },
+})
 
-  mounted () {
-    if (this.autoFocus) {
-      this.$refs.input.focus()
-    }
-  },
-}
+const emit = defineEmits(['update:modelValue'])
+const input = ref(null)
+const valueModel = computed({
+  get: () => props.modelValue,
+  set: value => emit('update:modelValue', value),
+})
+
+onMounted(() => {
+  if (props.autoFocus) {
+    input.value.focus()
+  }
+})
 </script>
 
 <template>

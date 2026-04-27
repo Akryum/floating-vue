@@ -1,47 +1,34 @@
-<script>
+<script setup>
+import { ref } from 'vue'
 import ThemeButton from './ThemeButton.vue'
 import ThemeInput from './ThemeInput.vue'
 import ThemeModal from './ThemeModal.vue'
 import { createNewTheme, state } from './state'
 import { builtinThemes } from './builtin-themes'
 
-export default {
-  components: {
-    ThemeModal,
-    ThemeButton,
-    ThemeInput,
-  },
+const emit = defineEmits(['close'])
+const name = ref('')
+const error = ref(null)
 
-  data () {
-    return {
-      name: '',
-      error: null,
-    }
-  },
+function createTheme () {
+  error.value = null
+  if (!name.value) return
 
-  methods: {
-    createNewTheme () {
-      this.error = null
-      if (!this.name) return
+  if (builtinThemes.includes(name.value)) {
+    error.value = 'This name is reserved for built-in themes.'
+  } else if (name.value in state.themeMap) {
+    error.value = 'A theme with this name already exists.'
+  }
 
-      // Validation
-      if (builtinThemes.includes(this.name)) {
-        this.error = 'This name is reserved for built-in themes.'
-      } else if (this.name in state.themeMap) {
-        this.error = 'A theme with this name already exists.'
-      }
+  if (error.value) return
+  createNewTheme({
+    name: name.value,
+  })
+  close()
+}
 
-      if (this.error) return
-      createNewTheme({
-        name: this.name,
-      })
-      this.close()
-    },
-
-    close () {
-      this.$emit('close')
-    },
-  },
+function close () {
+  emit('close')
 }
 </script>
 
@@ -56,7 +43,7 @@ export default {
         v-model="name"
         placeholder="Theme name"
         auto-focus
-        @keyup.enter="createNewTheme()"
+        @keyup.enter="createTheme()"
       />
 
       <div
@@ -78,7 +65,7 @@ export default {
 
       <ThemeButton
         class="flex-1 p-2"
-        @click="createNewTheme()"
+        @click="createTheme()"
       >
         Create theme
       </ThemeButton>

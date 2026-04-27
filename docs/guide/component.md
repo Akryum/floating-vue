@@ -254,12 +254,12 @@ You can also use a property:
 <button v-close-popper="myBooleanProp">Close</button>
 ```
 
-```js
-data () {
-  return {
-    myBooleanProp: true,
-  }
-}
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const myBooleanProp = ref(true)
+</script>
 ```
 
 Close all the poppers in the page with the `all` modifier:
@@ -290,12 +290,12 @@ Disabling a popper will prevent it from being shown.
 <VDropdown :disabled="isDisabled"></VDropdown>
 ```
 
-```js
-data () {
-  return {
-    isDisabled: true,
-  }
-}
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const isDisabled = ref(true)
+</script>
 ```
 
 ## Mobile
@@ -310,32 +310,25 @@ It can for example be useful on the mobile version of your app if you want to ap
 
 <DropdownMobileDemo />
 
-```html
-<script>
+```vue
+<script setup>
+import { ref } from 'vue'
+
 let count = 0
+const isMobile = ref(false)
 
-export default {
-  data () {
-    return {
-      isMobile: false,
-    }
-  },
+function onShow () {
+  if (count === 0) {
+    document.body.classList.add('no-scroll')
+  }
+  count++
+}
 
-  methods: {
-    onShow () {
-      if (count === 0) {
-        document.body.classList.add('no-scroll')
-      }
-      count++
-    },
-
-    onHide () {
-      count--
-      if (count === 0) {
-        document.body.classList.remove('no-scroll')
-      }
-    },
-  },
+function onHide () {
+  count--
+  if (count === 0) {
+    document.body.classList.remove('no-scroll')
+  }
 }
 </script>
 

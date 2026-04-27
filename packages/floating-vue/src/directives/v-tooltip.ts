@@ -1,4 +1,4 @@
-import { App, createApp, h, Ref, ref } from 'vue'
+import { App, createApp, h, Ref, ref, unref } from 'vue'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
@@ -57,15 +57,12 @@ function ensureDirectiveApp () {
   directiveApp = createApp({
     name: 'VTooltipDirectiveApp',
     setup () {
-      return {
-        directives,
-      }
-    },
-    render () {
-      return this.directives.map((directive) => {
+      return () => directives.value.map((directive) => {
+        const options = unref(directive.options)
+        const shown = unref(directive.shown)
         return h(TooltipDirective, {
-          ...directive.options,
-          shown: directive.shown || directive.options.shown,
+          ...options,
+          shown: shown || options.shown,
           key: directive.id,
         })
       })
@@ -147,10 +144,12 @@ export function bind (el, { value, modifiers }) {
   }
 }
 
-export default {
+const vTooltip = {
   beforeMount: bind,
   updated: bind,
   beforeUnmount (el) {
     destroyTooltip(el)
   },
 }
+
+export default vTooltip

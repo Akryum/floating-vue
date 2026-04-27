@@ -1,28 +1,21 @@
-<script>
+<script setup>
+import { ref } from 'vue'
+
 let count = 0
+const isMobile = ref(false)
 
-export default {
-  data () {
-    return {
-      isMobile: false,
-    }
-  },
+function onShow () {
+  if (count === 0) {
+    document.body.classList.add('no-scroll')
+  }
+  count++
+}
 
-  methods: {
-    onShow () {
-      if (count === 0) {
-        document.body.classList.add('no-scroll')
-      }
-      count++
-    },
-
-    onHide () {
-      count--
-      if (count === 0) {
-        document.body.classList.remove('no-scroll')
-      }
-    },
-  },
+function onHide () {
+  count--
+  if (count === 0) {
+    document.body.classList.remove('no-scroll')
+  }
 }
 </script>
 

@@ -20,23 +20,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      id: 0,
-    }
-  },
+<script setup>
+import { ref } from 'vue'
 
-  methods: {
-    asyncMethod () {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve('I\'m a message loaded asynchronously')
-        }, 2000)
-      })
-    },
-  },
+const id = ref(0)
+
+function asyncMethod () {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('I\'m a message loaded asynchronously')
+    }, 2000)
+  })
 }
 </script>
 

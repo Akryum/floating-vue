@@ -1,57 +1,65 @@
 // Ported from https://github.com/buttons/vue-github-button/blob/main/index.js
 
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref } from 'vue'
 import { hasOwn, hyphenate } from '@vue/shared'
 
-export default defineComponent({
-  name: 'GithubButton',
-  props: {
-    href: String,
-    ariaLabel: String,
-    title: String,
-    dataIcon: String,
-    dataColorScheme: String,
-    dataSize: String,
-    dataShowCount: String,
-    dataText: String,
-  },
-  mounted: function () {
-    this.paint()
-  },
-  beforeUpdate: function () {
-    this.reset()
-  },
-  updated: function () {
-    this.paint()
-  },
-  beforeUnmount: function () {
-    this.reset()
-  },
-  methods: {
-    paint: function () {
-      const _ = this.$el.appendChild(document.createElement('span'))
-      const _this = this
-      import('github-buttons').then(function (module) {
-        module.render(_.appendChild(_this.$refs._), function (el) {
-          try {
-            _.parentNode.replaceChild(el, _)
-          } catch (_) {}
-        })
+const githubButtonProps = {
+  href: String,
+  ariaLabel: String,
+  title: String,
+  dataIcon: String,
+  dataColorScheme: String,
+  dataSize: String,
+  dataShowCount: String,
+  dataText: String,
+}
+
+export default defineComponent((props, { slots }) => {
+  const root = ref<HTMLElement | null>(null)
+  const anchor = ref<HTMLAnchorElement | null>(null)
+
+  /**
+   * Lets github-buttons replace the placeholder anchor with its iframe.
+   */
+  function paint () {
+    if (!root.value || !anchor.value) return
+
+    const placeholder = root.value.appendChild(document.createElement('span'))
+    import('github-buttons').then(module => {
+      module.render(placeholder.appendChild(anchor.value), el => {
+        try {
+          placeholder.parentNode.replaceChild(el, placeholder)
+        } catch (e) {}
       })
-    },
-    reset: function () {
-      this.$el.replaceChild(/** @type {HTMLAnchorElement} */ (this.$refs._), this.$el.lastChild)
-    },
-  },
-  render: function () {
-    const props = { ref: '_' }
-    for (const key in this.$props) {
-      props[hyphenate(key)] = this.$props[key]
+    })
+  }
+
+  /**
+   * Restores the original anchor before Vue updates or unmounts.
+   */
+  function reset () {
+    if (root.value && anchor.value && root.value.lastChild) {
+      root.value.replaceChild(anchor.value, root.value.lastChild)
     }
-    return h('span', [
-      hasOwn(this.$slots, 'default')
-        ? h('a', props, this.$slots.default())
-        : h('a', props),
+  }
+
+  onMounted(paint)
+  onBeforeUpdate(reset)
+  onUpdated(paint)
+  onBeforeUnmount(reset)
+
+  return () => {
+    const anchorProps = { ref: anchor }
+    for (const key in props) {
+      anchorProps[hyphenate(key)] = props[key]
+    }
+    return h('span', { ref: root }, [
+      hasOwn(slots, 'default')
+        ? h('a', anchorProps, slots.default())
+        : h('a', anchorProps),
     ])
-  },
+  }
+}, {
+  name: 'GithubButton',
+  props: githubButtonProps,
 })

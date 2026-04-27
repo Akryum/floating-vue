@@ -55,14 +55,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['offset', 'info'],
+<script setup>
+import { ref, watch } from 'vue'
 
-  data () {
-    return {
-      tempOffset: [...this.offset],
-    }
+const props = defineProps({
+  offset: {
+    type: Array,
+    required: true,
   },
-}
+  info: {
+    type: String,
+    default: '',
+  },
+})
+
+const tempOffset = ref([...props.offset])
+
+watch(() => props.offset, value => {
+  tempOffset.value = [...value]
+})
 </script>

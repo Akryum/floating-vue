@@ -9,22 +9,19 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      count: 0,
-    }
-  },
+<script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
-  mounted () {
-    this.timer = setInterval(() => {
-      this.count++
-    }, 1000)
-  },
+const count = ref(0)
+let timer
 
-  destroyed () {
-    clearInterval(this.timer)
-  },
-}
+onMounted(() => {
+  timer = setInterval(() => {
+    count.value++
+  }, 1000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(timer)
+})
 </script>

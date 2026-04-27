@@ -364,13 +364,7 @@ You can change the default values in the [Global options](#global-options).
 <v-popover :disabled="isDisabled"></v-popover>
 ```
 
-```js
-data () {
-  return {
-    isDisabled: true,
-  }
-}
-```
+`isDisabled` can be any boolean value from your component state.
 
 #### Close directive
 
@@ -399,13 +393,7 @@ You can also use a property:
 <a v-close-popover="myBooleanProp">Close</a>
 ```
 
-```js
-data () {
-  return {
-    myBooleanProp: true,
-  }
-}
-```
+`myBooleanProp` can be any boolean value from your component state.
 
 Close all the popovers in the page with the `all` modifier:
 

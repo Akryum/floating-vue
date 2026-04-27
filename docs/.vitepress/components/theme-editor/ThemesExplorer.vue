@@ -1,53 +1,30 @@
-<script>
+<script setup>
+import { computed, ref } from 'vue'
 import SearchIcon from '~icons/lucide/search'
 import PlusIcon from '~icons/lucide/plus'
 import MoreVerticalIcon from '~icons/lucide/more-vertical'
 import Trash2Icon from '~icons/lucide/trash-2'
 import ThemeButton from './ThemeButton.vue'
 import ThemeModal from './ThemeModal.vue'
-import { mapState, loadTheme, deleteTheme } from './state'
+import { state, loadTheme, deleteTheme as deleteThemeFromState } from './state'
 
-export default {
-  components: {
-    SearchIcon,
-    PlusIcon,
-    MoreVerticalIcon,
-    Trash2Icon,
-    ThemeButton,
-    ThemeModal,
-  },
+const searchText = ref('')
+const confirmDeleteTheme = ref(null)
+const emit = defineEmits(['create'])
+const themes = computed(() => state.themes)
+const theme = computed(() => state.theme)
+const filteredThemes = computed(() => {
+  if (!searchText.value) {
+    return themes.value
+  }
 
-  data () {
-    return {
-      searchText: '',
-      confirmDeleteTheme: null,
-    }
-  },
+  const reg = new RegExp(searchText.value.trim().replace(/\s+/g, '|'), 'gi')
+  return themes.value.filter(t => reg.test(t.name))
+})
 
-  computed: {
-    ...mapState([
-      'themes',
-      'theme',
-    ]),
-
-    filteredThemes () {
-      if (!this.searchText) {
-        return this.themes
-      } else {
-        const reg = new RegExp(this.searchText.trim().replace(/\s+/g, '|'), 'gi')
-        return this.themes.filter(t => reg.test(t.name))
-      }
-    },
-  },
-
-  methods: {
-    loadTheme,
-
-    deleteTheme () {
-      deleteTheme(this.confirmDeleteTheme)
-      this.confirmDeleteTheme = null
-    },
-  },
+function deleteTheme () {
+  deleteThemeFromState(confirmDeleteTheme.value)
+  confirmDeleteTheme.value = null
 }
 </script>
 
@@ -65,7 +42,7 @@ export default {
       <button
         v-tooltip.bottom="'Create a new theme...'"
         class="flex-none px-3 h-full text-gray-500 hover:text-black hover:bg-emerald-100 dark:hover:text-white dark:hover:bg-emerald-800"
-        @click="$emit('create')"
+        @click="emit('create')"
       >
         <PlusIcon class="w-4 h-4" />
       </button>

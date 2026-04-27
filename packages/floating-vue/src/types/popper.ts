@@ -1,54 +1,7 @@
-import type { StyleValue } from 'vue'
 import type { Placement, Strategy } from '@floating-ui/dom'
 import type { Trigger } from './trigger.js'
-
-export type PopperStyleClass = string | string[] | Record<string, boolean> | PopperStyleClass[]
-
-export type PopperStyleObject = StyleValue
-
-export type PopperStyle = {
-  class?: PopperStyleClass
-  style?: StyleValue
-}
-
-/**
- * Classes applied depending on the state of the popper
- */
-export interface PopperDynamicStyles {
-  base?: PopperStyle
-  /**
-   * Class applied to the popper when it's shown
-   */
-  shown?: PopperStyle
-  /**
-   * Class applied to the popper when it's shown during one frame for transitions
-   */
-  showFrom?: PopperStyle
-  /**
-   * Class applied to the popper when it's shown after one frame for transitions
-   */
-  showTo?: PopperStyle
-  /**
-   * Class applied to the popper when it's hidden
-   */
-  hidden?: PopperStyle
-  /**
-   * Class applied to the popper when it's hidden during one frame for transitions
-   */
-  hideFrom?: PopperStyle
-  /**
-   * Class applied to the popper when it's hidden after one frame for transitions
-   */
-  hideTo?: PopperStyle
-  /**
-   * Class applied to the popper when no transition should be applied (`instantMove` is in effect)
-   */
-  skipTransition?: PopperStyle
-  /**
-   * Class applied to the popper when floating positioning is disabled (using `positioningDisabled` option)
-   */
-  noPositioning?: PopperStyle
-}
+import type { PopperDynamicStyles, PopperStyle } from './popper-style.js'
+export type { PopperDynamicStyles, PopperStyle, PopperStyleClass, PopperStyleObject } from './popper-style.js'
 
 export interface PopperConfig {
   /**
@@ -78,7 +31,7 @@ export interface PopperConfig {
 
   /**
    * Default container where the popper will be appended
-   * 
+   *
    * If `false`, the popper will be appended to the reference element's parent.
    */
   container: string | Element | false
@@ -188,7 +141,7 @@ export interface PopperConfig {
 
   /**
    * Set `transform-origin` of the popper (`.v-popper__wrapper`) to the center of the reference element to allow animations around it (for example zooming out of the reference).
-   * 
+   *
    * @example
    * ```html
    * <template>
@@ -210,8 +163,8 @@ export interface PopperConfig {
 
   /**
    * Set the size of the popper depending on the size of the reference element.
-   * 
-   * 
+   *
+   *
    * - If the final placement is `top-*` or `bottom-*`, the reference width will be taken into account.
    * - If the final placement is `left-*` or `right-*`, the reference height will be taken into account.
    *
@@ -263,7 +216,7 @@ export interface PopperConfig {
     popper?: PopperDynamicStyles
     /**
      * Popper backdrop (`.v-popper__backdrop`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__backdrop
      * ```
@@ -271,7 +224,7 @@ export interface PopperConfig {
     backdrop?: PopperDynamicStyles
     /**
      * Popper wrapper (`.v-popper__wrapper`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__wrapper
      * ```
@@ -279,7 +232,7 @@ export interface PopperConfig {
     wrapper?: PopperDynamicStyles
     /**
      * Popper inner wrapper (`.v-popper__inner`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__wrapper > .v-popper__inner
      * ```
@@ -287,7 +240,7 @@ export interface PopperConfig {
     inner?: PopperDynamicStyles
     /**
      * Arrow container (`.v-popper__arrow-container`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__wrapper > .v-popper__arrow-container
      * ```
@@ -295,7 +248,7 @@ export interface PopperConfig {
     arrow?: PopperDynamicStyles
     /**
      * Outer arrow used for arrow border (`.v-popper__arrow-outer`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__wrapper > .v-popper__arrow-container > .v-popper__arrow-outer
      * ```
@@ -303,7 +256,7 @@ export interface PopperConfig {
     arrowOuter?: PopperDynamicStyles
     /**
      * Inner arrow used for arrow fill color (`.v-popper__arrow-inner`)
-     * 
+     *
      * ```css
      * .v-popper__popper > .v-popper__wrapper > .v-popper__arrow-container > .v-popper__arrow-inner
      * ```

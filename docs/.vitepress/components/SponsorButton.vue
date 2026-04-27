@@ -11,14 +11,8 @@
   </p>
 </template>
 
-<script>
+<script setup>
 import GithubButton from './GitHubButton'
-
-export default {
-  components: {
-    GithubButton,
-  },
-}
 </script>
 
 <style scoped>

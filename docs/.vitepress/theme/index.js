@@ -3,7 +3,7 @@ import './style.postcss'
 import 'floating-vue/style.css'
 import FloatingVue, { createTooltip } from 'floating-vue'
 
-export default {
+const theme = {
   extends: DefaultTheme,
   enhanceApp ({ app }) {
     app.use(FloatingVue, {
@@ -27,3 +27,5 @@ export default {
     }
   },
 }
+
+export default theme

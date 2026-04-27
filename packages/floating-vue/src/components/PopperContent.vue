@@ -25,11 +25,11 @@
     :aria-hidden="shown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
     :data-popper-placement="result ? result.placement : undefined"
-    @keyup.esc="autoHide && $emit('hide')"
+    @keyup.esc="autoHide && emit('hide')"
   >
     <div
       class="v-popper__backdrop"
-      @click="autoHide && $emit('hide')"
+      @click="autoHide && emit('hide')"
     />
     <div
       class="v-popper__wrapper"
@@ -48,7 +48,7 @@
 
           <ResizeObserver
             v-if="handleResize"
-            @notify="$emit('resize', $event)"
+            @notify="emit('resize', $event)"
           />
         </template>
       </div>
@@ -68,46 +68,44 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { toRef } from 'vue'
 import { ResizeObserver } from 'vue-resize'
-import ThemeClass from './ThemeClass'
+import { useThemeClass } from '../composable/useThemeClass'
+import type { PopperClasses, PopperResult } from '../composable/popper/types'
 
-export default defineComponent({
-  name: 'VPopperContent',
-
-  components: {
-    ResizeObserver,
-  },
-
-  mixins: [
-    ThemeClass(),
-  ],
-
-  props: {
-    popperId: String,
-    theme: String,
-    shown: Boolean,
-    mounted: Boolean,
-    skipTransition: Boolean,
-    autoHide: Boolean,
-    handleResize: Boolean,
-    classes: Object,
-    result: Object,
-  },
-
-  emits: [
-    'hide',
-    'resize',
-  ],
-
-  methods: {
-    toPx (value) {
-      if (value != null && !isNaN(value)) {
-        return `${value}px`
-      }
-      return null
-    },
-  },
+const props = withDefaults(defineProps<{
+  popperId?: string
+  theme: string
+  shown: boolean
+  mounted: boolean
+  skipTransition: boolean
+  autoHide: boolean
+  handleResize: boolean
+  classes: PopperClasses & { popperClass?: unknown }
+  result: PopperResult | null
+}>(), {
+  autoHide: false,
+  handleResize: false,
+  mounted: false,
+  shown: false,
+  skipTransition: false,
 })
+
+const emit = defineEmits<{
+  (event: 'hide'): void
+  (event: 'resize', value?: unknown): void
+}>()
+
+const themeClass = useThemeClass(toRef(props, 'theme'))
+
+/**
+ * Converts a numeric pixel value to a CSS length.
+ */
+function toPx (value: unknown) {
+  if (value != null && !isNaN(Number(value))) {
+    return `${value}px`
+  }
+  return null
+}
 </script>

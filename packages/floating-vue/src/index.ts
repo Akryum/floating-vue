@@ -7,9 +7,7 @@ import PrivateDropdown from './components/Dropdown'
 import PrivateMenu from './components/Menu'
 import PrivatePopper from './components/Popper'
 import PrivatePopperContent from './components/PopperContent.vue'
-import PrivatePopperMethods from './components/PopperMethods'
 import PrivatePopperWrapper from './components/PopperWrapper.vue'
-import PrivateThemeClass from './components/ThemeClass'
 import PrivateTooltip from './components/Tooltip'
 import PrivateTooltipDirective from './components/TooltipDirective.vue'
 // Directives
@@ -36,18 +34,20 @@ export const Dropdown = PrivateDropdown
 export const Menu = PrivateMenu
 export const Popper = PrivatePopper
 export const PopperContent = PrivatePopperContent
-export const PopperMethods = PrivatePopperMethods
 export const PopperWrapper = PrivatePopperWrapper
-export const ThemeClass = PrivateThemeClass
 export const Tooltip = PrivateTooltip
 export const TooltipDirective = PrivateTooltipDirective
+export { usePopper } from './composable/usePopper'
+export { usePopperMethods } from './composable/usePopperMethods'
+export { useThemeClass } from './composable/useThemeClass'
 // Utils
 export { hideAllPoppers, recomputeAllPoppers } from './components/Popper'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'
 // Types
-export type { TriggerEvent } from './components/PopperWrapper.vue'
+export type { TriggerEvent } from './components/popperWrapperProps'
+export type { PopperApi, PopperProps, PopperSlotData } from './composable/usePopper'
 
 /* Vue plugin */
 

@@ -7,10 +7,10 @@ This is an advanced API! You are advised to get familiar with the library before
 
 You can create an entirely custom component to use as a popper. v-tooltip exposes the following building blocks:
 
-- `Popper` (component): main logic component and integration with popperjs
+- `Popper` (component): main logic component and integration with Floating UI
 - `PopperContent` (component): standard minimal popper content with all the needed containers and CSS classes
-- `PopperMethods` (mixin): forwards useful methods such as `show` and `hide` to the underlying `<Popper>` component
-- `ThemeClass` (mixin): computes the final root CSS classes depending on themes
+- `usePopperMethods` (composable): forwards useful methods such as `show` and `hide` to the underlying `<Popper>` component
+- `useThemeClass` (composable): computes the final root CSS classes depending on themes
 
 ## Popper
 
@@ -81,8 +81,8 @@ Refs:
     v-bind="$attrs"
     :theme="theme"
     :target-nodes="getTargetNodes"
-    :reference-node="() => $refs.reference"
-    :popper-node="() => $refs.popperContent.$el"
+    :reference-node="() => reference"
+    :popper-node="() => popperContent.$el"
   >
     <div
       ref="reference"
@@ -119,43 +119,38 @@ Refs:
   </Popper>
 </template>
 
-<script>
+<script setup>
+import { computed, ref } from 'vue'
 import {
   Popper,
   PopperContent,
-  PopperMethods,
-  ThemeClass
+  usePopperMethods,
+  useThemeClass
 } from 'floating-vue'
 
-export default {
-  name: 'VPopperWrapper',
-
-  components: {
-    Popper: Popper(),
-    PopperContent,
+const props = defineProps({
+  theme: {
+    type: String,
+    default: 'dropdown',
   },
+})
 
-  mixins: [
-    PopperMethods,
-    ThemeClass(),
-  ],
+const popper = ref(null)
+const popperContent = ref(null)
+const reference = ref(null)
+const theme = computed(() => props.theme)
+const themeClass = useThemeClass(theme)
+const { show, hide, dispose, onResize } = usePopperMethods(popper)
 
-  inheritAttrs: false,
+defineExpose({
+  show,
+  hide,
+  dispose,
+  onResize,
+})
 
-  props: {
-    theme: {
-      type: String,
-      default () {
-        return this.$options.vPopperTheme
-      },
-    },
-  },
-
-  methods: {
-    getTargetNodes () {
-      return Array.from(this.$refs.reference.children)
-    },
-  },
+function getTargetNodes () {
+  return Array.from(reference.value.children)
 }
 </script>
 ```

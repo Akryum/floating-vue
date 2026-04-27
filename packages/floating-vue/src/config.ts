@@ -1,5 +1,7 @@
 import { Config } from './types/config.js'
 
+export type FloatingVueConfig = Partial<Config>
+
 export const config: Config = {
   disabled: false,
   distance: 5,

@@ -17,12 +17,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      count: 1,
-    }
-  },
-}
+<script setup>
+import { ref } from 'vue'
+
+const count = ref(1)
 </script>

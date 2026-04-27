@@ -42,7 +42,7 @@
 
       <button
         class="flex-none border border-gray-300 rounded px-8 md:px-2 !md:py-3"
-        @click="offset = [...offset];tempPadding = padding"
+        @click="reset"
       >
         Reset
       </button>
@@ -50,20 +50,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    padding: {
-      type: Number,
-      default: 0,
-    },
-  },
+<script setup>
+import { ref } from 'vue'
 
-  data () {
-    return {
-      offset: [-32, 0],
-      tempPadding: this.padding,
-    }
+const props = defineProps({
+  padding: {
+    type: Number,
+    default: 0,
   },
+})
+
+const offset = ref([-32, 0])
+const tempPadding = ref(props.padding)
+
+function reset () {
+  offset.value = [-32, 0]
+  tempPadding.value = props.padding
 }
 </script>

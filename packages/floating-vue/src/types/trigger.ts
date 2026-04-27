@@ -1,4 +1,4 @@
-export type Trigger = 
+export type Trigger =
   'hover' |
   'focus' |
   'click' |

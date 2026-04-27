@@ -21,12 +21,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      content: '<b>Bold</b>',
-    }
-  },
-}
+<script setup>
+import { ref } from 'vue'
+
+const content = ref('<b>Bold</b>')
 </script>

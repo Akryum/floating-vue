@@ -1,20 +1,22 @@
-<script>
-import { mapState } from './state'
+<script setup>
+import { computed, ref, watch } from 'vue'
+import { state } from './state'
 import Tabs from './Tabs.vue'
 import PenToolIcon from '~icons/lucide/pen-tool'
 import { loadValue, storeValue } from './util'
 
 const TAB_KEY = 'v-tooltip.theme-editor.style-tab'
+const tab = ref('normal')
+const theme = computed(() => state.theme)
+const currentStyle = computed(() => theme.value.styles[tab.value])
 
 function inherit (key, defaultValue) {
-  return {
-    get () {
-      return this.currentStyle[key] == null
+  return computed({
+    get: () => currentStyle.value[key] == null,
+    set: value => {
+      currentStyle.value[key] = value ? undefined : getDefaultValue(defaultValue)
     },
-    set (value) {
-      this.currentStyle[key] = value ? undefined : getDefaultValue(defaultValue)
-    },
-  }
+  })
 }
 
 function getDefaultValue (value) {
@@ -25,61 +27,24 @@ function getDefaultValue (value) {
   }
 }
 
-export default {
-  components: {
-    Tabs,
-    PenToolIcon,
-  },
+const inheritBackgroundColor = inherit('backgroundColor', () => ({ color: '#ffffff', opacity: 1 }))
+const inheritColor = inherit('color', () => ({ color: '#000000', opacity: 1 }))
+const inheritPadding = inherit('padding', () => ({ multiple: false, top: 0, right: 0, bottom: 0, left: 0 }))
+const inheritBorder = inherit('border', () => ({ enabled: true, color: '#000000' }))
+const inheritBorderRadius = inherit('borderRadius', 0)
+const inheritBoxShadow = inherit('boxShadow', () => ({ color: '#000', opacity: 0.5, size: 10, x: 0, y: 0 }))
+const inheritArrow = inherit('arrow', () => ({ enabled: true }))
 
-  data () {
-    return {
-      tab: 'normal',
-    }
-  },
+watch(tab, value => storeValue(TAB_KEY, value))
+watch(currentStyle, value => {
+  if (value == null) {
+    theme.value.styles[tab.value] = {}
+  }
+}, { immediate: true })
 
-  computed: {
-    ...mapState([
-      'theme',
-    ]),
-
-    currentStyle () {
-      return this.theme.styles[this.tab]
-    },
-
-    inheritBackgroundColor: inherit('backgroundColor', () => ({ color: '#ffffff', opacity: 1 })),
-
-    inheritColor: inherit('color', () => ({ color: '#000000', opacity: 1 })),
-
-    inheritPadding: inherit('padding', () => ({ multiple: false, top: 0, right: 0, bottom: 0, left: 0 })),
-
-    inheritBorder: inherit('border', () => ({ enabled: true, color: '#000000' })),
-    inheritBorderRadius: inherit('borderRadius', 0),
-
-    inheritBoxShadow: inherit('boxShadow', () => ({ color: '#000', opacity: 0.5, size: 10, x: 0, y: 0 })),
-
-    inheritArrow: inherit('arrow', () => ({ enabled: true })),
-  },
-
-  watch: {
-    tab: storeValue.bind(null, TAB_KEY),
-
-    currentStyle: {
-      handler (value) {
-      // Create new styles
-        if (value == null) {
-          this.theme.styles[this.tab] = {}
-        }
-      },
-      immediate: true,
-    },
-  },
-
-  created () {
-    loadValue(TAB_KEY, value => {
-      this.tab = value
-    })
-  },
-}
+loadValue(TAB_KEY, value => {
+  tab.value = value
+})
 </script>
 
 <template>

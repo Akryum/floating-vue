@@ -1,9 +1,3 @@
-import PopperWrapper from './PopperWrapper.vue'
+import { createPopperComponent } from './createPopperComponent'
 
-const Component = ({
-  ...PopperWrapper,
-  name: 'VDropdown',
-  vPopperTheme: 'dropdown',
-}) as unknown as typeof PopperWrapper
-
-export default Component
+export default createPopperComponent('VDropdown', 'dropdown')

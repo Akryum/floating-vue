@@ -1,76 +1,43 @@
-<script>
+<script setup>
+import { computed, ref, watch } from 'vue'
 import { builtinThemes } from './builtin-themes'
-import { mapState, state } from './state'
+import { state } from './state'
 import { SHOW_EVENT_MAP, placements } from 'floating-vue'
 import ToolIcon from '~icons/lucide/wrench'
 import Tabs from './Tabs.vue'
 import { loadValue, storeValue } from './util'
 
 const TAB_KEY = 'v-tooltip.theme-editor.config-tab'
+const tab = ref('general')
+const theme = computed(() => state.theme)
+const triggers = Object.keys(SHOW_EVENT_MAP)
+const otherThemes = computed(() => [
+  ...builtinThemes,
+  ...state.themes.filter(t => t.name !== theme.value.name).map(t => t.name),
+])
 
 function inheritFactory (prop, defaultFactory) {
-  return {
-    get () {
-      return this.theme.config[prop] == null
+  return computed({
+    get: () => theme.value.config[prop] == null,
+    set: value => {
+      theme.value.config[prop] = value ? undefined : defaultFactory()
     },
-    set (value) {
-      this.theme.config[prop] = value ? undefined : defaultFactory()
-    },
-  }
+  })
 }
 
-export default {
-  components: {
-    ToolIcon,
-    Tabs,
-  },
+const inheritTriggers = inheritFactory('triggers', () => [])
+const inheritDistance = inheritFactory('distance', () => 0)
+const inheritSkidding = inheritFactory('skidding', () => 0)
+const inheritDelay = inheritFactory('delay', () => ({ show: 0, hide: 0 }))
+const inheritLoadingContent = inheritFactory('loadingContent', () => '...')
+const inheritArrowPadding = inheritFactory('arrowPadding', () => 0)
+const inheritOverflowPadding = inheritFactory('overflowPadding', () => 0)
 
-  data () {
-    return {
-      tab: 'general',
-    }
-  },
+watch(tab, value => storeValue(TAB_KEY, value))
 
-  computed: {
-    ...mapState([
-      'theme',
-    ]),
-
-    otherThemes () {
-      return [
-        ...builtinThemes,
-        ...state.themes.filter(t => t.name !== this.theme.name).map(t => t.name),
-      ]
-    },
-
-    inheritTriggers: inheritFactory('triggers', () => []),
-
-    inheritDistance: inheritFactory('distance', () => 0),
-
-    inheritSkidding: inheritFactory('skidding', () => 0),
-
-    inheritDelay: inheritFactory('delay', () => ({ show: 0, hide: 0 })),
-
-    inheritLoadingContent: inheritFactory('loadingContent', () => '...'),
-
-    inheritArrowPadding: inheritFactory('arrowPadding', () => 0),
-
-    inheritOverflowPadding: inheritFactory('overflowPadding', () => 0),
-  },
-
-  watch: {
-    tab: storeValue.bind(null, TAB_KEY),
-  },
-
-  created () {
-    this.placements = placements
-    this.triggers = Object.keys(SHOW_EVENT_MAP)
-
-    loadValue(TAB_KEY, value => {
-      this.tab = value
-    })
-  },
-}
+loadValue(TAB_KEY, value => {
+  tab.value = value
+})
 </script>
 
 <template>

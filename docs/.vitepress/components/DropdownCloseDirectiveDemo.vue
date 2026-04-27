@@ -7,8 +7,15 @@
 
       <template #popper>
         <div class="p-6 flex gap-2">
-          <button class="underline cursor-pointer">Other button</button>
-          <button v-close-popper class="underline cursor-pointer">Close</button>
+          <button class="underline cursor-pointer">
+            Other button
+          </button>
+          <button
+            v-close-popper
+            class="underline cursor-pointer"
+          >
+            Close
+          </button>
         </div>
       </template>
     </VDropdown>

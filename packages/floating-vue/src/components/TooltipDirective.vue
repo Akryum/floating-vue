@@ -16,7 +16,7 @@
     v-bind="$attrs"
     :theme="theme"
     :target-nodes="targetNodes"
-    :popper-node="() => ($refs as any).popperContent.$el"
+    :popper-node="getPopperNode"
     @apply-show="onShow"
     @apply-hide="onHide"
   >
@@ -49,125 +49,116 @@
   </Popper>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed, getCurrentInstance, nextTick, ref, watch, type ComponentPublicInstance, type PropType } from 'vue'
 import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import { getDefaultConfig } from '../config'
-import PopperMethods from './PopperMethods'
+import { usePopperMethods } from '../composable/usePopperMethods'
 
-export default defineComponent({
+defineOptions({
   name: 'VTooltipDirective',
-
-  components: {
-    Popper: Popper(),
-    PopperContent,
-  },
-
-  mixins: [
-    PopperMethods,
-  ],
-
   inheritAttrs: false,
+})
 
-  props: {
-    theme: {
-      type: String,
-      default: 'tooltip',
-    },
-
-    html: {
-      type: Boolean,
-      default: props => getDefaultConfig(props.theme, 'html'),
-    },
-
-    content: {
-      type: [String, Number, Function],
-      default: null,
-    },
-
-    loadingContent: {
-      type: String,
-      default: props => getDefaultConfig(props.theme, 'loadingContent'),
-    },
-
-    targetNodes: {
-      type: Function,
-      required: true,
-    },
+const props = defineProps({
+  theme: {
+    type: String,
+    default: 'tooltip',
   },
 
-  data () {
-    return {
-      asyncContent: null as string,
-    }
+  html: {
+    type: Boolean,
+    default: props => getDefaultConfig(props.theme, 'html'),
   },
 
-  computed: {
-    isContentAsync (): boolean {
-      return typeof this.content === 'function'
-    },
-
-    loading (): boolean {
-      return this.isContentAsync && this.asyncContent == null
-    },
-
-    finalContent (): string {
-      if (this.isContentAsync) {
-        return this.loading ? this.loadingContent : this.asyncContent
-      }
-      return this.content
-    },
+  content: {
+    type: [String, Number, Function],
+    default: null,
   },
 
-  watch: {
-    content: {
-      handler () {
-        this.fetchContent(true)
-      },
-      immediate: true,
-    },
-
-    async finalContent () {
-      await this.$nextTick()
-      this.$refs.popper.onResize()
-    },
+  loadingContent: {
+    type: String,
+    default: props => getDefaultConfig(props.theme, 'loadingContent'),
   },
 
-  created () {
-    this.$_fetchId = 0
-  },
-
-  methods: {
-    fetchContent (force: boolean) {
-      if (typeof this.content === 'function' && this.$_isShown &&
-        (force || (!this.$_loading && this.asyncContent == null))) {
-        this.asyncContent = null
-        this.$_loading = true
-        const fetchId = ++this.$_fetchId
-        const result = this.content(this)
-        if (result.then) {
-          result.then(res => this.onResult(fetchId, res))
-        } else {
-          this.onResult(fetchId, result)
-        }
-      }
-    },
-
-    onResult (fetchId, result) {
-      if (fetchId !== this.$_fetchId) return
-      this.$_loading = false
-      this.asyncContent = result
-    },
-
-    onShow () {
-      this.$_isShown = true
-      this.fetchContent()
-    },
-
-    onHide () {
-      this.$_isShown = false
-    },
+  targetNodes: {
+    type: Function as PropType<() => Element[]>,
+    required: true,
   },
 })
+
+const instance = getCurrentInstance()
+const popper = ref(null)
+const popperContent = ref<ComponentPublicInstance | null>(null)
+const asyncContent = ref<string | number | null>(null)
+const isPopperShown = ref(false)
+const methods = usePopperMethods(popper)
+let fetchId = 0
+let fetchLoading = false
+
+const isContentAsync = computed(() => typeof props.content === 'function')
+const loading = computed(() => isContentAsync.value && asyncContent.value == null)
+const finalContent = computed(() => {
+  if (isContentAsync.value) {
+    return loading.value ? props.loadingContent : asyncContent.value
+  }
+  return props.content
+})
+
+/**
+ * Fetches async tooltip content when visible.
+ */
+function fetchContent (force = false) {
+  if (typeof props.content === 'function' && isPopperShown.value && (force || (!fetchLoading && asyncContent.value == null))) {
+    asyncContent.value = null
+    fetchLoading = true
+    const currentFetchId = ++fetchId
+    const result = props.content(instance?.proxy)
+    if (result?.then) {
+      result.then(res => onResult(currentFetchId, res))
+    } else {
+      onResult(currentFetchId, result)
+    }
+  }
+}
+
+/**
+ * Applies async content only if it belongs to the latest request.
+ */
+function onResult (currentFetchId: number, result: string | number) {
+  if (currentFetchId !== fetchId) return
+  fetchLoading = false
+  asyncContent.value = result
+}
+
+/**
+ * Handles core popper show completion.
+ */
+function onShow () {
+  isPopperShown.value = true
+  fetchContent()
+}
+
+/**
+ * Handles core popper hide completion.
+ */
+function onHide () {
+  isPopperShown.value = false
+}
+
+/**
+ * Returns the popper content root element.
+ */
+function getPopperNode () {
+  return popperContent.value?.$el
+}
+
+watch(() => props.content, () => fetchContent(true), { immediate: true })
+watch(finalContent, async () => {
+  await nextTick()
+  await methods.onResize()
+})
+
+defineExpose(methods)
 </script>

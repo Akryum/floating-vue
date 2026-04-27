@@ -116,18 +116,25 @@ Vue.use(FloatingVue, {
 })
 ```
 
-We can then create a Themed Component by using the `PopperWrapper` component from `floating-vue` and overriding the `vPopperTheme` option:
+We can then create a Themed Component by wrapping the `PopperWrapper` component from `floating-vue` and passing the theme:
 
-```html
-<script>
+```vue
+<script setup>
 import { PopperWrapper } from 'floating-vue'
-
-export default {
-  ...PopperWrapper,
-  name: 'VInfoDropdown',
-  vPopperTheme: 'info-dropdown',
-}
 </script>
+
+<template>
+  <PopperWrapper theme="info-dropdown">
+    <slot />
+
+    <template #popper="slotProps">
+      <slot
+        name="popper"
+        v-bind="slotProps"
+      />
+    </template>
+  </PopperWrapper>
+</template>
 
 <style>
 .v-popper--theme-info-dropdown .v-popper__inner {

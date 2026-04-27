@@ -123,6 +123,16 @@ New prop:
 <VDropdown :arrow-padding="12" />
 ```
 
+### Custom popper components
+
+Advanced custom components now use Composition API helpers instead of old shared option helpers:
+
+- Use direct component imports with `<script setup>` instead of `Popper: Popper()`.
+- Replace `PopperMethods` with `usePopperMethods`.
+- Replace `ThemeClass` with `useThemeClass`.
+
+See the [custom component guide](../guide/custom-component.md) for an updated example.
+
 ## New features
 
 ### `v-popper__popper--arrow-overflow`

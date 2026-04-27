@@ -1,12 +1,12 @@
-
-<script>
+<script setup>
+import { computed, ref, watch } from 'vue'
 import FloatingVue from 'floating-vue'
 import AlertTriangleIcon from '~icons/lucide/alert-triangle'
 import SettingsIcon from '~icons/lucide/settings'
 import EyeIcon from '~icons/lucide/eye'
 import CodeIcon from '~icons/lucide/code'
 import PlusIcon from '~icons/lucide/plus'
-import { loadSettings, loadLastTheme, mapState, loadThemes } from './state'
+import { loadSettings, loadLastTheme, loadThemes, state } from './state'
 import Sandbox from './Sandbox.vue'
 import StyleEditor from './StyleEditor.vue'
 import ConfigEditor from './ConfigEditor.vue'
@@ -17,66 +17,27 @@ import ThemeButton from './ThemeButton.vue'
 import { loadValue, storeValue } from './util'
 
 const OUTPUT_TAB_KEY = 'v-tooltip.theme-editor.output-tab'
+const outputTab = ref('sandbox')
+const createThemeOpen = ref(false)
+const version = FloatingVue.version
+const theme = computed(() => state.theme)
+const error = computed(() => state.error)
+const settings = computed(() => state.settings)
+const sourceOutput = computed(() => state.sourceOutput)
+const styleOutput = computed(() => state.styleOutput)
 
-export default {
-  components: {
-    AlertTriangleIcon,
-    SettingsIcon,
-    PlusIcon,
-    Sandbox,
-    StyleEditor,
-    ConfigEditor,
-    Tabs,
-    ThemesExplorer,
-    CreateTheme,
-    ThemeButton,
-  },
+loadSettings()
+loadThemes()
+loadLastTheme()
 
-  data () {
-    return {
-      outputTab: 'sandbox',
-      createThemeOpen: false,
-    }
-  },
+watch(outputTab, value => storeValue(OUTPUT_TAB_KEY, value))
 
-  computed: {
-    ...mapState([
-      'theme',
-      'error',
-      'settings',
-      'sourceOutput',
-      'styleOutput',
-    ]),
-  },
+loadValue(OUTPUT_TAB_KEY, value => {
+  outputTab.value = value
+})
 
-  watch: {
-    outputTab: storeValue.bind(null, OUTPUT_TAB_KEY),
-  },
-
-  beforeCreate () {
-    loadSettings()
-    loadThemes()
-    loadLastTheme()
-  },
-
-  created () {
-    this.version = FloatingVue.version
-
-    Object.assign(this, {
-      EyeIcon,
-      CodeIcon,
-    })
-
-    loadValue(OUTPUT_TAB_KEY, value => {
-      this.outputTab = value
-    })
-  },
-
-  methods: {
-    openCreateTheme () {
-      this.createThemeOpen = true
-    },
-  },
+function openCreateTheme () {
+  createThemeOpen.value = true
 }
 </script>
 

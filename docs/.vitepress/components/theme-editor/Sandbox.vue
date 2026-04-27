@@ -1,48 +1,39 @@
-<script>
-import { mapState, state } from './state'
+<script setup>
+import { computed, onBeforeUnmount, onErrorCaptured, onMounted, ref, watch } from 'vue'
+import { state } from './state'
 
-export default {
-  data () {
-    return {
-      uid: 0,
-      ready: false,
-      shown: [true, false, false],
-    }
-  },
+const uid = ref(0)
+const ready = ref(false)
+const shown = ref([true, false, false])
+const sandbox = ref(null)
+const theme = computed(() => state.theme)
+const settings = computed(() => state.settings)
+const allStyleOutput = computed(() => state.allStyleOutput)
+let style
 
-  computed: {
-    ...mapState([
-      'theme',
-      'settings',
-      'allStyleOutput',
-    ]),
-  },
+watch(() => theme.value.config, () => {
+  uid.value++
+}, { deep: true })
 
-  watch: {
-    'theme.config': {
-      handler () {
-        this.uid++
-      },
-      deep: true,
-    },
-    allStyleOutput: {
-      handler () {
-        if (this.style) { this.style.innerHTML = this.allStyleOutput }
-      },
-      immediate: true,
-    },
-  },
+watch(allStyleOutput, value => {
+  if (style) {
+    style.innerHTML = value
+  }
+}, { immediate: true })
 
-  mounted () {
-    this.ready = true
-    this.style = document.createElement('style')
-    document.head.appendChild(this.style)
-  },
+onMounted(() => {
+  ready.value = true
+  style = document.createElement('style')
+  document.head.appendChild(style)
+})
 
-  errorCaptured (e) {
-    state.error = e.message
-  },
-}
+onBeforeUnmount(() => {
+  style?.remove()
+})
+
+onErrorCaptured(e => {
+  state.error = e.message
+})
 </script>
 
 <template>
@@ -119,10 +110,11 @@ export default {
             v-for="n in 3"
             :key="uid + ':' + n"
             :theme="theme.name"
-            :container="$refs.sandbox"
-            :boundary="$refs.sandbox"
-            :shown.sync="shown[n - 1]"
+            :container="sandbox"
+            :boundary="sandbox"
+            :shown="shown[n - 1]"
             :auto-hide="settings.ignoreAutoHide ? false : undefined"
+            @update:shown="value => shown[n - 1] = value"
           >
             <button class="border border-gray-300 dark:border-gray-700 rounded px-4 py-2">
               Reference
