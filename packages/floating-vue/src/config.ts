@@ -31,6 +31,7 @@ export const config: Config = {
       handleResize: false,
       html: false,
       loadingContent: '...',
+      ariaRole: 'tooltip',
     },
     dropdown: {
       placement: 'bottom',
@@ -38,6 +39,7 @@ export const config: Config = {
       delay: 0,
       handleResize: true,
       autoHide: true,
+      ariaRole: 'dialog',
     },
     menu: {
       $extend: 'dropdown',
@@ -47,6 +49,7 @@ export const config: Config = {
         show: 0,
         hide: 400,
       },
+      ariaRole: 'menu',
     },
   },
 }

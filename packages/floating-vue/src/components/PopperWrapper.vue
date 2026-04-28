@@ -13,6 +13,7 @@
       onResize,
       classes,
       result,
+      ariaRole,
     }"
     v-bind="$props"
     :theme="finalTheme"
@@ -47,6 +48,7 @@
       :handle-resize="handleResize"
       :classes="classes"
       :result="result"
+      :aria-role="ariaRole"
       @hide="hide"
       @resize="onResize"
     >

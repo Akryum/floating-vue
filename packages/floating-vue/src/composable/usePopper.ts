@@ -90,6 +90,7 @@ export function usePopper (props: PopperProps, options: UsePopperOptions): Poppe
       },
       result: props.positioningDisabled ? null : state.result,
       attrs: options.attrs,
+      ariaRole: props.ariaRole,
     })),
   })
 

@@ -187,6 +187,24 @@ export interface PopperConfig {
   noAutoFocus: boolean
 
   /**
+   * ARIA role applied to the popper element. `null` to omit.
+   *
+   * Defaults to `'tooltip'`, `'dialog'`, and `'menu'` for the corresponding presets.
+   */
+  ariaRole: string | null
+
+  /**
+   * Trap Tab focus inside the popper while it is shown. Tab and Shift+Tab cycle
+   * through focusable descendants of the popper instead of leaving it.
+   */
+  focusTrap: boolean
+
+  /**
+   * Restore focus to the previously-focused element when the popper closes.
+   */
+  restoreFocus: boolean
+
+  /**
    * Arrow padding (px)
    */
   arrowPadding: number | string

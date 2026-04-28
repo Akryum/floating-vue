@@ -34,6 +34,7 @@
       :handle-resize="handleResize"
       :classes="classes"
       :result="result"
+      :aria-role="tooltipAriaRole"
       @hide="hide"
       @resize="onResize"
     >
@@ -97,6 +98,7 @@ const methods = usePopperMethods(popper)
 let fetchId = 0
 let fetchLoading = false
 
+const tooltipAriaRole = computed(() => getDefaultConfig(props.theme, 'ariaRole') as string | null)
 const isContentAsync = computed(() => typeof props.content === 'function')
 const loading = computed(() => isContentAsync.value && asyncContent.value == null)
 const finalContent = computed(() => {

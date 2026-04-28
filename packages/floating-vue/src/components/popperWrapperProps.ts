@@ -205,6 +205,21 @@ export const popperWrapperProps = {
     default: undefined,
   },
 
+  ariaRole: {
+    type: String as PropType<string | null>,
+    default: undefined,
+  },
+
+  focusTrap: {
+    type: Boolean,
+    default: undefined,
+  },
+
+  restoreFocus: {
+    type: Boolean,
+    default: undefined,
+  },
+
   disposeTimeout: {
     type: Number as PropType<number | null>,
     default: undefined,

@@ -203,6 +203,100 @@ describe('Popper wrapper components', () => {
     expect(secondNode?.classList.contains('v-popper__popper--shown')).toBe(true)
   })
 
+  test('applies the preset ariaRole to the popper element', async () => {
+    wrapper = mount(Tooltip, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<span>Tooltip content</span>',
+      },
+    })
+
+    ;(wrapper.vm as any).show({ skipDelay: true })
+    await waitForPopperUpdates()
+    expect(getPopperElement()?.getAttribute('role')).toBe('tooltip')
+  })
+
+  test('uses dialog role and aria-modal for dropdowns', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    ;(wrapper.vm as any).show({ skipDelay: true })
+    await waitForPopperUpdates()
+    const node = getPopperElement()
+    expect(node?.getAttribute('role')).toBe('dialog')
+    expect(node?.getAttribute('aria-modal')).toBe('true')
+  })
+
+  test('omits role attribute when ariaRole prop is null', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        ariaRole: null,
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    ;(wrapper.vm as any).show({ skipDelay: true })
+    await waitForPopperUpdates()
+    expect(getPopperElement()?.hasAttribute('role')).toBe(false)
+  })
+
+  test('returns focus to the trigger when restoreFocus is true', async () => {
+    const trigger = document.createElement('button')
+    trigger.id = 'trigger'
+    document.body.appendChild(trigger)
+    trigger.focus()
+
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        restoreFocus: true,
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    ;(wrapper.vm as any).show({ skipDelay: true })
+    await waitForPopperUpdates()
+
+    ;(wrapper.vm as any).hide({ skipDelay: true })
+    await waitForPopperUpdates()
+
+    expect(document.activeElement).toBe(trigger)
+    trigger.remove()
+  })
+
   test('forwards apply-show and apply-hide events to consumers', async () => {
     wrapper = mount(Dropdown, {
       attachTo: document.body,

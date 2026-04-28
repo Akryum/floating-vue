@@ -141,6 +141,10 @@ export interface PopperRuntime {
   hideInProgress: boolean
   /** Prevents current opening click from auto-closing. */
   showFrameLocked: boolean
+  /** Element that had focus before the popper showed. */
+  previousFocus: Element | null
+  /** Cleanup callbacks for installed focus trap and menu keyboard handlers. */
+  focusCleanups: Array<() => void>
 }
 
 /**
@@ -188,6 +192,9 @@ export interface PopperProps {
   shift: boolean
   shiftCrossAxis: boolean
   noAutoFocus: boolean
+  ariaRole: string | null
+  focusTrap: boolean
+  restoreFocus: boolean
   disposeTimeout: number | null
 }
 
@@ -207,6 +214,7 @@ export interface PopperSlotData {
   classes: PopperClasses & { popperClass?: unknown }
   result: PopperResult | null
   attrs: Record<string, unknown>
+  ariaRole: string | null
 }
 
 /**

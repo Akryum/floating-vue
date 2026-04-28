@@ -224,6 +224,21 @@ export const popperProps = {
     default: defaultPropFactory('noAutoFocus'),
   },
 
+  ariaRole: {
+    type: String as PropType<string | null>,
+    default: defaultPropFactory('ariaRole'),
+  },
+
+  focusTrap: {
+    type: Boolean,
+    default: defaultPropFactory('focusTrap'),
+  },
+
+  restoreFocus: {
+    type: Boolean,
+    default: defaultPropFactory('restoreFocus'),
+  },
+
   disposeTimeout: {
     type: Number as PropType<number | null>,
     default: defaultPropFactory('disposeTimeout'),

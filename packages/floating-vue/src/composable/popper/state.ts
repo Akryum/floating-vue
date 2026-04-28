@@ -57,5 +57,7 @@ export function createPopperRuntime (): PopperRuntime {
     preventShow: false,
     hideInProgress: false,
     showFrameLocked: false,
+    previousFocus: null,
+    focusCleanups: [],
   }
 }

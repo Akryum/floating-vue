@@ -22,6 +22,8 @@
       position: result.strategy,
       transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
     } : undefined"
+    :role="ariaRole ?? undefined"
+    :aria-modal="ariaRole === 'dialog' && shown ? 'true' : undefined"
     :aria-hidden="shown ? 'false' : 'true'"
     :tabindex="autoHide ? 0 : undefined"
     :data-popper-placement="result ? result.placement : undefined"
@@ -84,12 +86,14 @@ const props = withDefaults(defineProps<{
   handleResize: boolean
   classes: PopperClasses & { popperClass?: unknown }
   result: PopperResult | null
+  ariaRole?: string | null
 }>(), {
   autoHide: false,
   handleResize: false,
   mounted: false,
   shown: false,
   skipTransition: false,
+  ariaRole: null,
 })
 
 const emit = defineEmits<{

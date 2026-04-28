@@ -1,6 +1,7 @@
 import { getOverflowAncestors } from '@floating-ui/dom'
 import { nextFrame } from '../../util/frame'
 import { applyAttrsToTarget, detachPopperNode, ensureTeleport } from './dom'
+import { installFocusTrap, installMenuKeyboardNav, pickRestoreTarget } from './focus'
 import { registerEventListeners, removePopperEventListeners } from './listeners'
 import { isAimingPopper } from './mouse'
 import { computePopperPosition } from './positioning'
@@ -19,6 +20,11 @@ import type { PopperApi, PopperMethodOptions } from './types'
 export function showPopper (api: PopperApi, { event = null, skipDelay = false, force = false }: PopperMethodOptions = {}) {
   const parent = api.parentPopper
   if (parent?.runtime.lockedChild && parent.runtime.lockedChild !== api) return
+
+  // Capture focus owner before any internal focus moves so restoreFocus can return to it.
+  if (api.props.restoreFocus && typeof document !== 'undefined' && !api.runtime.previousFocus) {
+    api.runtime.previousFocus = document.activeElement
+  }
 
   api.state.pendingHide = false
   if (force || !api.props.disabled) {
@@ -163,6 +169,7 @@ async function applyShowEffect (api: PopperApi) {
   }
 
   registerShownPopper(api)
+  installFocusBehaviors(api)
   api.emit('apply-show')
 
   api.state.classes.showFrom = true
@@ -175,6 +182,37 @@ async function applyShowEffect (api: PopperApi) {
   if (!api.props.noAutoFocus) {
     api.runtime.nodes.popperNode?.focus()
   }
+}
+
+/**
+ * Installs focus trap and menu keyboard navigation handlers based on props.
+ * The cleanups run on hide via teardownFocusBehaviors.
+ */
+function installFocusBehaviors (api: PopperApi) {
+  const popperNode = api.runtime.nodes.popperNode
+  if (!popperNode) return
+
+  if (api.props.focusTrap) {
+    api.runtime.focusCleanups.push(installFocusTrap(popperNode))
+  }
+  if (api.props.ariaRole === 'menu') {
+    api.runtime.focusCleanups.push(installMenuKeyboardNav(popperNode))
+  }
+}
+
+/**
+ * Runs and clears any installed focus handlers, then optionally restores focus
+ * to the previously-focused element.
+ */
+function teardownFocusBehaviors (api: PopperApi) {
+  for (const cleanup of api.runtime.focusCleanups) cleanup()
+  api.runtime.focusCleanups = []
+
+  if (api.props.restoreFocus) {
+    const target = pickRestoreTarget(api.runtime.previousFocus)
+    if (target) target.focus()
+  }
+  api.runtime.previousFocus = null
 }
 
 /**
@@ -205,6 +243,7 @@ async function applyHide (api: PopperApi, skipTransition = false) {
 
   scheduleDispose(api)
   removePopperEventListeners(api, 'scroll')
+  teardownFocusBehaviors(api)
   api.emit('apply-hide')
 
   api.state.classes.showFrom = false
