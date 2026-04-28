@@ -65,6 +65,9 @@
     "url": "https://github.com/Akryum/floating-vue/issues"
   },
   "homepage": "https://floating-vue.starpad.dev/",
+  "engines": {
+    "node": ">=18"
+  },
   "keywords": [
     "vue",
     "popper",

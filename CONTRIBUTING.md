@@ -1,45 +1,107 @@
 # Contributing Guidelines
 
-(WIP)
+Thanks for considering a contribution! This guide covers how to set up the
+repo, run the local checks, and ship a change.
 
-## Run the project
+## Prerequisites
 
-Install deps:
+- Node.js 18 or 20 (matrix used by CI)
+- pnpm 10 — installed automatically via `corepack` if you have a recent Node
 
-```
-yarn
-```
+The required pnpm version is pinned in `packageManager` in the root
+`package.json`. Run `corepack enable` once to let your Node bootstrap it.
 
-Run the tests:
+## Initial setup
 
-```
-pnpm run test:unit --watch
-```
-
-Build the library in dev mode:
-
-```
-pnpm run dev
+```bash
+pnpm install
 ```
 
-Build the library for production:
+This installs every workspace package (`packages/floating-vue`, `demo`, `docs`).
 
-```
-pnpm run build
-```
+## Daily workflow
 
-### Demo
+The repo is a single primary package (`packages/floating-vue`) plus a Vite
+demo and a VitePress docs site. Most commands run from the repo root.
 
-Run the demo:
+Run the unit tests in watch mode while iterating:
 
-```
-cd demo-src
-yarn
-pnpm run dev
+```bash
+pnpm -C packages/floating-vue run test:unit --watch
 ```
 
-Build the demo:
+Run the full local check suite (matches CI):
 
+```bash
+pnpm lint        # eslint across .js, .ts, .vue
+pnpm typecheck   # vue-tsc against tests/types fixture
+pnpm test        # peeky unit tests
+pnpm build       # vite build + .d.ts emit
 ```
-pnpm run build
+
+Build the library in watch mode:
+
+```bash
+pnpm -C packages/floating-vue run dev
 ```
+
+## Demo
+
+Visual regression check / playground while editing the library:
+
+```bash
+pnpm -C demo run dev
+```
+
+The demo imports the workspace package directly, so source edits are picked up
+on save once `pnpm -C packages/floating-vue run dev` is also running, or after
+a fresh `pnpm build`.
+
+## Docs
+
+```bash
+pnpm docs        # alias for `pnpm -C docs run dev`
+pnpm docs:build  # full library + docs production build
+```
+
+## Tests
+
+The library uses [Peeky](https://peeky.dev/) with a JSDOM runtime. Spec files
+sit next to the source they cover — for example
+`src/composable/popper/positioning.ts` is paired with
+`src/composable/popper/positioning.spec.ts`.
+
+Add tests with the same flavor: small DOM mounts, focused assertions, no
+real timers unless the behavior under test is timer-driven. Component tests
+go in `src/components/*.spec.ts` and use `@vue/test-utils`.
+
+## Code style
+
+- Files stay under ~300 LOC where possible. Split early; small, named
+  modules are preferred.
+- Public functions, classes, and exported types carry JSDoc. Internal helpers
+  carry a one-line JSDoc when their role is non-obvious.
+- TypeScript runs in strict mode. Don't add `any` to keep the tree green —
+  type the value, even if it takes a small refactor.
+- Vue components use `<script setup lang="ts">` with `defineProps<>()` and
+  `defineEmits<>()`. No Options API.
+
+ESLint enforces formatting. There is no Prettier; rely on `pnpm lint --fix`.
+
+## Pull requests
+
+- Open against `main` (or the active development branch — check the README).
+- CI runs lint, typecheck, tests, and build on Node 18 and 20.
+- Use semantic commit messages (`feat:`, `fix:`, `chore:`, `test:`, `docs:`).
+- Describe the user-facing change and the testing you ran in the PR body.
+
+## Releasing
+
+Maintainers only. Releases are cut from `main`:
+
+```bash
+pnpm run release
+```
+
+This runs lint, builds the library, and invokes the `sheep` release tool. The
+release-notes workflow then publishes a GitHub Release for the new tag.

@@ -1,7 +1,13 @@
+/*
+ * Customization tokens. Override on :root, an ancestor, or a popper instance
+ * (via popperClass + the matching custom-property assignment) to retheme
+ * floating-vue without recompiling. Defaults match the previous hardcoded values.
+ */
+
 /* Content */
 
 .v-popper__popper {
-  z-index: 10000;
+  z-index: var(--v-popper-zindex, 10000);
   top: 0;
   left: 0;
   outline: none;
@@ -10,14 +16,16 @@
 .v-popper__popper.v-popper__popper--hidden {
   visibility: hidden;
   opacity: 0;
-  transition: opacity .15s, visibility .15s;
+  transition:
+    opacity var(--v-popper-transition-duration, .15s),
+    visibility var(--v-popper-transition-duration, .15s);
   pointer-events: none;
 }
 
 .v-popper__popper.v-popper__popper--shown {
   visibility: visible;
   opacity: 1;
-  transition: opacity .15s;
+  transition: opacity var(--v-popper-transition-duration, .15s);
 }
 
 .v-popper__popper.v-popper__popper--skip-transition,
@@ -49,8 +57,8 @@
 
 .v-popper__arrow-container {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: var(--v-popper-arrow-size, 10px);
+  height: var(--v-popper-arrow-size, 10px);
 }
 
 .v-popper__popper--arrow-overflow .v-popper__arrow-container,
@@ -70,11 +78,11 @@
 
 .v-popper__arrow-inner {
   visibility: hidden;
-  border-width: 7px;
+  border-width: var(--v-popper-arrow-inner-size, 7px);
 }
 
 .v-popper__arrow-outer {
-  border-width: 6px;
+  border-width: var(--v-popper-arrow-outer-size, 6px);
 }
 
 .v-popper__popper[data-popper-placement^="top"] .v-popper__arrow-inner,
@@ -164,31 +172,31 @@
 /* Tooltip */
 
 .v-popper--theme-tooltip .v-popper__inner {
-  background: rgba(0, 0, 0, .8);
-  color: white;
-  border-radius: 6px;
-  padding: 7px 12px 6px;
+  background: var(--v-popper-tooltip-background, rgba(0, 0, 0, .8));
+  color: var(--v-popper-tooltip-color, white);
+  border-radius: var(--v-popper-tooltip-radius, 6px);
+  padding: var(--v-popper-tooltip-padding, 7px 12px 6px);
 }
 
 .v-popper--theme-tooltip .v-popper__arrow-outer {
-  border-color: rgba(0, 0, 0, .8);
+  border-color: var(--v-popper-tooltip-background, rgba(0, 0, 0, .8));
 }
 
 /* Dropdown */
 
 .v-popper--theme-dropdown .v-popper__inner {
-  background: #fff;
-  color: black;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
+  background: var(--v-popper-dropdown-background, #fff);
+  color: var(--v-popper-dropdown-color, black);
+  border-radius: var(--v-popper-dropdown-radius, 6px);
+  border: 1px solid var(--v-popper-dropdown-border-color, #ddd);
+  box-shadow: var(--v-popper-dropdown-shadow, 0 6px 30px rgba(0, 0, 0, .1));
 }
 
 .v-popper--theme-dropdown .v-popper__arrow-inner {
   visibility: visible;
-  border-color: #fff;
+  border-color: var(--v-popper-dropdown-background, #fff);
 }
 
 .v-popper--theme-dropdown .v-popper__arrow-outer {
-  border-color: #ddd;
+  border-color: var(--v-popper-dropdown-border-color, #ddd);
 }
