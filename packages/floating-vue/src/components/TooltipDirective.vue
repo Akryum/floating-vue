@@ -69,7 +69,7 @@ const props = defineProps({
 
   html: {
     type: Boolean,
-    default: props => getDefaultConfig(props.theme, 'html'),
+    default: (props: { theme: string }) => getDefaultConfig(props.theme, 'html'),
   },
 
   content: {
@@ -79,7 +79,7 @@ const props = defineProps({
 
   loadingContent: {
     type: String,
-    default: props => getDefaultConfig(props.theme, 'loadingContent'),
+    default: (props: { theme: string }) => getDefaultConfig(props.theme, 'loadingContent'),
   },
 
   targetNodes: {
@@ -115,10 +115,10 @@ function fetchContent (force = false) {
     fetchLoading = true
     const currentFetchId = ++fetchId
     const result = props.content(instance?.proxy)
-    if (result?.then) {
-      result.then(res => onResult(currentFetchId, res))
+    if (result && typeof (result as { then?: unknown }).then === 'function') {
+      (result as Promise<string | number>).then((res: string | number) => onResult(currentFetchId, res))
     } else {
-      onResult(currentFetchId, result)
+      onResult(currentFetchId, result as string | number)
     }
   }
 }

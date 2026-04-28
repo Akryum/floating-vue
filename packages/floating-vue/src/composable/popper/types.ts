@@ -147,7 +147,7 @@ export interface PopperRuntime {
  * Core props consumed by the popper composable.
  */
 export interface PopperProps {
-  [key: string]: any
+  [key: string]: unknown
   theme: string
   targetNodes: () => Element[]
   referenceNode?: (() => Element | null) | null
@@ -219,7 +219,7 @@ export interface PopperApi {
   state: PopperState
   runtime: PopperRuntime
   props: PopperProps
-  emit: (event: string, ...args: any[]) => void
+  emit: (event: string, ...args: unknown[]) => void
   instance: ComponentInternalInstance | null
   show: (options?: PopperMethodOptions) => void
   hide: (options?: PopperMethodOptions) => void
@@ -237,5 +237,5 @@ export interface UsePopperOptions {
   /** Non-prop attrs forwarded to slot data. */
   attrs: Record<string, unknown>
   /** Vue emit function from setup context. */
-  emit: (event: string, ...args: any[]) => void
+  emit: (event: string, ...args: unknown[]) => void
 }

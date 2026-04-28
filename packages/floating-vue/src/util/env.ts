@@ -8,7 +8,10 @@ if (typeof window !== 'undefined') {
         supportsPassive = true
       },
     })
-    window.addEventListener('test', null, opts)
+    // Listener body is irrelevant — we only care that reading `passive` triggers the getter.
+    const noop = () => {}
+    window.addEventListener('test' as keyof WindowEventMap, noop, opts)
+    window.removeEventListener('test' as keyof WindowEventMap, noop, opts)
   } catch (e) {}
 }
 

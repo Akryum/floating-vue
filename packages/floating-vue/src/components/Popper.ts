@@ -28,7 +28,7 @@ export default defineComponent({
     const api = usePopper(props as PopperProps, {
       rootNode,
       attrs,
-      emit,
+      emit: emit as (event: string, ...args: unknown[]) => void,
     })
 
     expose({

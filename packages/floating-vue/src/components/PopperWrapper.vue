@@ -22,7 +22,7 @@
     ]"
     @show="emit('show')"
     @hide="emit('hide')"
-    @update:shown="shown => emit('update:shown', shown)"
+    @update:shown="(shown: boolean) => emit('update:shown', shown)"
     @apply-show="emit('apply-show')"
     @apply-hide="emit('apply-hide')"
     @close-group="emit('close-group')"

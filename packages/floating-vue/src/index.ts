@@ -1,3 +1,4 @@
+import type { App } from 'vue'
 import { assign } from './util/assign-deep'
 import { config, FloatingVueConfig } from './config'
 import 'vue-resize/dist/vue-resize.css'
@@ -51,7 +52,7 @@ export type { PopperApi, PopperProps, PopperSlotData } from './composable/usePop
 
 /* Vue plugin */
 
-export function install (app, options: FloatingVueConfig = {}) {
+export function install (app: App & { $_vTooltipInstalled?: boolean }, options: FloatingVueConfig = {}) {
   if (app.$_vTooltipInstalled) return
   app.$_vTooltipInstalled = true
 

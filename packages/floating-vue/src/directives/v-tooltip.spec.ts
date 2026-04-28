@@ -1,10 +1,11 @@
 import { describe, test, expect } from '@peeky/test'
 import * as VTooltip from './v-tooltip'
+import type { Placement } from '../util/popper'
 
 describe('getPlacement', () => {
   test('object notation', () => {
     const value = {
-      placement: 'bottom',
+      placement: 'bottom' as Placement,
     }
     const modifiers = {}
     const result = VTooltip.getPlacement(value, modifiers)

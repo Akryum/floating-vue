@@ -6,6 +6,9 @@ import {
   offset,
   shift,
   size,
+  type Boundary,
+  type Middleware,
+  type Placement as FloatingPlacement,
 } from '@floating-ui/dom'
 import type { PopperApi } from './types'
 
@@ -16,13 +19,14 @@ export type ComputePositionConfig = NonNullable<Parameters<typeof computePositio
  */
 export function createComputePositionOptions (api: PopperApi): ComputePositionConfig {
   const props = api.props
-  const options: any = {
+  const middleware: Middleware[] = []
+  const options: ComputePositionConfig = {
     strategy: props.strategy,
-    middleware: [],
+    middleware,
   }
 
   if (props.distance || props.skidding) {
-    options.middleware.push(offset({
+    middleware.push(offset({
       mainAxis: Number(props.distance),
       crossAxis: Number(props.skidding),
     }))
@@ -30,33 +34,33 @@ export function createComputePositionOptions (api: PopperApi): ComputePositionCo
 
   const isPlacementAuto = props.placement.startsWith('auto')
   if (isPlacementAuto) {
-    options.middleware.push(autoPlacement({
+    middleware.push(autoPlacement({
       alignment: props.placement.split('-')[1] ?? '',
     } as Parameters<typeof autoPlacement>[0]))
   } else {
-    options.placement = props.placement as any
+    options.placement = props.placement as FloatingPlacement
   }
 
   if (props.preventOverflow) {
     if (props.shift) {
-      options.middleware.push(shift({
+      middleware.push(shift({
         padding: Number(props.overflowPadding),
-        boundary: props.boundary as any,
+        boundary: props.boundary as Boundary | undefined,
         crossAxis: props.shiftCrossAxis,
       }))
     }
 
     if (!isPlacementAuto && props.flip) {
-      options.middleware.push(flip({
+      middleware.push(flip({
         padding: Number(props.overflowPadding),
-        boundary: props.boundary as any,
+        boundary: props.boundary as Boundary | undefined,
       }))
     }
   }
 
-  addArrowMiddleware(api, options.middleware)
-  addAutoSizeMiddleware(api, options.middleware)
-  addBoundarySizeMiddleware(api, options.middleware)
+  addArrowMiddleware(api, middleware)
+  addAutoSizeMiddleware(api, middleware)
+  addBoundarySizeMiddleware(api, middleware)
 
   return options
 }
@@ -96,7 +100,7 @@ export async function computePopperPosition (api: PopperApi) {
 /**
  * Adds arrow positioning and optional overflow detection.
  */
-function addArrowMiddleware (api: PopperApi, middleware: any[]) {
+function addArrowMiddleware (api: PopperApi, middleware: Middleware[]) {
   const arrowNode = api.runtime.nodes.arrowNode
   if (!arrowNode) return
 
@@ -127,7 +131,7 @@ function addArrowMiddleware (api: PopperApi, middleware: any[]) {
 /**
  * Adds middleware that sizes the popper inner element against its reference.
  */
-function addAutoSizeMiddleware (api: PopperApi, middleware: any[]) {
+function addAutoSizeMiddleware (api: PopperApi, middleware: Middleware[]) {
   const innerNode = api.runtime.nodes.innerNode
   if (!innerNode || (!api.props.autoMinSize && !api.props.autoSize)) return
 
@@ -137,8 +141,8 @@ function addAutoSizeMiddleware (api: PopperApi, middleware: any[]) {
     fn: ({ rects, placement, middlewareData }) => {
       if (middlewareData.autoSize?.skip) return {}
 
-      let width: number
-      let height: number
+      let width: number | undefined
+      let height: number | undefined
       if (placement.startsWith('top') || placement.startsWith('bottom')) {
         width = rects.reference.width
       } else {
@@ -147,8 +151,8 @@ function addAutoSizeMiddleware (api: PopperApi, middleware: any[]) {
 
       const widthProp = autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'
       const heightProp = autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'
-      innerNode.style[widthProp] = width != null ? `${width}px` : null
-      innerNode.style[heightProp] = height != null ? `${height}px` : null
+      innerNode.style[widthProp] = width != null ? `${width}px` : ''
+      innerNode.style[heightProp] = height != null ? `${height}px` : ''
 
       return {
         data: {
@@ -165,19 +169,19 @@ function addAutoSizeMiddleware (api: PopperApi, middleware: any[]) {
 /**
  * Adds middleware that limits popper inner max size to available boundary space.
  */
-function addBoundarySizeMiddleware (api: PopperApi, middleware: any[]) {
+function addBoundarySizeMiddleware (api: PopperApi, middleware: Middleware[]) {
   const innerNode = api.runtime.nodes.innerNode
   if (!innerNode || (!api.props.autoMaxSize && !api.props.autoBoundaryMaxSize)) return
 
-  innerNode.style.maxWidth = null
-  innerNode.style.maxHeight = null
+  innerNode.style.maxWidth = ''
+  innerNode.style.maxHeight = ''
 
   middleware.push(size({
-    boundary: api.props.boundary as any,
+    boundary: api.props.boundary as Boundary | undefined,
     padding: Number(api.props.overflowPadding),
     apply: ({ availableWidth, availableHeight }) => {
-      innerNode.style.maxWidth = availableWidth != null ? `${availableWidth}px` : null
-      innerNode.style.maxHeight = availableHeight != null ? `${availableHeight}px` : null
+      innerNode.style.maxWidth = availableWidth != null ? `${availableWidth}px` : ''
+      innerNode.style.maxHeight = availableHeight != null ? `${availableHeight}px` : ''
     },
   }))
 }

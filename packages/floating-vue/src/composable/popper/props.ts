@@ -225,7 +225,7 @@ export const popperProps = {
   },
 
   disposeTimeout: {
-    type: Number,
+    type: Number as PropType<number | null>,
     default: defaultPropFactory('disposeTimeout'),
   },
 }

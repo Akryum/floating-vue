@@ -1,6 +1,7 @@
 import { supportsPassive } from '../../util/env'
 import { HIDE_EVENT_MAP, SHOW_EVENT_MAP } from '../../util/events'
-import type { PopperApi, PopperEvent } from './types'
+import type { Trigger } from '../../types/trigger'
+import type { PopperApi, PopperEvent, PopperListener } from './types'
 
 /**
  * Registers a DOM event listener and tracks it for cleanup.
@@ -48,7 +49,7 @@ export function addPopperEventListeners (api: PopperApi) {
  * Removes event listeners, optionally filtering by event type.
  */
 export function removePopperEventListeners (api: PopperApi, filterEventType?: string) {
-  const newList = []
+  const newList: PopperListener[] = []
   api.runtime.events.forEach(listener => {
     const { targetNodes, eventType, handler } = listener
     if (!filterEventType || filterEventType === eventType) {
@@ -77,14 +78,14 @@ function registerTriggerListeners (
   api: PopperApi,
   targetNodes: EventTarget[],
   eventMap: Record<string, string>,
-  commonTriggers,
-  customTrigger,
+  commonTriggers: Trigger[] | undefined,
+  customTrigger: Trigger[] | ((triggers: Trigger[]) => Trigger[]) | undefined,
   handler: (event: Event) => void,
 ) {
-  let triggers = commonTriggers
+  let triggers: Trigger[] | undefined = commonTriggers
 
   if (customTrigger != null) {
-    triggers = typeof customTrigger === 'function' ? customTrigger(triggers) : customTrigger
+    triggers = typeof customTrigger === 'function' ? customTrigger(triggers ?? []) : customTrigger
   }
 
   triggers?.forEach(trigger => {

@@ -1,4 +1,4 @@
-import { Config } from './types/config.js'
+import { Config, PopperPreset } from './types/config.js'
 
 export type FloatingVueConfig = Partial<Config>
 
@@ -52,21 +52,21 @@ export const config: Config = {
 }
 
 /**
- * Get default config value depending on preset
+ * Get default config value depending on preset.
  */
-export function getDefaultConfig (preset: string, key: string): Config {
-  let presetConfig = config.presets[preset] || {}
-  let value
+export function getDefaultConfig (preset: string, key: string): unknown {
+  let presetConfig: PopperPreset | null = config.presets[preset] ?? {}
+  let value: unknown
   do {
-    value = presetConfig[key]
+    value = (presetConfig as Record<string, unknown>)[key]
     if (typeof value === 'undefined') {
       // Support preset extend
       if (presetConfig.$extend) {
-        presetConfig = config.presets[presetConfig.$extend] || {}
+        presetConfig = config.presets[presetConfig.$extend] ?? {}
       } else {
         // Base config
         presetConfig = null
-        value = config[key]
+        value = (config as unknown as Record<string, unknown>)[key]
       }
     } else {
       presetConfig = null
@@ -76,16 +76,16 @@ export function getDefaultConfig (preset: string, key: string): Config {
 }
 
 /**
- * Theme CSS inheritance
+ * Theme CSS inheritance.
  */
 export function getThemeClasses (preset: string): string[] {
   const result = [preset]
-  let presetConfig = config.presets[preset] || {}
+  let presetConfig: PopperPreset | null = config.presets[preset] ?? {}
   do {
     // Support preset extend
     if (presetConfig.$extend && !presetConfig.$resetCss) {
       result.push(presetConfig.$extend)
-      presetConfig = config.presets[presetConfig.$extend] || {}
+      presetConfig = config.presets[presetConfig.$extend] ?? {}
     } else {
       presetConfig = null
     }
@@ -95,12 +95,12 @@ export function getThemeClasses (preset: string): string[] {
 
 export function getAllParentThemes (preset: string): string[] {
   const result = [preset]
-  let presetConfig = config.presets[preset] || {}
+  let presetConfig: PopperPreset | null = config.presets[preset] ?? {}
   do {
     // Support preset extend
     if (presetConfig.$extend) {
       result.push(presetConfig.$extend)
-      presetConfig = config.presets[presetConfig.$extend] || {}
+      presetConfig = config.presets[presetConfig.$extend] ?? {}
     } else {
       presetConfig = null
     }

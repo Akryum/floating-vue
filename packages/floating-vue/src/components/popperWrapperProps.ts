@@ -206,7 +206,7 @@ export const popperWrapperProps = {
   },
 
   disposeTimeout: {
-    type: Number,
+    type: Number as PropType<number | null>,
     default: undefined,
   },
 }

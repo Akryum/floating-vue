@@ -34,7 +34,7 @@
     <div
       class="v-popper__wrapper"
       :style="result ? {
-        transformOrigin: result.transformOrigin,
+        transformOrigin: result.transformOrigin ?? undefined,
       } : undefined"
     >
       <div
@@ -100,12 +100,12 @@ const emit = defineEmits<{
 const themeClass = useThemeClass(toRef(props, 'theme'))
 
 /**
- * Converts a numeric pixel value to a CSS length.
+ * Converts a numeric pixel value to a CSS length, returning '' to clear the property.
  */
-function toPx (value: unknown) {
+function toPx (value: unknown): string {
   if (value != null && !isNaN(Number(value))) {
     return `${value}px`
   }
-  return null
+  return ''
 }
 </script>

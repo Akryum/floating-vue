@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2018",
     "module": "ESNext",
-    "strict": false,
+    "strict": true,
     "declaration": true,
     "lib": [
       "ESNext",
