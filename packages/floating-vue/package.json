@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
     "prepublishOnly": "pnpm run test && pnpm run build",
     "test": "pnpm run test:unit",
-    "test:unit": "peeky run"
+    "test:unit": "peeky run",
+    "typecheck": "vue-tsc --noEmit"
   },
   "main": "dist/floating-vue.umd.js",
   "module": "dist/floating-vue.mjs",

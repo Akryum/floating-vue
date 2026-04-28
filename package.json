@@ -9,6 +9,7 @@
     "docs:build": "pnpm run build && pnpm -C docs run build",
     "dev": "pnpm -C docs run dev",
     "test": "pnpm -r --filter=\"./packages/*\" run test",
+    "typecheck": "pnpm -r --filter=\"./packages/*\" run typecheck",
     "lint": "eslint --ext .js,.ts,.vue .",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
