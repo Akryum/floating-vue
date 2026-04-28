@@ -129,4 +129,101 @@ describe('Popper wrapper components', () => {
 
     expect(getPopperElement()?.textContent).toContain('Tooltip content')
   })
+
+  test('exposes shown state and imperative handles via the default slot', async () => {
+    const captured: {
+      shown: boolean | null
+      show: ((options?: { skipDelay?: boolean }) => void) | null
+      hide: (() => void) | null
+    } = {
+      shown: null,
+      show: null,
+      hide: null,
+    }
+
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: (slotProps: { shown: boolean, show: (options?: { skipDelay?: boolean }) => void, hide: () => void }) => {
+          captured.shown = slotProps.shown
+          captured.show = slotProps.show
+          captured.hide = slotProps.hide
+          return '<button>Reference</button>'
+        },
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    expect(captured.shown).toBe(false)
+    expect(typeof captured.show).toBe('function')
+    expect(typeof captured.hide).toBe('function')
+
+    captured.show?.({ skipDelay: true })
+    await waitForPopperUpdates()
+    expect(captured.shown).toBe(true)
+
+    captured.hide?.()
+    await waitForPopperUpdates()
+    expect(captured.shown).toBe(false)
+  })
+
+  test('reacts to shown prop toggling without remounting', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        shown: false,
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    await wrapper.setProps({ shown: true })
+    await waitForPopperUpdates()
+    const firstNode = getPopperElement()
+    expect(firstNode?.classList.contains('v-popper__popper--shown')).toBe(true)
+
+    await wrapper.setProps({ shown: false })
+    await waitForPopperUpdates()
+    await wrapper.setProps({ shown: true })
+    await waitForPopperUpdates()
+
+    const secondNode = getPopperElement()
+    expect(secondNode?.classList.contains('v-popper__popper--shown')).toBe(true)
+  })
+
+  test('forwards apply-show and apply-hide events to consumers', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    ;(wrapper.vm as any).show({ skipDelay: true })
+    await waitForPopperUpdates()
+    expect(wrapper.emitted('apply-show')).toBeTruthy()
+
+    ;(wrapper.vm as any).hide({ skipDelay: true })
+    await waitForPopperUpdates()
+    expect(wrapper.emitted('apply-hide')).toBeTruthy()
+  })
 })
