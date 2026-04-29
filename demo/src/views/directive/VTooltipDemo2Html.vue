@@ -7,6 +7,7 @@
         content: '<b>Hey</b>, how are <i>you</i>?',
         html: true,
       }"
+      data-test="tooltip-html-target"
     >
       Hover me
     </button>

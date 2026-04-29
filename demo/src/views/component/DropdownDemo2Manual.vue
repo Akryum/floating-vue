@@ -10,11 +10,11 @@ const placement = ref('bottom')
 
   <div>
     <label>
-      <input v-model="shown" type="checkbox">
+      <input v-model="shown" type="checkbox" data-test="dropdown-manual-toggle">
       Show dropdown
     </label>
 
-    <select v-model="placement">
+    <select v-model="placement" data-test="dropdown-placement-select">
       <option v-for="option of ['bottom', 'top', 'left', 'right']"
         :key="option"
         :value="option"
@@ -36,10 +36,10 @@ const placement = ref('bottom')
     popper-class="zoom-in"
     compute-transform-origin
   >
-    <button id="dropdown-btn">Click me</button>
+    <button id="dropdown-btn" data-test="dropdown-manual-trigger">Click me</button>
 
     <template #popper>
-      <div class="my-menu">
+      <div class="my-menu" data-test="dropdown-manual-content">
         Manual dropdown
       </div>
     </template>

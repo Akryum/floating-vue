@@ -6,10 +6,10 @@ const text = ref('')
 <template>
   <h1>VTooltip input model</h1>
 
-  <input v-model="text" />
+  <input v-model="text" data-test="tooltip-reactive-input" />
 
   <div>
-    <button v-tooltip="text">
+    <button v-tooltip="text" data-test="tooltip-reactive-target">
       Hover me
     </button>
   </div>

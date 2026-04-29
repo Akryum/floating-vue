@@ -57,6 +57,10 @@ module.exports = {
   ignorePatterns: [
     'node_modules/',
     'dist/',
+    'test-results/',
+    'playwright-report/',
+    'playwright/.cache/',
+    'blob-report/',
     '!.*',
   ],
 }

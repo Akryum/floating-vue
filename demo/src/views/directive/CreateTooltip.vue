@@ -24,6 +24,7 @@ function clipboardSuccess (el) {
   <div>
     <button
       class="px-4 py-2 bg-green-100 rounded"
+      data-test="copy-button"
       @click="clipboardSuccess($event.currentTarget)"
     >
       Copy

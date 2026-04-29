@@ -12,6 +12,8 @@
     "docs:build": "pnpm run build && pnpm -C docs run build",
     "dev": "pnpm -C docs run dev",
     "test": "pnpm -r --filter=\"./packages/*\" run test",
+    "test:e2e": "pnpm -C demo run test:e2e",
+    "test:e2e:ui": "pnpm -C demo run test:e2e:ui",
     "typecheck": "pnpm -r --filter=\"./packages/*\" run typecheck",
     "lint": "eslint --ext .js,.ts,.vue .",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"

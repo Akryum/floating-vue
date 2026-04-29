@@ -1,7 +1,7 @@
 <template>
   <div class="example flex justify-center items-center gap-6">
     <VMenu placement="bottom-start">
-      <button class="border border-gray-300 rounded px-4 py-2">
+      <button class="border border-gray-300 rounded px-4 py-2" data-test="menu-root">
         Hover me
       </button>
 
@@ -43,7 +43,7 @@
     </VMenu>
 
     <VDropdown placement="bottom-start">
-      <button class="border border-gray-300 rounded px-4 py-2">
+      <button class="border border-gray-300 rounded px-4 py-2" data-test="dropdown-root">
         Click me
       </button>
 

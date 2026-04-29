@@ -75,6 +75,31 @@ Add tests with the same flavor: small DOM mounts, focused assertions, no
 real timers unless the behavior under test is timer-driven. Component tests
 go in `src/components/*.spec.ts` and use `@vue/test-utils`.
 
+## End-to-end tests
+
+The demo SPA doubles as a Playwright e2e fixture. Specs live in
+`demo/e2e/*.spec.ts` and drive a real Chromium against the existing
+demo routes (`/directive/*`, `/component/*`).
+
+First run installs the Chromium browser binary:
+
+```bash
+pnpm build                                       # demo resolves floating-vue/dist
+pnpm -C demo exec playwright install chromium    # one-time
+pnpm test:e2e
+```
+
+Day-to-day:
+
+```bash
+pnpm test:e2e            # headless, list reporter
+pnpm test:e2e:ui         # Playwright UI runner for debugging
+```
+
+Set `E2E_ALL_BROWSERS=1` to also run Firefox and WebKit projects.
+CI runs the suite on Chromium only and uploads the HTML report and
+traces as artifacts on failure.
+
 ## Code style
 
 - Files stay under ~300 LOC where possible. Split early; small, named

@@ -20,6 +20,7 @@ const loadingContent = '<span style="opacity:.5;">Loading... Please wait</span>'
         loadingContent,
         html: true
       }"
+      data-test="tooltip-async-target"
     >
       Hover me
     </button>
