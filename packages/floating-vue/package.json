@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
     "prepublishOnly": "pnpm run test && pnpm run build",
     "test": "pnpm run test:unit",
-    "test:unit": "peeky run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "vue-tsc -p tsconfig.typecheck.json --noEmit"
   },
   "main": "dist/floating-vue.umd.js",
@@ -42,11 +43,12 @@
   },
   "devDependencies": {
     "@nuxt/kit": "^3.6.1",
-    "@peeky/test": "^0.14.1",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/test-utils": "^2.4.9",
     "cross-env": "^7.0.3",
+    "happy-dom": "^15.7.4",
     "vite": "^4.3.9",
+    "vitest": "^2.1.0",
     "vue": "^3.3.4",
     "vue-tsc": "^3.2.7"
   },

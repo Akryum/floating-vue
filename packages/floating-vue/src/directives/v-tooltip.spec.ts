@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@peeky/test'
+import { describe, expect, test } from 'vitest'
 import * as VTooltip from './v-tooltip'
 import type { Placement } from '../util/popper'
 

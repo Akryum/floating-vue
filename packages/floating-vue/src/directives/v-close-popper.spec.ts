@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from '@peeky/test'
+import { afterEach, describe, expect, test } from 'vitest'
 import vClosePopper from './v-close-popper'
 import type { DirectiveBinding } from 'vue'
 import type { PopperEvent } from '../composable/popper/types'

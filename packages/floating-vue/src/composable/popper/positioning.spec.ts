@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@peeky/test'
+import { describe, expect, test } from 'vitest'
 import { createComputePositionOptions } from './positioning'
 import type { PopperApi, PopperProps } from './types'
 

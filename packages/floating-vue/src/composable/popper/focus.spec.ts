@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from '@peeky/test'
+import { afterEach, describe, expect, test } from 'vitest'
 import {
   getFocusableElements,
   installFocusTrap,
