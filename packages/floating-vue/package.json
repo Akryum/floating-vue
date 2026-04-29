@@ -29,8 +29,7 @@
     "*.mjs"
   ],
   "dependencies": {
-    "@floating-ui/dom": "~1.6.3",
-    "vue-resize": "^2.0.0-alpha.1"
+    "@floating-ui/dom": "~1.6.3"
   },
   "peerDependencies": {
     "@nuxt/kit": "^3.2.0",
@@ -42,19 +41,14 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
     "@nuxt/kit": "^3.6.1",
     "@peeky/test": "^0.14.1",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/test-utils": "^2.4.9",
-    "babel-jest": "^29.5.0",
     "cross-env": "^7.0.3",
-    "fs-extra": "^11.1.1",
     "vite": "^4.3.9",
     "vue": "^3.3.4",
-    "vue-tsc": "^3.2.7",
-    "vue-typegen": "^0.2.0"
+    "vue-tsc": "^3.2.7"
   },
   "browserslist": [
     "> 1%",

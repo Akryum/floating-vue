@@ -47,11 +47,6 @@
           <div>
             <slot />
           </div>
-
-          <ResizeObserver
-            v-if="handleResize"
-            @notify="emit('resize', $event)"
-          />
         </template>
       </div>
 
@@ -71,8 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import { toRef } from 'vue'
-import { ResizeObserver } from 'vue-resize'
+import { ref, toRef } from 'vue'
+import { useResizeObserver } from '../composable/useResizeObserver'
 import { useThemeClass } from '../composable/useThemeClass'
 import type { PopperClasses, PopperResult } from '../composable/popper/types'
 
@@ -102,6 +97,14 @@ const emit = defineEmits<{
 }>()
 
 const themeClass = useThemeClass(toRef(props, 'theme'))
+
+const inner = ref<HTMLElement | null>(null)
+
+useResizeObserver(
+  inner,
+  () => emit('resize'),
+  () => props.mounted && props.handleResize,
+)
 
 /**
  * Converts a numeric pixel value to a CSS length, returning '' to clear the property.
