@@ -1,7 +1,11 @@
-import type { ComponentInternalInstance, ComputedRef, Ref } from 'vue'
+import type { ComponentInternalInstance, ComputedRef, EmitFn, Ref } from 'vue'
 import type { ComputePositionReturn, Strategy } from '@floating-ui/dom'
 import type { Trigger } from '../../types/trigger'
+import type { PopperStyleClass } from '../../types/popper-style'
 import type { Placement } from '../../util/popper'
+import type { PopperEmitOptions } from './emits'
+
+export type PopperEmitFn = EmitFn<PopperEmitOptions>
 
 /**
  * User-facing arguments accepted by show/hide methods.
@@ -151,7 +155,6 @@ export interface PopperRuntime {
  * Core props consumed by the popper composable.
  */
 export interface PopperProps {
-  [key: string]: unknown
   theme: string
   targetNodes: () => Element[]
   referenceNode?: (() => Element | null) | null
@@ -178,7 +181,7 @@ export interface PopperProps {
   handleResize: boolean
   instantMove: boolean
   eagerMount: boolean
-  popperClass?: unknown
+  popperClass?: PopperStyleClass
   computeTransformOrigin: boolean
   autoMinSize?: boolean
   autoSize: boolean | 'min' | 'max'
@@ -187,6 +190,7 @@ export interface PopperProps {
   preventOverflow: boolean
   overflowPadding: number | string
   arrowPadding: number | string
+  arrowSize?: number | string | null
   arrowOverflow: boolean
   flip: boolean
   shift: boolean
@@ -211,10 +215,11 @@ export interface PopperSlotData {
   hide: (options?: PopperMethodOptions) => void
   handleResize: boolean
   onResize: () => Promise<void>
-  classes: PopperClasses & { popperClass?: unknown }
+  classes: PopperClasses & { popperClass?: PopperStyleClass }
   result: PopperResult | null
   attrs: Record<string, unknown>
   ariaRole: string | null
+  arrowSize?: number | string | null
 }
 
 /**
@@ -227,7 +232,7 @@ export interface PopperApi {
   state: PopperState
   runtime: PopperRuntime
   props: PopperProps
-  emit: (event: string, ...args: unknown[]) => void
+  emit: PopperEmitFn
   instance: ComponentInternalInstance | null
   show: (options?: PopperMethodOptions) => void
   hide: (options?: PopperMethodOptions) => void
@@ -245,5 +250,5 @@ export interface UsePopperOptions {
   /** Non-prop attrs forwarded to slot data. */
   attrs: Record<string, unknown>
   /** Vue emit function from setup context. */
-  emit: (event: string, ...args: unknown[]) => void
+  emit: PopperEmitFn
 }

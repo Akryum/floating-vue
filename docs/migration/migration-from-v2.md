@@ -25,7 +25,7 @@ The positioning library has changed from `popperjs` to [`floating-ui`](https://f
 
 ### Global configuration
 
-The global configuration object has completely changed. Instead of having a lot of specific options it is now an object of default values for the [props](/api/#component-props) (like `placement` or `distance`). Additionally, it has a `themes` option to define [themes](/guide/themes).
+The global configuration object has completely changed. Instead of having a lot of specific options it is now an object of default values for the [props](/api/#component-props) (like `placement` or `distance`). Additionally, it has a `presets` option to define [theme presets](/guide/themes).
 
 - `defaultPlacement`: use `placement`
 - `defaultClass`: removed
@@ -100,7 +100,7 @@ After:
   boundary: undefined,
   autoHide: true,
   disposeTimeout: 5000,
-  themes: {
+  presets: {
     tooltip: {
       html: true,
       triggers: ['hover', 'focus'],
@@ -357,7 +357,7 @@ After:
 Changed classes:
 
 - `tooltip popover` (default value) to `v-popper__popper`.
-- `vue-tooltip-theme` (default value) is replaced by [theme classes](../guide/css.md#theme-classes).
+- `vue-tooltip-theme` (default value) is replaced by [preset classes](../guide/css.md#preset-classes).
 - `open` (default value) to `v-popper__popper--shown` and `v-popper__popper--hidden`.
 - `wrapper` (default value) to `v-popper__wrapper`.
 - `tooltip-inner popover-inner` (default value) to `v-popper__inner`.
@@ -431,7 +431,7 @@ Before (default):
 After:
 
 ```html
-<div class="v-popper__popper v-popper--theme-tooltip">
+<div class="v-popper__popper v-popper--preset-tooltip">
   <div class="v-popper__wrapper">
     <div class="v-popper__inner">
       <div>
@@ -461,7 +461,7 @@ Before:
 After:
 
 ```html
-<div class="v-popper__popper v-popper--theme-tooltip v-popper--tooltip-loading">
+<div class="v-popper__popper v-popper--preset-tooltip v-popper--tooltip-loading">
   <div class="v-popper__wrapper">
     <div class="v-popper__inner">
       <div>
@@ -611,7 +611,7 @@ Themes can extend each other:
 
 ```js
 app.use(FloatingVue, {
-  themes: {
+  presets: {
     select: {
       $extend: 'dropdown', // builtin theme
       triggers: ['click', 'touch', 'hover', 'focus'],
@@ -631,7 +631,7 @@ app.use(FloatingVue, {
 
 ### Global configuration
 
-The global configuration is now simply an object of the popper props (except special properties starting with `$` such as `$extend` and `$resetCss`, in addition to `themes`). The values will be used by default.
+The global configuration is now simply an object of the popper props (except special properties starting with `$` such as `$extend` and `$resetCss`, in addition to `presets`). The values will be used by default.
 
 [Learn more](../guide/config.md)
 

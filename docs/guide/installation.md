@@ -123,7 +123,7 @@ You can change the configuration too:
 ```js
 import { options } from 'floating-vue'
 
-options.themes.myTheme = {
+options.presets.myTheme = {
   // ...
 }
 ```

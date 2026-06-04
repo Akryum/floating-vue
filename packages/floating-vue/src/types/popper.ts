@@ -1,6 +1,7 @@
-import type { Placement, Strategy } from '@floating-ui/dom'
+import type { Strategy } from '@floating-ui/dom'
+import type { Placement } from '../util/popper.js'
 import type { Trigger } from './trigger.js'
-import type { PopperDynamicStyles, PopperStyle } from './popper-style.js'
+import type { PopperDynamicStyles, PopperStyle, PopperStyleClass } from './popper-style.js'
 export type { PopperDynamicStyles, PopperStyle, PopperStyleClass, PopperStyleObject } from './popper-style.js'
 
 export interface PopperConfig {
@@ -22,12 +23,12 @@ export interface PopperConfig {
   /**
    * Default position offset along main axis (px)
    */
-  distance: number
+  distance: number | string
 
   /**
    * Default position offset along cross axis (px)
    */
-  skidding: number
+  skidding: number | string
 
   /**
    * Default container where the popper will be appended
@@ -74,9 +75,9 @@ export interface PopperConfig {
   /**
    * Delay (ms)
    */
-  delay: number | {
-    show: number
-    hide: number
+  delay: number | string | {
+    show?: number | string
+    hide?: number | string
   }
 
   /**
@@ -92,7 +93,7 @@ export interface PopperConfig {
   /**
    * Virtual padding added to the `boundary` when computing overflow (in px)
    */
-  overflowPadding: number
+  overflowPadding: number | string
 
   /**
    * Flip to the opposite placement if needed
@@ -122,7 +123,7 @@ export interface PopperConfig {
   /**
    * Auto hide on click outside
    */
-  autoHide: boolean
+  autoHide: boolean | ((event: Event) => boolean)
 
   /**
    * Skip delay & CSS transitions when another popper is shown, so that the popper appear to instanly move to the new position.
@@ -132,12 +133,17 @@ export interface PopperConfig {
   /**
    * Auto destroy popper DOM nodes (ms)
    */
-  disposeTimeout: number
+  disposeTimeout: number | null
 
   /**
    * Mount popper content even if it's hidden
    */
   eagerMount: boolean
+
+  /**
+   * Classes applied to the popper root.
+   */
+  popperClass?: PopperStyleClass
 
   /**
    * Set `transform-origin` of the popper (`.v-popper__wrapper`) to the center of the reference element to allow animations around it (for example zooming out of the reference).
@@ -177,9 +183,19 @@ export interface PopperConfig {
   autoSize: boolean | 'min' | 'max'
 
   /**
+   * @deprecated Use `autoSize="min"` instead.
+   */
+  autoMinSize?: boolean
+
+  /**
    * Resize the popper inner container to the available size (using `max-width` and `max-height`). It's very useful for a dropdown that should automatically shrink its size when it reaches the boundary.
    */
   autoBoundaryMaxSize: boolean
+
+  /**
+   * @deprecated Use `autoBoundaryMaxSize` instead.
+   */
+  autoMaxSize?: boolean
 
   /**
    * Disable the auto focus on the popper DOM node when shown
@@ -208,6 +224,11 @@ export interface PopperConfig {
    * Arrow padding (px)
    */
   arrowPadding: number | string
+
+  /**
+   * Arrow container size. Numbers and numeric strings are interpreted as pixels.
+   */
+  arrowSize?: number | string | null
 
   /**
    * Compute arrow overflow (useful to hide it)

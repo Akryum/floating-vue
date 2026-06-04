@@ -1,6 +1,8 @@
 import type { PropType } from 'vue'
 import { getDefaultConfig } from '../../config'
 import { placements, type Placement } from '../../util/popper'
+import type { PopperConfig } from '../../types/popper'
+import type { Trigger } from '../../types/trigger'
 import type { PopperProps } from './types'
 
 /**
@@ -13,8 +15,8 @@ const ElementType = typeof window !== 'undefined'
 /**
  * Creates a Vue prop default that reads from the active theme preset.
  */
-function defaultPropFactory (prop: string) {
-  return function getDefaultThemeProp (props: PopperProps) {
+function defaultPropFactory<K extends keyof PopperConfig> (prop: K) {
+  return function getDefaultThemeProp (props: { theme: string }) {
     return getDefaultConfig(props.theme, prop)
   }
 }
@@ -25,12 +27,12 @@ function defaultPropFactory (prop: string) {
 export const popperProps = {
   theme: {
     type: String,
-    required: true,
+    required: true as const,
   },
 
   targetNodes: {
     type: Function as PropType<() => Element[]>,
-    required: true,
+    required: true as const,
   },
 
   referenceNode: {
@@ -40,7 +42,7 @@ export const popperProps = {
 
   popperNode: {
     type: Function as PropType<() => HTMLElement | null>,
-    required: true,
+    required: true as const,
   },
 
   shown: {
@@ -54,6 +56,7 @@ export const popperProps = {
   },
 
   ariaId: {
+    type: String as PropType<string | null>,
     default: null,
   },
 
@@ -89,42 +92,42 @@ export const popperProps = {
   },
 
   triggers: {
-    type: Array,
+    type: Array as PropType<Trigger[]>,
     default: defaultPropFactory('triggers'),
   },
 
   showTriggers: {
-    type: [Array, Function],
+    type: [Array, Function] as PropType<PopperProps['showTriggers']>,
     default: defaultPropFactory('showTriggers'),
   },
 
   hideTriggers: {
-    type: [Array, Function],
+    type: [Array, Function] as PropType<PopperProps['hideTriggers']>,
     default: defaultPropFactory('hideTriggers'),
   },
 
   popperTriggers: {
-    type: Array,
+    type: Array as PropType<Trigger[]>,
     default: defaultPropFactory('popperTriggers'),
   },
 
   popperShowTriggers: {
-    type: [Array, Function],
+    type: [Array, Function] as PropType<PopperProps['popperShowTriggers']>,
     default: defaultPropFactory('popperShowTriggers'),
   },
 
   popperHideTriggers: {
-    type: [Array, Function],
+    type: [Array, Function] as PropType<PopperProps['popperHideTriggers']>,
     default: defaultPropFactory('popperHideTriggers'),
   },
 
   container: {
-    type: [String, Object, ElementType, Boolean],
+    type: [String, Object, ElementType, Boolean] as PropType<PopperProps['container']>,
     default: defaultPropFactory('container'),
   },
 
   boundary: {
-    type: [String, ElementType],
+    type: [String, ElementType] as PropType<PopperProps['boundary']>,
     default: defaultPropFactory('boundary'),
   },
 
@@ -135,7 +138,7 @@ export const popperProps = {
   },
 
   autoHide: {
-    type: [Boolean, Function],
+    type: [Boolean, Function] as PropType<PopperProps['autoHide']>,
     default: defaultPropFactory('autoHide'),
   },
 
@@ -155,7 +158,7 @@ export const popperProps = {
   },
 
   popperClass: {
-    type: [String, Array, Object],
+    type: [String, Array, Object] as PropType<PopperProps['popperClass']>,
     default: defaultPropFactory('popperClass'),
   },
 
@@ -197,6 +200,11 @@ export const popperProps = {
   arrowPadding: {
     type: [Number, String],
     default: defaultPropFactory('arrowPadding'),
+  },
+
+  arrowSize: {
+    type: [Number, String] as PropType<PopperProps['arrowSize']>,
+    default: defaultPropFactory('arrowSize'),
   },
 
   arrowOverflow: {

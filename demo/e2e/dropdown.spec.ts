@@ -78,4 +78,20 @@ test.describe('VDropdown component', () => {
       )
     }
   })
+
+  test('custom preset — exposes preset classes and CSS variables', async ({ page }) => {
+    await page.goto('/component/custom-preset')
+
+    await page.getByTestId('custom-preset-trigger').click()
+    const popper = await expectPopperWithText(page, 'Custom preset dropdown')
+
+    await expect(popper).toHaveClass(/v-popper--preset-e2e-custom-dropdown/)
+    await expect(popper).toHaveClass(/v-popper--preset-dropdown/)
+    await expect(popper).toHaveClass(/e2e-custom-popper/)
+    await expect(popper).toHaveAttribute('style', /--v-popper-arrow-size: 18px/)
+
+    const inner = popper.locator('.v-popper__inner')
+    await expect(inner).toHaveCSS('background-color', 'rgb(17, 24, 39)')
+    await expect(inner).toHaveCSS('color', 'rgb(240, 253, 244)')
+  })
 })

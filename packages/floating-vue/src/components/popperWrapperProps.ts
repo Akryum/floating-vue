@@ -136,7 +136,7 @@ export const popperWrapperProps = {
   },
 
   popperClass: {
-    type: [String, Array, Object],
+    type: [String, Array, Object] as PropType<PopperProps['popperClass']>,
     default: undefined,
   },
 
@@ -177,6 +177,11 @@ export const popperWrapperProps = {
 
   arrowPadding: {
     type: [Number, String],
+    default: undefined,
+  },
+
+  arrowSize: {
+    type: [Number, String] as PropType<PopperProps['arrowSize']>,
     default: undefined,
   },
 

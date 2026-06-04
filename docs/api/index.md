@@ -28,6 +28,27 @@ recomputeAllPoppers()
 
 This function is automatically called when the window is resized.
 
+### `defineFloatingVueConfig`
+
+Typed identity helper for global configuration objects. It returns the same object and only exists to provide TypeScript autocomplete and excess-property checks.
+
+```ts
+import FloatingVue, { defineFloatingVueConfig, definePopperPreset } from 'floating-vue'
+
+app.use(FloatingVue, defineFloatingVueConfig({
+  presets: {
+    custom: definePopperPreset({
+      $extend: 'dropdown',
+      arrowSize: 14,
+    }),
+  },
+}))
+```
+
+### `definePopperPreset`
+
+Typed identity helper for one theme preset object. Use it when sharing presets across config files or when you want excess-property checks on a single preset.
+
 ### `createTooltip`
 
 `createTooltip(el, valueOrOptions, directiveModifiers)` creates a tooltip on a given element.
@@ -153,7 +174,7 @@ The popper theme applied to the popper  (default: `'dropdown'`).
 Quick way to add one-time classes to the popper container, for example to limit its width in a specific situation.
 
 ::: tip
-It's recommended to use [themes](../guide/themes.md) to style the poppers.
+It's recommended to use [theme presets](../guide/themes.md) to style the poppers.
 :::
 
 ### `placement`
@@ -319,6 +340,16 @@ Padding of the arrow relative to the popper bounds to prevent it from overflowin
 ```
 
 [Learn more](../guide/component.md#arrow-padding)
+
+### `arrowSize`
+
+Size of the arrow. Numbers and numeric strings are interpreted as pixels.
+
+```html
+<VDropdown :arrow-size="12" />
+```
+
+You can also customize the arrow through CSS variables such as `--v-popper-arrow-size`, `--v-popper-arrow-inner-size`, and `--v-popper-arrow-outer-size`.
 
 ### `container`
 

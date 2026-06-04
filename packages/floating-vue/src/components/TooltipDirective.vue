@@ -12,6 +12,7 @@
       onResize,
       classes,
       result,
+      arrowSize,
     }"
     v-bind="$attrs"
     :theme="theme"
@@ -35,6 +36,7 @@
       :classes="classes"
       :result="result"
       :aria-role="tooltipAriaRole"
+      :arrow-size="arrowSize"
       @hide="hide"
       @resize="onResize"
     >
@@ -98,7 +100,7 @@ const methods = usePopperMethods(popper)
 let fetchId = 0
 let fetchLoading = false
 
-const tooltipAriaRole = computed(() => getDefaultConfig(props.theme, 'ariaRole') as string | null)
+const tooltipAriaRole = computed(() => getDefaultConfig(props.theme, 'ariaRole') ?? null)
 const isContentAsync = computed(() => typeof props.content === 'function')
 const loading = computed(() => isContentAsync.value && asyncContent.value == null)
 const finalContent = computed(() => {

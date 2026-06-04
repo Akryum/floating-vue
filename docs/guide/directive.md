@@ -91,12 +91,12 @@ Use the `triggers` and `shown` options from the [popper component](./component.m
 
 ## Disabling tooltips
 
-On mobile, you can disable the tooltips with the `disabled` prop on the `tooltip` theme:
+On mobile, you can disable the tooltips with the `disabled` prop on the `tooltip` preset:
 
 ```javascript
 import FloatingVue from 'floating-vue'
 
-FloatingVue.options.themes.tooltip.disabled = window.innerWidth <= 768
+FloatingVue.options.presets.tooltip.disabled = window.innerWidth <= 768
 ```
 
 You can still override this value, just like you would for any other prop which has a default value in the [configuration](./config.md):

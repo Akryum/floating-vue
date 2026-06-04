@@ -2,21 +2,21 @@
 
 To customize the style of your poppers, you have many CSS classes available.
 
-## Theme classes
+## Preset classes
 
-Each [theme](./themes.md) has a corresponding CSS class:
+Each [theme preset](./themes.md) has a corresponding CSS class:
 
 ```js
-(themeName) => `v-popper--theme-${themeName}`
+(themeName) => `v-popper--preset-${themeName}`
 ```
 
-For example, the `info-tooltip` theme will have the CSS class `v-popper--theme-info-tooltip`.
+For example, the `info-tooltip` theme will have the CSS class `v-popper--preset-info-tooltip`.
 
 If a theme extends another theme, the CSS class of this parent theme will also be included. For example:
 
 ```js
 Vue.use(VTooltip, {
-  themes: {
+  presets: {
     'info-tooltip': {
       $extend: 'tooltip',
     },
@@ -28,8 +28,8 @@ The `themeClasses` will be:
 
 ```js
 [
-  'v-popper--theme-info-tooltip',
-  'v-popper--theme-tooltip',
+  'v-popper--preset-info-tooltip',
+  'v-popper--preset-tooltip',
 ]
 ```
 
@@ -37,7 +37,7 @@ This works for any level of inheritance:
 
 ```js
 Vue.use(VTooltip, {
-  themes: {
+  presets: {
     'info-tooltip': {
       $extend: 'tooltip',
     },
@@ -52,9 +52,9 @@ The `themeClasses` will be:
 
 ```js
 [
-  'v-popper--theme-other-tooltip',
-  'v-popper--theme-info-tooltip',
-  'v-popper--theme-tooltip',
+  'v-popper--preset-other-tooltip',
+  'v-popper--preset-info-tooltip',
+  'v-popper--preset-tooltip',
 ]
 ```
 
@@ -62,7 +62,7 @@ You can prevent a theme from including the parent classes with `$resetCss`:
 
 ```js
 Vue.use(VTooltip, {
-  themes: {
+  presets: {
     'info-tooltip': {
       $extend: 'tooltip',
       $resetCss: true,
@@ -75,7 +75,7 @@ The `themeClasses` will be:
 
 ```js
 [
-  'v-popper--theme-info-tooltip',
+  'v-popper--preset-info-tooltip',
 ]
 ```
 
@@ -94,6 +94,44 @@ HTML result:
   <!-- Default slot -->
 </div>
 ```
+
+## CSS variables
+
+The default stylesheet exposes CSS custom properties for common popper styling. You can override them on `:root`, an ancestor, a preset class, or a specific popper class.
+
+```css
+.v-popper--preset-large-tooltip {
+  --v-popper-arrow-size: 14px;
+}
+```
+
+Arrow sizing can also be controlled with the `arrowSize` option:
+
+```html
+<VDropdown :arrow-size="14" />
+```
+
+For lower-level arrow control, use:
+
+- `--v-popper-arrow-size`: arrow positioning box size.
+- `--v-popper-arrow-inner-size`: inner arrow border width.
+- `--v-popper-arrow-outer-size`: outer arrow border width.
+- `--v-popper-arrow-inner-horizontal-offset` and `--v-popper-arrow-outer-horizontal-offset`: horizontal offsets for top and bottom placements.
+- `--v-popper-arrow-inner-top-offset`, `--v-popper-arrow-inner-bottom-offset`, and `--v-popper-arrow-outer-bottom-offset`: vertical offsets for top and bottom placements.
+- `--v-popper-arrow-inner-vertical-offset` and `--v-popper-arrow-outer-vertical-offset`: vertical offsets for left and right placements.
+- `--v-popper-arrow-inner-right-offset`, `--v-popper-arrow-outer-right-offset`, `--v-popper-arrow-container-left-offset`, and `--v-popper-arrow-inner-left-offset`: horizontal offsets for left and right placements.
+
+## Styling contract
+
+The default stylesheet treats these selectors and CSS variables as public extension points:
+
+| Surface | Stable/public API | Notes |
+| --- | --- | --- |
+| Preset classes | `v-popper--preset-{name}` | Added to the popper root. Parent preset classes are included unless the preset uses `$resetCss`. |
+| Reference classes | `v-popper`, `v-popper--shown` | Added around component default slots. |
+| Popper structure | `v-popper__popper`, `v-popper__wrapper`, `v-popper__inner`, `v-popper__arrow-container`, `v-popper__arrow-outer`, `v-popper__arrow-inner` | Safe targets for custom preset CSS. |
+| Dynamic classes | `v-popper__popper--shown`, `v-popper__popper--hidden`, `v-popper__popper--skip-transition`, `v-popper__popper--arrow-overflow`, `v-popper__popper--no-positioning`, transition frame classes | Safe for state-specific styles. |
+| CSS variables | Documented `--v-popper-*` variables | Safe to override on `:root`, ancestors, preset classes, or `popperClass`. |
 
 ## Popper content
 
@@ -139,7 +177,7 @@ HTML result:
 You probably want to put a default padding on all dropdowns and menus:
 
 ```css
-.v-popper--theme-dropdown .v-popper__inner {
+.v-popper--preset-dropdown .v-popper__inner {
   padding: 6px;
 }
 ```
@@ -156,7 +194,7 @@ The `popper` element has several dynamic classes:
 Full example style:
 
 ```css
-.v-popper--theme-my-theme .v-popper__inner {
+.v-popper--preset-my-theme .v-popper__inner {
   background: #fff;
   color: black;
   padding: 24px;
@@ -165,30 +203,30 @@ Full example style:
   box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
 }
 
-.v-popper--theme-my-theme .v-popper__arrow-inner {
+.v-popper--preset-my-theme .v-popper__arrow-inner {
   visibility: visible;
   border-color: #fff;
 }
 
-.v-popper--theme-my-theme .v-popper__arrow-outer {
+.v-popper--preset-my-theme .v-popper__arrow-outer {
   border-color: #ddd;
 }
 
 /* Transition */
 
-.v-popper--theme-my-theme.v-popper__popper--hidden {
+.v-popper--preset-my-theme.v-popper__popper--hidden {
   visibility: hidden;
   opacity: 0;
   transition: opacity .15s, visibility .15s;
 }
 
-.v-popper--theme-my-theme.v-popper__popper--shown {
+.v-popper--preset-my-theme.v-popper__popper--shown {
   visibility: visible;
   opacity: 1;
   transition: opacity .15s;
 }
 
-.v-popper--theme-my-theme.v-popper__popper--skip-transition {
+.v-popper--preset-my-theme.v-popper__popper--skip-transition {
   transition: none !important;
 }
 ```

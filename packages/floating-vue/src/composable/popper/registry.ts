@@ -182,7 +182,11 @@ function handlePopperGlobalClose (popper: PopperApi, event: PopperEvent, touch: 
   if (popper.runtime.showFrameLocked) return
 
   popper.hide({ event })
-  popper.emit(event.closePopover ? 'close-directive' : 'auto-hide')
+  if (event.closePopover) {
+    popper.emit('close-directive')
+  } else {
+    popper.emit('auto-hide')
+  }
 
   if (touch) {
     popper.runtime.preventShow = true

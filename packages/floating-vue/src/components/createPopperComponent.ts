@@ -1,6 +1,7 @@
 import { defineComponent, h, ref } from 'vue'
 import PopperWrapper from './PopperWrapper.vue'
 import { popperWrapperProps } from './popperWrapperProps'
+import { popperEmits } from '../composable/popper/emits'
 import { usePopperMethods } from '../composable/usePopperMethods'
 
 /**
@@ -12,17 +13,7 @@ export function createPopperComponent (name: string, theme: string) {
 
     props: popperWrapperProps,
 
-    emits: {
-      show: () => true,
-      hide: () => true,
-      'update:shown': (shown: boolean) => typeof shown === 'boolean',
-      'apply-show': () => true,
-      'apply-hide': () => true,
-      'close-group': () => true,
-      'close-directive': () => true,
-      'auto-hide': () => true,
-      resize: () => true,
-    },
+    emits: popperEmits,
 
     setup (props, { attrs, emit, expose, slots }) {
       const popper = ref(null)

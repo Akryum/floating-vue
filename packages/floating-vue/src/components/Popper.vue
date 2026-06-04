@@ -12,10 +12,12 @@ const attrs = useAttrs()
 const popper = ref(null)
 const reference = ref<HTMLElement | null>(null)
 const methods = usePopperMethods(popper)
+const theme = computed(() => typeof attrs.theme === 'string' ? attrs.theme : 'dropdown')
 const coreAttrs = computed(() => {
   const rest = { ...attrs }
   delete rest.class
   delete rest.style
+  delete rest.theme
   return rest
 })
 
@@ -49,6 +51,7 @@ defineExpose(methods)
     ref="popper"
     v-slot="slotData"
     v-bind="coreAttrs"
+    :theme="theme"
     :target-nodes="getTargetNodes"
     :reference-node="getReferenceNode"
     :popper-node="getPopperNode"

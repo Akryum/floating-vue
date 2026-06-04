@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest'
+import { computed } from 'vue'
 import { createComputePositionOptions } from './positioning'
+import { createPopperRuntime, createPopperState } from './state'
 import type { PopperApi, PopperProps } from './types'
 
 /**
@@ -36,28 +38,59 @@ function buildProps (overrides: Partial<PopperProps> = {}): PopperProps {
     shift: true,
     shiftCrossAxis: false,
     noAutoFocus: false,
+    ariaRole: null,
+    focusTrap: false,
+    restoreFocus: false,
     disposeTimeout: null,
     ...overrides,
-  } as PopperProps
+  }
 }
 
 /**
  * Builds a minimal PopperApi shape sufficient for positioning unit tests.
  */
 function buildApi (overrides: Partial<PopperProps> = {}, runtimeOverrides: Partial<PopperApi['runtime']['nodes']> = {}): PopperApi {
+  const props = buildProps(overrides)
+  const runtime = createPopperRuntime()
+  runtime.nodes = {
+    ...runtime.nodes,
+    ...runtimeOverrides,
+  }
+
   return {
-    props: buildProps(overrides),
-    runtime: {
-      nodes: {
-        referenceNode: null,
-        targetNodes: [],
-        popperNode: null,
-        innerNode: null,
-        arrowNode: null,
-        ...runtimeOverrides,
+    popperId: computed(() => 'test-popper'),
+    slotData: computed(() => ({
+      popperId: 'test-popper',
+      isShown: false,
+      shouldMountContent: false,
+      skipTransition: false,
+      autoHide: false,
+      show: () => {},
+      hide: () => {},
+      handleResize: false,
+      onResize: async () => {},
+      classes: {
+        showFrom: false,
+        showTo: false,
+        hideFrom: false,
+        hideTo: true,
       },
-    },
-  } as unknown as PopperApi
+      result: null,
+      attrs: {},
+      ariaRole: null,
+    })),
+    parentPopper: null,
+    state: createPopperState(props),
+    runtime,
+    props,
+    emit: () => {},
+    instance: null,
+    show: () => {},
+    hide: () => {},
+    dispose: () => {},
+    onResize: async () => {},
+    recompute: async () => {},
+  }
 }
 
 /**

@@ -14,6 +14,7 @@
       classes,
       result,
       ariaRole,
+      arrowSize,
     }"
     v-bind="$props"
     :theme="finalTheme"
@@ -49,6 +50,7 @@
       :classes="classes"
       :result="result"
       :aria-role="ariaRole"
+      :arrow-size="arrowSize"
       @hide="hide"
       @resize="onResize"
     >
@@ -66,6 +68,7 @@ import { computed, getCurrentInstance, ref, type ComponentPublicInstance } from 
 import Popper from './Popper.vue'
 import PopperContent from './PopperContent.vue'
 import { popperWrapperProps } from './popperWrapperProps'
+import { popperEmits } from '../composable/popper/emits'
 import { usePopperMethods } from '../composable/usePopperMethods'
 import { useThemeClass } from '../composable/useThemeClass'
 
@@ -75,17 +78,7 @@ defineOptions({
 
 const props = defineProps(popperWrapperProps)
 
-const emit = defineEmits({
-  show: () => true,
-  hide: () => true,
-  'update:shown': (shown: boolean) => typeof shown === 'boolean',
-  'apply-show': () => true,
-  'apply-hide': () => true,
-  'close-group': () => true,
-  'close-directive': () => true,
-  'auto-hide': () => true,
-  resize: () => true,
-})
+const emit = defineEmits(popperEmits)
 
 const instance = getCurrentInstance()
 const popper = ref(null)

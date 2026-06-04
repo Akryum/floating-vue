@@ -40,6 +40,7 @@ export const TooltipDirective = PrivateTooltipDirective
 export { usePopper } from './composable/usePopper'
 export { usePopperMethods } from './composable/usePopperMethods'
 export { useThemeClass } from './composable/useThemeClass'
+export { defineFloatingVueConfig, definePopperPreset } from './config'
 // Utils
 export { hideAllPoppers, recomputeAllPoppers } from './components/Popper'
 export * from './util/events'
@@ -48,6 +49,9 @@ export type { Placement } from './util/popper'
 // Types
 export type { TriggerEvent } from './components/popperWrapperProps'
 export type { PopperApi, PopperProps, PopperSlotData } from './composable/usePopper'
+export type { FloatingVueConfig } from './config'
+export type { Config, PopperPreset } from './types/config'
+export type { PopperConfig } from './types/popper'
 
 /* Vue plugin */
 

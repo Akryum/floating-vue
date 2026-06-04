@@ -13,3 +13,9 @@ h1 {
 input {
   @apply px-2 py-1 border border-gray-300 rounded;
 }
+
+.v-popper--preset-e2e-custom-dropdown {
+  --v-popper-dropdown-background: rgb(17, 24, 39);
+  --v-popper-dropdown-color: rgb(240, 253, 244);
+  --v-popper-dropdown-border-color: rgb(34, 197, 94);
+}

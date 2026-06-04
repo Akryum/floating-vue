@@ -1,9 +1,16 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
+import { config } from '../config'
 import Dropdown from './Dropdown'
 import Tooltip from './Tooltip'
 
-let wrapper: VueWrapper<any> | null = null
+interface ExposedPopperMethods {
+  show: (options?: { skipDelay?: boolean }) => void
+  hide: (options?: { skipDelay?: boolean }) => void
+}
+
+let wrapper: VueWrapper | null = null
+const initialArrowSize = config.arrowSize
 
 /**
  * Waits for Vue updates plus the two requestAnimationFrame turns used by popper transitions.
@@ -23,9 +30,31 @@ function getPopperElement (): HTMLElement | null {
   return document.body.querySelector('.v-popper__popper')
 }
 
+/**
+ * Returns exposed methods from the mounted popper wrapper.
+ */
+function getWrapperMethods (): ExposedPopperMethods {
+  return wrapper?.vm as unknown as ExposedPopperMethods
+}
+
+/**
+ * Shows the mounted popper without waiting for configured delays.
+ */
+function showWrapper () {
+  getWrapperMethods().show({ skipDelay: true })
+}
+
+/**
+ * Hides the mounted popper without waiting for configured delays.
+ */
+function hideWrapper () {
+  getWrapperMethods().hide({ skipDelay: true })
+}
+
 afterEach(() => {
   wrapper?.unmount()
   wrapper = null
+  config.arrowSize = initialArrowSize
   document.body.innerHTML = ''
   document.body.className = ''
 })
@@ -46,14 +75,14 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
 
     expect(wrapper.emitted('show')).toHaveLength(1)
     expect(wrapper.emitted('update:shown')?.[0]).toEqual([true])
     expect(getPopperElement()?.classList.contains('v-popper__popper--shown')).toBe(true)
 
-    ;(wrapper.vm as any).hide({ skipDelay: true })
+    hideWrapper()
     await waitForPopperUpdates()
 
     expect(wrapper.emitted('hide')).toHaveLength(1)
@@ -124,7 +153,7 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
 
     expect(getPopperElement()?.textContent).toContain('Tooltip content')
@@ -218,7 +247,7 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
     expect(getPopperElement()?.getAttribute('role')).toBe('tooltip')
   })
@@ -238,7 +267,7 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
     const node = getPopperElement()
     expect(node?.getAttribute('role')).toBe('dialog')
@@ -261,7 +290,7 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
     expect(getPopperElement()?.hasAttribute('role')).toBe(false)
   })
@@ -287,10 +316,10 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
 
-    ;(wrapper.vm as any).hide({ skipDelay: true })
+    hideWrapper()
     await waitForPopperUpdates()
 
     expect(document.activeElement).toBe(trigger)
@@ -312,12 +341,129 @@ describe('Popper wrapper components', () => {
       },
     })
 
-    ;(wrapper.vm as any).show({ skipDelay: true })
+    showWrapper()
     await waitForPopperUpdates()
     expect(wrapper.emitted('apply-show')).toBeTruthy()
 
-    ;(wrapper.vm as any).hide({ skipDelay: true })
+    hideWrapper()
     await waitForPopperUpdates()
     expect(wrapper.emitted('apply-hide')).toBeTruthy()
+  })
+
+  test('applies numeric arrowSize as a CSS variable on the popper element', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        arrowSize: 14,
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('14px')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-inner-size')).toBe('9.8px')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-outer-size')).toBe('8.4px')
+  })
+
+  test('scales arrow CSS variables for authored CSS length arrowSize strings', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        arrowSize: '0.75rem',
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('0.75rem')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-inner-size')).toBe('0.525rem')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-outer-size')).toBe('0.45rem')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-inner-horizontal-offset')).toBe('-0.15rem')
+  })
+
+  test('scales arrow CSS variables for custom property arrowSize strings', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        arrowSize: 'var(--floating-arrow-size)',
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('var(--floating-arrow-size)')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-inner-size')).toBe('calc(var(--floating-arrow-size) * 0.7)')
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-inner-horizontal-offset')).toBe('calc(var(--floating-arrow-size) * -0.2)')
+  })
+
+  test('uses configured arrowSize as the default CSS variable value', async () => {
+    config.arrowSize = 16
+
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('16px')
+  })
+
+  test('does not set an inline arrow size when arrowSize is omitted', async () => {
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: {
+        triggers: [],
+        delay: 0,
+        disposeTimeout: null,
+        noAutoFocus: true,
+      },
+      slots: {
+        default: '<button>Reference</button>',
+        popper: '<div>Floating content</div>',
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+
+    expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('')
   })
 })

@@ -12,6 +12,8 @@ import {
   VClosePopper,
   VTooltip,
   createTooltip,
+  defineFloatingVueConfig,
+  definePopperPreset,
   destroyTooltip,
   hideAllPoppers,
   install,
@@ -25,7 +27,9 @@ import {
   vTooltip,
   type Placement,
   type PopperApi,
+  type PopperConfig,
   type PopperProps,
+  type PopperPreset,
   type PopperSlotData,
   type TriggerEvent,
 } from '../../src'
@@ -93,3 +97,50 @@ expectType<TriggerEvent>(trigger)
 
 // `options` mirrors the runtime config object.
 expectType<typeof options>(options)
+expectType<unknown>(options.popperClass)
+expectType<boolean | undefined>(options.autoMinSize)
+expectType<boolean | undefined>(options.autoMaxSize)
+
+// Config helpers are runtime-neutral identity helpers with precise return types.
+const customPreset = definePopperPreset({
+  $extend: 'dropdown',
+  arrowSize: 14,
+  popperClass: ['custom-popper', { active: true }],
+  autoHide: (event: Event) => event.type === 'click',
+})
+expectType<PopperPreset>(customPreset)
+
+const customConfig = defineFloatingVueConfig({
+  distance: '8',
+  presets: {
+    custom: customPreset,
+    compact: definePopperPreset({
+      $extend: 'tooltip',
+      placement: 'bottom-start',
+    }),
+  },
+})
+expectType<typeof customConfig>(customConfig)
+
+// @ts-expect-error Unknown config keys should fail excess-property checks.
+defineFloatingVueConfig({ unknownOption: true })
+
+// @ts-expect-error Unknown preset keys should fail excess-property checks.
+definePopperPreset({ unknownPresetOption: true })
+
+// Component props expose the public wrapper option surface.
+type DropdownProps = InstanceType<typeof Dropdown>['$props']
+const dropdownProps: DropdownProps = {
+  arrowSize: '1rem',
+  popperClass: ['one-off', { bounded: true }],
+  autoHide: (event: Event) => event.type === 'pointerdown',
+  container: false,
+}
+expectType<DropdownProps>(dropdownProps)
+
+const presetConfigValues: Partial<PopperConfig> = {
+  arrowSize: '0.75rem',
+  popperClass: 'preset-popper',
+  autoHide: () => true,
+}
+expectType<Partial<PopperConfig>>(presetConfigValues)

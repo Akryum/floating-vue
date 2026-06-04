@@ -2,6 +2,7 @@ import {
   computed,
   getCurrentInstance,
   inject,
+  nextTick,
   onActivated,
   onBeforeUnmount,
   onDeactivated,
@@ -37,6 +38,7 @@ const POSITIONING_PROPS = [
   'strategy',
   'overflowPadding',
   'arrowPadding',
+  'arrowSize',
   'preventOverflow',
   'shift',
   'shiftCrossAxis',
@@ -91,6 +93,7 @@ export function usePopper (props: PopperProps, options: UsePopperOptions): Poppe
       result: props.positioningDisabled ? null : state.result,
       attrs: options.attrs,
       ariaRole: props.ariaRole,
+      arrowSize: props.arrowSize,
     })),
   })
 
@@ -129,7 +132,15 @@ function setupWatchers (api: PopperApi) {
   watch(() => api.props.container, () => refreshPopperContainer(api))
   watch(() => api.props.triggers, () => refreshPopperEventListeners(api), { deep: true })
   watch(() => api.props.positioningDisabled, () => refreshPopperEventListeners(api))
-  watch(() => POSITIONING_PROPS.map(prop => api.props[prop]), () => computePopperPosition(api))
+  watch(() => POSITIONING_PROPS.map(prop => api.props[prop]), () => recomputePopperPositionAfterDomUpdate(api), { flush: 'post' })
+}
+
+/**
+ * Recomputes after Vue has applied DOM styles that affect Floating UI measurements.
+ */
+async function recomputePopperPositionAfterDomUpdate (api: PopperApi) {
+  await nextTick()
+  await computePopperPosition(api)
 }
 
 /**

@@ -35,8 +35,9 @@ Run the full local check suite (matches CI):
 ```bash
 pnpm lint        # eslint across .js, .ts, .vue
 pnpm typecheck   # vue-tsc against tests/types fixture
-pnpm test        # peeky unit tests
+pnpm test        # vitest unit tests
 pnpm build       # vite build + .d.ts emit
+pnpm test:e2e    # Playwright suite against the demo SPA
 ```
 
 Build the library in watch mode:
@@ -66,7 +67,7 @@ pnpm docs:build  # full library + docs production build
 
 ## Tests
 
-The library uses [Peeky](https://peeky.dev/) with a JSDOM runtime. Spec files
+The library uses [Vitest](https://vitest.dev/) with a happy-dom runtime. Spec files
 sit next to the source they cover — for example
 `src/composable/popper/positioning.ts` is paired with
 `src/composable/popper/positioning.spec.ts`.

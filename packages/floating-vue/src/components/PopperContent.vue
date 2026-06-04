@@ -18,10 +18,7 @@
         'v-popper__popper--no-positioning': !result,
       },
     ]"
-    :style="result ? {
-      position: result.strategy,
-      transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
-    } : undefined"
+    :style="popperStyle"
     :role="ariaRole ?? undefined"
     :aria-modal="ariaRole === 'dialog' && shown ? 'true' : undefined"
     :aria-hidden="shown ? 'false' : 'true'"
@@ -66,10 +63,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { useResizeObserver } from '../composable/useResizeObserver'
 import { useThemeClass } from '../composable/useThemeClass'
 import type { PopperClasses, PopperResult } from '../composable/popper/types'
+import type { PopperStyleClass } from '../types/popper-style'
 
 const props = withDefaults(defineProps<{
   popperId?: string
@@ -79,9 +77,10 @@ const props = withDefaults(defineProps<{
   skipTransition: boolean
   autoHide: boolean
   handleResize: boolean
-  classes: PopperClasses & { popperClass?: unknown }
+  classes: PopperClasses & { popperClass?: PopperStyleClass }
   result: PopperResult | null
   ariaRole?: string | null
+  arrowSize?: number | string | null
 }>(), {
   autoHide: false,
   handleResize: false,
@@ -89,6 +88,7 @@ const props = withDefaults(defineProps<{
   shown: false,
   skipTransition: false,
   ariaRole: null,
+  arrowSize: null,
 })
 
 const emit = defineEmits<{
@@ -96,9 +96,45 @@ const emit = defineEmits<{
   (event: 'resize', value?: unknown): void
 }>()
 
+/**
+ * CSS variables derived from the arrow container size.
+ */
+const ARROW_SIZE_RATIOS = [
+  ['--v-popper-arrow-inner-size', 0.7],
+  ['--v-popper-arrow-outer-size', 0.6],
+  ['--v-popper-arrow-inner-horizontal-offset', -0.2],
+  ['--v-popper-arrow-outer-horizontal-offset', -0.1],
+  ['--v-popper-arrow-inner-top-offset', -0.2],
+  ['--v-popper-arrow-inner-bottom-offset', -0.4],
+  ['--v-popper-arrow-outer-bottom-offset', -0.6],
+  ['--v-popper-arrow-inner-vertical-offset', -0.2],
+  ['--v-popper-arrow-outer-vertical-offset', -0.1],
+  ['--v-popper-arrow-inner-right-offset', -0.4],
+  ['--v-popper-arrow-outer-right-offset', -0.6],
+  ['--v-popper-arrow-container-left-offset', -1],
+  ['--v-popper-arrow-inner-left-offset', -0.2],
+] as const
+
+/**
+ * Matches simple CSS lengths so their numeric part can be scaled without calc().
+ */
+const CSS_LENGTH_RE = /^(-?(?:\d+|\d*\.\d+)(?:e[+-]?\d+)?)([a-z%]+)$/i
+
 const themeClass = useThemeClass(toRef(props, 'theme'))
 
 const inner = ref<HTMLElement | null>(null)
+const popperStyle = computed(() => {
+  const style: Record<string, string> = {
+    ...getArrowSizeVars(props.arrowSize),
+  }
+
+  if (props.result) {
+    style.position = props.result.strategy
+    style.transform = `translate3d(${Math.round(props.result.x)}px,${Math.round(props.result.y)}px,0)`
+  }
+
+  return Object.keys(style).length ? style : undefined
+})
 
 useResizeObserver(
   inner,
@@ -114,5 +150,66 @@ function toPx (value: unknown): string {
     return `${value}px`
   }
   return ''
+}
+
+/**
+ * Converts numeric values to pixels while preserving authored CSS lengths.
+ */
+function normalizeCssLength (value: number | string | null | undefined): string | undefined {
+  if (value == null) return undefined
+
+  const normalizedValue = typeof value === 'string' ? value.trim() : value
+  if (normalizedValue === '') return undefined
+
+  if (!isNaN(Number(normalizedValue))) {
+    return formatPx(Number(normalizedValue))
+  }
+
+  return String(normalizedValue)
+}
+
+/**
+ * Builds arrow custom properties from an optional high-level arrow size.
+ */
+function getArrowSizeVars (value: number | string | null | undefined): Record<string, string> {
+  const arrowSize = normalizeCssLength(value)
+  if (!arrowSize) return {}
+
+  const style: Record<string, string> = {
+    '--v-popper-arrow-size': arrowSize,
+  }
+
+  for (const [name, ratio] of ARROW_SIZE_RATIOS) {
+    style[name] = scaleCssLength(arrowSize, ratio)
+  }
+
+  return style
+}
+
+/**
+ * Scales CSS lengths while preserving authored units and CSS variables.
+ */
+function scaleCssLength (value: string, ratio: number): string {
+  const match = value.match(CSS_LENGTH_RE)
+
+  if (match) {
+    return `${formatNumber(Number(match[1]) * ratio)}${match[2]}`
+  }
+
+  return `calc(${value} * ${formatNumber(ratio)})`
+}
+
+/**
+ * Formats a pixel number without trailing decimal noise.
+ */
+function formatPx (value: number): string {
+  return `${formatNumber(value)}px`
+}
+
+/**
+ * Formats a number without trailing decimal noise.
+ */
+function formatNumber (value: number): string {
+  return `${Number.parseFloat(value.toFixed(4))}`
 }
 </script>

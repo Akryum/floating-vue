@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue'
+import { popperEmits } from '../composable/popper/emits'
 import { popperProps } from '../composable/popper/props'
 import { usePopper } from '../composable/usePopper'
-import type { PopperProps } from '../composable/popper/types'
 
 /**
  * Core renderless popper component.
@@ -11,24 +11,14 @@ export default defineComponent({
 
   props: popperProps,
 
-  emits: {
-    show: () => true,
-    hide: () => true,
-    'update:shown': (shown: boolean) => typeof shown === 'boolean',
-    'apply-show': () => true,
-    'apply-hide': () => true,
-    'close-group': () => true,
-    'close-directive': () => true,
-    'auto-hide': () => true,
-    resize: () => true,
-  },
+  emits: popperEmits,
 
   setup (props, { attrs, emit, expose, slots }) {
     const rootNode = ref<Element | null>(null)
-    const api = usePopper(props as PopperProps, {
+    const api = usePopper(props, {
       rootNode,
       attrs,
-      emit: emit as (event: string, ...args: unknown[]) => void,
+      emit,
     })
 
     expose({

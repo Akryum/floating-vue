@@ -2,13 +2,28 @@
 
 The global configuration allows you to set default values for all [available props](../api/) so you don't have to specify every one of them when using the popper directive or components.
 
-It also describes the available [themes](./themes.md).
+It also describes the available [theme presets](./themes.md).
 
 You can change the configuration options during install with the arguments:
 
 ```javascript
 import FloatingVue from 'floating-vue'
 Vue.use(FloatingVue, options)
+```
+
+For TypeScript projects, use `defineFloatingVueConfig` and `definePopperPreset` to get autocomplete and excess-property checks:
+
+```ts
+import FloatingVue, { defineFloatingVueConfig, definePopperPreset } from 'floating-vue'
+
+app.use(FloatingVue, defineFloatingVueConfig({
+  presets: {
+    custom: definePopperPreset({
+      $extend: 'dropdown',
+      arrowSize: 14,
+    }),
+  },
+}))
 ```
 
 Or directly on `FloatingVue`:
@@ -18,12 +33,12 @@ import FloatingVue from 'floating-vue'
 FloatingVue.options.distance = 12
 ```
 
-For a specific theme:
+For a specific theme preset:
 
 
 ```js
 import FloatingVue from 'floating-vue'
-FloatingVue.options.themes.dropdown.distance = 12
+FloatingVue.options.presets.dropdown.distance = 12
 ```
 
 ## Default values
@@ -60,14 +75,16 @@ export const config: FloatingVueConfig = {
   overflowPadding: 0,
   // Arrow padding (px)
   arrowPadding: 0,
+  // Arrow size (px). Keep undefined to use the default CSS variables.
+  arrowSize: undefined,
   // Compute arrow overflow (useful to hide it)
   arrowOverflow: true,
   /**
    * By default, compute autohide on 'click'.
    */
   autoHideOnMousedown: false,
-  // Themes
-  themes: {
+  // Theme presets
+  presets: {
     tooltip: {
       // Default tooltip placement relative to target element
       placement: 'top',

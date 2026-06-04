@@ -65,6 +65,13 @@ export const demos = [
       label: 'Submenu 1',
     },
   },
+  {
+    path: '/component/custom-preset',
+    component: () => import('./views/component/CustomPresetDemo.vue'),
+    meta: {
+      label: 'Custom preset',
+    },
+  },
 ]
 
 const routes = [

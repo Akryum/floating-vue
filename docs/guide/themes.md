@@ -23,13 +23,13 @@ The theme of a popper directive or component can be changed with the `theme` pro
 >
 ```
 
-Each theme is described by an object that can contain default values of all [available props](../api/).
+Each theme is described by a preset object that can contain default values of all [available props](../api/).
 
-For example, this `info-tooltip` theme:
+For example, this `info-tooltip` preset:
 
 ```js
 Vue.use(FloatingVue, {
-  themes: {
+  presets: {
     'info-tooltip': {
       distance: 24,
       delay: { show: 1000, hide: 0 },
@@ -42,11 +42,11 @@ See the [global configuration](./config.md#default-values) for the values used i
 
 ## Custom theme
 
-To customize your tooltips and other popovers, you can create themes:
+To customize your tooltips and other popovers, you can create theme presets:
 
 ```js
 Vue.use(FloatingVue, {
-  themes: {
+  presets: {
     'info-tooltip': {
       $extend: 'tooltip',
       // Other options (see the 'Global options' section)
@@ -55,13 +55,13 @@ Vue.use(FloatingVue, {
 })
 ```
 
-Here, `$extend: 'tooltip'` extends the `tooltip` theme defined by default inside `floating-vue`, so all its options and CSS classes are inherited.
+Here, `$extend: 'tooltip'` extends the `tooltip` preset defined by default inside `floating-vue`, so all its options and CSS classes are inherited.
 
 If you don't want to inherit the CSS classes, use `$resetCss`:
 
 ```js
 Vue.use(FloatingVue, {
-  themes: {
+  presets: {
     'info-tooltip': {
       $extend: 'tooltip',
       $resetCss: true,
@@ -82,7 +82,7 @@ To use the new theme, specify it on the directive:
 Then you can customize the CSS for this theme:
 
 ```css
-.v-popper--theme-info-tooltip {
+.v-popper--preset-info-tooltip {
   .v-popper__inner {
     background: #004499;
   }
@@ -105,7 +105,7 @@ Let's have this example custom theme called `info-dropdown`:
 
 ```js
 Vue.use(FloatingVue, {
-  themes: {
+  presets: {
     'info-dropdown': {
       $extend: 'dropdown',
       // Other options (see the 'Global options' section)
@@ -137,11 +137,11 @@ import { PopperWrapper } from 'floating-vue'
 </template>
 
 <style>
-.v-popper--theme-info-dropdown .v-popper__inner {
+.v-popper--preset-info-dropdown .v-popper__inner {
   background: #004499;
 }
 
-.v-popper--theme-info-dropdown .v-popper__arrow-inner {
+.v-popper--preset-info-dropdown .v-popper__arrow-inner {
   border-color: #004499;
 }
 </style>

@@ -52,7 +52,7 @@ After:
 The default `padding` for the `dropdown` theme has been removed. You can add your own padding like this:
 
 ```css
-.v-popper--theme-dropdown .v-popper__inner {
+.v-popper--preset-dropdown .v-popper__inner {
   padding: 6px;
 }
 ```
