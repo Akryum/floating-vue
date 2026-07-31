@@ -15,9 +15,9 @@ function createTheme () {
   if (!name.value) return
 
   if (builtinThemes.includes(name.value)) {
-    error.value = 'This name is reserved for built-in themes.'
+    error.value = 'This name is reserved for built-in presets.'
   } else if (name.value in state.themeMap) {
-    error.value = 'A theme with this name already exists.'
+    error.value = 'A preset with this name already exists.'
   }
 
   if (error.value) return
@@ -35,13 +35,13 @@ function close () {
 <template>
   <ThemeModal>
     <div class="text-lg border-b border-gray-100 dark:border-gray-800">
-      Create theme
+      Create preset
     </div>
 
     <div class="space-y-2 w-96">
       <ThemeInput
         v-model="name"
-        placeholder="Theme name"
+        placeholder="Preset name"
         auto-focus
         @keyup.enter="createTheme()"
       />
@@ -67,7 +67,7 @@ function close () {
         class="flex-1 p-2"
         @click="createTheme()"
       >
-        Create theme
+        Create preset
       </ThemeButton>
     </template>
   </ThemeModal>

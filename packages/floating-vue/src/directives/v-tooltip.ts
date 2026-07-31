@@ -2,15 +2,20 @@ import { type App, createApp, type DirectiveBinding, h, type ObjectDirective, ty
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 import { placements, type Placement } from '../util/popper'
+import { resolvePresetName } from '../util/preset'
 
 const TARGET_CLASS = 'v-popper--has-tooltip'
 
 /**
- * Resolved tooltip directive options merged from binding value, modifiers and theme defaults.
+ * Resolved tooltip directive options merged from binding value, modifiers and preset defaults.
  */
 export interface TooltipOptions {
   content?: unknown
   placement?: Placement
+  preset?: string
+  /**
+   * @deprecated Use `preset` instead.
+   */
   theme?: string
   shown?: boolean
   targetNodes: () => Element[]
@@ -23,6 +28,10 @@ type ModifierMap = Record<string, boolean>
 type ObjectValue = Record<string, unknown> & {
   content?: unknown
   placement?: Placement
+  preset?: string
+  /**
+   * @deprecated Use `preset` instead.
+   */
   theme?: string
   shown?: boolean
 }
@@ -52,7 +61,7 @@ type TooltipEl = HTMLElement & {
 /**
  * Support placement as directive modifier.
  */
-export function getPlacement (options: { placement?: Placement, theme?: string }, modifiers: ModifierMap | undefined): Placement {
+export function getPlacement (options: { placement?: Placement, preset?: string, theme?: string }, modifiers: ModifierMap | undefined): Placement {
   let result: Placement | undefined = options.placement
   if (!result && modifiers) {
     for (const pos of placements) {
@@ -62,7 +71,7 @@ export function getPlacement (options: { placement?: Placement, theme?: string }
     }
   }
   if (!result) {
-    result = getDefaultConfig(options.theme || 'tooltip', 'placement') as Placement
+    result = getDefaultConfig(resolvePresetName(options, 'tooltip'), 'placement') as Placement
   }
   return result
 }
@@ -164,7 +173,7 @@ export function destroyTooltip (el: TooltipEl) {
 
 export function bind (el: TooltipEl, { value, modifiers }: DirectiveBinding<DirectiveValue>) {
   const options = getOptions(el, value, modifiers as ModifierMap | undefined)
-  if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
+  if (!options.content || getDefaultConfig(resolvePresetName(options, 'tooltip'), 'disabled')) {
     destroyTooltip(el)
   } else {
     let directive: NonNullable<TooltipEl['$_popper']>

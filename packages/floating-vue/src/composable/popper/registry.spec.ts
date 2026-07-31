@@ -15,9 +15,9 @@ let nextId = 0
 /**
  * Builds a minimal PopperApi shape with the methods registry.ts touches.
  */
-function buildPopper (theme = 'tooltip'): PopperApi & { hideCalls: number, recomputeCalls: number } {
+function buildPopper (preset = 'tooltip'): PopperApi & { hideCalls: number, recomputeCalls: number } {
   const popper = {
-    props: { theme },
+    props: { preset },
     state: { randomId: `popper_${nextId++}` },
     hideCalls: 0,
     recomputeCalls: 0,
@@ -57,13 +57,13 @@ describe('registerShownPopper / unregisterShownPopper', () => {
     expect(document.body.classList.contains('v-popper--some-open')).toBe(true)
   })
 
-  test('adds theme-scoped body class', () => {
+  test('adds preset-scoped body class', () => {
     const popper = buildPopper('tooltip')
     registerShownPopper(popper)
     expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(true)
   })
 
-  test('adds parent theme classes for extended preset', () => {
+  test('adds parent preset classes for extended preset', () => {
     const popper = buildPopper('menu')
     registerShownPopper(popper)
     expect(document.body.classList.contains('v-popper--some-open--menu')).toBe(true)
@@ -78,7 +78,7 @@ describe('registerShownPopper / unregisterShownPopper', () => {
     expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(false)
   })
 
-  test('keeps body class while another popper of same theme is still open', () => {
+  test('keeps body class while another popper of same preset is still open', () => {
     const a = buildPopper('tooltip')
     const b = buildPopper('tooltip')
     registerShownPopper(a)

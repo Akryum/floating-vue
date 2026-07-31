@@ -17,10 +17,10 @@
       arrowSize,
     }"
     v-bind="$props"
-    :theme="finalTheme"
+    :preset="finalPreset"
     :popper-node="getPopperNode"
     :class="[
-      themeClass,
+      presetClass,
     ]"
     @show="emit('show')"
     @hide="emit('hide')"
@@ -41,7 +41,7 @@
     <PopperContent
       ref="popperContent"
       :popper-id="popperId"
-      :theme="finalTheme"
+      :preset="finalPreset"
       :shown="isShown"
       :mounted="shouldMountContent"
       :skip-transition="skipTransition"
@@ -70,7 +70,7 @@ import PopperContent from './PopperContent.vue'
 import { popperWrapperProps } from './popperWrapperProps'
 import { popperEmits } from '../composable/popper/emits'
 import { usePopperMethods } from '../composable/usePopperMethods'
-import { useThemeClass } from '../composable/useThemeClass'
+import { usePresetClass } from '../composable/usePresetClass'
 
 defineOptions({
   name: 'VPopperWrapper',
@@ -83,8 +83,12 @@ const emit = defineEmits(popperEmits)
 const instance = getCurrentInstance()
 const popper = ref(null)
 const popperContent = ref<ComponentPublicInstance | null>(null)
-const finalTheme = computed(() => props.theme ?? (instance?.type as { vPopperTheme?: string } | undefined)?.vPopperTheme)
-const themeClass = useThemeClass(finalTheme)
+// `vPopperTheme` is the deprecated spelling of the preset baked into a wrapper
+// component definition. The final fallback matches Popper and PopperContent, so
+// a bare <PopperWrapper> gets consistent classes instead of `preset-undefined`.
+const componentPreset = instance?.type as { vPopperPreset?: string, vPopperTheme?: string } | undefined
+const finalPreset = computed(() => props.preset ?? componentPreset?.vPopperPreset ?? componentPreset?.vPopperTheme ?? 'dropdown')
+const presetClass = usePresetClass(finalPreset)
 const methods = usePopperMethods(popper)
 
 /**

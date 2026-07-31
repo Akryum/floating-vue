@@ -117,7 +117,7 @@ function generateCSSForComponent (theme, key, classKey, handler) {
   const merged = assign(assign({}, inherited), styles)
 
   const isDark = key === 'dark'
-  let className = `.v-popper--theme-${theme.name} .v-popper__${classKey}`
+  let className = `.v-popper--preset-${theme.name} .v-popper__${classKey}`
   if (isDark) {
     className = `.${state.settings.darkClass} ${className}`
   }

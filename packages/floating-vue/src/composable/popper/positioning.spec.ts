@@ -9,7 +9,7 @@ import type { PopperApi, PopperProps } from './types'
  */
 function buildProps (overrides: Partial<PopperProps> = {}): PopperProps {
   return {
-    theme: 'tooltip',
+    preset: 'tooltip',
     targetNodes: () => [],
     popperNode: () => null,
     shown: false,

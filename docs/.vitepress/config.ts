@@ -52,7 +52,7 @@ export default defineConfig({
         link: '/api/',
       },
       {
-        text: 'Theme editor',
+        text: 'Preset editor',
         link: '/theme-editor',
       },
       {
@@ -87,8 +87,9 @@ export default defineConfig({
             { text: 'Components', link: '/guide/component' },
             { text: 'Directives', link: '/guide/directive' },
             { text: 'Configuration', link: '/guide/config' },
-            { text: 'Themes', link: '/guide/themes' },
+            { text: 'Presets', link: '/guide/presets' },
             { text: 'CSS', link: '/guide/css' },
+            { text: 'Accessibility', link: '/guide/accessibility' },
             { text: 'Custom popper component', link: '/guide/custom-component' },
           ],
         },

@@ -57,6 +57,19 @@ export const config: Config = {
   },
 }
 
+// `presets` used to be called `themes`. The alias is a non-enumerable accessor over
+// the same object, so `options.themes.foo = {}` mutates `config.presets` and a
+// `{ themes: … }` plugin option deep-merges into it through `assign`.
+Object.defineProperty(config, 'themes', {
+  enumerable: false,
+  get () {
+    return config.presets
+  },
+  set (value: Record<string, PopperPreset>) {
+    config.presets = value
+  },
+})
+
 /**
  * Provides autocomplete and excess-property checks for Floating Vue plugin config.
  */
@@ -65,7 +78,7 @@ export function defineFloatingVueConfig<T extends FloatingVueConfig> (config: St
 }
 
 /**
- * Provides autocomplete and excess-property checks for a single theme preset.
+ * Provides autocomplete and excess-property checks for a single preset.
  */
 export function definePopperPreset<T extends PopperPreset> (preset: StrictConfig<T, PopperPreset>): T {
   return preset
@@ -103,9 +116,9 @@ function getConfigValue<K extends keyof PopperConfig> (source: Partial<PopperCon
 }
 
 /**
- * Theme CSS inheritance.
+ * Preset CSS inheritance.
  */
-export function getThemeClasses (preset: string): string[] {
+export function getPresetClasses (preset: string): string[] {
   const result = [preset]
   let presetConfig: PopperPreset | null = config.presets[preset] ?? {}
   do {
@@ -117,10 +130,15 @@ export function getThemeClasses (preset: string): string[] {
       presetConfig = null
     }
   } while (presetConfig)
-  return result.map(c => `v-popper--preset-${c}`)
+  // Each preset also emits the pre-v5 `v-popper--theme-*` spelling so stylesheets
+  // written against the old class keep matching. Deprecated, removed in a future major.
+  return result.flatMap(c => [`v-popper--preset-${c}`, `v-popper--theme-${c}`])
 }
 
-export function getAllParentThemes (preset: string): string[] {
+/**
+ * Returns a preset and every preset it extends, closest first.
+ */
+export function getAllParentPresets (preset: string): string[] {
   const result = [preset]
   let presetConfig: PopperPreset | null = config.presets[preset] ?? {}
   do {

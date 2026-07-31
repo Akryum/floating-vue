@@ -4,3 +4,9 @@
 [build]
   publish = "docs/.vitepress/dist"
   command = "pnpm run docs:build"
+
+# `themes` was renamed to `presets` to match the `config.presets` API
+[[redirects]]
+  from = "/guide/themes"
+  to = "/guide/presets"
+  status = 301

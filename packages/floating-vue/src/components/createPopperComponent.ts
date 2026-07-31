@@ -5,9 +5,9 @@ import { popperEmits } from '../composable/popper/emits'
 import { usePopperMethods } from '../composable/usePopperMethods'
 
 /**
- * Creates a themed public wrapper component such as VDropdown or VTooltip.
+ * Creates a public wrapper component bound to one preset, such as VDropdown or VTooltip.
  */
-export function createPopperComponent (name: string, theme: string) {
+export function createPopperComponent (name: string, preset: string) {
   return defineComponent({
     name,
 
@@ -24,7 +24,7 @@ export function createPopperComponent (name: string, theme: string) {
         ...attrs,
         ...props,
         ref: popper,
-        theme: props.theme ?? theme,
+        preset: props.preset ?? preset,
         onShow: () => emit('show'),
         onHide: () => emit('hide'),
         'onUpdate:shown': (shown: boolean) => emit('update:shown', shown),

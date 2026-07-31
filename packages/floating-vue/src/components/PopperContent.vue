@@ -4,7 +4,7 @@
     ref="popover"
     class="v-popper__popper"
     :class="[
-      themeClass,
+      presetClass,
       classes.popperClass,
       {
         'v-popper__popper--shown': shown,
@@ -63,15 +63,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRef } from 'vue'
+import { computed, ref } from 'vue'
 import { useResizeObserver } from '../composable/useResizeObserver'
-import { useThemeClass } from '../composable/useThemeClass'
+import { usePresetClass } from '../composable/usePresetClass'
+import { resolvePresetName } from '../util/preset'
 import type { PopperClasses, PopperResult } from '../composable/popper/types'
 import type { PopperStyleClass } from '../types/popper-style'
 
 const props = withDefaults(defineProps<{
   popperId?: string
-  theme: string
+  preset?: string
+  /**
+   * @deprecated Use `preset` instead.
+   */
+  theme?: string
   shown: boolean
   mounted: boolean
   skipTransition: boolean
@@ -89,6 +94,7 @@ const props = withDefaults(defineProps<{
   skipTransition: false,
   ariaRole: null,
   arrowSize: null,
+  // `preset` and `theme` deliberately get no default here — see `deprecatedThemeProp`.
 })
 
 const emit = defineEmits<{
@@ -120,7 +126,7 @@ const ARROW_SIZE_RATIOS = [
  */
 const CSS_LENGTH_RE = /^(-?(?:\d+|\d*\.\d+)(?:e[+-]?\d+)?)([a-z%]+)$/i
 
-const themeClass = useThemeClass(toRef(props, 'theme'))
+const presetClass = usePresetClass(computed(() => resolvePresetName(props, 'dropdown')))
 
 const inner = ref<HTMLElement | null>(null)
 const popperStyle = computed(() => {

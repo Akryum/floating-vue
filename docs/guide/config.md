@@ -2,7 +2,7 @@
 
 The global configuration allows you to set default values for all [available props](../api/) so you don't have to specify every one of them when using the popper directive or components.
 
-It also describes the available [theme presets](./themes.md).
+It also describes the available [presets](./presets.md).
 
 You can change the configuration options during install with the arguments:
 
@@ -33,7 +33,7 @@ import FloatingVue from 'floating-vue'
 FloatingVue.options.distance = 12
 ```
 
-For a specific theme preset:
+For a specific preset:
 
 
 ```js
@@ -41,12 +41,18 @@ import FloatingVue from 'floating-vue'
 FloatingVue.options.presets.dropdown.distance = 12
 ```
 
+::: warning `themes` is deprecated
+This option used to be called `themes`. Both the plugin option and `FloatingVue.options.themes`
+still read and write the same object as `presets`, so nothing breaks, but the alias will be
+removed in a future major.
+:::
+
 ## Default values
 
 The default global options are:
 
 ```js
-export const config: FloatingVueConfig = {
+export const config: Config = {
   // Disable popper components
   disabled: false,
   // Default position offset along main axis (px)
@@ -60,7 +66,7 @@ export const config: FloatingVueConfig = {
   // Skip delay & CSS transitions when another popper is shown, so that the popper appear to instanly move to the new position.
   instantMove: false,
   // Auto destroy tooltip DOM nodes (ms)
-  disposeTimeout: 5000,
+  disposeTimeout: 150,
   // Triggers on the popper itself
   popperTriggers: [],
   // Positioning strategy
@@ -83,7 +89,7 @@ export const config: FloatingVueConfig = {
    * By default, compute autohide on 'click'.
    */
   autoHideOnMousedown: false,
-  // Theme presets
+  // Presets
   presets: {
     tooltip: {
       // Default tooltip placement relative to target element
@@ -103,6 +109,8 @@ export const config: FloatingVueConfig = {
       html: false,
       // Displayed when tooltip content is loading
       loadingContent: '...',
+      // ARIA role applied to the popper element
+      ariaRole: 'tooltip',
     },
     dropdown: {
       // Default dropdown placement relative to target element
@@ -115,15 +123,19 @@ export const config: FloatingVueConfig = {
       handleResize: true,
       // Hide on click outside
       autoHide: true,
+      // ARIA role applied to the popper element
+      ariaRole: 'dialog',
     },
     menu: {
       $extend: 'dropdown',
       triggers: ['hover', 'focus'],
-      popperTriggers: ['hover', 'focus'],
+      popperTriggers: ['hover'],
       delay: {
         show: 0,
         hide: 400,
       },
+      // ARIA role applied to the popper element (enables arrow key navigation)
+      ariaRole: 'menu',
     },
   },
 }

@@ -25,12 +25,12 @@ The positioning library has changed from `popperjs` to [`floating-ui`](https://f
 
 ### Global configuration
 
-The global configuration object has completely changed. Instead of having a lot of specific options it is now an object of default values for the [props](/api/#component-props) (like `placement` or `distance`). Additionally, it has a `presets` option to define [theme presets](/guide/themes).
+The global configuration object has completely changed. Instead of having a lot of specific options it is now an object of default values for the [props](/api/#component-props) (like `placement` or `distance`). Additionally, it has a `presets` option to define [presets](/guide/presets).
 
 - `defaultPlacement`: use `placement`
 - `defaultClass`: removed
 - `defaultTargetClass`: removed
-- `defaultHtml`: use `html` in the `tooltip` theme (or any theme that you use with the directive)
+- `defaultHtml`: use `html` in the `tooltip` preset (or any preset that you use with the directive)
 - `defaultTemplate`: removed
 - `defaultArrowSelector`: removed
 - `defaultInnerSelector`: removed
@@ -41,11 +41,11 @@ The global configuration object has completely changed. Instead of having a lot 
 - `defaultBoundariesElement`: use `boundary`
 - `defaultPopperOptions`: removed
 - `defaultLoadingClass`: removed
-- `defaultLoadingContent`: use `loadingContent` in the `tooltip` theme (or any theme that you use with the directive)
+- `defaultLoadingContent`: use `loadingContent` in the `tooltip` preset (or any preset that you use with the directive)
 - `autoHide`: unchanged
 - `defaultHideOnTargetClick`: use `hideTriggers`
 - `disposeTimeout`: unchanged
-- `popover`: removed, use [themes](../guide/themes.md) instead
+- `popover`: removed, use [presets](../guide/presets.md) instead
 
 Before:
 
@@ -155,7 +155,7 @@ The following directive options were also removed:
 
 ### Default component
 
-`<v-popper>` component was removed. Instead use `<VDropdown>` or any other [builtin](../guide/component.md) (or [custom](../guide/themes.md)) components.
+`<v-popper>` component was removed. Instead use `<VDropdown>` or any other [builtin](../guide/component.md) (or [custom](../guide/presets.md)) components.
 
 Before:
 
@@ -323,7 +323,7 @@ The following props were removed and are no longer available:
 
 ### CSS classes
 
-The structure of the HTML produced by the library has changed. Most classes are now using a BEM-like notation with the `v-popper` prefix. They are no longer customizable since they don't conflict with other libraries such as boostrap. You can add your own classes to the poppers with [themes](../guide/themes.md) (recommended) or the `popperClass` prop.  
+The structure of the HTML produced by the library has changed. Most classes are now using a BEM-like notation with the `v-popper` prefix. They are no longer customizable since they don't conflict with other libraries such as boostrap. You can add your own classes to the poppers with [presets](../guide/presets.md) (recommended) or the `popperClass` prop.  
 [Learn more about CSS classes](../guide/css.md)
 
 Changed classes:
@@ -603,17 +603,17 @@ New prop:
 
 The new package supports Vue 3 in addition to Vue 2.
 
-### Themes
+### Presets
 
-Themes are a powerful and simple way to create multiple kinds of floating components. Application usually have many of them: tooltip, dropdown, menus, selects, etc. Each theme specify the default props values or/and the styling through the associated CSS classes.
+Presets are a powerful and simple way to create multiple kinds of floating components. Application usually have many of them: tooltip, dropdown, menus, selects, etc. Each preset specify the default props values or/and the styling through the associated CSS classes.
 
-Themes can extend each other:
+Presets can extend each other:
 
 ```js
 app.use(FloatingVue, {
   presets: {
     select: {
-      $extend: 'dropdown', // builtin theme
+      $extend: 'dropdown', // builtin preset
       triggers: ['click', 'touch', 'hover', 'focus'],
       distance: 6,
       delay: 0,
@@ -627,7 +627,7 @@ app.use(FloatingVue, {
 })
 ```
 
-[Learn more](../guide/themes.md)
+[Learn more](../guide/presets.md)
 
 ### Global configuration
 
@@ -664,7 +664,7 @@ import 'floating-vue/dist/style.css'
 ```
 
 ```html
-<!-- 'dropdown' theme -->
+<!-- 'dropdown' preset -->
 <VDropdown>
   <button>Click me!</button>
   <template #popper>
@@ -672,7 +672,7 @@ import 'floating-vue/dist/style.css'
   </template>
 </VDropdown>
 
-<!-- 'menu' theme -->
+<!-- 'menu' preset -->
 <VMenu>
   <button>Hover me!</button>
   <template #popper>
@@ -680,7 +680,7 @@ import 'floating-vue/dist/style.css'
   </template>
 </VMenu>
 
-<!-- 'tooltip' theme -->
+<!-- 'tooltip' preset -->
 <VTooltip>
   <button>Hover me!</button>
   <template #popper>

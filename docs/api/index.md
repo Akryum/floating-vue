@@ -47,7 +47,7 @@ app.use(FloatingVue, defineFloatingVueConfig({
 
 ### `definePopperPreset`
 
-Typed identity helper for one theme preset object. Use it when sharing presets across config files or when you want excess-property checks on a single preset.
+Typed identity helper for one preset object. Use it when sharing presets across config files or when you want excess-property checks on a single preset.
 
 ### `createTooltip`
 
@@ -77,6 +77,76 @@ export function clipboardSuccess (el) {
 `destroyTooltip(el)` destroys a tooltip on a given element.
 
 See example above.
+
+### `placements`
+
+Array of every valid value for the [`placement`](#placement) prop. Useful to build a placement picker.
+
+```js
+import { placements } from 'floating-vue'
+```
+
+### `SHOW_EVENT_MAP` and `HIDE_EVENT_MAP`
+
+Maps each [trigger](#triggers) to the DOM event floating-vue listens to.
+
+| Trigger | `SHOW_EVENT_MAP` | `HIDE_EVENT_MAP` |
+| --- | --- | --- |
+| `hover` | `mouseenter` | `mouseleave` |
+| `focus` | `focus` | `blur` |
+| `click` | `click` | `click` |
+| `touch` | `touchstart` | `touchend` |
+| `pointer` | `pointerdown` | `pointerup` |
+
+## Composables
+
+### `usePopper`
+
+`usePopper(props: PopperProps, options: UsePopperOptions): PopperApi`
+
+The entire logic of the `<Popper>` component. Use it only if you are replacing `<Popper>` itself — for a custom popper built on top of `<Popper>`, use [`usePopperMethods`](#usepoppermethods) instead. See the [custom popper component](../guide/custom-component.md) guide.
+
+`options` requires:
+
+- `rootNode`: `Ref<Element | null>` — fallback DOM reference used when there is no `referenceNode` prop.
+- `attrs`: non-prop attributes to forward to the popper.
+- `emit`: the `emit` function from `setup`.
+
+The returned `PopperApi` exposes:
+
+- `popperId`: `ComputedRef<string>` — unique ID for accessibility attributes.
+- `slotData`: `ComputedRef<PopperSlotData>` — everything `<Popper>` passes to its default slot.
+- `state` / `runtime`: internal reactive state.
+- `parentPopper`: the enclosing `PopperApi` when nested (sub menus), otherwise `null`.
+- `show(options?)` / `hide(options?)` / `dispose()`
+- `onResize()`: recompute after the popper content resized.
+- `recompute()`: recompute the position.
+
+::: warning
+`POPPER_PROVIDE_KEY` (used internally for the parent/child popper relationship) is not part of the package entry point.
+:::
+
+### `usePopperMethods`
+
+`usePopperMethods(popper: Ref<PopperMethods | null>)`
+
+Forwards the methods of a `<Popper>` template ref, so a custom component can re-expose them. Returns `{ show, hide, dispose, onResize }`.
+
+```js
+const popper = ref(null)
+const { show, hide, dispose, onResize } = usePopperMethods(popper)
+defineExpose({ show, hide, dispose, onResize })
+```
+
+### `usePresetClass`
+
+`usePresetClass(preset: Ref<string>): ComputedRef<string[]>`
+
+Computes the `v-popper--preset-*` classes for a [preset](../guide/presets.md) name, including the classes inherited through `$extend`.
+
+::: warning
+This replaces the `ThemeClass` Options API mixin, which is still exported but deprecated. See the [migration guide](../migration/migration-from-v3.md#custom-popper-components).
+:::
 
 ## Directive options
 
@@ -163,18 +233,26 @@ Same as `content`, used when the actual tooltip content is loading.
 
 ## Component props
 
-### `theme`
+### `preset`
 
-The popper theme applied to the popper  (default: `'dropdown'`).
+Name of the [preset](../guide/presets.md) applied to the popper (default: `'dropdown'`). Looks up `config.presets[name]` for the default value of every other prop, and adds the `v-popper--preset-{name}` CSS class.
 
-[Learn more](../guide/themes.md)
+```html
+<VDropdown preset="info-dropdown" />
+```
+
+::: warning `theme` is deprecated
+This prop used to be called `theme`. The old name still works and resolves to the same preset, but it will be removed in a future major. If both are set, `preset` wins.
+:::
+
+[Learn more](../guide/presets.md)
 
 ### `popperClass`
 
 Quick way to add one-time classes to the popper container, for example to limit its width in a specific situation.
 
 ::: tip
-It's recommended to use [theme presets](../guide/themes.md) to style the poppers.
+It's recommended to use [presets](../guide/presets.md) to style the poppers.
 :::
 
 ### `placement`
@@ -212,6 +290,7 @@ Available events:
 - `'click'`
 - `'focus'`
 - `'touch'`
+- `'pointer'`
 
 Example:
 
@@ -260,6 +339,7 @@ Available events:
 - `'click'`
 - `'focus'`
 - `'touch'`
+- `'pointer'`
 
 For example, it's useful when triggering on `hover` so that the popper stay open when mouse hovering it:
 
@@ -514,6 +594,34 @@ Boolean: disable the auto focus on the popper DOM node when shown.
 
 Id used for the `aria-describedby` attribute. By default a random id.
 
+### `ariaRole`
+
+`String | null`: ARIA role applied to the popper element. Pass `null` to omit the attribute. When the role is `dialog`, `aria-modal="true"` is added while the popper is shown. When the role is `menu`, arrow key navigation is enabled.
+
+Defaults come from the [preset](../guide/presets.md): `'tooltip'`, `'dialog'` and `'menu'` respectively.
+
+```html
+<VDropdown aria-role="listbox" />
+```
+
+[Learn more](../guide/accessibility.md)
+
+### `focusTrap`
+
+Boolean (default `false`): trap <kbd>Tab</kbd> focus inside the popper while it is shown. <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> cycle through the focusable descendants of the popper instead of leaving it.
+
+```html
+<VDropdown focus-trap />
+```
+
+### `restoreFocus`
+
+Boolean (default `false`): restore focus to the previously focused element when the popper closes.
+
+```html
+<VDropdown restore-focus />
+```
+
 ## Component slots
 
 ### `default`
@@ -615,3 +723,23 @@ Value: `Boolean` (default: `true`). Pass `false` to disable the directive.
 Modifiers:
 
 - `all`: Close all the poppers in the page.
+
+## Types
+
+`floating-vue` ships its own type declarations. The following types are exported from the package entry point:
+
+| Type | Description |
+| --- | --- |
+| `Placement` | One of the values in [`placements`](#placements). |
+| `TriggerEvent` | One of `'hover'`, `'focus'`, `'click'`, `'touch'`, `'pointer'`. |
+| `PopperConfig` | Every option that can be set globally, on a preset, or as a component prop. |
+| `Config` | The full global configuration: `PopperConfig` plus `presets`. |
+| `FloatingVueConfig` | `Partial<Config>` — what you pass to `app.use(FloatingVue, …)`. |
+| `PopperPreset` | A single entry of `config.presets`, including `$extend` and `$resetCss`. |
+| `PopperProps` | Props accepted by the `<Popper>` component. |
+| `PopperSlotData` | What `<Popper>` passes to its default slot. |
+| `PopperApi` | Return type of [`usePopper`](#usepopper). |
+
+```ts
+import type { FloatingVueConfig, Placement, PopperPreset } from 'floating-vue'
+```

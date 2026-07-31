@@ -1,7 +1,7 @@
 <template>
   <h1>Custom preset demo</h1>
 
-  <VDropdown theme="e2e-custom-dropdown">
+  <VDropdown preset="e2e-custom-dropdown">
     <button data-test="custom-preset-trigger">
       Open custom preset
     </button>

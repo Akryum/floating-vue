@@ -70,14 +70,14 @@ function openCreateTheme () {
             class="max-w-32"
           >
           <div class="text-gray-500 text-lg">
-            Select a theme or create a new one to get started
+            Select a preset or create a new one to get started
           </div>
           <ThemeButton
             class="px-4 py-3"
             @click="openCreateTheme()"
           >
             <PlusIcon class="w-4 h-4 mr-2" />
-            New theme
+            New preset
           </ThemeButton>
         </div>
       </div>

@@ -87,7 +87,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.backgroundColor.opacity"
             v-tooltip="{
               content: `Opacity (${currentStyle.backgroundColor.opacity})`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="range"
             min="0"
@@ -116,7 +116,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.color.opacity"
             v-tooltip="{
               content: `Opacity (${currentStyle.color.opacity})`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="range"
             min="0"
@@ -155,7 +155,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.padding.top"
             v-tooltip="{
               content: `${currentStyle.padding.multiple ? 'Top' : 'Padding'} (${currentStyle.padding.top}px)`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="number"
             class="flex-1 w-0"
@@ -165,7 +165,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.padding.top"
             v-tooltip="{
               content: `${currentStyle.padding.multiple ? 'Top' : 'Padding'} (${currentStyle.padding.top}px)`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="range"
             min="0"
@@ -178,7 +178,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.right"
               v-tooltip="{
                 content: `Right (${currentStyle.padding.right}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="number"
               class="flex-1 w-0"
@@ -188,7 +188,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.right"
               v-tooltip="{
                 content: `Right (${currentStyle.padding.right}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="range"
               min="0"
@@ -200,7 +200,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.bottom"
               v-tooltip="{
                 content: `Bottom (${currentStyle.padding.bottom}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="number"
               class="flex-1 w-0"
@@ -210,7 +210,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.bottom"
               v-tooltip="{
                 content: `Bottom (${currentStyle.padding.bottom}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="range"
               min="0"
@@ -222,7 +222,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.left"
               v-tooltip="{
                 content: `Left (${currentStyle.padding.left}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="number"
               class="flex-1 w-0"
@@ -232,7 +232,7 @@ loadValue(TAB_KEY, value => {
               v-model.number="currentStyle.padding.left"
               v-tooltip="{
                 content: `Left (${currentStyle.padding.left}px)`,
-                theme: '_editor-tooltip',
+                preset: '_editor-tooltip',
               }"
               type="range"
               min="0"
@@ -315,7 +315,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.boxShadow.opacity"
             v-tooltip="{
               content: `Opacity (${currentStyle.boxShadow.opacity})`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="range"
             min="0"
@@ -328,7 +328,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.boxShadow.size"
             v-tooltip="{
               content: `Size (${currentStyle.boxShadow.size}px)`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="number"
             class="w-0 flex-1"
@@ -338,7 +338,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.boxShadow.x"
             v-tooltip="{
               content: `Horizontal position (${currentStyle.boxShadow.x}px)`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="number"
             class="w-0 flex-1"
@@ -348,7 +348,7 @@ loadValue(TAB_KEY, value => {
             v-model.number="currentStyle.boxShadow.y"
             v-tooltip="{
               content: `Vertical position (${currentStyle.boxShadow.y}px)`,
-              theme: '_editor-tooltip',
+              preset: '_editor-tooltip',
             }"
             type="number"
             class="w-0 flex-1"

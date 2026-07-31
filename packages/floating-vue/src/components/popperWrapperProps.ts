@@ -2,6 +2,7 @@ import type { PropType } from 'vue'
 import type { Placement } from '../util/popper'
 import type { Trigger } from '../types/trigger'
 import type { PopperProps } from '../composable/popper/types'
+import { deprecatedThemeProp, type PresetPropsLike } from '../util/preset'
 
 const ElementType = typeof window !== 'undefined'
   ? window.Element
@@ -16,10 +17,19 @@ export type TriggerEvent = Trigger
  * Public props accepted by wrapper components such as VDropdown and VTooltip.
  */
 export const popperWrapperProps = {
-  theme: {
+  preset: {
     type: String,
-    default: null,
+    // Only reads the deprecated alias: Vue calls this factory exactly when the
+    // raw `preset` was undefined, so reading `props.preset` here is always a
+    // no-op. Left null when neither is set, so PopperWrapper can fall back to
+    // the preset baked into the wrapper component (VDropdown, VMenu, VTooltip).
+    default: (props: PresetPropsLike) => props.theme ?? null,
   },
+
+  /**
+   * @deprecated Use `preset` instead.
+   */
+  theme: deprecatedThemeProp,
 
   referenceNode: {
     type: Function as PropType<() => Element>,

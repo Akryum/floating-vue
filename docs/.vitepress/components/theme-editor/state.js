@@ -25,7 +25,7 @@ const data = reactive({
 export const state = reactive({
   ...toRefs(data),
   sourceOutput: computed(() => {
-    return '// Config\n' + formatObjectToSource({ themes: { [data.theme.name]: data.theme.config } })
+    return '// Config\n' + formatObjectToSource({ presets: { [data.theme.name]: data.theme.config } })
   }),
 
   styleOutput: computed(() => {
@@ -52,7 +52,7 @@ watch(
   () => state.theme,
   (value) => {
     if (value) {
-      FloatingVue.options.themes[value.name] = value.config
+      FloatingVue.options.presets[value.name] = value.config
       state.error = ''
     }
   },

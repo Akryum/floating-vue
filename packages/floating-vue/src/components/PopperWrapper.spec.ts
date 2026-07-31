@@ -2,39 +2,18 @@ import { afterEach, describe, expect, test } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { config } from '../config'
 import Dropdown from './Dropdown'
+import PopperWrapper from './PopperWrapper.vue'
 import Tooltip from './Tooltip'
-
-interface ExposedPopperMethods {
-  show: (options?: { skipDelay?: boolean }) => void
-  hide: (options?: { skipDelay?: boolean }) => void
-}
+import { controlledPopperProps, getExposedMethods, getPopperElement, waitForPopperUpdates } from '../../tests/unit/popper-helpers'
 
 let wrapper: VueWrapper | null = null
 const initialArrowSize = config.arrowSize
 
 /**
- * Waits for Vue updates plus the two requestAnimationFrame turns used by popper transitions.
- */
-async function waitForPopperUpdates () {
-  await Promise.resolve()
-  await new Promise(resolve => setTimeout(resolve, 0))
-  await new Promise(resolve => requestAnimationFrame(resolve))
-  await new Promise(resolve => requestAnimationFrame(resolve))
-  await Promise.resolve()
-}
-
-/**
- * Returns the current floating popper element appended to document.body.
- */
-function getPopperElement (): HTMLElement | null {
-  return document.body.querySelector('.v-popper__popper')
-}
-
-/**
  * Returns exposed methods from the mounted popper wrapper.
  */
-function getWrapperMethods (): ExposedPopperMethods {
-  return wrapper?.vm as unknown as ExposedPopperMethods
+function getWrapperMethods () {
+  return getExposedMethods(wrapper?.vm)
 }
 
 /**
@@ -55,9 +34,33 @@ afterEach(() => {
   wrapper?.unmount()
   wrapper = null
   config.arrowSize = initialArrowSize
+  delete config.presets['spec-listbox']
+  delete config.presets['spec-grid']
   document.body.innerHTML = ''
   document.body.className = ''
 })
+
+/**
+ * Mounts a wrapper component bound to a preset and returns the ARIA role the
+ * preset resolved to, which proves the preset drove the other prop defaults.
+ */
+async function mountAndReadResolvedRole (props: Record<string, unknown>, component: unknown = Dropdown) {
+  wrapper = mount(component as typeof Dropdown, {
+    attachTo: document.body,
+    props: {
+      ...controlledPopperProps,
+      ...props,
+    },
+    slots: {
+      default: '<button>Reference</button>',
+      popper: '<div>Floating content</div>',
+    },
+  })
+
+  showWrapper()
+  await waitForPopperUpdates()
+  return getPopperElement()?.getAttribute('role')
+}
 
 describe('Popper wrapper components', () => {
   test('shows and hides through exposed methods', async () => {
@@ -444,6 +447,38 @@ describe('Popper wrapper components', () => {
     await waitForPopperUpdates()
 
     expect(getPopperElement()?.style.getPropertyValue('--v-popper-arrow-size')).toBe('16px')
+  })
+
+  test('resolves prop defaults from the preset prop', async () => {
+    config.presets['spec-listbox'] = { $extend: 'dropdown', ariaRole: 'listbox' }
+    expect(await mountAndReadResolvedRole({ preset: 'spec-listbox' })).toBe('listbox')
+  })
+
+  test('still resolves prop defaults from the deprecated theme prop', async () => {
+    config.presets['spec-listbox'] = { $extend: 'dropdown', ariaRole: 'listbox' }
+    expect(await mountAndReadResolvedRole({ theme: 'spec-listbox' })).toBe('listbox')
+  })
+
+  test('prefers preset over the deprecated theme prop', async () => {
+    config.presets['spec-listbox'] = { $extend: 'dropdown', ariaRole: 'listbox' }
+    config.presets['spec-grid'] = { $extend: 'dropdown', ariaRole: 'grid' }
+    expect(await mountAndReadResolvedRole({ preset: 'spec-grid', theme: 'spec-listbox' })).toBe('grid')
+  })
+
+  test('resolves the preset baked into a wrapper component', async () => {
+    config.presets['spec-listbox'] = { $extend: 'dropdown', ariaRole: 'listbox' }
+    const Custom = { ...PopperWrapper, name: 'VSpecListbox', vPopperPreset: 'spec-listbox' }
+    expect(await mountAndReadResolvedRole({}, Custom)).toBe('listbox')
+  })
+
+  test('still resolves the deprecated vPopperTheme component option', async () => {
+    config.presets['spec-listbox'] = { $extend: 'dropdown', ariaRole: 'listbox' }
+    const Custom = { ...PopperWrapper, name: 'VSpecLegacy', vPopperTheme: 'spec-listbox' }
+    expect(await mountAndReadResolvedRole({}, Custom)).toBe('listbox')
+  })
+
+  test('falls back to the dropdown preset when no preset is set at all', async () => {
+    expect(await mountAndReadResolvedRole({}, PopperWrapper)).toBe('dialog')
   })
 
   test('does not set an inline arrow size when arrowSize is omitted', async () => {

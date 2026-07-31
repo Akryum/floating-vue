@@ -4,15 +4,21 @@ To customize the style of your poppers, you have many CSS classes available.
 
 ## Preset classes
 
-Each [theme preset](./themes.md) has a corresponding CSS class:
+Each [preset](./presets.md) has a corresponding CSS class:
 
 ```js
-(themeName) => `v-popper--preset-${themeName}`
+(presetName) => `v-popper--preset-${presetName}`
 ```
 
-For example, the `info-tooltip` theme will have the CSS class `v-popper--preset-info-tooltip`.
+For example, the `info-tooltip` preset will have the CSS class `v-popper--preset-info-tooltip`.
 
-If a theme extends another theme, the CSS class of this parent theme will also be included. For example:
+::: warning `v-popper--theme-*` is deprecated
+Every preset class below is also emitted with the older `v-popper--theme-{presetName}` spelling,
+so stylesheets written before the rename keep working. The lists on this page only show the
+current spelling. The old one will be removed in a future major.
+:::
+
+If a preset extends another preset, the CSS class of this parent preset will also be included. For example:
 
 ```js
 Vue.use(VTooltip, {
@@ -24,7 +30,7 @@ Vue.use(VTooltip, {
 })
 ```
 
-The `themeClasses` will be:
+The preset classes will be:
 
 ```js
 [
@@ -48,7 +54,7 @@ Vue.use(VTooltip, {
 })
 ```
 
-The `themeClasses` will be:
+The preset classes will be:
 
 ```js
 [
@@ -58,7 +64,7 @@ The `themeClasses` will be:
 ]
 ```
 
-You can prevent a theme from including the parent classes with `$resetCss`:
+You can prevent a preset from including the parent classes with `$resetCss`:
 
 ```js
 Vue.use(VTooltip, {
@@ -71,7 +77,7 @@ Vue.use(VTooltip, {
 })
 ```
 
-The `themeClasses` will be:
+The preset classes will be:
 
 ```js
 [
@@ -81,7 +87,7 @@ The `themeClasses` will be:
 
 ## Main content
 
-By default, the popper components will have the `v-popper` class plus the associated `themeClasses`.
+By default, the popper components will have the `v-popper` class plus the associated preset classes.
 
 Dynamic class:
 
@@ -90,7 +96,7 @@ Dynamic class:
 HTML result:
 
 ```html
-<div class="v-popper"> <!-- themeClasses, 'v-popper--shown' -->
+<div class="v-popper"> <!-- preset classes, 'v-popper--shown' -->
   <!-- Default slot -->
 </div>
 ```
@@ -105,7 +111,45 @@ The default stylesheet exposes CSS custom properties for common popper styling. 
 }
 ```
 
-Arrow sizing can also be controlled with the `arrowSize` option:
+Overriding these tokens is the preferred way to restyle the built-in presets — it survives library updates, unlike overriding the `.v-popper__inner` rules themselves.
+
+### Layout
+
+| Variable | Default |
+| --- | --- |
+| `--v-popper-zindex` | `10000` |
+| `--v-popper-transition-duration` | `.15s` |
+
+### Tooltip preset
+
+Applied under `.v-popper--preset-tooltip`.
+
+| Variable | Default |
+| --- | --- |
+| `--v-popper-tooltip-background` | `rgba(0, 0, 0, .8)` |
+| `--v-popper-tooltip-color` | `white` |
+| `--v-popper-tooltip-radius` | `6px` |
+| `--v-popper-tooltip-padding` | `7px 12px 6px` |
+
+The arrow color follows `--v-popper-tooltip-background`.
+
+### Dropdown preset
+
+Applied under `.v-popper--preset-dropdown` — and therefore under `menu`, which extends it.
+
+| Variable | Default |
+| --- | --- |
+| `--v-popper-dropdown-background` | `#fff` |
+| `--v-popper-dropdown-color` | `black` |
+| `--v-popper-dropdown-radius` | `6px` |
+| `--v-popper-dropdown-border-color` | `#ddd` |
+| `--v-popper-dropdown-shadow` | `0 6px 30px rgba(0, 0, 0, .1)` |
+
+The arrow fill follows `--v-popper-dropdown-background` and its border follows `--v-popper-dropdown-border-color`.
+
+### Arrow
+
+Arrow sizing can also be controlled with the `arrowSize` option, which derives all three sizes at once:
 
 ```html
 <VDropdown :arrow-size="14" />
@@ -113,9 +157,9 @@ Arrow sizing can also be controlled with the `arrowSize` option:
 
 For lower-level arrow control, use:
 
-- `--v-popper-arrow-size`: arrow positioning box size.
-- `--v-popper-arrow-inner-size`: inner arrow border width.
-- `--v-popper-arrow-outer-size`: outer arrow border width.
+- `--v-popper-arrow-size` (`10px`): arrow positioning box size.
+- `--v-popper-arrow-inner-size` (`7px`): inner arrow border width.
+- `--v-popper-arrow-outer-size` (`6px`): outer arrow border width.
 - `--v-popper-arrow-inner-horizontal-offset` and `--v-popper-arrow-outer-horizontal-offset`: horizontal offsets for top and bottom placements.
 - `--v-popper-arrow-inner-top-offset`, `--v-popper-arrow-inner-bottom-offset`, and `--v-popper-arrow-outer-bottom-offset`: vertical offsets for top and bottom placements.
 - `--v-popper-arrow-inner-vertical-offset` and `--v-popper-arrow-outer-vertical-offset`: vertical offsets for left and right placements.
@@ -142,13 +186,13 @@ By default, multiple elements are mounted in the popper content:
     - `inner`: the main popper content. Ideal target for main styles such as background, border, text color...
     - `arrow-container`: contains the arrow graphics. This will be positioned by popperjs.
       - `arrow-outer`: the bigger arrow. Visible by default. If you want a border, should use the border color - otherwise, should use the background color.
-      - `arrow-inner`: the smaller arrow, useful to simulate a border. Hidden by default. The default `dropdown` theme makes it visible to display the default border. Should use the background color.
+      - `arrow-inner`: the smaller arrow, useful to simulate a border. Hidden by default. The default `dropdown` preset makes it visible to display the default border. Should use the background color.
 
 
 HTML result:
 
 ```html
-<div class="v-popper__popper"> <!-- themeClasses,
+<div class="v-popper__popper"> <!-- preset classes,
                                     props.popperClass,
                                     'v-popper__popper--shown',
                                     'v-popper__popper--hidden',
@@ -194,7 +238,7 @@ The `popper` element has several dynamic classes:
 Full example style:
 
 ```css
-.v-popper--preset-my-theme .v-popper__inner {
+.v-popper--preset-my-preset .v-popper__inner {
   background: #fff;
   color: black;
   padding: 24px;
@@ -203,30 +247,30 @@ Full example style:
   box-shadow: 0 6px 30px rgba(0, 0, 0, .1);
 }
 
-.v-popper--preset-my-theme .v-popper__arrow-inner {
+.v-popper--preset-my-preset .v-popper__arrow-inner {
   visibility: visible;
   border-color: #fff;
 }
 
-.v-popper--preset-my-theme .v-popper__arrow-outer {
+.v-popper--preset-my-preset .v-popper__arrow-outer {
   border-color: #ddd;
 }
 
 /* Transition */
 
-.v-popper--preset-my-theme.v-popper__popper--hidden {
+.v-popper--preset-my-preset.v-popper__popper--hidden {
   visibility: hidden;
   opacity: 0;
   transition: opacity .15s, visibility .15s;
 }
 
-.v-popper--preset-my-theme.v-popper__popper--shown {
+.v-popper--preset-my-preset.v-popper__popper--shown {
   visibility: visible;
   opacity: 1;
   transition: opacity .15s;
 }
 
-.v-popper--preset-my-theme.v-popper__popper--skip-transition {
+.v-popper--preset-my-preset.v-popper__popper--skip-transition {
   transition: none !important;
 }
 ```

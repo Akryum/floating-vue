@@ -155,7 +155,11 @@ export interface PopperRuntime {
  * Core props consumed by the popper composable.
  */
 export interface PopperProps {
-  theme: string
+  preset: string
+  /**
+   * @deprecated Use `preset` instead.
+   */
+  theme?: string | null
   targetNodes: () => Element[]
   referenceNode?: (() => Element | null) | null
   popperNode: () => HTMLElement | null

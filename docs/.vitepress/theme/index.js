@@ -8,7 +8,7 @@ const theme = {
   enhanceApp ({ app }) {
     app.use(FloatingVue, {
       boundary: 'body',
-      themes: {
+      presets: {
         '_editor-tooltip': {
           $extend: 'tooltip',
           hideTriggers: events => events,

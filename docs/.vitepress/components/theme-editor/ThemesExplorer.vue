@@ -35,12 +35,12 @@ function deleteTheme () {
 
       <input
         v-model="searchText"
-        placeholder="Filter themes..."
+        placeholder="Filter presets..."
         class="flex-1 w-0 pl-8 py-2"
       >
 
       <button
-        v-tooltip.bottom="'Create a new theme...'"
+        v-tooltip.bottom="'Create a new preset...'"
         class="flex-none px-3 h-full text-gray-500 hover:text-black hover:bg-emerald-100 dark:hover:text-white dark:hover:bg-emerald-800"
         @click="emit('create')"
       >
@@ -65,7 +65,7 @@ function deleteTheme () {
         </button>
 
         <VDropdown
-          theme="_editor-dropdown"
+          preset="_editor-dropdown"
           placement="right-start"
         >
           <button class="px-3 h-full">
@@ -95,7 +95,7 @@ function deleteTheme () {
     >
       <div class="text-lg">
         <Trash2Icon class="w-5 h-5 mr-1 inline-block" />
-        Confirm deleting theme '{{ confirmDeleteTheme.name }}'?
+        Confirm deleting preset '{{ confirmDeleteTheme.name }}'?
       </div>
 
       <template #actions>
@@ -112,7 +112,7 @@ function deleteTheme () {
           class="flex-1 p-2"
           @click="deleteTheme()"
         >
-          Delete theme
+          Delete preset
         </ThemeButton>
       </template>
     </ThemeModal>

@@ -28,13 +28,13 @@ The most basic component included by default is the `VDropdown` component:
 
 As shown in the above example, the popper content must be passed to the `popper` slot.
 
-The `VDropdown` uses the `dropdown` theme.
+The `VDropdown` uses the `dropdown` preset.
 
 <DropdownSimpleExample />
 
 ## Tooltip
 
-If you want to display a tooltip with components and more advanced content, you can use the `VTooltip` component that uses the `tooltip` theme (just like the `v-tooltip` directive).
+If you want to display a tooltip with components and more advanced content, you can use the `VTooltip` component that uses the `tooltip` preset (just like the `v-tooltip` directive).
 
 ```html
 <VTooltip>
@@ -50,7 +50,7 @@ If you want to display a tooltip with components and more advanced content, you 
 
 ## Hover Menu
 
-There is a `VMenu` variant with the `menu` theme which extends the `dropdown` theme. It overrides `triggers` and `delay` to be usable on mouse over.
+There is a `VMenu` variant with the `menu` preset which extends the `dropdown` preset. It overrides `triggers` and `delay` to be usable on mouse over.
 
 ```html
 <VMenu>

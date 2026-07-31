@@ -6,7 +6,9 @@ import {
   Menu,
   Popper,
   PopperContent,
+  PopperMethods,
   PopperWrapper,
+  ThemeClass,
   Tooltip,
   TooltipDirective,
   VClosePopper,
@@ -22,7 +24,7 @@ import {
   recomputeAllPoppers,
   usePopper,
   usePopperMethods,
-  useThemeClass,
+  usePresetClass,
   vClosePopper,
   vTooltip,
   type Placement,
@@ -50,6 +52,10 @@ expectType<unknown>(PopperWrapper)
 expectType<unknown>(Tooltip)
 expectType<unknown>(TooltipDirective)
 
+// Deprecated Options API mixins kept for floating-vue 5 consumers.
+expectType<unknown>(PopperMethods)
+expectType<(prop?: string) => unknown>(ThemeClass)
+
 // Directives are exported under both legacy and Vue 3 names.
 expectType<typeof vTooltip>(VTooltip)
 expectType<typeof vClosePopper>(VClosePopper)
@@ -68,7 +74,7 @@ expectType<(app: App, options?: Record<string, unknown>) => void>(install as nev
 // Composables expose their public shape.
 expectType<typeof usePopper>(usePopper)
 expectType<typeof usePopperMethods>(usePopperMethods)
-expectType<typeof useThemeClass>(useThemeClass)
+expectType<typeof usePresetClass>(usePresetClass)
 
 // Placement type literally includes both floating-ui placements and the auto family.
 const placementLiteralOk: Placement = 'top'
@@ -122,6 +128,12 @@ const customConfig = defineFloatingVueConfig({
 })
 expectType<typeof customConfig>(customConfig)
 
+// The deprecated `themes` config key still type-checks.
+const legacyConfig = defineFloatingVueConfig({
+  themes: { custom: customPreset },
+})
+expectType<typeof legacyConfig>(legacyConfig)
+
 // @ts-expect-error Unknown config keys should fail excess-property checks.
 defineFloatingVueConfig({ unknownOption: true })
 
@@ -131,12 +143,17 @@ definePopperPreset({ unknownPresetOption: true })
 // Component props expose the public wrapper option surface.
 type DropdownProps = InstanceType<typeof Dropdown>['$props']
 const dropdownProps: DropdownProps = {
+  preset: 'custom',
   arrowSize: '1rem',
   popperClass: ['one-off', { bounded: true }],
   autoHide: (event: Event) => event.type === 'pointerdown',
   container: false,
 }
 expectType<DropdownProps>(dropdownProps)
+
+// The deprecated `theme` alias still type-checks on wrapper components.
+const legacyDropdownProps: DropdownProps = { theme: 'custom' }
+expectType<DropdownProps>(legacyDropdownProps)
 
 const presetConfigValues: Partial<PopperConfig> = {
   arrowSize: '0.75rem',

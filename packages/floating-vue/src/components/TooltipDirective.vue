@@ -15,7 +15,7 @@
       arrowSize,
     }"
     v-bind="$attrs"
-    :theme="theme"
+    :preset="preset"
     :target-nodes="targetNodes"
     :popper-node="getPopperNode"
     @apply-show="onShow"
@@ -27,7 +27,7 @@
         'v-popper--tooltip-loading': loading,
       }"
       :popper-id="popperId"
-      :theme="theme"
+      :preset="preset"
       :shown="isShown"
       :mounted="shouldMountContent"
       :skip-transition="skipTransition"
@@ -58,6 +58,7 @@ import Popper from './Popper'
 import PopperContent from './PopperContent.vue'
 import { getDefaultConfig } from '../config'
 import { usePopperMethods } from '../composable/usePopperMethods'
+import { deprecatedThemeProp, type PresetPropsLike, resolvePresetName } from '../util/preset'
 
 defineOptions({
   name: 'VTooltipDirective',
@@ -65,14 +66,19 @@ defineOptions({
 })
 
 const props = defineProps({
-  theme: {
+  preset: {
     type: String,
-    default: 'tooltip',
+    default: (props: PresetPropsLike) => resolvePresetName(props, 'tooltip'),
   },
+
+  /**
+   * @deprecated Use `preset` instead.
+   */
+  theme: deprecatedThemeProp,
 
   html: {
     type: Boolean,
-    default: (props: { theme: string }) => getDefaultConfig(props.theme, 'html'),
+    default: (props: PresetPropsLike) => getDefaultConfig(resolvePresetName(props, 'tooltip'), 'html'),
   },
 
   content: {
@@ -82,7 +88,7 @@ const props = defineProps({
 
   loadingContent: {
     type: String,
-    default: (props: { theme: string }) => getDefaultConfig(props.theme, 'loadingContent'),
+    default: (props: PresetPropsLike) => getDefaultConfig(resolvePresetName(props, 'tooltip'), 'loadingContent'),
   },
 
   targetNodes: {
@@ -100,7 +106,7 @@ const methods = usePopperMethods(popper)
 let fetchId = 0
 let fetchLoading = false
 
-const tooltipAriaRole = computed(() => getDefaultConfig(props.theme, 'ariaRole') ?? null)
+const tooltipAriaRole = computed(() => getDefaultConfig(props.preset, 'ariaRole') ?? null)
 const isContentAsync = computed(() => typeof props.content === 'function')
 const loading = computed(() => isContentAsync.value && asyncContent.value == null)
 const finalContent = computed(() => {

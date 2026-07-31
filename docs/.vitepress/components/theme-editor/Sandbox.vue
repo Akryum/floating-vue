@@ -109,7 +109,7 @@ onErrorCaptured(e => {
           <VDropdown
             v-for="n in 3"
             :key="uid + ':' + n"
-            :theme="theme.name"
+            :preset="theme.name"
             :container="sandbox"
             :boundary="sandbox"
             :shown="shown[n - 1]"

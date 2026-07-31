@@ -45,7 +45,7 @@ loadValue(TAB_KEY, value => {
     <div class="text-gray-500 flex items-center border-b border-gray-100 dark:border-gray-800">
       <ToolIcon class="w-4 h-4 mx-2" />
       <span class="flex-1">
-        Theme Configuration
+        Preset Configuration
       </span>
 
       <Tabs
@@ -62,7 +62,7 @@ loadValue(TAB_KEY, value => {
     <div class="overflow-auto">
       <template v-if="tab === 'general'">
         <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
-          <span>Theme name:</span>
+          <span>Preset name:</span>
           <input
             v-model="theme.name"
             class="w-0 flex-1 border border-gray-300 dark:border-gray-700 rounded px-1"
@@ -70,7 +70,7 @@ loadValue(TAB_KEY, value => {
         </div>
 
         <div class="flex space-x-1 hover:bg-gray-50 dark:hover:bg-gray-800 p-2">
-          <label for="extend">Inherit another theme:</label>
+          <label for="extend">Inherit another preset:</label>
           <select
             id="extend"
             v-model="theme.config.$extend"
@@ -86,7 +86,7 @@ loadValue(TAB_KEY, value => {
               :key="t"
               :value="t"
             >
-              Extends '{{ t }}' theme
+              Extends '{{ t }}' preset
             </option>
           </select>
         </div>

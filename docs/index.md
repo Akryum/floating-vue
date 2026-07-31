@@ -23,7 +23,7 @@ features:
   - title: Flexible configuration
     details: Tailor the library to you need with the extensive configuration capabilities
   - title: Powerful theming
-    details: Customizable themes for different kind of poppers be it tooltips, dropdowns, menus...
+    details: Customizable presets for different kind of poppers be it tooltips, dropdowns, menus...
 ---
 
 <div class="mt-10" />

@@ -17,4 +17,9 @@ export interface Config extends Partial<PopperConfig> {
    * Presets allow reusing popper configurations
    */
   presets: Record<string, PopperPreset>
+
+  /**
+   * @deprecated Use `presets` instead. Reads and writes go to `presets`.
+   */
+  themes?: Record<string, PopperPreset>
 }

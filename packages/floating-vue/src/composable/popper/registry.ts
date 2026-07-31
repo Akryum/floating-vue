@@ -1,10 +1,10 @@
-import { config, getAllParentThemes } from '../../config'
+import { config, getAllParentPresets } from '../../config'
 import { isIOS, supportsPassive } from '../../util/env'
 import { removeFromArray } from '../../util/lang'
 import type { PopperApi, PopperEvent } from './types'
 
 const shownPoppers: PopperApi[] = []
-const shownPoppersByTheme: Record<string, PopperApi[]> = {}
+const shownPoppersByPreset: Record<string, PopperApi[]> = {}
 let globalHandlersInstalled = false
 let hidingPopper: PopperApi | null = null
 
@@ -30,20 +30,20 @@ export function getShownPoppers () {
 }
 
 /**
- * Registers one popper as shown and updates body theme classes.
+ * Registers one popper as shown and updates body preset classes.
  */
 export function registerShownPopper (popper: PopperApi) {
   shownPoppers.push(popper)
   document.body.classList.add('v-popper--some-open')
 
-  for (const theme of getAllParentThemes(popper.props.theme)) {
-    getShownPoppersByTheme(theme).push(popper)
-    document.body.classList.add(`v-popper--some-open--${theme}`)
+  for (const preset of getAllParentPresets(popper.props.preset)) {
+    getShownPoppersByPreset(preset).push(popper)
+    document.body.classList.add(`v-popper--some-open--${preset}`)
   }
 }
 
 /**
- * Removes one popper from the shown registry and body theme classes.
+ * Removes one popper from the shown registry and body preset classes.
  */
 export function unregisterShownPopper (popper: PopperApi) {
   removeFromArray(shownPoppers, popper)
@@ -51,11 +51,11 @@ export function unregisterShownPopper (popper: PopperApi) {
     document.body.classList.remove('v-popper--some-open')
   }
 
-  for (const theme of getAllParentThemes(popper.props.theme)) {
-    const list = getShownPoppersByTheme(theme)
+  for (const preset of getAllParentPresets(popper.props.preset)) {
+    const list = getShownPoppersByPreset(preset)
     removeFromArray(list, popper)
     if (list.length === 0) {
-      document.body.classList.remove(`v-popper--some-open--${theme}`)
+      document.body.classList.remove(`v-popper--some-open--${preset}`)
     }
   }
 }
@@ -216,12 +216,12 @@ function getAutoHideResult (popper: PopperApi, event: Event) {
 }
 
 /**
- * Returns shown registry bucket for one theme.
+ * Returns shown registry bucket for one preset.
  */
-function getShownPoppersByTheme (theme: string) {
-  let list = shownPoppersByTheme[theme]
+function getShownPoppersByPreset (preset: string) {
+  let list = shownPoppersByPreset[preset]
   if (!list) {
-    list = shownPoppersByTheme[theme] = []
+    list = shownPoppersByPreset[preset] = []
   }
   return list
 }

@@ -4,6 +4,7 @@ import { placements, type Placement } from '../../util/popper'
 import type { PopperConfig } from '../../types/popper'
 import type { Trigger } from '../../types/trigger'
 import type { PopperProps } from './types'
+import { deprecatedThemeProp, type PresetPropsLike, resolvePresetName } from '../../util/preset'
 
 /**
  * Runtime Element constructor fallback used during SSR.
@@ -13,11 +14,11 @@ const ElementType = typeof window !== 'undefined'
   : function ElementFallback () {}
 
 /**
- * Creates a Vue prop default that reads from the active theme preset.
+ * Creates a Vue prop default that reads from the active preset.
  */
 function defaultPropFactory<K extends keyof PopperConfig> (prop: K) {
-  return function getDefaultThemeProp (props: { theme: string }) {
-    return getDefaultConfig(props.theme, prop)
+  return function getDefaultPresetProp (props: PresetPropsLike) {
+    return getDefaultConfig(resolvePresetName(props, 'dropdown'), prop)
   }
 }
 
@@ -25,10 +26,15 @@ function defaultPropFactory<K extends keyof PopperConfig> (prop: K) {
  * Props accepted by the core Popper component.
  */
 export const popperProps = {
-  theme: {
+  preset: {
     type: String,
-    required: true as const,
+    default: (props: PresetPropsLike) => resolvePresetName(props, 'dropdown'),
   },
+
+  /**
+   * @deprecated Use `preset` instead.
+   */
+  theme: deprecatedThemeProp,
 
   targetNodes: {
     type: Function as PropType<() => Element[]>,

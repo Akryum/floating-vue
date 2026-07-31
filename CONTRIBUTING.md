@@ -34,7 +34,7 @@ Run the full local check suite (matches CI):
 
 ```bash
 pnpm lint        # eslint across .js, .ts, .vue
-pnpm typecheck   # vue-tsc against tests/types fixture
+pnpm typecheck   # vue-tsc over src + the public-API type fixture
 pnpm test        # vitest unit tests
 pnpm build       # vite build + .d.ts emit
 pnpm test:e2e    # Playwright suite against the demo SPA
