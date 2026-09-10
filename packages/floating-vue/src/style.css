@@ -25,6 +25,18 @@
   transition: none !important;
 }
 
+.v-popper__resize-observer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
 .v-popper__backdrop {
   position: absolute;
   top: 0;
