@@ -45,11 +45,6 @@
           <div>
             <slot />
           </div>
-
-          <ResizeObserver
-            v-if="handleResize"
-            @notify="$emit('resize', $event)"
-          />
         </template>
       </div>
 
@@ -70,15 +65,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ResizeObserver from './ResizeObserver'
 import ThemeClass from './ThemeClass'
 
 export default defineComponent({
   name: 'VPopperContent',
-
-  components: {
-    ResizeObserver,
-  },
 
   mixins: [
     ThemeClass(),
@@ -100,6 +90,17 @@ export default defineComponent({
     'hide',
     'resize',
   ],
+
+  mounted () {
+    if (this.handleResize) {
+      this.$_resizeObserver = new ResizeObserver(() => this.$emit('resize'))
+      this.$_resizeObserver.observe(this.$refs.inner)
+    }
+  },
+
+  beforeUnmount () {
+    this.$_resizeObserver?.disconnect()
+  },
 
   methods: {
     toPx (value) {
