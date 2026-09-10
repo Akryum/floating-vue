@@ -1,17 +1,12 @@
-import { defineComponent, h } from 'vue'
+import { computed, defineComponent, h, nextTick, ref, watch } from 'vue'
 import { createPopper } from '../factories/Popper'
 import { PopperContent } from './PopperContent'
-import { PopperMethods } from '../mixins/PopperMethods'
 import { getDefaultConfig } from '../config'
 
-const Popper = createPopper()
+const Popper = /** @__PURE__ */ createPopper()
 
-export const TooltipDirective = defineComponent({
+export const TooltipDirective = /** @__PURE__ */ defineComponent({
   name: 'VTooltipDirective',
-
-  mixins: [
-    PopperMethods,
-  ],
 
   inheritAttrs: false,
 
@@ -42,88 +37,77 @@ export const TooltipDirective = defineComponent({
     },
   },
 
-  data () {
-    return {
-      asyncContent: null as string,
-    }
-  },
+  setup (props, { attrs, expose }) {
+    const asyncContent = ref<string | null>(null)
 
-  computed: {
-    isContentAsync (): boolean {
-      return typeof this.content === 'function'
-    },
-
-    loading (): boolean {
-      return this.isContentAsync && this.asyncContent == null
-    },
-
-    finalContent (): string {
-      if (this.isContentAsync) {
-        return this.loading ? this.loadingContent : this.asyncContent
+    const isContentAsync = computed(() => typeof props.content === 'function')
+    const loading = computed(() => isContentAsync.value && asyncContent.value == null)
+    const finalContent = computed(() => {
+      if (isContentAsync.value) {
+        return loading.value ? props.loadingContent : asyncContent.value
       }
-      return this.content
-    },
-  },
+      return props.content as string
+    })
 
-  watch: {
-    content: {
-      handler () {
-        this.fetchContent(true)
-      },
-      immediate: true,
-    },
+    let popperRef: InstanceType<typeof Popper> | undefined
+    let popperContentRef: InstanceType<typeof PopperContent> | undefined
 
-    async finalContent () {
-      await this.$nextTick()
-      this.$refs.popper.onResize()
-    },
-  },
+    let isPopperShown = false
+    let isLoading = false
+    let fetchId = 0
 
-  created () {
-    this.$_fetchId = 0
-  },
-
-  methods: {
-    fetchContent (force: boolean) {
-      if (typeof this.content === 'function' && this.$_isShown &&
-        (force || (!this.$_loading && this.asyncContent == null))) {
-        this.asyncContent = null
-        this.$_loading = true
-        const fetchId = ++this.$_fetchId
-        const result = this.content(this)
+    function fetchContent (force = false) {
+      if (typeof props.content === 'function' && isPopperShown &&
+        (force || (!isLoading && asyncContent.value == null))) {
+        asyncContent.value = null
+        isLoading = true
+        const currentFetchId = ++fetchId
+        const result = props.content(props)
         if (result.then) {
-          result.then(res => this.onResult(fetchId, res))
+          result.then((res: string) => onResult(currentFetchId, res))
         } else {
-          this.onResult(fetchId, result)
+          onResult(currentFetchId, result)
         }
       }
-    },
+    }
 
-    onResult (fetchId, result) {
-      if (fetchId !== this.$_fetchId) { return }
-      this.$_loading = false
-      this.asyncContent = result
-    },
+    function onResult (resultFetchId: number, result: string) {
+      if (resultFetchId !== fetchId) { return }
+      isLoading = false
+      asyncContent.value = result
+    }
 
-    onShow () {
-      this.$_isShown = true
-      this.fetchContent()
-    },
+    watch(() => props.content, () => fetchContent(true), { immediate: true })
 
-    onHide () {
-      this.$_isShown = false
-    },
-  },
+    watch(finalContent, async () => {
+      await nextTick()
+      popperRef!.onResize()
+    })
 
-  render () {
-    return h(Popper, {
-      ref: 'popper',
-      ...this.$attrs,
-      theme: this.theme,
-      targetNodes: this.targetNodes,
-      popperNode: () => (this.$refs as any).popperContent.$el,
-      onApplyShow: this.onShow,
-      onApplyHide: this.onHide,
+    function onShow () {
+      isPopperShown = true
+      fetchContent()
+    }
+
+    function onHide () {
+      isPopperShown = false
+    }
+
+    expose({
+      show: (...args: any[]) => popperRef!.show(...args),
+      hide: (...args: any[]) => popperRef!.hide(...args),
+      dispose: () => popperRef!.dispose(),
+      onResize: () => popperRef!.onResize(),
+    })
+
+    return () => h(Popper, {
+      ref: (el: any) => { popperRef = el },
+      ...attrs,
+      theme: props.theme,
+      targetNodes: props.targetNodes,
+      popperNode: () => popperContentRef!.$el,
+      onApplyShow: onShow,
+      onApplyHide: onHide,
     }, {
       default: ({
         popperId,
@@ -137,12 +121,12 @@ export const TooltipDirective = defineComponent({
         classes,
         result,
       }) => h(PopperContent, {
-        ref: 'popperContent',
+        ref: (el: any) => { popperContentRef = el },
         class: {
-          'v-popper--tooltip-loading': this.loading,
+          'v-popper--tooltip-loading': loading.value,
         },
         popperId,
-        theme: this.theme,
+        theme: props.theme,
         shown: isShown,
         mounted: shouldMountContent,
         skipTransition,
@@ -153,9 +137,9 @@ export const TooltipDirective = defineComponent({
         onHide: hide,
         onResize,
       }, {
-        default: () => this.html
-          ? h('div', { innerHTML: this.finalContent })
-          : h('div', { textContent: this.finalContent }),
+        default: () => props.html
+          ? h('div', { innerHTML: finalContent.value })
+          : h('div', { textContent: finalContent.value }),
       }),
     })
   },

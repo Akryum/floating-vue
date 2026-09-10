@@ -1,12 +1,8 @@
-import { defineComponent, h } from 'vue'
-import { ThemeClass } from '../mixins/ThemeClass'
+import { computed, defineComponent, h, onBeforeUnmount, onMounted, ref } from 'vue'
+import { getThemeClasses } from '../config'
 
-export const PopperContent = defineComponent({
+export const PopperContent = /** @__PURE__ */ defineComponent({
   name: 'VPopperContent',
-
-  mixins: [
-    ThemeClass(),
-  ],
 
   props: {
     popperId: String,
@@ -25,93 +21,99 @@ export const PopperContent = defineComponent({
     'resize',
   ],
 
-  mounted () {
-    if (this.handleResize) {
-      this.$_resizeObserver = new ResizeObserver(() => this.$emit('resize'))
-      this.$_resizeObserver.observe(this.$refs.inner)
-    }
-  },
+  setup (props, { emit, slots }) {
+    const inner = ref<HTMLElement>()
 
-  beforeUnmount () {
-    this.$_resizeObserver?.disconnect()
-  },
+    const themeClass = computed(() => getThemeClasses(props.theme))
 
-  methods: {
-    toPx (value) {
+    let resizeObserver: ResizeObserver | undefined
+
+    onMounted(() => {
+      if (props.handleResize) {
+        resizeObserver = new ResizeObserver(() => emit('resize'))
+        resizeObserver.observe(inner.value!)
+      }
+    })
+
+    onBeforeUnmount(() => {
+      resizeObserver?.disconnect()
+    })
+
+    function toPx (value) {
       if (value != null && !Number.isNaN(value)) {
         return `${value}px`
       }
       return null
-    },
-  },
+    }
 
-  render () {
-    const { autoHide, classes, result, shown } = this
+    return () => {
+      const { autoHide, classes, result, shown } = props
 
-    return h('div', {
-      id: this.popperId,
-      ref: 'popover',
-      'data-allow-mismatch': '',
-      class: ['v-popper__popper', this.themeClass, classes.popperClass, {
-        'v-popper__popper--shown': shown,
-        'v-popper__popper--hidden': !shown,
-        'v-popper__popper--show-from': classes.showFrom,
-        'v-popper__popper--show-to': classes.showTo,
-        'v-popper__popper--hide-from': classes.hideFrom,
-        'v-popper__popper--hide-to': classes.hideTo,
-        'v-popper__popper--skip-transition': this.skipTransition,
-        'v-popper__popper--arrow-overflow': result && result.arrow.overflow,
-        'v-popper__popper--no-positioning': !result,
-      }],
-      style: result
-        ? {
-            position: result.strategy,
-            transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
-          }
-        : undefined,
-      'aria-hidden': shown || autoHide ? 'false' : 'true',
-      tabindex: autoHide ? 0 : undefined,
-      'data-popper-placement': result ? result.placement : undefined,
-      onKeyup: (event: KeyboardEvent) => {
-        if (event.key === 'Escape' && autoHide) {
-          this.$emit('hide')
-        }
-      },
-    }, [
-      h('div', {
-        class: 'v-popper__backdrop',
-        onClick: () => autoHide && this.$emit('hide'),
-      }),
-      h('div', {
-        class: 'v-popper__wrapper',
+      return h('div', {
+        id: props.popperId,
+        ref: 'popover',
+        'data-allow-mismatch': '',
+        class: ['v-popper__popper', themeClass.value, classes.popperClass, {
+          'v-popper__popper--shown': shown,
+          'v-popper__popper--hidden': !shown,
+          'v-popper__popper--show-from': classes.showFrom,
+          'v-popper__popper--show-to': classes.showTo,
+          'v-popper__popper--hide-from': classes.hideFrom,
+          'v-popper__popper--hide-to': classes.hideTo,
+          'v-popper__popper--skip-transition': props.skipTransition,
+          'v-popper__popper--arrow-overflow': result && result.arrow.overflow,
+          'v-popper__popper--no-positioning': !result,
+        }],
         style: result
           ? {
-              transformOrigin: result.transformOrigin,
+              position: result.strategy,
+              transform: `translate3d(${Math.round(result.x)}px,${Math.round(result.y)}px,0)`,
             }
           : undefined,
+        'aria-hidden': shown || autoHide ? 'false' : 'true',
+        tabindex: autoHide ? 0 : undefined,
+        'data-popper-placement': result ? result.placement : undefined,
+        onKeyup: (event: KeyboardEvent) => {
+          if (event.key === 'Escape' && autoHide) {
+            emit('hide')
+          }
+        },
       }, [
         h('div', {
-          ref: 'inner',
-          class: 'v-popper__inner',
-        }, this.mounted
-          ? [
-              h('div', this.$slots.default?.()),
-            ]
-          : undefined),
+          class: 'v-popper__backdrop',
+          onClick: () => autoHide && emit('hide'),
+        }),
         h('div', {
-          ref: 'arrow',
-          class: 'v-popper__arrow-container',
+          class: 'v-popper__wrapper',
           style: result
             ? {
-                left: this.toPx(result.arrow.x),
-                top: this.toPx(result.arrow.y),
+                transformOrigin: result.transformOrigin,
               }
             : undefined,
         }, [
-          h('div', { class: 'v-popper__arrow-outer' }),
-          h('div', { class: 'v-popper__arrow-inner' }),
+          h('div', {
+            ref: inner,
+            class: 'v-popper__inner',
+          }, props.mounted
+            ? [
+                h('div', slots.default?.()),
+              ]
+            : undefined),
+          h('div', {
+            ref: 'arrow',
+            class: 'v-popper__arrow-container',
+            style: result
+              ? {
+                  left: toPx(result.arrow.x),
+                  top: toPx(result.arrow.y),
+                }
+              : undefined,
+          }, [
+            h('div', { class: 'v-popper__arrow-outer' }),
+            h('div', { class: 'v-popper__arrow-inner' }),
+          ]),
         ]),
-      ]),
-    ])
+      ])
+    }
   },
 })
