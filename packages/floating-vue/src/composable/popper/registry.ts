@@ -139,7 +139,8 @@ function handleGlobalClose (event: PopperEvent, touch: boolean) {
     try {
       const contains = popper.state.containsGlobalTarget =
         popper.state.mouseDownContains ||
-        (getPopperNode(popper)?.contains(event.target as Node) ?? false)
+        (getPopperNode(popper)?.contains(event.target as Node) ?? false) ||
+        containsShownChildTarget(popper, event.target)
       popper.state.pendingHide = false
 
       requestAnimationFrame(() => {
@@ -231,4 +232,14 @@ function getShownPoppersByPreset (preset: string) {
  */
 function getPopperNode (popper: PopperApi) {
   return popper.runtime.nodes.popperNode ?? popper.props.popperNode()
+}
+
+/**
+ * Returns whether an event target is inside a shown teleported descendant.
+ */
+function containsShownChildTarget (popper: PopperApi, target: EventTarget | null) {
+  return Array.from(popper.state.shownChildren).some(childId => {
+    const child = shownPoppers.find(candidate => candidate.state.randomId === childId)
+    return child != null && (getPopperNode(child)?.contains(target as Node) ?? false)
+  })
 }

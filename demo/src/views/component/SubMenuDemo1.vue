@@ -73,9 +73,16 @@
                 Option {{ n }} >
               </button>
 
-              <template #popper>
-                <div class="px-6 py-2">
+              <template #popper="{ hide }">
+                <div class="px-6 py-2 text-center">
                   Hello
+                  <button
+                    class="rounded hover:bg-red-100 px-4 py-2 w-full mt-2"
+                    data-test="nested-dropdown-hide"
+                    @click="hide"
+                  >
+                    Hide
+                  </button>
                 </div>
               </template>
             </VDropdown>

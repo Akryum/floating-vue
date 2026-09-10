@@ -44,7 +44,10 @@ test.describe('Submenu trees', () => {
     const subPopper = await expectPopperWithText(page, /Option 1 >/)
 
     await subPopper.getByText('Option 1 >').click()
-    await expectPopperWithText(page, 'Hello')
+    const leafPopper = await expectPopperWithText(page, 'Hello')
     expect(await shownPoppers(page).count()).toBeGreaterThanOrEqual(3)
+
+    await leafPopper.getByTestId('nested-dropdown-hide').click()
+    await expect(shownPoppers(page)).toHaveCount(2)
   })
 })

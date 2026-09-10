@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
+import { h, ref } from 'vue'
 import { config } from '../config'
 import Dropdown from './Dropdown'
 import PopperWrapper from './PopperWrapper.vue'
@@ -138,6 +139,49 @@ describe('Popper wrapper components', () => {
     await waitForPopperUpdates()
 
     expect(wrapper.emitted('show')).toHaveLength(1)
+    expect(getPopperElement()?.classList.contains('v-popper__popper--shown')).toBe(true)
+  })
+
+  test('keeps parent shown after interacting with and hiding a nested dropdown', async () => {
+    const child = ref<{
+      show: (options?: { skipDelay?: boolean }) => void
+      hide: (options?: { skipDelay?: boolean }) => void
+    } | null>(null)
+
+    wrapper = mount(Dropdown, {
+      attachTo: document.body,
+      props: controlledPopperProps,
+      slots: {
+        default: () => h('button', 'Parent reference'),
+        popper: () => h(Dropdown, {
+          ref: child,
+          ...controlledPopperProps,
+        }, {
+          default: () => h('button', 'Child reference'),
+          popper: () => h('button', { 'data-testid': 'child-content' }, 'Child content'),
+        }),
+      },
+    })
+
+    showWrapper()
+    await waitForPopperUpdates()
+    expect(child.value).not.toBeNull()
+
+    child.value?.show({ skipDelay: true })
+    await waitForPopperUpdates()
+
+    const childContent = document.body.querySelector('[data-testid="child-content"]')
+    expect(childContent).not.toBeNull()
+    childContent?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+    childContent?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await waitForPopperUpdates()
+
+    expect(wrapper.emitted('auto-hide')).toBeUndefined()
+
+    child.value?.hide({ skipDelay: true })
+    await waitForPopperUpdates()
+
+    expect(wrapper.emitted('auto-hide')).toBeUndefined()
     expect(getPopperElement()?.classList.contains('v-popper__popper--shown')).toBe(true)
   })
 
