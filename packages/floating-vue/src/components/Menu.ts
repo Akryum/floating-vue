@@ -1,3 +1,3 @@
-import { createThemedPopperWrapper } from './internals/PopperWrapper'
+import { createThemedPopperWrapper } from './PopperWrapper'
 
 export default createThemedPopperWrapper('VMenu', 'menu')

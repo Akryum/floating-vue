@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue'
-import Popper from './Popper'
+import Popper from '../Popper'
 
 export default defineComponent({
   extends: Popper(),

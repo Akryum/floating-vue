@@ -1,10 +1,10 @@
 import { defineComponent, h } from 'vue'
 import type { PropType } from 'vue'
-import PopperRoot from './PopperRoot'
+import PopperRoot from './internals/PopperRoot'
 import PopperContent from './PopperContent'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
-import type { Placement } from '../../util/popper.js'
+import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 

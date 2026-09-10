@@ -26,19 +26,19 @@ export const VClosePopper = vClosePopper
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 // Components
 export { Dropdown, Menu, Tooltip }
-export { default as Popper } from './components/internals/Popper'
-export { default as PopperContent } from './components/internals/PopperContent'
-export { default as PopperMethods } from './components/internals/PopperMethods'
-export { default as PopperWrapper } from './components/internals/PopperWrapper'
-export { default as ThemeClass } from './components/internals/ThemeClass'
-export { default as TooltipDirective } from './components/internals/TooltipDirective'
+export { default as Popper } from './components/Popper'
+export { default as PopperContent } from './components/PopperContent'
+export { default as PopperMethods } from './components/PopperMethods'
+export { default as PopperWrapper } from './components/PopperWrapper'
+export { default as ThemeClass } from './components/ThemeClass'
+export { default as TooltipDirective } from './components/TooltipDirective'
 // Utils
-export { hideAllPoppers, recomputeAllPoppers } from './components/internals/Popper'
+export { hideAllPoppers, recomputeAllPoppers } from './components/Popper'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'
 // Types
-export type { TriggerEvent } from './components/internals/PopperWrapper'
+export type { TriggerEvent } from './components/PopperWrapper'
 
 /* Vue plugin */
 

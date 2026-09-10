@@ -9,13 +9,13 @@ import {
   getOverflowAncestors,
   size,
 } from '@floating-ui/dom'
-import { supportsPassive, isIOS } from '../../util/env'
-import type { Placement } from '../../util/popper'
-import { placements } from '../../util/popper'
-import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../../util/events'
-import { removeFromArray } from '../../util/lang'
-import { nextFrame } from '../../util/frame'
-import { getDefaultConfig, getAllParentThemes, config } from '../../config'
+import { supportsPassive, isIOS } from '../util/env'
+import type { Placement } from '../util/popper'
+import { placements } from '../util/popper'
+import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
+import { removeFromArray } from '../util/lang'
+import { nextFrame } from '../util/frame'
+import { getDefaultConfig, getAllParentThemes, config } from '../config'
 
 export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 

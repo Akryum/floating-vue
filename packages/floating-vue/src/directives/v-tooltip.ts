@@ -1,6 +1,6 @@
 import type { App, Ref } from 'vue'
 import { createApp, h, ref } from 'vue'
-import TooltipDirective from '../components/internals/TooltipDirective'
+import TooltipDirective from '../components/TooltipDirective'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
 
