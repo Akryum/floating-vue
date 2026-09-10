@@ -2,13 +2,14 @@ import { defineComponent, h, ref } from 'vue'
 import PopperWrapper from './PopperWrapper.vue'
 import { popperWrapperProps } from './popperWrapperProps'
 import { popperEmits } from '../composable/popper/emits'
-import { usePopperMethods } from '../composable/usePopperMethods'
+import { usePopperMethods, type PopperExposedMethods } from '../composable/usePopperMethods'
+import type { ComponentWithExposedMethods } from './componentTypes'
 
 /**
  * Creates a public wrapper component bound to one preset, such as VDropdown or VTooltip.
  */
 export function createPopperComponent (name: string, preset: string) {
-  return defineComponent({
+  const component = defineComponent({
     name,
 
     props: popperWrapperProps,
@@ -37,4 +38,6 @@ export function createPopperComponent (name: string, preset: string) {
       }, slots)
     },
   })
+
+  return component as typeof component & ComponentWithExposedMethods<typeof component, PopperExposedMethods>
 }

@@ -45,6 +45,7 @@ export const popperWrapperProps = {
   },
 
   ariaId: {
+    type: String as PropType<string | null>,
     default: null,
   },
 

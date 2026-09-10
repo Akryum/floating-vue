@@ -155,6 +155,34 @@ expectType<DropdownProps>(dropdownProps)
 const legacyDropdownProps: DropdownProps = { theme: 'custom' }
 expectType<DropdownProps>(legacyDropdownProps)
 
+// Public component refs expose the imperative popper methods.
+declare const dropdown: InstanceType<typeof Dropdown>
+declare const menu: InstanceType<typeof Menu>
+declare const tooltip: InstanceType<typeof Tooltip>
+declare const popper: InstanceType<typeof Popper>
+
+for (const instance of [dropdown, menu, tooltip, popper]) {
+  expectType<void>(instance.show())
+  expectType<void>(instance.hide())
+  expectType<void>(instance.dispose())
+  expectType<Promise<void>>(instance.onResize())
+}
+
+// Core Popper retains its positioning recomputation method.
+expectType<Promise<void>>(popper.recompute())
+
+// @ts-expect-error Public popper instances do not expose arbitrary methods.
+dropdown.unknownMethod()
+
+// Wrapper aria IDs are safe to pass through to the core popper.
+const dropdownAriaId: DropdownProps = { ariaId: 'dropdown-id' }
+const dropdownNullAriaId: DropdownProps = { ariaId: null }
+expectType<DropdownProps>(dropdownAriaId)
+expectType<DropdownProps>(dropdownNullAriaId)
+
+// @ts-expect-error ariaId accepts only string or null.
+expectType<DropdownProps>({ ariaId: 1 })
+
 const presetConfigValues: Partial<PopperConfig> = {
   arrowSize: '0.75rem',
   popperClass: 'preset-popper',

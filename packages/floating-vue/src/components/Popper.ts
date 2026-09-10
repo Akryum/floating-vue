@@ -2,11 +2,18 @@ import { defineComponent, ref } from 'vue'
 import { popperEmits } from '../composable/popper/emits'
 import { popperProps } from '../composable/popper/props'
 import { usePopper } from '../composable/usePopper'
+import type { PopperApi } from '../composable/popper/types'
+import type { ComponentWithExposedMethods } from './componentTypes'
+
+/**
+ * Imperative methods exposed by the core renderless Popper component.
+ */
+type CorePopperExposedMethods = Pick<PopperApi, 'show' | 'hide' | 'dispose' | 'onResize' | 'recompute'>
 
 /**
  * Core renderless popper component.
  */
-export default defineComponent({
+const component = defineComponent({
   name: 'VPopper',
 
   props: popperProps,
@@ -32,6 +39,8 @@ export default defineComponent({
     return () => slots.default?.(api.slotData.value)
   },
 })
+
+export default component as typeof component & ComponentWithExposedMethods<typeof component, CorePopperExposedMethods>
 
 export { hideAllPoppers, recomputeAllPoppers } from '../composable/popper/registry'
 export type { PopperApi as PopperInstance } from '../composable/usePopper'
