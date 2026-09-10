@@ -62,16 +62,23 @@ import 'floating-vue/dist/style.css'
 
 ## Browser
 
-Include `dist/floating-vue.min.js` in the page:
+First, include scripts for dependencies: `@floating-ui/core` and `@floating-ui/dom`:
 
 ```html
-<script src="https://unpkg.com/floating-vue@^2.0.0-beta.1"></script>
+<script src="https://unpkg.com/@floating-ui/core@1/dist/floating-ui.core.umd.js"></script>
+<script src="https://unpkg.com/@floating-ui/dom@1/dist/floating-ui.dom.umd.js"></script>
+```
+
+Include `dist/floating-vue.umd.js` in the page:
+
+```html
+<script src="https://unpkg.com/floating-vue@5/dist/floating-vue.umd.js"></script>
 ```
 
 Also include the default CSS:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/floating-vue@^2.0.0-beta.1/dist/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/floating-vue@5/dist/style.css" />
 ```
 
 Install the plugin into your app:
