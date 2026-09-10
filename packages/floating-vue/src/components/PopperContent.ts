@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue'
-import ThemeClass from './ThemeClass'
+import ThemeClass from '../mixins/ThemeClass'
 
 export default defineComponent({
   name: 'VPopperContent',

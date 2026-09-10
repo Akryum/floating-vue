@@ -1,7 +1,7 @@
 import { defineComponent, h } from 'vue'
-import createPopper from './Popper'
+import createPopper from '../factories/Popper'
 import PopperContent from './PopperContent'
-import PopperMethods from './PopperMethods'
+import PopperMethods from '../mixins/PopperMethods'
 import { getDefaultConfig } from '../config'
 
 const Popper = createPopper()

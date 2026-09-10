@@ -26,14 +26,14 @@ export const VClosePopper = vClosePopper
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 // Components
 export { Dropdown, Menu, Tooltip }
-export { default as Popper } from './components/Popper'
+export { default as Popper } from './factories/Popper'
 export { default as PopperContent } from './components/PopperContent'
-export { default as PopperMethods } from './components/PopperMethods'
+export { default as PopperMethods } from './mixins/PopperMethods'
 export { default as PopperWrapper } from './components/PopperWrapper'
-export { default as ThemeClass } from './components/ThemeClass'
+export { default as ThemeClass } from './mixins/ThemeClass'
 export { default as TooltipDirective } from './components/TooltipDirective'
 // Utils
-export { hideAllPoppers, recomputeAllPoppers } from './components/Popper'
+export { hideAllPoppers, recomputeAllPoppers } from './factories/Popper'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'

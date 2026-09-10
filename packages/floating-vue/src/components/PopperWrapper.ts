@@ -2,8 +2,8 @@ import { defineComponent, h } from 'vue'
 import type { PropType } from 'vue'
 import PopperRoot from './internals/PopperRoot'
 import PopperContent from './PopperContent'
-import PopperMethods from './PopperMethods'
-import ThemeClass from './ThemeClass'
+import PopperMethods from '../mixins/PopperMethods'
+import ThemeClass from '../mixins/ThemeClass'
 import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
@@ -311,16 +311,3 @@ const PopperWrapper = defineComponent({
 })
 
 export default PopperWrapper
-
-/**
- * A `PopperWrapper` variant with its own name and default theme — same recipe
- * as the themed-component guide in the docs.
- */
-export function createThemedPopperWrapper (name: string, vPopperTheme: string) {
-  return ({
-    ...PopperWrapper,
-    name,
-    vPopperTheme,
-    // `vPopperTheme` is a custom option (read from `$options`), invisible to the component type
-  }) as unknown as typeof PopperWrapper
-}
