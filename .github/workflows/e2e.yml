@@ -1,0 +1,30 @@
+name: E2E Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions: {}
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter floating-vue build
+
+      - run: pnpm --filter demo exec playwright install --with-deps chromium
+
+      - run: pnpm --filter demo test:e2e

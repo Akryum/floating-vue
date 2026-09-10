@@ -2,8 +2,10 @@
 node_modules
 /dist
 
-/tests/e2e/videos/
-/tests/e2e/screenshots/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 
 # local env files

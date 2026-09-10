@@ -1,8 +1,8 @@
-import { describe, test, expect } from '@peeky/test'
+import { describe, expect, it } from 'vitest'
 import * as VTooltip from './v-tooltip'
 
 describe('getPlacement', () => {
-  test('object notation', () => {
+  it('object notation', () => {
     const value = {
       placement: 'bottom',
     }
@@ -11,7 +11,7 @@ describe('getPlacement', () => {
     expect(result).toBe('bottom')
   })
 
-  test('modifier', () => {
+  it('modifier', () => {
     const value = {}
     const modifiers = {
       'top-end': true,
@@ -20,7 +20,7 @@ describe('getPlacement', () => {
     expect(result).toBe('top-end')
   })
 
-  test('invalid modifier', () => {
+  it('invalid modifier', () => {
     const value = {}
     const modifiers = {
       'left-middle': true,

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test:e2e": "echo \"TODO\""
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "core-js": "^3.50.0",
@@ -14,6 +15,7 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/compiler-sfc": "^3.5.42",
     "autoprefixer": "^10.5.5",
