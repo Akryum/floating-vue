@@ -232,9 +232,6 @@ importers:
       tsdown:
         specifier: ^0.23.0
         version: 0.23.0(@volar/typescript@2.4.28(typescript@5.9.3))(typescript@5.9.3)(vue-tsc@3.3.11(typescript@5.9.3))
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
       vue:
         specifier: ^3.5.42
         version: 3.5.42(typescript@5.9.3)

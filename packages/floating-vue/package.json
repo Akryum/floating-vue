@@ -64,7 +64,6 @@
   "devDependencies": {
     "@nuxt/kit": "^3.21.11",
     "tsdown": "^0.23.0",
-    "typescript": "^5.9.3",
     "vue": "^3.5.42",
     "vue-tsc": "^3.3.11"
   },
