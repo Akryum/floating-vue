@@ -3,12 +3,12 @@ import type { FloatingVueConfig } from './config'
 import { config } from './config'
 import './style.css'
 // Components
-import Dropdown from './components/Dropdown'
-import Menu from './components/Menu'
-import Tooltip from './components/Tooltip'
+import { Dropdown } from './components/Dropdown'
+import { Menu } from './components/Menu'
+import { Tooltip } from './components/Tooltip'
 // Directives
-import vTooltip from './directives/v-tooltip'
-import vClosePopper from './directives/v-close-popper'
+import { vTooltip } from './directives/v-tooltip'
+import { vClosePopper } from './directives/v-close-popper'
 
 /* Exports */
 
@@ -26,12 +26,12 @@ export const VClosePopper = vClosePopper
 export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 // Components
 export { Dropdown, Menu, Tooltip }
-export { default as Popper } from './factories/Popper'
-export { default as PopperContent } from './components/PopperContent'
-export { default as PopperMethods } from './mixins/PopperMethods'
-export { default as PopperWrapper } from './components/PopperWrapper'
-export { default as ThemeClass } from './mixins/ThemeClass'
-export { default as TooltipDirective } from './components/TooltipDirective'
+export { createPopper as Popper } from './factories/Popper'
+export { PopperContent } from './components/PopperContent'
+export { PopperMethods } from './mixins/PopperMethods'
+export { PopperWrapper } from './components/PopperWrapper'
+export { ThemeClass } from './mixins/ThemeClass'
+export { TooltipDirective } from './components/TooltipDirective'
 // Utils
 export { hideAllPoppers, recomputeAllPoppers } from './factories/Popper'
 export * from './util/events'

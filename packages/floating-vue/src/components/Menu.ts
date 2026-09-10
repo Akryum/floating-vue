@@ -1,3 +1,3 @@
 import { createThemedPopperWrapper } from '../factories/ThemedPopperWrapper'
 
-export default createThemedPopperWrapper('VMenu', 'menu')
+export const Menu = createThemedPopperWrapper('VMenu', 'menu')

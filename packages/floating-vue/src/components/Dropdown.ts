@@ -1,3 +1,3 @@
 import { createThemedPopperWrapper } from '../factories/ThemedPopperWrapper'
 
-export default createThemedPopperWrapper('VDropdown', 'dropdown')
+export const Dropdown = createThemedPopperWrapper('VDropdown', 'dropdown')

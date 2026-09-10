@@ -1,8 +1,8 @@
 import { defineComponent, h } from 'vue'
-import Popper from '../../factories/Popper'
+import { createPopper } from '../../factories/Popper'
 
-export default defineComponent({
-  extends: Popper(),
+export const PopperRoot = defineComponent({
+  extends: createPopper(),
 
   render () {
     return h('div', {

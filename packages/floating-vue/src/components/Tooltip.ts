@@ -1,3 +1,3 @@
 import { createThemedPopperWrapper } from '../factories/ThemedPopperWrapper'
 
-export default createThemedPopperWrapper('VTooltip', 'tooltip')
+export const Tooltip = createThemedPopperWrapper('VTooltip', 'tooltip')

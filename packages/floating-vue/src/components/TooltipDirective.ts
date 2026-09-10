@@ -1,12 +1,12 @@
 import { defineComponent, h } from 'vue'
-import createPopper from '../factories/Popper'
-import PopperContent from './PopperContent'
-import PopperMethods from '../mixins/PopperMethods'
+import { createPopper } from '../factories/Popper'
+import { PopperContent } from './PopperContent'
+import { PopperMethods } from '../mixins/PopperMethods'
 import { getDefaultConfig } from '../config'
 
 const Popper = createPopper()
 
-export default defineComponent({
+export const TooltipDirective = defineComponent({
   name: 'VTooltipDirective',
 
   mixins: [
