@@ -12,11 +12,11 @@
     "test": "pnpm -r --filter=\"./packages/*\" run test",
     "lint": "eslint --cache",
     "typecheck": "pnpm -r run typecheck",
-    "release": "pnpm run lint && pnpm run build && sheep release -b main"
+    "release": "pnpm run lint && pnpm run build && bumpp -r"
   },
   "devDependencies": {
-    "@akryum/sheep": "^0.5.2",
     "@antfu/eslint-config": "^9.5.1",
+    "bumpp": "^12.3.0",
     "eslint": "^10.10.0",
     "floating-vue": "workspace:*",
     "typescript": "^5.9.3"
