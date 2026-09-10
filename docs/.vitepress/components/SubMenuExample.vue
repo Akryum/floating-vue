@@ -47,7 +47,7 @@
         Click me
       </button>
 
-      <template #popper>
+      <template #popper="{ hide }">
         <div class="px-4 py-1">
           Sub menus:
         </div>
@@ -62,7 +62,7 @@
             Sub menu >
           </button>
 
-          <template #popper>
+          <template #popper="{ hide: hideLevel2 }">
             <VDropdown
               v-for="m in 5"
               :key="m"
@@ -73,14 +73,33 @@
                 Option {{ m }} >
               </button>
 
-              <template #popper>
-                <div class="px-6 py-2">
+              <template #popper="{ hide: hideLevel3 }">
+                <div class="px-6 py-2 text-center">
                   Hello
+                  <button
+                    class="rounded hover:bg-red-100 px-4 py-2 w-full mt-2"
+                    @click="hideLevel3"
+                  >
+                    Hide
+                  </button>
                 </div>
               </template>
             </VDropdown>
+            <button
+              class="rounded hover:bg-red-100 px-4 py-2 w-full text-left"
+              @click="hideLevel2"
+            >
+              Hide
+            </button>
           </template>
         </VDropdown>
+
+        <button
+          class="rounded hover:bg-red-100 px-4 py-2 w-full text-left"
+          @click="hide"
+        >
+          Hide
+        </button>
       </template>
     </VDropdown>
   </div>
