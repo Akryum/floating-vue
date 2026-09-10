@@ -1,9 +1,8 @@
-import { defineComponent, h } from 'vue'
+import { computed, defineComponent, getCurrentInstance, h } from 'vue'
 import type { PropType } from 'vue'
 import { PopperRoot } from './internals/PopperRoot'
 import { PopperContent } from './PopperContent'
-import { PopperMethods } from '../mixins/PopperMethods'
-import { ThemeClass } from '../mixins/ThemeClass'
+import { getThemeClasses } from '../config'
 import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
@@ -13,13 +12,8 @@ if (typeof window !== 'undefined') {
   Element = window.Element
 }
 
-const PopperWrapper = defineComponent({
+const PopperWrapper = /** @__PURE__ */ defineComponent({
   name: 'VPopperWrapper',
-
-  mixins: [
-    PopperMethods,
-    ThemeClass('finalTheme'),
-  ],
 
   props: {
     theme: {
@@ -235,38 +229,46 @@ const PopperWrapper = defineComponent({
     resize: () => true,
   },
 
-  computed: {
-    finalTheme (): string {
-      return this.theme ?? this.$options.vPopperTheme
-    },
-  },
+  setup (props, { emit, slots, expose }) {
+    const instance = getCurrentInstance()!
+    const vPopperTheme = (instance.type as any).vPopperTheme
 
-  methods: {
-    getTargetNodes () {
-      return Array.from(this.$el.children)
-        .filter(node => node !== this.$refs.popperContent.$el)
-    },
-  },
+    const finalTheme = computed(() => props.theme ?? vPopperTheme)
+    const themeClass = computed(() => getThemeClasses(finalTheme.value))
 
-  render () {
-    return h(PopperRoot, {
-      ref: 'popper',
-      ...this.$props,
-      theme: this.finalTheme,
-      targetNodes: this.getTargetNodes,
-      popperNode: () => (this.$refs as any).popperContent.$el,
+    let popperRef: InstanceType<typeof PopperRoot> | undefined
+    let popperContentRef: InstanceType<typeof PopperContent> | undefined
+
+    function getTargetNodes () {
+      return Array.from(popperRef!.$el.children)
+        .filter(node => node !== popperContentRef!.$el)
+    }
+
+    expose({
+      show: (...args: any[]) => popperRef!.show(...args),
+      hide: (...args: any[]) => popperRef!.hide(...args),
+      dispose: () => popperRef!.dispose(),
+      onResize: () => popperRef!.onResize(),
+    })
+
+    return () => h(PopperRoot, {
+      ref: (el: any) => { popperRef = el },
+      ...props,
+      theme: finalTheme.value,
+      targetNodes: getTargetNodes,
+      popperNode: () => popperContentRef!.$el,
       class: [
-        this.themeClass,
+        themeClass.value,
       ],
-      onShow: () => this.$emit('show'),
-      onHide: () => this.$emit('hide'),
-      'onUpdate:shown': (shown: boolean) => this.$emit('update:shown', shown),
-      onApplyShow: () => this.$emit('apply-show'),
-      onApplyHide: () => this.$emit('apply-hide'),
-      onCloseGroup: () => this.$emit('close-group'),
-      onCloseDirective: () => this.$emit('close-directive'),
-      onAutoHide: () => this.$emit('auto-hide'),
-      onResize: () => this.$emit('resize'),
+      onShow: () => emit('show'),
+      onHide: () => emit('hide'),
+      'onUpdate:shown': (shown: boolean) => emit('update:shown', shown),
+      onApplyShow: () => emit('apply-show'),
+      onApplyHide: () => emit('apply-hide'),
+      onCloseGroup: () => emit('close-group'),
+      onCloseDirective: () => emit('close-directive'),
+      onAutoHide: () => emit('auto-hide'),
+      onResize: () => emit('resize'),
     }, {
       default: ({
         popperId,
@@ -281,15 +283,15 @@ const PopperWrapper = defineComponent({
         classes,
         result,
       }) => [
-        this.$slots.default?.({
+        slots.default?.({
           shown: isShown,
           show,
           hide,
         }),
         h(PopperContent, {
-          ref: 'popperContent',
+          ref: (el: any) => { popperContentRef = el },
           popperId,
-          theme: this.finalTheme,
+          theme: finalTheme.value,
           shown: isShown,
           mounted: shouldMountContent,
           skipTransition,
@@ -300,7 +302,7 @@ const PopperWrapper = defineComponent({
           onHide: hide,
           onResize,
         }, {
-          default: () => this.$slots.popper?.({
+          default: () => slots.popper?.({
             shown: isShown,
             hide,
           }),

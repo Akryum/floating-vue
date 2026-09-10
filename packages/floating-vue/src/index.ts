@@ -13,6 +13,7 @@ import { vClosePopper } from './directives/v-close-popper'
 /* Exports */
 
 export const options = config
+export { getThemeClasses } from './config'
 // Directives
 export { vTooltip, vClosePopper } // For <script setup>
 /**
@@ -28,8 +29,18 @@ export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 export { Dropdown, Menu, Tooltip }
 export { createPopper as Popper } from './factories/Popper'
 export { PopperContent } from './components/PopperContent'
+/**
+ * @deprecated Options API mixins are no longer used internally. Use the
+ * Composition API instead: forward `show`/`hide`/`dispose`/`onResize` from
+ * your `<Popper>` ref (see the custom component guide).
+ */
 export { PopperMethods } from './mixins/PopperMethods'
 export { PopperWrapper } from './components/PopperWrapper'
+/**
+ * @deprecated Options API mixins are no longer used internally. Use the
+ * Composition API instead: compute the theme class with
+ * `computed(() => getThemeClasses(theme))` (see the custom component guide).
+ */
 export { ThemeClass } from './mixins/ThemeClass'
 export { TooltipDirective } from './components/TooltipDirective'
 // Utils

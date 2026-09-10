@@ -9,8 +9,11 @@ You can create an entirely custom component to use as a popper. v-tooltip expose
 
 - `Popper` (component): main logic component and integration with popperjs
 - `PopperContent` (component): standard minimal popper content with all the needed containers and CSS classes
-- `PopperMethods` (mixin): forwards useful methods such as `show` and `hide` to the underlying `<Popper>` component
-- `ThemeClass` (mixin): computes the final root CSS classes depending on themes
+- `getThemeClasses` (function): computes the final root CSS classes depending on themes
+
+::: warning
+`PopperMethods` and `ThemeClass` (Options API mixins) are deprecated. Use the Composition API example below instead.
+:::
 
 ## Popper
 
@@ -81,8 +84,8 @@ Refs:
     v-bind="$attrs"
     :theme="theme"
     :target-nodes="getTargetNodes"
-    :reference-node="() => $refs.reference"
-    :popper-node="() => $refs.popperContent.$el"
+    :reference-node="() => reference"
+    :popper-node="() => popperContent.$el"
   >
     <div
       ref="reference"
@@ -119,43 +122,41 @@ Refs:
   </Popper>
 </template>
 
-<script>
+<script setup>
+import { computed, ref } from 'vue'
 import {
   Popper,
   PopperContent,
-  PopperMethods,
-  ThemeClass
+  getThemeClasses,
 } from 'floating-vue'
 
-export default {
+defineOptions({
   name: 'VPopperWrapper',
-
-  components: {
-    Popper: Popper(),
-    PopperContent,
-  },
-
-  mixins: [
-    PopperMethods,
-    ThemeClass(),
-  ],
-
   inheritAttrs: false,
+})
 
-  props: {
-    theme: {
-      type: String,
-      default () {
-        return this.$options.vPopperTheme
-      },
-    },
+const props = defineProps({
+  theme: {
+    type: String,
+    default: 'my-popper-theme',
   },
+})
 
-  methods: {
-    getTargetNodes () {
-      return Array.from(this.$refs.reference.children)
-    },
-  },
+const reference = ref()
+const popperContent = ref()
+const popper = ref()
+
+const themeClass = computed(() => getThemeClasses(props.theme))
+
+function getTargetNodes () {
+  return Array.from(reference.value.children)
 }
+
+defineExpose({
+  show: (...args) => popper.value.show(...args),
+  hide: (...args) => popper.value.hide(...args),
+  dispose: (...args) => popper.value.dispose(...args),
+  onResize: (...args) => popper.value.onResize(...args),
+})
 </script>
 ```
