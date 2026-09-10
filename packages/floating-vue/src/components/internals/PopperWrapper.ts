@@ -1,74 +1,10 @@
-<template>
-  <!-- eslint-disable vue/no-template-shadow -- destructured slot props intentionally reuse outer names -->
-  <Popper
-    ref="popper"
-    v-slot="{
-      popperId,
-      isShown,
-      shouldMountContent,
-      skipTransition,
-      autoHide,
-      show,
-      hide,
-      handleResize,
-      onResize,
-      classes,
-      result,
-    }"
-    v-bind="$props"
-    :theme="finalTheme"
-    :target-nodes="getTargetNodes"
-    :popper-node="() => ($refs as any).popperContent.$el"
-    :class="[
-      themeClass,
-    ]"
-    @show="() => $emit('show')"
-    @hide="() => $emit('hide')"
-    @update:shown="(shown) => $emit('update:shown', shown)"
-    @apply-show="() => $emit('apply-show')"
-    @apply-hide="() => $emit('apply-hide')"
-    @close-group="() => $emit('close-group')"
-    @close-directive="() => $emit('close-directive')"
-    @auto-hide="() => $emit('auto-hide')"
-    @resize="() => $emit('resize')"
-  >
-    <slot
-      :shown="isShown"
-      :show="show"
-      :hide="hide"
-    />
-
-    <PopperContent
-      ref="popperContent"
-      :popper-id="popperId"
-      :theme="finalTheme"
-      :shown="isShown"
-      :mounted="shouldMountContent"
-      :skip-transition="skipTransition"
-      :auto-hide="autoHide"
-      :handle-resize="handleResize"
-      :classes="classes"
-      :result="result"
-      @hide="hide"
-      @resize="onResize"
-    >
-      <slot
-        name="popper"
-        :shown="isShown"
-        :hide="hide"
-      />
-    </PopperContent>
-  </Popper>
-</template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 import type { PropType } from 'vue'
-import Popper from './Popper.vue'
-import PopperContent from './PopperContent.vue'
+import PopperRoot from './PopperRoot'
+import PopperContent from './PopperContent'
 import PopperMethods from './PopperMethods'
 import ThemeClass from './ThemeClass'
-import type { Placement } from '../util/popper.js'
+import type { Placement } from '../../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 
@@ -79,11 +15,6 @@ if (typeof window !== 'undefined') {
 
 export default defineComponent({
   name: 'VPopperWrapper',
-
-  components: {
-    Popper,
-    PopperContent,
-  },
 
   mixins: [
     PopperMethods,
@@ -316,5 +247,65 @@ export default defineComponent({
         .filter(node => node !== this.$refs.popperContent.$el)
     },
   },
+
+  render () {
+    return h(PopperRoot, {
+      ref: 'popper',
+      ...this.$props,
+      theme: this.finalTheme,
+      targetNodes: this.getTargetNodes,
+      popperNode: () => (this.$refs as any).popperContent.$el,
+      class: [
+        this.themeClass,
+      ],
+      onShow: () => this.$emit('show'),
+      onHide: () => this.$emit('hide'),
+      'onUpdate:shown': (shown: boolean) => this.$emit('update:shown', shown),
+      onApplyShow: () => this.$emit('apply-show'),
+      onApplyHide: () => this.$emit('apply-hide'),
+      onCloseGroup: () => this.$emit('close-group'),
+      onCloseDirective: () => this.$emit('close-directive'),
+      onAutoHide: () => this.$emit('auto-hide'),
+      onResize: () => this.$emit('resize'),
+    }, {
+      default: ({
+        popperId,
+        isShown,
+        shouldMountContent,
+        skipTransition,
+        autoHide,
+        show,
+        hide,
+        handleResize,
+        onResize,
+        classes,
+        result,
+      }) => [
+        this.$slots.default?.({
+          shown: isShown,
+          show,
+          hide,
+        }),
+        h(PopperContent, {
+          ref: 'popperContent',
+          popperId,
+          theme: this.finalTheme,
+          shown: isShown,
+          mounted: shouldMountContent,
+          skipTransition,
+          autoHide,
+          handleResize,
+          classes,
+          result,
+          onHide: hide,
+          onResize,
+        }, {
+          default: () => this.$slots.popper?.({
+            shown: isShown,
+            hide,
+          }),
+        }),
+      ],
+    })
+  },
 })
-</script>

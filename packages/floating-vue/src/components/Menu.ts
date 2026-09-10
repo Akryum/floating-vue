@@ -1,4 +1,4 @@
-import PopperWrapper from './PopperWrapper.vue'
+import PopperWrapper from './internals/PopperWrapper'
 
 const Component = ({
   ...PopperWrapper,
