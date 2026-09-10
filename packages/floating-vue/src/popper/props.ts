@@ -9,7 +9,7 @@ function defaultPropFactory (prop: string) {
   }
 }
 
-export type PopperShownEvent = Event
+export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 
 export const popperProps = {
   theme: {
@@ -78,32 +78,32 @@ export const popperProps = {
   },
 
   triggers: {
-    type: Array as PropType<string[]>,
+    type: Array as PropType<TriggerEvent[]>,
     default: defaultPropFactory('triggers'),
   },
 
   showTriggers: {
-    type: [Array, Function] as PropType<string[] | ((triggers: string[]) => string[])>,
+    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
     default: defaultPropFactory('showTriggers'),
   },
 
   hideTriggers: {
-    type: [Array, Function] as PropType<string[] | ((triggers: string[]) => string[])>,
+    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
     default: defaultPropFactory('hideTriggers'),
   },
 
   popperTriggers: {
-    type: Array as PropType<string[]>,
+    type: Array as PropType<TriggerEvent[]>,
     default: defaultPropFactory('popperTriggers'),
   },
 
   popperShowTriggers: {
-    type: [Array, Function] as PropType<string[] | ((triggers: string[]) => string[])>,
+    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
     default: defaultPropFactory('popperShowTriggers'),
   },
 
   popperHideTriggers: {
-    type: [Array, Function] as PropType<string[] | ((triggers: string[]) => string[])>,
+    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
     default: defaultPropFactory('popperHideTriggers'),
   },
 

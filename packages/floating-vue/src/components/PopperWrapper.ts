@@ -1,12 +1,31 @@
 import { computed, defineComponent, getCurrentInstance, h } from 'vue'
-import type { ComponentPublicInstance, PropType } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
 import { PopperRoot } from './internals/PopperRoot'
+import { popperEmits, popperProps } from '../popper/props'
 import type { PopperExposed } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getThemeClasses } from '../config'
-import type { Placement } from '../util/popper.js'
 
-export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
+export type { TriggerEvent } from '../popper/props'
+
+// `theme` gets its own default below; target/popper nodes are provided by the wrapper itself
+type OwnedProp = 'theme' | 'targetNodes' | 'popperNode'
+const ownedProps: OwnedProp[] = ['theme', 'targetNodes', 'popperNode']
+
+// Same props as the popper, but without defaults so the theme config applies
+// at the popper level, and without validators (they would run on `undefined`).
+type InheritedPopperProps = {
+  [K in Exclude<keyof typeof popperProps, OwnedProp>]: {
+    type: (typeof popperProps)[K] extends { type: infer T } ? T : null
+    default: undefined
+  }
+}
+
+const inheritedPopperProps = Object.fromEntries(
+  Object.entries(popperProps)
+    .filter(([key]) => !ownedProps.includes(key as OwnedProp))
+    .map(([key, prop]) => [key, { type: (prop as { type?: unknown }).type ?? null, default: undefined }]),
+) as InheritedPopperProps // Object.fromEntries erases per-key types
 
 const PopperWrapper = /** @__PURE__ */ defineComponent({
   name: 'VPopperWrapper',
@@ -17,213 +36,10 @@ const PopperWrapper = /** @__PURE__ */ defineComponent({
       default: null,
     },
 
-    referenceNode: {
-      type: Function as PropType<() => Element>,
-      default: null,
-    },
-
-    shown: {
-      type: Boolean,
-      default: false,
-    },
-
-    showGroup: {
-      type: String,
-      default: null,
-    },
-
-    ariaId: {
-      default: null,
-    },
-
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    positioningDisabled: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    placement: {
-      type: String as PropType<Placement>,
-      default: undefined,
-    },
-
-    delay: {
-      type: [String, Number, Object] as PropType<string | number | { show: number, hide: number }>,
-      default: undefined,
-    },
-
-    distance: {
-      type: [Number, String],
-      default: undefined,
-    },
-
-    skidding: {
-      type: [Number, String],
-      default: undefined,
-    },
-
-    triggers: {
-      type: Array as PropType<Array<TriggerEvent>>,
-      default: undefined,
-    },
-
-    showTriggers: {
-      type: [Array, Function] as PropType<Array<TriggerEvent> | ((triggers: Array<TriggerEvent>) => Array<TriggerEvent>)>,
-      default: undefined,
-    },
-
-    hideTriggers: {
-      type: [Array, Function] as PropType<Array<TriggerEvent> | ((triggers: Array<TriggerEvent>) => Array<TriggerEvent>)>,
-      default: undefined,
-    },
-
-    popperTriggers: {
-      type: Array as PropType<Array<TriggerEvent>>,
-      default: undefined,
-    },
-
-    popperShowTriggers: {
-      type: [Array, Function] as PropType<Array<TriggerEvent> | ((triggers: Array<TriggerEvent>) => Array<TriggerEvent>)>,
-      default: undefined,
-    },
-
-    popperHideTriggers: {
-      type: [Array, Function] as PropType<Array<TriggerEvent> | ((triggers: Array<TriggerEvent>) => Array<TriggerEvent>)>,
-      default: undefined,
-    },
-
-    container: {
-      type: [String, Object, Boolean] as PropType<string | HTMLElement | boolean>,
-      default: undefined,
-    },
-
-    boundary: {
-      type: [String, Object] as PropType<string | Element>,
-      default: undefined,
-    },
-
-    strategy: {
-      type: String as PropType<'absolute' | 'fixed'>,
-      default: undefined,
-    },
-
-    autoHide: {
-      type: [Boolean, Function] as PropType<boolean | ((event: Event) => boolean)>,
-      default: undefined,
-    },
-
-    handleResize: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    instantMove: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    eagerMount: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    popperClass: {
-      type: [String, Array, Object],
-      default: undefined,
-    },
-
-    computeTransformOrigin: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    /**
-     * @deprecated
-     */
-    autoMinSize: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    autoSize: {
-      type: [Boolean, String] as PropType<boolean | 'min' | 'max'>,
-      default: undefined,
-    },
-
-    /**
-     * @deprecated
-     */
-    autoMaxSize: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    autoBoundaryMaxSize: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    preventOverflow: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    overflowPadding: {
-      type: [Number, String],
-      default: undefined,
-    },
-
-    arrowPadding: {
-      type: [Number, String],
-      default: undefined,
-    },
-
-    arrowOverflow: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    flip: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    shift: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    shiftCrossAxis: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    noAutoFocus: {
-      type: Boolean,
-      default: undefined,
-    },
-
-    disposeTimeout: {
-      type: Number,
-      default: undefined,
-    },
+    ...inheritedPopperProps,
   },
 
-  emits: {
-    show: () => true,
-    hide: () => true,
-    'update:shown': (_shown: boolean) => true,
-    'apply-show': () => true,
-    'apply-hide': () => true,
-    'close-group': () => true,
-    'close-directive': () => true,
-    'auto-hide': () => true,
-    resize: () => true,
-  },
+  emits: popperEmits,
 
   setup (props, { emit, slots, expose }) {
     const instance = getCurrentInstance()!
