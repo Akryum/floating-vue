@@ -1,23 +1,15 @@
 import { defineComponent } from 'vue'
 import {
-  autoPlacement,
   computePosition,
-  offset,
-  shift,
-  flip,
-  arrow,
   getOverflowAncestors,
-  size,
 } from '@floating-ui/dom'
 import { isIOS } from '../util/env'
-import type { Placement } from '../util/popper'
-import { placements } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { nextFrame } from '../util/frame'
-import { getDefaultConfig, getAllParentThemes, config } from '../config'
-
-export type ComputePositionConfig = Parameters<typeof computePosition>[2]
+import { getAllParentThemes, config } from '../config'
+import { popperProps, popperEmits } from '../popper/props'
+import { buildPositionOptions } from '../popper/position'
 
 interface PopperEvent extends Event {
   usedByTooltip?: boolean
@@ -37,17 +29,6 @@ function getShownPoppersByTheme (theme: string) {
   return list
 }
 
-let Element: any = function () {}
-if (typeof window !== 'undefined') {
-  Element = window.Element
-}
-
-function defaultPropFactory (prop: string) {
-  return function (props) {
-    return getDefaultConfig(props.theme, prop)
-  }
-}
-
 const PROVIDE_KEY = '__floating-vue__popper'
 
 export const createPopper = () => defineComponent({
@@ -65,231 +46,9 @@ export const createPopper = () => defineComponent({
     [PROVIDE_KEY]: { default: null },
   },
 
-  props: {
-    theme: {
-      type: String,
-      required: true,
-    },
+  props: popperProps,
 
-    targetNodes: {
-      type: Function,
-      required: true,
-    },
-
-    referenceNode: {
-      type: Function,
-      default: null,
-    },
-
-    popperNode: {
-      type: Function,
-      required: true,
-    },
-
-    shown: {
-      type: Boolean,
-      default: false,
-    },
-
-    showGroup: {
-      type: String,
-      default: null,
-    },
-
-    ariaId: {
-      default: null,
-    },
-
-    disabled: {
-      type: Boolean,
-      default: defaultPropFactory('disabled'),
-    },
-
-    positioningDisabled: {
-      type: Boolean,
-      default: defaultPropFactory('positioningDisabled'),
-    },
-
-    placement: {
-      type: String,
-      default: defaultPropFactory('placement'),
-      validator: (value: Placement) => placements.includes(value),
-    },
-
-    delay: {
-      type: [String, Number, Object],
-      default: defaultPropFactory('delay'),
-    },
-
-    distance: {
-      type: [Number, String],
-      default: defaultPropFactory('distance'),
-    },
-
-    skidding: {
-      type: [Number, String],
-      default: defaultPropFactory('skidding'),
-    },
-
-    triggers: {
-      type: Array,
-      default: defaultPropFactory('triggers'),
-    },
-
-    showTriggers: {
-      type: [Array, Function],
-      default: defaultPropFactory('showTriggers'),
-    },
-
-    hideTriggers: {
-      type: [Array, Function],
-      default: defaultPropFactory('hideTriggers'),
-    },
-
-    popperTriggers: {
-      type: Array,
-      default: defaultPropFactory('popperTriggers'),
-    },
-
-    popperShowTriggers: {
-      type: [Array, Function],
-      default: defaultPropFactory('popperShowTriggers'),
-    },
-
-    popperHideTriggers: {
-      type: [Array, Function],
-      default: defaultPropFactory('popperHideTriggers'),
-    },
-
-    container: {
-      type: [String, Object, Element, Boolean],
-      default: defaultPropFactory('container'),
-    },
-
-    boundary: {
-      type: [String, Element],
-      default: defaultPropFactory('boundary'),
-    },
-
-    strategy: {
-      type: String,
-      validator: (value: string) => ['absolute', 'fixed'].includes(value),
-      default: defaultPropFactory('strategy'),
-    },
-
-    autoHide: {
-      type: [Boolean, Function],
-      default: defaultPropFactory('autoHide'),
-    },
-
-    handleResize: {
-      type: Boolean,
-      default: defaultPropFactory('handleResize'),
-    },
-
-    instantMove: {
-      type: Boolean,
-      default: defaultPropFactory('instantMove'),
-    },
-
-    eagerMount: {
-      type: Boolean,
-      default: defaultPropFactory('eagerMount'),
-    },
-
-    popperClass: {
-      type: [String, Array, Object],
-      default: defaultPropFactory('popperClass'),
-    },
-
-    computeTransformOrigin: {
-      type: Boolean,
-      default: defaultPropFactory('computeTransformOrigin'),
-    },
-
-    /**
-     * @deprecated
-     */
-    autoMinSize: {
-      type: Boolean,
-      default: defaultPropFactory('autoMinSize'),
-    },
-
-    autoSize: {
-      type: [Boolean, String],
-      default: defaultPropFactory('autoSize'),
-    },
-
-    /**
-     * @deprecated
-     */
-    autoMaxSize: {
-      type: Boolean,
-      default: defaultPropFactory('autoMaxSize'),
-    },
-
-    autoBoundaryMaxSize: {
-      type: Boolean,
-      default: defaultPropFactory('autoBoundaryMaxSize'),
-    },
-
-    preventOverflow: {
-      type: Boolean,
-      default: defaultPropFactory('preventOverflow'),
-    },
-
-    overflowPadding: {
-      type: [Number, String],
-      default: defaultPropFactory('overflowPadding'),
-    },
-
-    arrowPadding: {
-      type: [Number, String],
-      default: defaultPropFactory('arrowPadding'),
-    },
-
-    arrowOverflow: {
-      type: Boolean,
-      default: defaultPropFactory('arrowOverflow'),
-    },
-
-    flip: {
-      type: Boolean,
-      default: defaultPropFactory('flip'),
-    },
-
-    shift: {
-      type: Boolean,
-      default: defaultPropFactory('shift'),
-    },
-
-    shiftCrossAxis: {
-      type: Boolean,
-      default: defaultPropFactory('shiftCrossAxis'),
-    },
-
-    noAutoFocus: {
-      type: Boolean,
-      default: defaultPropFactory('noAutoFocus'),
-    },
-
-    disposeTimeout: {
-      type: Number,
-      default: defaultPropFactory('disposeTimeout'),
-    },
-  },
-
-  emits: {
-    show: () => true,
-    hide: () => true,
-    'update:shown': (_shown: boolean) => true,
-    'apply-show': () => true,
-    'apply-hide': () => true,
-    'close-group': () => true,
-    'close-directive': () => true,
-    'auto-hide': () => true,
-    resize: () => true,
-  },
+  emits: popperEmits,
 
   data () {
     return {
@@ -541,122 +300,23 @@ export const createPopper = () => defineComponent({
     async $_computePosition () {
       if (this.isDisposed || this.positioningDisabled) { return }
 
-      const options: ComputePositionConfig = {
+      const options = buildPositionOptions({
         strategy: this.strategy,
-        middleware: [],
-      }
-
-      // Offset
-      if (this.distance || this.skidding) {
-        options.middleware.push(offset({
-          mainAxis: this.distance,
-          crossAxis: this.skidding,
-        }))
-      }
-
-      // Placement
-      const isPlacementAuto = this.placement.startsWith('auto')
-      if (isPlacementAuto) {
-        options.middleware.push(autoPlacement({
-          alignment: this.placement.split('-')[1] ?? '',
-        }))
-      } else {
-        options.placement = this.placement
-      }
-
-      if (this.preventOverflow) {
-        // Shift
-        if (this.shift) {
-          options.middleware.push(shift({
-            padding: this.overflowPadding,
-            boundary: this.boundary,
-            crossAxis: this.shiftCrossAxis,
-          }))
-        }
-
-        // Flip
-        if (!isPlacementAuto && this.flip) {
-          options.middleware.push(flip({
-            padding: this.overflowPadding,
-            boundary: this.boundary,
-          }))
-        }
-      }
-
-      // Arrow
-      options.middleware.push(arrow({
-        element: this.$_arrowNode,
-        padding: this.arrowPadding,
-      }))
-
-      // Arrow overflow
-      if (this.arrowOverflow) {
-        options.middleware.push({
-          name: 'arrowOverflow',
-          fn: ({ placement, rects, middlewareData }) => {
-            let overflow: boolean
-            const { centerOffset } = middlewareData.arrow
-            if (placement.startsWith('top') || placement.startsWith('bottom')) {
-              overflow = Math.abs(centerOffset) > rects.reference.width / 2
-            } else {
-              overflow = Math.abs(centerOffset) > rects.reference.height / 2
-            }
-            return {
-              data: {
-                overflow,
-              },
-            }
-          },
-        })
-      }
-
-      // Auto min size for the popper inner
-      if (this.autoMinSize || this.autoSize) {
-        const autoSize = this.autoSize ? this.autoSize : this.autoMinSize ? 'min' : null
-        options.middleware.push({
-          name: 'autoSize',
-          fn: ({ rects, placement, middlewareData }) => {
-            if (middlewareData.autoSize?.skip) {
-              return {}
-            }
-            let width: number
-            let height: number
-            if (placement.startsWith('top') || placement.startsWith('bottom')) {
-              width = rects.reference.width
-            } else {
-              height = rects.reference.height
-            }
-            // Apply and re-compute
-            this.$_innerNode.style[autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'] = width != null ? `${width}px` : null
-            this.$_innerNode.style[autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'] = height != null ? `${height}px` : null
-            return {
-              data: {
-                skip: true,
-              },
-              reset: {
-                rects: true,
-              },
-            }
-          },
-        })
-      }
-
-      // Auto max size for the popper inner
-      if (this.autoMaxSize || this.autoBoundaryMaxSize) {
-        // Reset size to bestFit strategy can apply
-        this.$_innerNode.style.maxWidth = null
-        this.$_innerNode.style.maxHeight = null
-
-        options.middleware.push(size({
-          boundary: this.boundary,
-          padding: this.overflowPadding,
-          apply: ({ availableWidth, availableHeight }) => {
-            // Apply and re-compute
-            this.$_innerNode.style.maxWidth = availableWidth != null ? `${availableWidth}px` : null
-            this.$_innerNode.style.maxHeight = availableHeight != null ? `${availableHeight}px` : null
-          },
-        }))
-      }
+        placement: this.placement,
+        // numeric strings pass through like before the extraction
+        distance: this.distance as number,
+        skidding: this.skidding as number,
+        boundary: this.boundary as Element,
+        overflowPadding: this.overflowPadding as number,
+        arrowPadding: this.arrowPadding as number,
+        preventOverflow: this.preventOverflow,
+        shift: this.shift,
+        shiftCrossAxis: this.shiftCrossAxis,
+        flip: this.flip,
+        arrowOverflow: this.arrowOverflow,
+        autoSize: this.autoSize ? this.autoSize : this.autoMinSize ? 'min' : false,
+        autoBoundaryMaxSize: this.autoMaxSize || this.autoBoundaryMaxSize,
+      }, this.$_arrowNode, this.$_innerNode)
 
       const data = await computePosition(this.$_referenceNode, this.$_popperNode, options)
 
@@ -1075,7 +735,7 @@ function handleGlobalPointerDown (event: PopperEvent, touch: boolean) {
     for (let i = 0; i < shownPoppers.length; i++) {
       const popper = shownPoppers[i]
       try {
-        popper.mouseDownContains = popper.popperNode().contains(event.target)
+        popper.mouseDownContains = popper.popperNode().contains(event.target as Node)
       } catch {
         // noop
       }
@@ -1097,10 +757,10 @@ function handleGlobalClose (event: PopperEvent, touch: boolean) {
     try {
       const childrenContains = Array.from(popper.shownChildren).some(id => {
         const child = shownPoppers.find(p => p.randomId === id)
-        return child && child.popperNode().contains(event.target)
+        return child && child.popperNode().contains(event.target as Node)
       })
 
-      const contains = popper.containsGlobalTarget = popper.mouseDownContains || popper.popperNode().contains(event.target) || childrenContains
+      const contains = popper.containsGlobalTarget = popper.mouseDownContains || popper.popperNode().contains(event.target as Node) || childrenContains
       popper.pendingHide = false
 
       // Delay so that close directive has time to set values (closeAllPopover, closePopover)
