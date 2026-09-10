@@ -2,6 +2,7 @@
   <div
     :id="popperId"
     ref="popover"
+    data-allow-mismatch
     class="v-popper__popper"
     :class="[
       themeClass,
