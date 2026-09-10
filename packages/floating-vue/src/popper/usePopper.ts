@@ -30,6 +30,9 @@ export type PopperEmit = SetupContext<typeof popperEmits>['emit']
 /** Methods exposed by components built on `usePopper` (via `expose`). */
 export type PopperExposed = Pick<ReturnType<typeof usePopper>, 'show' | 'hide' | 'dispose' | 'onResize'>
 
+/** Data passed to the default slot of components built on `usePopper`. */
+export type PopperSlotData = ReturnType<typeof usePopper>['slotData']['value']
+
 const PROVIDE_KEY = '__floating-vue__popper'
 
 export function usePopper (props: PopperProps, emit: PopperEmit) {
@@ -89,7 +92,8 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   let context: PopperContext | null = null
   let trackingMouse = false
 
-  const vm = getCurrentInstance()
+  // usePopper only runs inside a component setup, so the instance exists.
+  const vm = getCurrentInstance()!
   const attrs = useAttrs()
 
   const parentPopper = inject<{ parentPopper: PopperController } | null>(PROVIDE_KEY, null)?.parentPopper ?? null
@@ -218,11 +222,12 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     preventShow = false
 
     // Nodes
-    referenceNode = props.referenceNode?.() ?? vm.proxy.$el
+    referenceNode = props.referenceNode?.() ?? vm.proxy!.$el
     targetNodes = props.targetNodes().filter(e => e.nodeType === e.ELEMENT_NODE)
     popperNode = props.popperNode()
-    innerNode = popperNode.querySelector('.v-popper__inner')
-    arrowNode = popperNode.querySelector('.v-popper__arrow-container')
+    // These nodes are always present in the popper content template.
+    innerNode = popperNode.querySelector<HTMLElement>('.v-popper__inner')!
+    arrowNode = popperNode.querySelector<HTMLElement>('.v-popper__arrow-container')!
 
     swapTargetAttrs('title', 'data-original-title')
 
@@ -383,7 +388,8 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     // Advanced animations
     if (props.computeTransformOrigin) {
       const bounds = referenceNode.getBoundingClientRect()
-      const popperWrapper = popperNode.querySelector<HTMLElement>('.v-popper__wrapper')
+      // the wrapper is always present in the popper content template
+      const popperWrapper = popperNode.querySelector<HTMLElement>('.v-popper__wrapper')!
       // the wrapper's parent is the popper element
       const parentBounds = (popperWrapper.parentNode as Element).getBoundingClientRect()
       const x = (bounds.x + bounds.width / 2) - (parentBounds.left + popperWrapper.offsetLeft)

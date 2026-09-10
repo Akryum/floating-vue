@@ -11,7 +11,7 @@ import {
 } from '@floating-ui/dom'
 import type { Placement } from '../util/popper'
 
-export type ComputePositionConfig = Parameters<typeof computePosition>[2]
+export type ComputePositionConfig = NonNullable<Parameters<typeof computePosition>[2]>
 
 export interface PositionSettings {
   strategy: 'absolute' | 'fixed'
@@ -31,15 +31,18 @@ export interface PositionSettings {
   autoBoundaryMaxSize: boolean
 }
 
-export function buildPositionOptions (settings: PositionSettings, arrowNode: HTMLElement, innerNode: HTMLElement): ComputePositionConfig {
-  const options: ComputePositionConfig = {
+type Middleware = NonNullable<ComputePositionConfig['middleware']>
+
+export function buildPositionOptions (settings: PositionSettings, arrowNode: HTMLElement, innerNode: HTMLElement): ComputePositionConfig & { middleware: Middleware } {
+  const middleware: Middleware = []
+  const options: ComputePositionConfig & { middleware: Middleware } = {
     strategy: settings.strategy,
-    middleware: [],
+    middleware,
   }
 
   // Offset
   if (settings.distance || settings.skidding) {
-    options.middleware.push(offset({
+    middleware.push(offset({
       mainAxis: settings.distance,
       crossAxis: settings.skidding,
     }))
@@ -48,7 +51,7 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
   // Placement
   const isPlacementAuto = settings.placement.startsWith('auto')
   if (isPlacementAuto) {
-    options.middleware.push(autoPlacement({
+    middleware.push(autoPlacement({
       // historical passthrough: '' means no alignment at runtime
       alignment: (settings.placement.split('-')[1] ?? '') as 'start' | 'end',
     }))
@@ -60,7 +63,7 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
   if (settings.preventOverflow) {
     // Shift
     if (settings.shift) {
-      options.middleware.push(shift({
+      middleware.push(shift({
         padding: settings.overflowPadding,
         boundary: settings.boundary,
         crossAxis: settings.shiftCrossAxis,
@@ -69,7 +72,7 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
 
     // Flip
     if (!isPlacementAuto && settings.flip) {
-      options.middleware.push(flip({
+      middleware.push(flip({
         padding: settings.overflowPadding,
         boundary: settings.boundary,
       }))
@@ -77,18 +80,18 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
   }
 
   // Arrow
-  options.middleware.push(arrow({
+  middleware.push(arrow({
     element: arrowNode,
     padding: settings.arrowPadding,
   }))
 
   // Arrow overflow
   if (settings.arrowOverflow) {
-    options.middleware.push({
+    middleware.push({
       name: 'arrowOverflow',
       fn: ({ placement, rects, middlewareData }) => {
         let overflow: boolean
-        const { centerOffset } = middlewareData.arrow
+        const centerOffset = middlewareData.arrow?.centerOffset ?? 0
         if (placement.startsWith('top') || placement.startsWith('bottom')) {
           overflow = Math.abs(centerOffset) > rects.reference.width / 2
         } else {
@@ -106,7 +109,7 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
   // Auto min size for the popper inner
   if (settings.autoSize) {
     const autoSize = settings.autoSize
-    options.middleware.push({
+    middleware.push({
       name: 'autoSize',
       fn: ({ rects, placement, middlewareData }) => {
         if (middlewareData.autoSize?.skip) {
@@ -140,7 +143,7 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
     innerNode.style.maxWidth = ''
     innerNode.style.maxHeight = ''
 
-    options.middleware.push(size({
+    middleware.push(size({
       boundary: settings.boundary,
       padding: settings.overflowPadding,
       apply: ({ availableWidth, availableHeight }) => {

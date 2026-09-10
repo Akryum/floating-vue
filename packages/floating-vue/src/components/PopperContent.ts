@@ -1,19 +1,37 @@
 import { computed, defineComponent, h, onBeforeUnmount, onMounted, ref } from 'vue'
+import type { PropType } from 'vue'
 import { getThemeClasses } from '../config'
+
+export interface PopperContentClasses {
+  showFrom: boolean
+  showTo: boolean
+  hideFrom: boolean
+  hideTo: boolean
+  popperClass?: string | unknown[] | Record<string, boolean>
+}
+
+export interface PopperContentResult {
+  x: number
+  y: number
+  placement: string
+  strategy: 'absolute' | 'fixed'
+  arrow: { x: number, y: number, centerOffset: number, overflow?: boolean }
+  transformOrigin: string | null
+}
 
 export const PopperContent = /** @__PURE__ */ defineComponent({
   name: 'VPopperContent',
 
   props: {
     popperId: String,
-    theme: String,
+    theme: { type: String, default: '' },
     shown: Boolean,
     mounted: Boolean,
     skipTransition: Boolean,
     autoHide: Boolean,
     handleResize: Boolean,
-    classes: Object,
-    result: Object,
+    classes: { type: Object as PropType<PopperContentClasses>, required: true },
+    result: Object as PropType<PopperContentResult | null>,
   },
 
   emits: [
@@ -39,7 +57,7 @@ export const PopperContent = /** @__PURE__ */ defineComponent({
       resizeObserver?.disconnect()
     })
 
-    function toPx (value) {
+    function toPx (value: number | null | undefined) {
       if (value != null && !Number.isNaN(value)) {
         return `${value}px`
       }

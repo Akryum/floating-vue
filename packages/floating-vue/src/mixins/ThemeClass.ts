@@ -3,7 +3,7 @@ import { getThemeClasses } from '../config'
 // @vue/component
 export const ThemeClass = (prop = 'theme') => ({
   computed: {
-    themeClass () {
+    themeClass (this: Record<string, string>): string[] {
       return getThemeClasses(this[prop])
     },
   },

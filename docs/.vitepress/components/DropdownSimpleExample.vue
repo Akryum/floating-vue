@@ -1,5 +1,5 @@
 <script setup lang="ts">
-function log (...args) {
+function log (...args: unknown[]) {
   // eslint-disable-next-line no-console -- intentional demo output
   console.log(...args)
 }
