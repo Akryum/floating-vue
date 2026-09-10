@@ -11,7 +11,7 @@ export function install (Vue, options = {}) {
   install.installed = true
 
   const finalOptions = {}
-  merge(finalOptions, defaultOptions, options)
+  merge(finalOptions, defaultOptions(), options)
 
   plugin.options = finalOptions
   vtooltip.options = finalOptions
