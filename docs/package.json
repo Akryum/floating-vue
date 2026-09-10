@@ -23,7 +23,7 @@
     "floating-vue": "workspace:*"
   },
   "devDependencies": {
-    "@floating-ui/dom": "~1.1.1",
+    "@floating-ui/dom": "^1.8.0",
     "@iconify-json/lucide": "^1.2.130",
     "@vue/shared": "^3.5.42",
     "autoprefixer": "^10.5.5",
