@@ -60,14 +60,12 @@
   },
   "devDependencies": {
     "@nuxt/kit": "^3.21.11",
-    "@vitejs/plugin-vue": "^4.6.2",
     "fs-extra": "^11.4.0",
     "jsdom": "^25.0.1",
     "vite": "^5.4.21",
     "vitest": "^3.2.7",
     "vue": "^3.5.42",
-    "vue-tsc": "^3.3.11",
-    "vue-typegen": "^0.2.0"
+    "vue-tsc": "^3.3.11"
   },
   "browserslist": [
     "> 1%",

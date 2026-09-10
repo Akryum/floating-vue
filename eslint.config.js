@@ -47,13 +47,4 @@ export default antfu(
       'vue/require-prop-types': 'off',
     },
   },
-  {
-    files: ['packages/floating-vue/src/components/**/*.vue'],
-    rules: {
-      // Template refs are consumed via `this.$refs`/`extends` from a different file
-      'vue/no-unused-refs': 'off',
-      // Public event API is intentionally kebab-case (e.g. `apply-show`, `close-group`)
-      'vue/custom-event-name-casing': 'off',
-    },
-  },
 )

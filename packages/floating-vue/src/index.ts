@@ -3,51 +3,42 @@ import type { FloatingVueConfig } from './config'
 import { config } from './config'
 import './style.css'
 // Components
-import PrivateDropdown from './components/Dropdown'
-import PrivateMenu from './components/Menu'
-import PrivatePopper from './components/Popper'
-import PrivatePopperContent from './components/PopperContent.vue'
-import PrivatePopperMethods from './components/PopperMethods'
-import PrivatePopperWrapper from './components/PopperWrapper.vue'
-import PrivateThemeClass from './components/ThemeClass'
-import PrivateTooltip from './components/Tooltip'
-import PrivateTooltipDirective from './components/TooltipDirective.vue'
+import Dropdown from './components/Dropdown'
+import Menu from './components/Menu'
+import Tooltip from './components/Tooltip'
 // Directives
-import PrivateVTooltip from './directives/v-tooltip'
-import PrivateVClosePopper from './directives/v-close-popper'
+import vTooltip from './directives/v-tooltip'
+import vClosePopper from './directives/v-close-popper'
 
 /* Exports */
 
 export const options = config
-// Directive
+// Directives
+export { vTooltip, vClosePopper } // For <script setup>
 /**
  * @deprecated Import `vTooltip` instead.
  */
-export const VTooltip = PrivateVTooltip
-export const vTooltip = PrivateVTooltip // For <script setup>
-export { createTooltip, destroyTooltip } from './directives/v-tooltip'
+export const VTooltip = vTooltip
 /**
  * @deprecated Import `vClosePopper` instead.
  */
-export const VClosePopper = PrivateVClosePopper
-export const vClosePopper = PrivateVClosePopper // For <script setup>
+export const VClosePopper = vClosePopper
+export { createTooltip, destroyTooltip } from './directives/v-tooltip'
 // Components
-export const Dropdown = PrivateDropdown
-export const Menu = PrivateMenu
-export const Popper = PrivatePopper
-export const PopperContent = PrivatePopperContent
-export const PopperMethods = PrivatePopperMethods
-export const PopperWrapper = PrivatePopperWrapper
-export const ThemeClass = PrivateThemeClass
-export const Tooltip = PrivateTooltip
-export const TooltipDirective = PrivateTooltipDirective
+export { Dropdown, Menu, Tooltip }
+export { default as Popper } from './factories/Popper'
+export { default as PopperContent } from './components/PopperContent'
+export { default as PopperMethods } from './mixins/PopperMethods'
+export { default as PopperWrapper } from './components/PopperWrapper'
+export { default as ThemeClass } from './mixins/ThemeClass'
+export { default as TooltipDirective } from './components/TooltipDirective'
 // Utils
-export { hideAllPoppers, recomputeAllPoppers } from './components/Popper'
+export { hideAllPoppers, recomputeAllPoppers } from './factories/Popper'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'
 // Types
-export type { TriggerEvent } from './components/PopperWrapper.vue'
+export type { TriggerEvent } from './components/PopperWrapper'
 
 /* Vue plugin */
 
@@ -57,13 +48,13 @@ export function install (app, options: FloatingVueConfig = {}) {
 
   assign(config, options)
 
-  // Directive
-  app.directive('tooltip', PrivateVTooltip)
-  app.directive('close-popper', PrivateVClosePopper)
+  // Directives
+  app.directive('tooltip', vTooltip)
+  app.directive('close-popper', vClosePopper)
   // Components
-  app.component('VTooltip', PrivateTooltip)
-  app.component('VDropdown', PrivateDropdown)
-  app.component('VMenu', PrivateMenu)
+  for (const component of [Tooltip, Dropdown, Menu]) {
+    app.component(component.name, component)
+  }
 }
 
 const plugin = {

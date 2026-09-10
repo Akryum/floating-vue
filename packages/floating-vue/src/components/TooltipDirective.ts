@@ -1,68 +1,13 @@
-<template>
-  <Popper
-    ref="popper"
-    v-slot="{
-      popperId,
-      isShown,
-      shouldMountContent,
-      skipTransition,
-      autoHide,
-      hide,
-      handleResize,
-      onResize,
-      classes,
-      result,
-    }"
-    v-bind="$attrs"
-    :theme="theme"
-    :target-nodes="targetNodes"
-    :popper-node="() => ($refs as any).popperContent.$el"
-    @apply-show="onShow"
-    @apply-hide="onHide"
-  >
-    <PopperContent
-      ref="popperContent"
-      :class="{
-        'v-popper--tooltip-loading': loading,
-      }"
-      :popper-id="popperId"
-      :theme="theme"
-      :shown="isShown"
-      :mounted="shouldMountContent"
-      :skip-transition="skipTransition"
-      :auto-hide="autoHide"
-      :handle-resize="handleResize"
-      :classes="classes"
-      :result="result"
-      @hide="hide"
-      @resize="onResize"
-    >
-      <div
-        v-if="html"
-        v-html="finalContent"
-      />
-      <div
-        v-else
-        v-text="finalContent"
-      />
-    </PopperContent>
-  </Popper>
-</template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import Popper from './Popper'
-import PopperContent from './PopperContent.vue'
+import { defineComponent, h } from 'vue'
+import createPopper from '../factories/Popper'
+import PopperContent from './PopperContent'
+import PopperMethods from '../mixins/PopperMethods'
 import { getDefaultConfig } from '../config'
-import PopperMethods from './PopperMethods'
+
+const Popper = createPopper()
 
 export default defineComponent({
   name: 'VTooltipDirective',
-
-  components: {
-    Popper: Popper(),
-    PopperContent,
-  },
 
   mixins: [
     PopperMethods,
@@ -169,5 +114,49 @@ export default defineComponent({
       this.$_isShown = false
     },
   },
+
+  render () {
+    return h(Popper, {
+      ref: 'popper',
+      ...this.$attrs,
+      theme: this.theme,
+      targetNodes: this.targetNodes,
+      popperNode: () => (this.$refs as any).popperContent.$el,
+      onApplyShow: this.onShow,
+      onApplyHide: this.onHide,
+    }, {
+      default: ({
+        popperId,
+        isShown,
+        shouldMountContent,
+        skipTransition,
+        autoHide,
+        hide,
+        handleResize,
+        onResize,
+        classes,
+        result,
+      }) => h(PopperContent, {
+        ref: 'popperContent',
+        class: {
+          'v-popper--tooltip-loading': this.loading,
+        },
+        popperId,
+        theme: this.theme,
+        shown: isShown,
+        mounted: shouldMountContent,
+        skipTransition,
+        autoHide,
+        handleResize,
+        classes,
+        result,
+        onHide: hide,
+        onResize,
+      }, {
+        default: () => this.html
+          ? h('div', { innerHTML: this.finalContent })
+          : h('div', { textContent: this.finalContent }),
+      }),
+    })
+  },
 })
-</script>

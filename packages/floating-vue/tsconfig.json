@@ -16,8 +16,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.vue"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
