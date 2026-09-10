@@ -59,6 +59,10 @@ export default defineConfig({
         text: 'Migration',
         items: [
           {
+            text: 'From floating-vue 5',
+            link: '/migration/migration-from-v5',
+          },
+          {
             text: 'From v-tooltip 2',
             link: '/migration/migration-from-v2',
           },
@@ -102,6 +106,10 @@ export default defineConfig({
         {
           text: 'Migration',
           items: [
+            {
+              text: 'From floating-vue 5',
+              link: '/migration/migration-from-v5',
+            },
             {
               text: 'From v-tooltip 2',
               link: '/migration/migration-from-v2',

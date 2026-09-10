@@ -20,7 +20,8 @@ Easy tooltips, dropdowns, menus... with <a href="https://github.com/floating-ui/
 
 | floating-vue | NPM Tag | Vue compatibility |
 | ------------ | ------- | ----------------- |
-| 5.x          | latest  | 3.x               |
+| 6.x          | latest  | 3.x               |
+| 5.x          | v5      | 3.x               |
 | 1.x          | vue2    | 2.x               |
 
 ## Quick start

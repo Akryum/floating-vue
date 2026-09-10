@@ -4,7 +4,8 @@
 
 | floating-vue | NPM Tag | Vue compatibility |
 | ------------ | ------- | ----------------- |
-| 5.x          | latest  | 3.x               |
+| 6.x          | latest  | 3.x               |
+| 5.x          | v5      | 3.x               |
 | 1.x          | vue2    | 2.x               |
 
 ## Node
@@ -130,7 +131,7 @@ options.presets.myPreset = {
 
 ## Vue 2
 
-floating-vue v5 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
+floating-vue v6 is compatible with Vue 3. For Vue 2, use floating-vue v1 instead:
 
 
 ::: code-group

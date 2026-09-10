@@ -12,7 +12,7 @@ Since the package has grown much past the `v-tooltip` directive, it has been ren
 
 | v-tooltip  | floating-vue | NPM Tag | Vue compatibility |
 | ---------- | ------------ | ------- | ----------------- |
-| 4.x-beta.x | 5.x          | latest  | 3.x               |
+| 4.x-beta.x | 5.x          | v5      | 3.x               |
 | 3.x-beta.x | 1.x          | vue2    | 2.x               |
 
 ### Popperjs
@@ -49,10 +49,10 @@ After:
 
 ### CSS
 
-The default `padding` for the `dropdown` preset has been removed. You can add your own padding like this:
+The default `padding` for the `dropdown` theme has been removed. You can add your own padding like this:
 
 ```css
-.v-popper--preset-dropdown .v-popper__inner {
+.v-popper--theme-dropdown .v-popper__inner {
   padding: 6px;
 }
 ```
@@ -122,58 +122,6 @@ New prop:
 <!-- After -->
 <VDropdown :arrow-padding="12" />
 ```
-
-### `themes` renamed to `presets`
-
-The global config key is now `presets`, and the CSS class it produces went from `v-popper--theme-{name}` to `v-popper--preset-{name}`.
-
-```js
-// Before
-app.use(FloatingVue, { themes: { 'info-tooltip': { $extend: 'tooltip' } } })
-// After
-app.use(FloatingVue, { presets: { 'info-tooltip': { $extend: 'tooltip' } } })
-```
-
-```css
-/* Before */
-.v-popper--theme-info-tooltip { /* ... */ }
-/* After */
-.v-popper--preset-info-tooltip { /* ... */ }
-```
-
-Both old spellings still work and are deprecated:
-
-- a `themes` option, and `options.themes` at runtime, read and write the same object as `presets`;
-- every popper still carries the matching `v-popper--theme-{name}` class next to `v-popper--preset-{name}`, so existing stylesheets keep applying.
-
-### `theme` prop renamed to `preset`
-
-To match the config key, the prop that selects a preset is now called `preset`:
-
-```html
-<!-- Before -->
-<VDropdown theme="info-dropdown" />
-<button v-tooltip="{ content: 'Hi', theme: 'info-tooltip' }" />
-
-<!-- After -->
-<VDropdown preset="info-dropdown" />
-<button v-tooltip="{ content: 'Hi', preset: 'info-tooltip' }" />
-```
-
-`theme` is still accepted as a deprecated alias on every component and on the directive options, so this migration can be done gradually. It will be removed in a future major. If both are set, `preset` wins.
-
-### Custom popper components
-
-Advanced custom components now use Composition API helpers instead of old shared option helpers:
-
-- Use direct component imports with `<script setup>` instead of `Popper: Popper()`.
-- Replace the `PopperMethods` mixin with the [`usePopperMethods`](../api/#usepoppermethods) composable.
-- Replace the `ThemeClass` mixin with the [`usePresetClass`](../api/#usepresetclass) composable.
-- Rename the `vPopperTheme` component option to `vPopperPreset`.
-
-Both mixins are still exported and still work, as is `vPopperTheme`. All three are deprecated and will be removed in a future major.
-
-See the [custom component guide](../guide/custom-component.md) for an updated example.
 
 ## New features
 
