@@ -1,9 +1,9 @@
 import { defineComponent, h } from 'vue'
 import type { PropType } from 'vue'
-import PopperRoot from './internals/PopperRoot'
-import PopperContent from './PopperContent'
-import PopperMethods from '../mixins/PopperMethods'
-import ThemeClass from '../mixins/ThemeClass'
+import { PopperRoot } from './internals/PopperRoot'
+import { PopperContent } from './PopperContent'
+import { PopperMethods } from '../mixins/PopperMethods'
+import { ThemeClass } from '../mixins/ThemeClass'
 import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
@@ -310,4 +310,4 @@ const PopperWrapper = defineComponent({
   },
 })
 
-export default PopperWrapper
+export { PopperWrapper }

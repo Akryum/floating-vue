@@ -54,7 +54,7 @@ function onTouchCancel (event) {
   el.$_vclosepopover_touch = false
 }
 
-export default {
+export const vClosePopper = {
   beforeMount (el, { value, modifiers }) {
     el.$_closePopoverModifiers = modifiers
     if (typeof value === 'undefined' || value) {

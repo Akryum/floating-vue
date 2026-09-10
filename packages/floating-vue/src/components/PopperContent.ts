@@ -1,7 +1,7 @@
 import { defineComponent, h } from 'vue'
-import ThemeClass from '../mixins/ThemeClass'
+import { ThemeClass } from '../mixins/ThemeClass'
 
-export default defineComponent({
+export const PopperContent = defineComponent({
   name: 'VPopperContent',
 
   mixins: [

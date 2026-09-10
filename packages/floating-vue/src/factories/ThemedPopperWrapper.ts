@@ -1,4 +1,4 @@
-import PopperWrapper from '../components/PopperWrapper'
+import { PopperWrapper } from '../components/PopperWrapper'
 
 /**
  * A `PopperWrapper` variant with its own name and default theme — same recipe

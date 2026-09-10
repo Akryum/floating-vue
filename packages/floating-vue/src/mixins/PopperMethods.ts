@@ -1,5 +1,5 @@
 // @vue/component
-export default {
+export const PopperMethods = {
   methods: {
     show (...args) {
       return this.$refs.popper.show(...args)

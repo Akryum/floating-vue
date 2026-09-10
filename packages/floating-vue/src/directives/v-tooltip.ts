@@ -1,6 +1,6 @@
 import type { App, Ref } from 'vue'
 import { createApp, h, ref } from 'vue'
-import TooltipDirective from '../components/TooltipDirective'
+import { TooltipDirective } from '../components/TooltipDirective'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
 
@@ -148,7 +148,7 @@ export function bind (el, { value, modifiers }) {
   }
 }
 
-export default {
+export const vTooltip = {
   beforeMount: bind,
   updated: bind,
   beforeUnmount (el) {
