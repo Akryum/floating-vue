@@ -176,6 +176,9 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^4.2.3
         version: 4.6.2(vite@4.5.14(@types/node@25.6.0))(vue@3.5.33(typescript@5.9.3))
+      '@vue/server-renderer':
+        specifier: ^3.3.4
+        version: 3.5.33(vue@3.5.33(typescript@5.9.3))
       '@vue/test-utils':
         specifier: ^2.4.9
         version: 2.4.9(@vue/compiler-dom@3.5.33)(@vue/server-renderer@3.5.33(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))

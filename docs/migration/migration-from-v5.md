@@ -67,6 +67,16 @@ The two other new accessibility props, `focusTrap` and `restoreFocus`, are off b
 
 [Learn more](../guide/accessibility.md)
 
+### SSR-generated popper IDs
+
+Automatically generated popper IDs now appear only after client mount. This keeps server markup and initial client hydration identical. Set `ariaId` when an ID must be present in SSR output or is referenced by server-rendered markup:
+
+```html
+<VDropdown aria-id="account-menu" />
+```
+
+After client mount, generated IDs and `aria-describedby` still point to the displayed popper as before.
+
 ### `Popper` is no longer a factory
 
 `Popper` used to be a function returning a component. It is now the component itself, so `Popper()` throws.

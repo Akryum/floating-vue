@@ -44,6 +44,7 @@
   "devDependencies": {
     "@nuxt/kit": "^3.6.1",
     "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/server-renderer": "^3.3.4",
     "@vue/test-utils": "^2.4.9",
     "cross-env": "^7.0.3",
     "happy-dom": "^15.7.4",

@@ -8,8 +8,10 @@ import {
   onDeactivated,
   onMounted,
   provide,
+  ref,
   watch,
   type InjectionKey,
+  type Ref,
 } from 'vue'
 import { computePopperPosition } from './popper/positioning'
 import { refreshPopperEventListeners } from './popper/listeners'
@@ -56,9 +58,12 @@ export function usePopper (props: PopperProps, options: UsePopperOptions): Poppe
   const parentContext = inject(POPPER_PROVIDE_KEY, null)
   const state = createPopperState(props)
   const runtime = createPopperRuntime()
+  const clientReady = ref(false)
 
   const api = {} as PopperApi
-  const popperId = computed(() => props.ariaId != null ? String(props.ariaId) : state.randomId)
+  const popperId = computed(() => props.ariaId != null
+    ? String(props.ariaId)
+    : clientReady.value ? state.randomId : '')
   const shouldMountContent = computed(() => props.eagerMount || state.isMounted)
 
   Object.assign(api, {
@@ -103,7 +108,7 @@ export function usePopper (props: PopperProps, options: UsePopperOptions): Poppe
   })
 
   setupWarnings(props)
-  setupLifecycle(api, options)
+  setupLifecycle(api, options, clientReady)
   setupWatchers(api)
 
   return api
@@ -112,8 +117,9 @@ export function usePopper (props: PopperProps, options: UsePopperOptions): Poppe
 /**
  * Registers lifecycle hooks used by the popper controller.
  */
-function setupLifecycle (api: PopperApi, options: UsePopperOptions) {
+function setupLifecycle (api: PopperApi, options: UsePopperOptions, clientReady: Ref<boolean>) {
   onMounted(() => {
+    clientReady.value = true
     initPopper(api, options.rootNode.value ?? api.instance?.proxy?.$el ?? null)
     detachInitialNode(api)
   })

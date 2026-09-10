@@ -1,6 +1,6 @@
 <template>
   <div
-    :id="popperId"
+    :id="popperId || undefined"
     ref="popover"
     class="v-popper__popper"
     :class="[
