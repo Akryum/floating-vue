@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { acquireMouseTracking, isAimingPopper, lineIntersectsLine } from './aiming'
+import { acquireMouseTracking, isAimingPopper, lineIntersectsLine, releaseMouseTracking } from './aiming'
 
 function fakeElement (left: number, top: number, width: number, height: number): Element {
   const el = document.createElement('div')
@@ -40,26 +40,26 @@ describe('mouse aiming', () => {
   const popper = fakeElement(200, 0, 100, 100)
 
   it('detects the mouse heading from the reference toward the popper', () => {
-    const release = acquireMouseTracking()
+    acquireMouseTracking()
     moveMouse(50, 50)
     moveMouse(60, 50)
     expect(isAimingPopper(reference, popper)).toBe(true)
-    release()
+    releaseMouseTracking()
   })
 
   it('rejects the mouse heading away from the popper', () => {
-    const release = acquireMouseTracking()
+    acquireMouseTracking()
     moveMouse(50, 50)
     moveMouse(40, 50)
     expect(isAimingPopper(reference, popper)).toBe(false)
-    release()
+    releaseMouseTracking()
   })
 
   it('stops tracking once every interest is released', () => {
-    const release = acquireMouseTracking()
+    acquireMouseTracking()
     moveMouse(50, 50)
     moveMouse(60, 50)
-    release()
+    releaseMouseTracking()
 
     // If the tracker were still attached, this would leave the reference bounds
     moveMouse(500, 500)

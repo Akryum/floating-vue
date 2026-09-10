@@ -16,7 +16,7 @@ import type { ExtractPropTypes, SetupContext } from 'vue'
 import { computePosition, getOverflowAncestors } from '@floating-ui/dom'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { nextFrame } from '../util/frame'
-import { acquireMouseTracking, isAimingPopper } from './aiming'
+import { acquireMouseTracking, isAimingPopper, releaseMouseTracking } from './aiming'
 import { acquirePopperContext, releasePopperContext } from './context'
 import type { PopperContext, PopperController, PopperEvent } from './context'
 import { buildPositionOptions } from './position'
@@ -87,7 +87,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   const events = new EventListeners()
   let context: PopperContext | null = null
-  let releaseMouseTracking: (() => void) | null = null
+  let trackingMouse = false
 
   const vm = getCurrentInstance()
   const attrs = useAttrs()
@@ -534,11 +534,9 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   function updateMouseTrackingInterest () {
     const wanted = !isDisposed && hasPopperShowTriggerHover.value
-    if (wanted && !releaseMouseTracking) {
-      releaseMouseTracking = acquireMouseTracking()
-    } else if (!wanted && releaseMouseTracking) {
-      releaseMouseTracking()
-      releaseMouseTracking = null
+    if (wanted !== trackingMouse) {
+      trackingMouse = wanted
+      wanted ? acquireMouseTracking() : releaseMouseTracking()
     }
   }
 

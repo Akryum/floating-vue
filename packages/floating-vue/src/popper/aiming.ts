@@ -14,23 +14,20 @@ function trackMouse (event: MouseEvent) {
   mouseY = event.clientY
 }
 
-/**
- * Attach the global mousemove tracker (only while at least one popper
- * needs hover aiming). Returns a release function.
- */
-export function acquireMouseTracking (): () => void {
+// The global mousemove tracker is refcounted: it is only attached while at
+// least one popper needs hover aiming.
+
+export function acquireMouseTracking () {
   interestCount++
   if (interestCount === 1) {
     window.addEventListener('mousemove', trackMouse, { passive: true })
   }
-  let released = false
-  return () => {
-    if (released) { return }
-    released = true
-    interestCount--
-    if (interestCount === 0) {
-      window.removeEventListener('mousemove', trackMouse)
-    }
+}
+
+export function releaseMouseTracking () {
+  interestCount--
+  if (interestCount === 0) {
+    window.removeEventListener('mousemove', trackMouse)
   }
 }
 
