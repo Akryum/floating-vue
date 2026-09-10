@@ -1,9 +1,3 @@
-import PopperWrapper from './internals/PopperWrapper'
+import { createThemedPopperWrapper } from './internals/PopperWrapper'
 
-const Component = ({
-  ...PopperWrapper,
-  name: 'VTooltip',
-  vPopperTheme: 'tooltip',
-}) as unknown as typeof PopperWrapper
-
-export default Component
+export default createThemedPopperWrapper('VTooltip', 'tooltip')
