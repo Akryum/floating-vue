@@ -1,29 +1,35 @@
-# demo2
+# demo
 
-## Project setup
-```
-yarn install
-```
+Playground app used to develop and end-to-end test floating-vue.
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+## Setup
+
+```sh
+pnpm install
 ```
 
-### Compiles and minifies for production
-```
-yarn build
+### Start the dev server
+
+```sh
+pnpm dev
 ```
 
-### Run your end-to-end tests
-```
-yarn test:e2e
+### Build for production
+
+```sh
+pnpm build
 ```
 
-### Lints and fixes files
-```
-yarn lint
+### Run the end-to-end tests
+
+The e2e tests use [Playwright](https://playwright.dev/). Build the library once
+so the demo can import it, install the browser, then run the tests:
+
+```sh
+pnpm --filter floating-vue build
+pnpm exec playwright install chromium
+pnpm test:e2e
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Playwright starts the Vite dev server automatically. Use `pnpm test:e2e:ui` for
+the interactive runner.

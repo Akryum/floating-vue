@@ -18,6 +18,9 @@ export default antfu(
       '**/dist',
       '**/*.d.ts',
       '**/cache',
+      '**/test-results',
+      '**/playwright-report',
+      '**/blob-report',
     ],
     stylistic: {
       braceStyle: '1tbs',
@@ -51,16 +54,6 @@ export default antfu(
       'vue/no-unused-refs': 'off',
       // Public event API is intentionally kebab-case (e.g. `apply-show`, `close-group`)
       'vue/custom-event-name-casing': 'off',
-    },
-  },
-  {
-    files: ['demo/tests/e2e/**'],
-    languageOptions: {
-      globals: {
-        describe: 'readonly',
-        it: 'readonly',
-        cy: 'readonly',
-      },
     },
   },
 )
