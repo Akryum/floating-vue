@@ -5,21 +5,24 @@
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite build --watch",
-    "build": "cross-env NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
-    "prepublishOnly": "pnpm run test && pnpm run build",
+    "build": "cross-env NODE_ENV=production vite build && vue-tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "check:package": "pnpm run validate:package && pnpm run typecheck:package",
+    "prepublishOnly": "pnpm run test && pnpm run build && pnpm run check:package",
     "test": "pnpm run test:unit",
     "test:unit": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "vue-tsc -p tsconfig.typecheck.json --noEmit"
+    "typecheck": "vue-tsc -p tsconfig.typecheck.json --noEmit",
+    "typecheck:package": "vue-tsc -p tsconfig.package-node.json --noEmit && vue-tsc -p tsconfig.package-node16.json --noEmit && vue-tsc -p tsconfig.package-bundler.json --noEmit",
+    "validate:package": "node ./scripts/validate-package.mjs"
   },
   "main": "dist/floating-vue.umd.js",
   "module": "dist/floating-vue.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/floating-vue.umd.js",
-      "import": "./dist/floating-vue.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/floating-vue.mjs"
     },
     "./nuxt": "./nuxt.mjs",
     "./style.css": "./dist/style.css",

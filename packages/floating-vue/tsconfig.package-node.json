@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": [
+    "tests/types/public-api.test-d.ts"
+  ]
+}

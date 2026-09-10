@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "**/__tests__/**",
+    "**/__fixtures__/**",
+    "**/fixtures/**",
+    "**/generated/**",
+    "**/*.generated.*",
+    "**/*.spec.*",
+    "**/*.test.*",
+    "**/*.js"
+  ]
+}

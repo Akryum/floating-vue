@@ -1,5 +1,13 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "floating-vue": [
+        "./src/index.ts"
+      ]
+    }
+  },
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",

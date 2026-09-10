@@ -34,7 +34,7 @@ import {
   type PopperPreset,
   type PopperSlotData,
   type TriggerEvent,
-} from '../../src'
+} from 'floating-vue'
 import type { App } from 'vue'
 
 /**

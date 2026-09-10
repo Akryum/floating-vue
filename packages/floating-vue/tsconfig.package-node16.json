@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": [
+    "tests/types/public-api.test-d.ts"
+  ]
+}
