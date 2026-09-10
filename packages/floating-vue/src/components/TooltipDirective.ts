@@ -1,7 +1,7 @@
 import { computed, defineComponent, h, nextTick, ref, watch } from 'vue'
 import type { ComponentPublicInstance, PropType } from 'vue'
 import { createPopper } from '../factories/Popper'
-import type { PopperExposed } from '../popper/usePopper'
+import type { PopperExposed, PopperSlotData } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getDefaultConfig } from '../config'
 
@@ -20,7 +20,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
 
     html: {
       type: Boolean,
-      default: props => getDefaultConfig(props.theme, 'html'),
+      default: (props: { theme: string }) => getDefaultConfig(props.theme, 'html'),
     },
 
     content: {
@@ -30,7 +30,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
 
     loadingContent: {
       type: String,
-      default: props => getDefaultConfig(props.theme, 'loadingContent'),
+      default: (props: { theme: string }) => getDefaultConfig(props.theme, 'loadingContent'),
     },
 
     targetNodes: {
@@ -122,7 +122,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
         onResize,
         classes,
         result,
-      }) => h(PopperContent, {
+      }: PopperSlotData) => h(PopperContent, {
         ref: (el: any) => { popperContentRef = el },
         class: {
           'v-popper--tooltip-loading': loading.value,

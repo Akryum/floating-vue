@@ -43,7 +43,7 @@ export const config: FloatingVueConfig = {
       // Default events that trigger the tooltip
       triggers: ['hover', 'focus', 'touch'],
       // Close tooltip on click on tooltip target
-      hideTriggers: events => [...events, 'click'],
+      hideTriggers: (events: string[]) => [...events, 'click'],
       // Delay (ms)
       delay: {
         show: 200,

@@ -10,7 +10,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "strict": false,
+    "strict": true,
     "declaration": true,
     "noEmit": true,
     "skipDefaultLibCheck": true,

@@ -1,3 +1,4 @@
+import type { App } from 'vue'
 import { version } from '../package.json'
 import { assign } from './util/assign-deep'
 import type { FloatingVueConfig } from './config'
@@ -53,9 +54,10 @@ export type { TriggerEvent } from './components/PopperWrapper'
 
 /* Vue plugin */
 
-export function install (app, options: FloatingVueConfig = {}) {
-  if (app.$_vTooltipInstalled) { return }
-  app.$_vTooltipInstalled = true
+export function install (app: App, options: FloatingVueConfig = {}) {
+  const installed = app as App & { $_vTooltipInstalled?: boolean }
+  if (installed.$_vTooltipInstalled) { return }
+  installed.$_vTooltipInstalled = true
 
   assign(config, options)
 
@@ -64,7 +66,9 @@ export function install (app, options: FloatingVueConfig = {}) {
   app.directive('close-popper', vClosePopper)
   // Components
   for (const component of [Tooltip, Dropdown, Menu]) {
-    app.component(component.name, component)
+    if (component.name) {
+      app.component(component.name, component)
+    }
   }
 }
 

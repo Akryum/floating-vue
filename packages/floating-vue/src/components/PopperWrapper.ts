@@ -2,7 +2,7 @@ import { computed, defineComponent, getCurrentInstance, h } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
 import { PopperRoot } from './internals/PopperRoot'
 import { popperEmits, popperProps } from '../popper/props'
-import type { PopperExposed } from '../popper/usePopper'
+import type { PopperExposed, PopperSlotData } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getThemeClasses } from '../config'
 
@@ -94,7 +94,7 @@ const PopperWrapper = /** @__PURE__ */ defineComponent({
         onResize,
         classes,
         result,
-      }) => [
+      }: PopperSlotData) => [
         slots.default?.({
           shown: isShown,
           show,

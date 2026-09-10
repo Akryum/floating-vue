@@ -20,11 +20,11 @@ export class EventListeners {
     }
   }
 
-  addTriggers (
+  addTriggers<T extends string> (
     targetNodes: EventTarget[],
     eventMap: Record<string, string>,
-    commonTriggers: string[],
-    customTrigger: string[] | ((triggers: string[]) => string[]) | null | undefined,
+    commonTriggers: T[],
+    customTrigger: T[] | ((triggers: T[]) => T[]) | null | undefined,
     handler: Handler,
   ) {
     let triggers = commonTriggers
