@@ -13,8 +13,6 @@ import type { Placement } from '../util/popper'
 
 export type ComputePositionConfig = Parameters<typeof computePosition>[2]
 
-type Middleware = ComputePositionConfig['middleware'][number]
-
 export interface PositionSettings {
   strategy: 'absolute' | 'fixed'
   placement: Placement
@@ -86,12 +84,54 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
 
   // Arrow overflow
   if (settings.arrowOverflow) {
-    options.middleware.push(arrowOverflowMiddleware())
+    options.middleware.push({
+      name: 'arrowOverflow',
+      fn: ({ placement, rects, middlewareData }) => {
+        let overflow: boolean
+        const { centerOffset } = middlewareData.arrow
+        if (placement.startsWith('top') || placement.startsWith('bottom')) {
+          overflow = Math.abs(centerOffset) > rects.reference.width / 2
+        } else {
+          overflow = Math.abs(centerOffset) > rects.reference.height / 2
+        }
+        return {
+          data: {
+            overflow,
+          },
+        }
+      },
+    })
   }
 
   // Auto min size for the popper inner
   if (settings.autoSize) {
-    options.middleware.push(autoSizeMiddleware(settings.autoSize, innerNode))
+    const autoSize = settings.autoSize
+    options.middleware.push({
+      name: 'autoSize',
+      fn: ({ rects, placement, middlewareData }) => {
+        if (middlewareData.autoSize?.skip) {
+          return {}
+        }
+        let width: number | undefined
+        let height: number | undefined
+        if (placement.startsWith('top') || placement.startsWith('bottom')) {
+          width = rects.reference.width
+        } else {
+          height = rects.reference.height
+        }
+        // Apply and re-compute
+        innerNode.style[autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'] = width != null ? `${width}px` : ''
+        innerNode.style[autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'] = height != null ? `${height}px` : ''
+        return {
+          data: {
+            skip: true,
+          },
+          reset: {
+            rects: true,
+          },
+        }
+      },
+    })
   }
 
   // Auto max size for the popper inner
@@ -114,51 +154,3 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
   return options
 }
 
-function arrowOverflowMiddleware (): Middleware {
-  return {
-    name: 'arrowOverflow',
-    fn: ({ placement, rects, middlewareData }) => {
-      let overflow: boolean
-      const { centerOffset } = middlewareData.arrow
-      if (placement.startsWith('top') || placement.startsWith('bottom')) {
-        overflow = Math.abs(centerOffset) > rects.reference.width / 2
-      } else {
-        overflow = Math.abs(centerOffset) > rects.reference.height / 2
-      }
-      return {
-        data: {
-          overflow,
-        },
-      }
-    },
-  }
-}
-
-function autoSizeMiddleware (autoSize: true | 'min' | 'max', innerNode: HTMLElement): Middleware {
-  return {
-    name: 'autoSize',
-    fn: ({ rects, placement, middlewareData }) => {
-      if (middlewareData.autoSize?.skip) {
-        return {}
-      }
-      let width: number | undefined
-      let height: number | undefined
-      if (placement.startsWith('top') || placement.startsWith('bottom')) {
-        width = rects.reference.width
-      } else {
-        height = rects.reference.height
-      }
-      // Apply and re-compute
-      innerNode.style[autoSize === 'min' ? 'minWidth' : autoSize === 'max' ? 'maxWidth' : 'width'] = width != null ? `${width}px` : ''
-      innerNode.style[autoSize === 'min' ? 'minHeight' : autoSize === 'max' ? 'maxHeight' : 'height'] = height != null ? `${height}px` : ''
-      return {
-        data: {
-          skip: true,
-        },
-        reset: {
-          rects: true,
-        },
-      }
-    },
-  }
-}
