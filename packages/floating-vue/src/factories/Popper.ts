@@ -9,7 +9,7 @@ import {
   getOverflowAncestors,
   size,
 } from '@floating-ui/dom'
-import { supportsPassive, isIOS } from '../util/env'
+import { isIOS } from '../util/env'
 import type { Placement } from '../util/popper'
 import { placements } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
@@ -924,11 +924,7 @@ export const createPopper = () => defineComponent({
 
     $_registerEventListeners (targetNodes: Element[], eventType: string, handler: (event: Event) => void) {
       this.$_events.push({ targetNodes, eventType, handler })
-      targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
-        ? {
-            passive: true,
-          }
-        : undefined))
+      targetNodes.forEach(node => node.addEventListener(eventType, handler, { passive: true }))
     },
 
     $_registerTriggerListeners (targetNodes: Element[], eventMap: Record<string, string>, commonTriggers, customTrigger, handler: (event: Event) => void) {
@@ -1058,12 +1054,10 @@ export const createPopper = () => defineComponent({
 
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
-    const options = supportsPassive
-      ? {
-          passive: true,
-          capture: true,
-        }
-      : true
+    const options = {
+      passive: true,
+      capture: true,
+    }
     document.addEventListener('touchstart', (event) => handleGlobalPointerDown(event, true), options)
     document.addEventListener('touchend', (event) => handleGlobalPointerUp(event, true), options)
   } else {
@@ -1185,11 +1179,7 @@ if (typeof window !== 'undefined') {
     mousePreviousY = mouseY
     mouseX = event.clientX
     mouseY = event.clientY
-  }, supportsPassive
-    ? {
-        passive: true,
-      }
-    : undefined)
+  }, { passive: true })
 }
 
 function lineIntersectsLine (x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number) {
