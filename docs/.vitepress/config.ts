@@ -96,6 +96,7 @@ export default defineConfig({
           text: 'Reference',
           items: [
             { text: 'API Reference', link: '/api/' },
+            { text: 'Export size', link: '/api/export-size' },
           ],
         },
         {

@@ -11,16 +11,21 @@
     "dev": "pnpm -C docs run dev",
     "test": "pnpm run build && vitest run",
     "lint": "eslint --cache",
-    "typecheck": "pnpm -r run typecheck",
+    "typecheck": "tsc",
+    "size": "tsx scripts/export-size.ts",
     "release": "pnpm run lint && pnpm run build && bumpp -r"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
     "bumpp": "^12.3.0",
     "eslint": "^10.10.0",
+    "export-size": "^0.8.0",
+    "filesize": "^11.0.13",
     "floating-vue": "workspace:*",
     "jsdom": "^25.0.1",
+    "markdown-table": "^3.0.4",
     "tsnapi": "^1.4.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite": "^8.2.2",
     "vitest": "^5.0.0"
