@@ -3,7 +3,7 @@ export default {
   inheritAttrs: false,
 
   props: {
-    // eslint-disable-next-line
+
     modelValue: {},
 
     autoFocus: {
@@ -11,6 +11,8 @@ export default {
       default: false,
     },
   },
+
+  emits: ['update:modelValue'],
 
   computed: {
     valueModel: {

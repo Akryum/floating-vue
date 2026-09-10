@@ -194,7 +194,7 @@ export default {
             }"
             type="number"
             class="flex-1 w-0"
-            :aria-label="(currentStyle.padding.multiple ? 'Top' : 'Padding') + ' padding'"
+            :aria-label="`${currentStyle.padding.multiple ? 'Top' : 'Padding'} padding`"
           >
           <input
             v-model.number="currentStyle.padding.top"
@@ -206,7 +206,7 @@ export default {
             min="0"
             max="100"
             class="flex-1 w-0"
-            :aria-label="(currentStyle.padding.multiple ? 'Top' : 'Padding') + ' padding slider'"
+            :aria-label="`${currentStyle.padding.multiple ? 'Top' : 'Padding'} padding slider`"
           >
           <template v-if="currentStyle.padding.multiple">
             <input

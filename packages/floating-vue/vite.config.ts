@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -25,7 +25,7 @@ export default defineConfig({
     },
   },
   define: {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line ts/no-require-imports
     VERSION: JSON.stringify(require('./package.json').version),
   },
 })

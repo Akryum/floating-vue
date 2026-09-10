@@ -12,6 +12,8 @@ export default {
     ThemeInput,
   },
 
+  emits: ['close'],
+
   data () {
     return {
       name: '',
@@ -22,7 +24,7 @@ export default {
   methods: {
     createNewTheme () {
       this.error = null
-      if (!this.name) return
+      if (!this.name) { return }
 
       // Validation
       if (builtinThemes.includes(this.name)) {
@@ -31,7 +33,7 @@ export default {
         this.error = 'A theme with this name already exists.'
       }
 
-      if (this.error) return
+      if (this.error) { return }
       createNewTheme({
         name: this.name,
       })

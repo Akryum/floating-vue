@@ -5,3 +5,4 @@ packages:
 allowBuilds:
   core-js: true
   esbuild: true
+shellEmulator: true

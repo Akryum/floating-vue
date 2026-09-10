@@ -1,19 +1,17 @@
-export let supportsPassive = false
-
-if (typeof window !== 'undefined') {
-  supportsPassive = false
+export const supportsPassive = (() => {
+  if (typeof window === 'undefined') { return false }
+  let supported = false
   try {
     const opts = Object.defineProperty({}, 'passive', {
       get () {
-        supportsPassive = true
+        supported = true
       },
     })
     window.addEventListener('test', null, opts)
-  } catch (e) {}
-}
+  } catch {}
+  return supported
+})()
 
-export let isIOS = false
-if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+export const isIOS = typeof window !== 'undefined' && typeof navigator !== 'undefined'
   // @ts-expect-error MSStream is missing in window type
-  isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-}
+  && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream

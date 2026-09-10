@@ -15,7 +15,8 @@ const placement = ref('bottom')
     </label>
 
     <select v-model="placement">
-      <option v-for="option of ['bottom', 'top', 'left', 'right']"
+      <option
+        v-for="option of ['bottom', 'top', 'left', 'right']"
         :key="option"
         :value="option"
       >

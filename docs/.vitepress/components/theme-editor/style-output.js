@@ -90,7 +90,7 @@ function generateArrowOuterCSS (theme, key) {
 function generateArrowInnerCSS (theme, key) {
   return generateCSSForComponent(theme, key, 'arrow-inner', (styles, { merged, inherited }, lines) => {
     if ((styles.arrow && styles.arrow.enabled !== inherited.arrow?.enabled) ||
-    (styles.border && styles.border.enabled !== inherited.border?.enabled)) {
+      (styles.border && styles.border.enabled !== inherited.border?.enabled)) {
       if (merged.arrow?.enabled && merged.border?.enabled) {
         lines.push(`visibility: visible`)
       } else {
@@ -108,11 +108,14 @@ function generateArrowInnerCSS (theme, key) {
 }
 
 /**
+ * @param {any} theme
+ * @param {string} key
+ * @param {string} classKey
  * @param {(styles: any, inheritedStyles: { merged: any, inherited: any }, lines: string[]) => unknown} handler
  */
 function generateCSSForComponent (theme, key, classKey, handler) {
   const styles = theme.styles[key]
-  if (!styles) return []
+  if (!styles) { return [] }
   const inherited = getInheritedStyleOptions(theme)[key]
   const merged = assign(assign({}, inherited), styles)
 
@@ -124,8 +127,8 @@ function generateCSSForComponent (theme, key, classKey, handler) {
   const lines = [`${className} {`]
   const ruleLines = []
   handler(styles, { inherited, merged }, ruleLines)
-  if (!ruleLines.length) return []
-  lines.push(...ruleLines.map(l => indent(1) + l + ';'))
+  if (!ruleLines.length) { return [] }
+  lines.push(...ruleLines.map(l => `${indent(1) + l};`))
   lines.push('}')
   return lines
 }
@@ -180,7 +183,7 @@ function getInheritedStyleOptions (theme) {
 
 function assign (to, from) {
   for (const key in from) {
-    if (Object.prototype.hasOwnProperty.call(from, key)) {
+    if (Object.hasOwn(from, key)) {
       if (typeof from[key] === 'object') {
         if (!to[key]) {
           to[key] = {}

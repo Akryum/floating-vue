@@ -3,43 +3,61 @@
   "version": "5.2.2",
   "description": "Easy Vue tooltips, dropdowns, menus & popovers using floating-ui",
   "author": "Guillaume Chau <guillaume.b.chau@gmail.com>",
-  "scripts": {
-    "dev": "NODE_ENV=development vite build --watch",
-    "build": "NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
-    "prepublishOnly": "pnpm run test && pnpm run build",
-    "typecheck": "vue-tsc --noEmit",
-    "test": "pnpm run test:unit",    
-    "test:unit": "peeky run"
+  "license": "MIT",
+  "homepage": "https://floating-vue.starpad.dev/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akryum/floating-vue.git",
+    "directory": "packages/floating-vue"
   },
-  "main": "dist/floating-vue.umd.js",
-  "module": "dist/floating-vue.mjs",
-  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/Akryum/floating-vue/issues"
+  },
+  "keywords": [
+    "vue",
+    "popper",
+    "tooltip",
+    "popover",
+    "dropdown",
+    "menu"
+  ],
   "exports": {
     ".": {
-      "require": "./dist/floating-vue.umd.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/floating-vue.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/floating-vue.umd.js"
     },
     "./nuxt": "./nuxt.mjs",
     "./style.css": "./dist/style.css",
     "./dist/style.css": "./dist/style.css"
   },
+  "main": "dist/floating-vue.umd.js",
+  "module": "dist/floating-vue.mjs",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "*.mjs"
+    "*.mjs",
+    "dist"
   ],
-  "dependencies": {
-    "@floating-ui/dom": "~1.1.1",
-    "vue-resize": "^2.0.0-alpha.1"
+  "scripts": {
+    "dev": "NODE_ENV=development vite build --watch",
+    "build": "NODE_ENV=production vite build && vue-tsc -d --emitDeclarationOnly",
+    "prepublishOnly": "pnpm run test && pnpm run build",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "pnpm run test:unit",
+    "test:unit": "peeky run"
   },
   "peerDependencies": {
-    "vue": "^3.2.0",
-    "@nuxt/kit": "^3.2.0 || ^4.0.0 || ^5.0.0-0"
+    "@nuxt/kit": "^3.2.0 || ^4.0.0 || ^5.0.0-0",
+    "vue": "^3.2.0"
   },
   "peerDependenciesMeta": {
     "@nuxt/kit": {
       "optional": true
     }
+  },
+  "dependencies": {
+    "@floating-ui/dom": "~1.1.1",
+    "vue-resize": "^2.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -59,23 +77,5 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ],
-  "bugs": {
-    "url": "https://github.com/Akryum/floating-vue/issues"
-  },
-  "homepage": "https://floating-vue.starpad.dev/",
-  "keywords": [
-    "vue",
-    "popper",
-    "tooltip",
-    "popover",
-    "dropdown",
-    "menu"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Akryum/floating-vue.git",
-    "directory": "packages/floating-vue"
-  }
+  ]
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="example flex justify-center py-12">
     <button
-      v-tooltip="'You have ' + count + ' new messages.'"
+      v-tooltip="`You have ${count} new messages.`"
       class="border border-gray-300 rounded px-4 py-2"
     >
       Mouse over me
@@ -23,7 +23,7 @@ export default {
     }, 1000)
   },
 
-  destroyed () {
+  unmounted () {
     clearInterval(this.timer)
   },
 }

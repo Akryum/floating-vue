@@ -1,4 +1,5 @@
-import { App, createApp, h, Ref, ref } from 'vue'
+import type { App, Ref } from 'vue'
+import { createApp, h, ref } from 'vue'
 import TooltipDirective from '../components/TooltipDirective.vue'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
@@ -50,7 +51,7 @@ let directives: Ref<Directive[]>
 let uid = 0
 
 function ensureDirectiveApp () {
-  if (directiveApp) return
+  if (directiveApp) { return }
 
   directives = ref([])
 
@@ -114,7 +115,7 @@ export function createTooltip (el, value, modifiers) {
 export function destroyTooltip (el) {
   if (el.$_popper) {
     const index = directives.value.indexOf(el.$_popper.item)
-    if (index !== -1) directives.value.splice(index, 1)
+    if (index !== -1) { directives.value.splice(index, 1) }
 
     delete el.$_popper
     delete el.$_popperOldShown

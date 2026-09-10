@@ -10,7 +10,8 @@ import {
   size,
 } from '@floating-ui/dom'
 import { supportsPassive, isIOS } from '../util/env'
-import { placements, Placement } from '../util/popper'
+import type { Placement } from '../util/popper'
+import { placements } from '../util/popper'
 import { SHOW_EVENT_MAP, HIDE_EVENT_MAP } from '../util/events'
 import { removeFromArray } from '../util/lang'
 import { nextFrame } from '../util/frame'
@@ -95,7 +96,6 @@ const createPopper = () => defineComponent({
       default: null,
     },
 
-    // eslint-disable-next-line vue/require-prop-types
     ariaId: {
       default: null,
     },
@@ -282,7 +282,7 @@ const createPopper = () => defineComponent({
   emits: {
     show: () => true,
     hide: () => true,
-    'update:shown': (shown: boolean) => true,
+    'update:shown': (_shown: boolean) => true,
     'apply-show': () => true,
     'apply-hide': () => true,
     'close-group': () => true,
@@ -326,7 +326,7 @@ const createPopper = () => defineComponent({
 
   computed: {
     popperId () {
-      return this.ariaId != null ? this.ariaId : this.randomId
+      return this.ariaId ?? this.randomId
     },
 
     shouldMountContent () {
@@ -433,7 +433,7 @@ const createPopper = () => defineComponent({
 
   methods: {
     show ({ event = null, skipDelay = false, force = false } = {}) {
-      if (this.parentPopper?.lockedChild && this.parentPopper.lockedChild !== this) return
+      if (this.parentPopper?.lockedChild && this.parentPopper.lockedChild !== this) { return }
 
       this.pendingHide = false
       if (force || !this.disabled) {
@@ -454,7 +454,7 @@ const createPopper = () => defineComponent({
     },
 
     hide ({ event = null, skipDelay = false } = {}) {
-      if (this.$_hideInProgress) return
+      if (this.$_hideInProgress) { return }
 
       // Abort if child is shown
       if (this.shownChildren.size > 0) {
@@ -490,7 +490,7 @@ const createPopper = () => defineComponent({
     },
 
     init () {
-      if (!this.isDisposed) return
+      if (!this.isDisposed) { return }
       this.isDisposed = false
       this.isMounted = false
       this.$_events = []
@@ -517,7 +517,7 @@ const createPopper = () => defineComponent({
     },
 
     dispose () {
-      if (this.isDisposed) return
+      if (this.isDisposed) { return }
       this.isDisposed = true
       this.$_removeEventListeners()
       this.hide({ skipDelay: true })
@@ -539,7 +539,7 @@ const createPopper = () => defineComponent({
     },
 
     async $_computePosition () {
-      if (this.isDisposed || this.positioningDisabled) return
+      if (this.isDisposed || this.positioningDisabled) { return }
 
       const options: ComputePositionConfig = {
         strategy: this.strategy,
@@ -702,7 +702,6 @@ const createPopper = () => defineComponent({
       }
 
       if (this.isShown) {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
         hidingPopper = this
       }
 
@@ -749,7 +748,7 @@ const createPopper = () => defineComponent({
     },
 
     async $_applyShowEffect () {
-      if (this.$_hideInProgress) return
+      if (this.$_hideInProgress) { return }
 
       // Advanced animations
       if (this.computeTransformOrigin) {
@@ -797,7 +796,7 @@ const createPopper = () => defineComponent({
       await nextFrame()
       this.classes.showFrom = false
       this.classes.showTo = true
-      if (!this.noAutoFocus) this.$_popperNode.focus()
+      if (!this.noAutoFocus) { this.$_popperNode.focus() }
     },
 
     async $_applyHide (skipTransition = false) {
@@ -876,7 +875,7 @@ const createPopper = () => defineComponent({
     },
 
     $_ensureTeleport () {
-      if (this.isDisposed) return
+      if (this.isDisposed) { return }
 
       let container = this.container
       // if container is a query, get the relative element
@@ -888,7 +887,7 @@ const createPopper = () => defineComponent({
       }
 
       if (!container) {
-        throw new Error('No container for popover: ' + this.container)
+        throw new Error(`No container for popover: ${this.container}`)
       }
 
       container.appendChild(this.$_popperNode)
@@ -927,8 +926,8 @@ const createPopper = () => defineComponent({
       this.$_events.push({ targetNodes, eventType, handler })
       targetNodes.forEach(node => node.addEventListener(eventType, handler, supportsPassive
         ? {
-          passive: true,
-        }
+            passive: true,
+          }
         : undefined))
     },
 
@@ -968,7 +967,7 @@ const createPopper = () => defineComponent({
     },
 
     $_handleGlobalClose (event, touch = false) {
-      if (this.$_showFrameLocked) return
+      if (this.$_showFrameLocked) { return }
 
       this.hide({ event })
 
@@ -1061,9 +1060,9 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   if (isIOS) {
     const options = supportsPassive
       ? {
-        passive: true,
-        capture: true,
-      }
+          passive: true,
+          capture: true,
+        }
       : true
     document.addEventListener('touchstart', (event) => handleGlobalPointerDown(event, true), options)
     document.addEventListener('touchend', (event) => handleGlobalPointerUp(event, true), options)
@@ -1083,7 +1082,7 @@ function handleGlobalPointerDown (event: PopperEvent, touch: boolean) {
       const popper = shownPoppers[i]
       try {
         popper.mouseDownContains = popper.popperNode().contains(event.target)
-      } catch (e) {
+      } catch {
         // noop
       }
     }
@@ -1108,7 +1107,7 @@ function handleGlobalClose (event: PopperEvent, touch: boolean) {
       // Delay so that close directive has time to set values (closeAllPopover, closePopover)
       requestAnimationFrame(() => {
         popper.pendingHide = false
-        if (preventClose[popper.randomId]) return
+        if (preventClose[popper.randomId]) { return }
 
         if (shouldAutoHide(popper, contains, event)) {
           popper.$_handleGlobalClose(event, touch)
@@ -1135,7 +1134,7 @@ function handleGlobalClose (event: PopperEvent, touch: boolean) {
           }
         }
       })
-    } catch (e) {
+    } catch {
       // noop
     }
   }
@@ -1183,8 +1182,8 @@ if (typeof window !== 'undefined') {
     mouseY = event.clientY
   }, supportsPassive
     ? {
-      passive: true,
-    }
+        passive: true,
+      }
     : undefined)
 }
 

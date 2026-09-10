@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "ESNext",
-    "strict": false,
-    "declaration": true,
+    "jsx": "preserve",
     "lib": [
       "ESNext",
       "DOM",
       "DOM.Iterable"
     ],
-    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "declaration": true,
     "outDir": "dist",
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",

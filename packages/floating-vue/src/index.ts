@@ -1,5 +1,6 @@
 import { assign } from './util/assign-deep'
-import { config, FloatingVueConfig } from './config'
+import type { FloatingVueConfig } from './config'
+import { config } from './config'
 import 'vue-resize/dist/vue-resize.css'
 import './style.css'
 // Components
@@ -52,7 +53,7 @@ export type { TriggerEvent } from './components/PopperWrapper.vue'
 /* Vue plugin */
 
 export function install (app, options: FloatingVueConfig = {}) {
-  if (app.$_vTooltipInstalled) return
+  if (app.$_vTooltipInstalled) { return }
   app.$_vTooltipInstalled = true
 
   assign(config, options)
@@ -67,7 +68,7 @@ export function install (app, options: FloatingVueConfig = {}) {
 }
 
 const plugin = {
-  // eslint-disable-next-line no-undef
+
   version: VERSION,
   install,
   options: config,

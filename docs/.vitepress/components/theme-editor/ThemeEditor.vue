@@ -1,4 +1,3 @@
-
 <script>
 import FloatingVue from 'floating-vue'
 import AlertTriangleIcon from '~icons/lucide/alert-triangle'

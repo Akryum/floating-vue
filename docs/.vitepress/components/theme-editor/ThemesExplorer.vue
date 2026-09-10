@@ -17,6 +17,8 @@ export default {
     ThemeModal,
   },
 
+  emits: ['create'],
+
   data () {
     return {
       searchText: '',

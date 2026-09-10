@@ -15,35 +15,35 @@ export default defineComponent({
     dataShowCount: String,
     dataText: String,
   },
-  mounted: function () {
+  mounted () {
     this.paint()
   },
-  beforeUpdate: function () {
+  beforeUpdate () {
     this.reset()
   },
-  updated: function () {
+  updated () {
     this.paint()
   },
-  beforeUnmount: function () {
+  beforeUnmount () {
     this.reset()
   },
   methods: {
-    paint: function () {
+    paint () {
       const _ = this.$el.appendChild(document.createElement('span'))
       const _this = this
-      import('github-buttons').then(function (module) {
-        module.render(_.appendChild(_this.$refs._), function (el) {
+      import('github-buttons').then((module) => {
+        module.render(_.appendChild(_this.$refs._), (el) => {
           try {
             _.parentNode.replaceChild(el, _)
-          } catch (_) {}
+          } catch {}
         })
       })
     },
-    reset: function () {
+    reset () {
       this.$el.replaceChild(/** @type {HTMLAnchorElement} */ (this.$refs._), this.$el.lastChild)
     },
   },
-  render: function () {
+  render () {
     const props = { ref: '_' }
     for (const key in this.$props) {
       props[hyphenate(key)] = this.$props[key]
