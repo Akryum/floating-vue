@@ -1,4 +1,4 @@
 import '@babel/polyfill'
 
-global.SVGAnimatedString = () => {}
-global.SVGElement = () => {}
+globalThis.SVGAnimatedString = () => {}
+globalThis.SVGElement = () => {}

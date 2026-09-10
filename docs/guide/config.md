@@ -66,6 +66,8 @@ export const config: FloatingVueConfig = {
    * By default, compute autohide on 'click'.
    */
   autoHideOnMousedown: false,
+  // Chose whether to automatically focus on the popper element after trigger
+  noAutoFocus: false,
   // Themes
   themes: {
     tooltip: {

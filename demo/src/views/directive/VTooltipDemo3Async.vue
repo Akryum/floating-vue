@@ -18,7 +18,7 @@ const loadingContent = '<span style="opacity:.5;">Loading... Please wait</span>'
       v-tooltip="{
         content: load,
         loadingContent,
-        html: true
+        html: true,
       }"
     >
       Hover me

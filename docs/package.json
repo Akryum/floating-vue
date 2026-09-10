@@ -1,45 +1,39 @@
 {
   "name": "docs",
-  "version": "2.0.0-beta.20",
-  "description": "floating-vue docs",
-  "private": true,
-  "main": "index.js",
   "type": "module",
+  "private": true,
+  "description": "floating-vue docs",
   "authors": {
     "name": "Guillaume Chau",
     "email": "guillaume.b.chau@gmail.com"
   },
+  "license": "MIT",
   "repository": {
     "url": "https://github.com/Akryum/floating-vue",
     "type": "git",
     "directory": "docs"
   },
+  "main": "index.js",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
-    "lint": "eslint . --ext .js,.vue"
+    "build": "vitepress build"
   },
-  "license": "MIT",
   "dependencies": {
     "color": "^4.2.3",
     "floating-vue": "workspace:*"
   },
   "devDependencies": {
     "@floating-ui/dom": "~1.1.1",
-    "@iconify-json/lucide": "^1.1.101",
-    "@vue/eslint-config-standard": "^8.0.1",
-    "@vue/shared": "^3.3.4",
-    "autoprefixer": "^10.4.14",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.42.0",
-    "eslint-plugin-vue": "^9.14.1",
-    "github-buttons": "^2.27.0",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "unplugin-icons": "^0.16.3",
-    "unplugin-vue-components": "^0.25.1",
-    "vite": "^4.3.9",
-    "vitepress": "^1.0.0-rc.36",
-    "vue": "^3.3.4"
+    "@iconify-json/lucide": "^1.2.130",
+    "@vue/shared": "^3.5.42",
+    "autoprefixer": "^10.5.5",
+    "github-buttons": "^2.33.0",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "unplugin-icons": "^0.16.6",
+    "unplugin-vue-components": "^0.25.2",
+    "vite": "^4.5.14",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.42"
   }
 }

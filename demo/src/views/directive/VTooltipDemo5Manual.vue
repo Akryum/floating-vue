@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+
 const shown = ref(true)
 </script>
 
@@ -7,7 +8,7 @@ const shown = ref(true)
   <h1>VTooltip manual</h1>
 
   <label>
-    <input type="checkbox" v-model="shown" />
+    <input v-model="shown" type="checkbox">
     Show tooltip
   </label>
 

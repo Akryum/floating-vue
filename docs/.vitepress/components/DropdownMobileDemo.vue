@@ -94,5 +94,4 @@ body.no-scroll {
 .v-popper__popper--no-positioning.v-popper__popper--hidden .v-popper__wrapper {
   transform: translateY(100%);
 }
-
 </style>

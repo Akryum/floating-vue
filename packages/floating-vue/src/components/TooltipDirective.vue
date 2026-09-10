@@ -155,7 +155,7 @@ export default defineComponent({
     },
 
     onResult (fetchId, result) {
-      if (fetchId !== this.$_fetchId) return
+      if (fetchId !== this.$_fetchId) { return }
       this.$_loading = false
       this.asyncContent = result
     },

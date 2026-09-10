@@ -25,11 +25,11 @@ const data = reactive({
 export const state = reactive({
   ...toRefs(data),
   sourceOutput: computed(() => {
-    return '// Config\n' + formatObjectToSource({ themes: { [data.theme.name]: data.theme.config } })
+    return `// Config\n${formatObjectToSource({ themes: { [data.theme.name]: data.theme.config } })}`
   }),
 
   styleOutput: computed(() => {
-    return '/* Style */\n' + generateCSS(data.theme)
+    return `/* Style */\n${generateCSS(data.theme)}`
   }),
 
   allStyleOutput: computed(() => {

@@ -103,7 +103,7 @@ export default {
       ref="sandbox"
       class="flex-1"
       :class="{
-        'dark': settings.darkMode,
+        dark: settings.darkMode,
         [settings.darkClass]: settings.darkMode,
       }"
     >
@@ -117,11 +117,11 @@ export default {
         <template v-if="ready">
           <VDropdown
             v-for="n in 3"
-            :key="uid + ':' + n"
+            :key="`${uid}:${n}`"
+            v-model:shown="shown[n - 1]"
             :theme="theme.name"
             :container="$refs.sandbox"
             :boundary="$refs.sandbox"
-            :shown.sync="shown[n - 1]"
             :auto-hide="settings.ignoreAutoHide ? false : undefined"
           >
             <button class="border border-gray-300 dark:border-gray-700 rounded px-4 py-2">

@@ -1,29 +1,24 @@
 {
   "name": "floating-vue-monorepo",
-  "packageManager": "pnpm@8.6.2",
+  "type": "module",
   "version": "5.2.2",
   "private": true,
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "build": "pnpm -r --filter=\"./packages/*\" run build",
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm run build && pnpm -C docs run build",
     "dev": "pnpm -C docs run dev",
     "test": "pnpm -r --filter=\"./packages/*\" run test",
-    "lint": "eslint --ext .js,.ts,.vue .",
+    "lint": "eslint --cache",
+    "typecheck": "pnpm -r run typecheck",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
   "devDependencies": {
-    "@akryum/sheep": "^0.5.0",
+    "@akryum/sheep": "^0.5.2",
+    "@antfu/eslint-config": "^9.5.1",
+    "eslint": "^10.10.0",
     "floating-vue": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "@vue/eslint-config-standard": "^8.0.1",
-    "@vue/eslint-config-typescript": "^11.0.3",
-    "eslint": "^8.42.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.14.1",
-    "typescript": "^5.1.3"
+    "typescript": "^5.9.3"
   }
 }

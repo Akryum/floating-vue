@@ -87,7 +87,7 @@ export default {
           { id: 'general', label: 'General' },
           { id: 'display', label: 'Display' },
           { id: 'position', label: 'Position' },
-          { id: 'directive', label: 'Directive '},
+          { id: 'directive', label: 'Directive ' },
         ]"
       />
     </div>

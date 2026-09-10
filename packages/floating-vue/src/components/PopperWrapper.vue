@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable vue/no-template-shadow -- destructured slot props intentionally reuse outer names -->
   <Popper
     ref="popper"
     v-slot="{
@@ -61,7 +62,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 import Popper from './Popper.vue'
 import PopperContent from './PopperContent.vue'
 import PopperMethods from './PopperMethods'
@@ -109,7 +111,6 @@ export default defineComponent({
       default: null,
     },
 
-    // eslint-disable-next-line vue/require-prop-types
     ariaId: {
       default: null,
     },
@@ -294,7 +295,7 @@ export default defineComponent({
   emits: {
     show: () => true,
     hide: () => true,
-    'update:shown': (shown: boolean) => true,
+    'update:shown': (_shown: boolean) => true,
     'apply-show': () => true,
     'apply-hide': () => true,
     'close-group': () => true,

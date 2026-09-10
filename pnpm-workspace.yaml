@@ -2,3 +2,7 @@ packages:
   - packages/*
   - demo
   - docs
+allowBuilds:
+  core-js: true
+  esbuild: true
+shellEmulator: true

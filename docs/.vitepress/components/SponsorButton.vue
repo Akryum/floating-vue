@@ -1,13 +1,13 @@
 <template>
   <p class="sponsor-button">
-    <github-button
+    <GithubButton
       href="https://github.com/sponsors/Akryum"
       data-icon="octicon-heart"
       data-size="large"
       aria-label="Sponsor @Akryum on GitHub"
     >
       Sponsor on GitHub
-    </github-button>
+    </GithubButton>
   </p>
 </template>
 

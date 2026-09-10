@@ -12,6 +12,8 @@ export default {
     },
   },
 
+  emits: ['click'],
+
   created () {
     this.colors = {
       emerald: {

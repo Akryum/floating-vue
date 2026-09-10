@@ -22,13 +22,13 @@
 
           <template #popper>
             <VMenu
-              v-for="n in 5"
-              :key="n"
+              v-for="m in 5"
+              :key="m"
               placement="right-start"
               instant-move
             >
               <button class="rounded hover:bg-green-100 px-4 py-2">
-                Option {{ n }} >
+                Option {{ m }} >
               </button>
 
               <template #popper>
@@ -64,13 +64,13 @@
 
           <template #popper>
             <VDropdown
-              v-for="n in 5"
-              :key="n"
+              v-for="m in 5"
+              :key="m"
               placement="right-start"
               instant-move
             >
               <button class="rounded hover:bg-green-100 px-4 py-2">
-                Option {{ n }} >
+                Option {{ m }} >
               </button>
 
               <template #popper>

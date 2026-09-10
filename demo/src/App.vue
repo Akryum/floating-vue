@@ -12,7 +12,7 @@ import { demos } from './router'
       {{ route.meta.label }}
     </router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
