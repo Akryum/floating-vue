@@ -1,6 +1,7 @@
 // #region Functions
 export function createTooltip(_, _, _) {}
 export function destroyTooltip(_) {}
+export function getThemeClasses(_) {}
 export function hideAllPoppers() {}
 export function install(_, _) {}
 export function recomputeAllPoppers() {}
