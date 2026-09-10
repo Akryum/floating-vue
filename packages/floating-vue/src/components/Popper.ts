@@ -466,7 +466,9 @@ const createPopper = () => defineComponent({
       if (this.hasPopperShowTriggerHover && this.$_isAimingPopper()) {
         if (this.parentPopper) {
           this.parentPopper.lockedChild = this
-          clearTimeout(this.parentPopper.lockedChildTimer)
+          if (this.parentPopper.lockedChildTimer) {
+            clearTimeout(this.parentPopper.lockedChildTimer)
+          }
           this.parentPopper.lockedChildTimer = setTimeout(() => {
             if (this.parentPopper.lockedChild === this) {
               this.parentPopper.lockedChild.hide({ skipDelay })
@@ -695,7 +697,9 @@ const createPopper = () => defineComponent({
       }
       this.$_updateParentShownChildren(false)
       this.$_hideInProgress = true
-      clearTimeout(this.$_scheduleTimer)
+      if (this.$_scheduleTimer) {
+        clearTimeout(this.$_scheduleTimer)
+      }
 
       if (this.isShown) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -715,8 +719,12 @@ const createPopper = () => defineComponent({
     },
 
     async $_applyShow (skipTransition = false) {
-      clearTimeout(this.$_disposeTimer)
-      clearTimeout(this.$_scheduleTimer)
+      if (this.$_disposeTimer) {
+        clearTimeout(this.$_disposeTimer)
+      }
+      if (this.$_scheduleTimer) {
+        clearTimeout(this.$_scheduleTimer)
+      }
       this.skipTransition = skipTransition
 
       // Already shown
@@ -798,7 +806,9 @@ const createPopper = () => defineComponent({
         this.$_hideInProgress = false
         return
       }
-      clearTimeout(this.$_scheduleTimer)
+      if (this.$_scheduleTimer) {
+        clearTimeout(this.$_scheduleTimer)
+      }
 
       // Already hidden
       if (!this.isShown) {
@@ -829,7 +839,9 @@ const createPopper = () => defineComponent({
         'data-popper-shown': undefined,
       })
 
-      clearTimeout(this.$_disposeTimer)
+      if (this.$_disposeTimer) {
+        clearTimeout(this.$_disposeTimer)
+      }
       const disposeTime = this.disposeTimeout
       if (disposeTime !== null) {
         this.$_disposeTimer = setTimeout(() => {
