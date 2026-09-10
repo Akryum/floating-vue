@@ -63,16 +63,18 @@ import 'floating-vue/dist/style.css'
 
 ## Browser
 
-Include `dist/floating-vue.min.js` in the page:
+Load Vue, Floating UI, then Floating Vue:
 
 ```html
-<script src="https://unpkg.com/floating-vue@^2.0.0-beta.1"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/@floating-ui/dom"></script>
+<script src="https://unpkg.com/floating-vue/dist/floating-vue.umd.js"></script>
 ```
 
 Also include the default CSS:
 
 ```html
-<link rel="stylsheet" href="https://unpkg.com/floating-vue@^2.0.0-beta.1/dist/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/floating-vue/dist/style.css" />
 ```
 
 Install the plugin into your app:
@@ -109,10 +111,19 @@ import { Dropdown, Tooltip, Menu, vTooltip } from 'floating-vue'
 
   <Tooltip>
     <a>Sponsor me</a>
+
+    <template #popper>
+      Help me fund my Open Source work!
+    </template>
   </Tooltip>
 
   <Menu>
     <button>Documentation</button>
+
+    <template #popper>
+      <button>Guide</button>
+      <button>API Reference</button>
+    </template>
   </Menu>
 
   <button v-tooltip="msg">Hover me</button>

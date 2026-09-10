@@ -30,7 +30,9 @@ A preset object can contain default values of all [available props](../api/).
 For example, this `info-tooltip` preset:
 
 ```js
-Vue.use(FloatingVue, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       distance: 24,
@@ -47,7 +49,9 @@ See the [global configuration](./config.md#default-values) for the values used i
 To customize your tooltips and other popovers, you can create your own presets:
 
 ```js
-Vue.use(FloatingVue, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -62,7 +66,9 @@ Here, `$extend: 'tooltip'` extends the `tooltip` preset defined by default insid
 If you don't want to inherit the CSS classes, use `$resetCss`:
 
 ```js
-Vue.use(FloatingVue, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -108,7 +114,9 @@ After you have created your new preset, you can use it with the `preset` prop li
 Let's have this example custom preset called `info-dropdown`:
 
 ```js
-Vue.use(FloatingVue, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-dropdown': {
       $extend: 'dropdown',

@@ -21,7 +21,9 @@ current spelling. The old one will be removed in a future major.
 If a preset extends another preset, the CSS class of this parent preset will also be included. For example:
 
 ```js
-Vue.use(VTooltip, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -42,7 +44,9 @@ The preset classes will be:
 This works for any level of inheritance:
 
 ```js
-Vue.use(VTooltip, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -67,7 +71,9 @@ The preset classes will be:
 You can prevent a preset from including the parent classes with `$resetCss`:
 
 ```js
-Vue.use(VTooltip, {
+import FloatingVue from 'floating-vue'
+
+app.use(FloatingVue, {
   presets: {
     'info-tooltip': {
       $extend: 'tooltip',
@@ -181,10 +187,10 @@ The default stylesheet treats these selectors and CSS variables as public extens
 
 By default, multiple elements are mounted in the popper content:
 
-- `popper`: the root element of the popper. This will be positioned by popperjs.
+- `popper`: the root element of the popper. This is positioned by Floating UI.
   - `wrapper`: an intermediary element to allow transforming both the content and the arrow (useful for zoom transitions).
     - `inner`: the main popper content. Ideal target for main styles such as background, border, text color...
-    - `arrow-container`: contains the arrow graphics. This will be positioned by popperjs.
+    - `arrow-container`: contains the arrow graphics. This is positioned by Floating UI.
       - `arrow-outer`: the bigger arrow. Visible by default. If you want a border, should use the border color - otherwise, should use the background color.
       - `arrow-inner`: the smaller arrow, useful to simulate a border. Hidden by default. The default `dropdown` preset makes it visible to display the default border. Should use the background color.
 
@@ -292,17 +298,17 @@ Showing:
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | **true** | false |
 | `v-popper__popper--show-to` | false | **true** |
-| `v-popper__popper--hidden-from` | false | false |
-| `v-popper__popper--hidden-to` | false | false |
+| `v-popper__popper--hide-from` | false | false |
+| `v-popper__popper--hide-to` | false | false |
 
-Hidding:
+Hiding:
 
 | Class | Frame 1 | Frame 2 |
 | ----- | ------- | ------- |
 | `v-popper__popper--show-from` | false | false |
 | `v-popper__popper--show-to` | false | false |
-| `v-popper__popper--hidden-from` | **true** | false |
-| `v-popper__popper--hidden-to` | false | **true** |
+| `v-popper__popper--hide-from` | **true** | false |
+| `v-popper__popper--hide-to` | false | **true** |
 
 #### Zoom show only example
 

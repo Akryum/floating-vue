@@ -60,7 +60,7 @@ export function clipboardSuccess (el) {
   const tooltip = createTooltip(el, {
     triggers: [],
     content: 'Text copied!',
-  })
+  }, {})
   tooltip.show()
   setTimeout(() => {
     tooltip.hide()
@@ -145,7 +145,7 @@ defineExpose({ show, hide, dispose, onResize })
 Computes the `v-popper--preset-*` classes for a [preset](../guide/presets.md) name, including the classes inherited through `$extend`.
 
 ::: warning
-This replaces the `ThemeClass` Options API mixin, which is still exported but deprecated. See the [migration guide](../migration/migration-from-v3.md#custom-popper-components).
+This replaces the `ThemeClass` Options API mixin, which is still exported but deprecated. See the [migration guide](../migration/migration-from-v5.md#options-api-mixins).
 :::
 
 ## Directive options
@@ -489,7 +489,7 @@ Boolean: mount the popper content without waiting for the popper to be displayed
 
 ### `disposeTimeout`
 
-Number of ms after hide when the popper instance is destroyed.
+Number of ms after hide before the popper DOM node is detached. The component instance remains available.
 
 ### `computeTransformOrigin`
 

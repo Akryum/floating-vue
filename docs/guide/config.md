@@ -8,7 +8,12 @@ You can change the configuration options during install with the arguments:
 
 ```javascript
 import FloatingVue from 'floating-vue'
-Vue.use(FloatingVue, options)
+
+const options = {
+  distance: 12,
+}
+
+app.use(FloatingVue, options)
 ```
 
 For TypeScript projects, use `defineFloatingVueConfig` and `definePopperPreset` to get autocomplete and excess-property checks:

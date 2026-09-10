@@ -26,9 +26,9 @@ The Vue peer range is unchanged: `^3.2.0`.
 
 ### Accessibility defaults
 
-Poppers now render a `role` attribute. In v5 they rendered none, so this changes the DOM of every popper, including tooltips created by the `v-tooltip` directive.
+The three built-in presets now render a `role` attribute. In v5 they rendered none, so this changes the DOM of poppers using those presets, including tooltips created by the `v-tooltip` directive.
 
-Each preset ships a default role:
+The built-in presets ship these default roles:
 
 | Preset | `ariaRole` |
 | --- | --- |
@@ -36,9 +36,11 @@ Each preset ships a default role:
 | `dropdown` | `dialog` |
 | `menu` | `menu` |
 
+Custom presets do not receive a role automatically. Extend one of these presets to inherit its role, or set `ariaRole` explicitly.
+
 Three consequences to check:
 
-- Tests and styles that match on the popper element — `getByRole`, DOM snapshots, `[role]` selectors — see a new attribute.
+- Tests and styles that match poppers using these presets — `getByRole`, DOM snapshots, `[role]` selectors — see a new attribute.
 - Anything on the `dropdown` preset also renders `aria-modal="true"` while shown, so screen readers announce it as a modal dialog. If your dropdown is really a list of options, set the correct role.
 - Anything on the `menu` preset installs arrow key navigation. <kbd>↓</kbd>, <kbd>↑</kbd>, <kbd>Home</kbd> and <kbd>End</kbd> are prevented and move focus between visible `[role="menuitem"]` descendants whenever there is at least one. Your own handlers for those keys inside the popper no longer run.
 
@@ -113,7 +115,7 @@ The package is compiled in strict mode and its public surface is pinned, so a fe
 - `FloatingVueConfig` went from `any` to `Partial<Config>`. Unknown or misspelled keys passed to `app.use(FloatingVue, { … })` are now errors. Use [`defineFloatingVueConfig`](../api/#definefloatingvueconfig) and [`definePopperPreset`](../api/#definepopperpreset) to author config in its own file with the same checks.
 - `TriggerEvent` moved from `components/PopperWrapper.vue` to `components/popperWrapperProps.ts`, and gained `'pointer'`. It is still re-exported from the package entry, so only deep imports break.
 - `ariaId` is typed `string | null` and validated at runtime — passing anything else logs a Vue warning.
-- `PopperInstance` still exists but is now an alias of `PopperApi`, which describes the popper logic (`state`, `runtime`, `props`, `emit`, `instance`) rather than a Vue component instance.
+- `PopperInstance` is no longer exported from the package entry. Use `PopperApi`, which describes the popper logic (`state`, `runtime`, `props`, `emit`, `instance`), instead.
 - `ComputePositionConfig` is no longer exported.
 
 Import everything from `floating-vue` — deep imports into `floating-vue/dist/components/*` are not part of the public API.
