@@ -1,10 +1,12 @@
 import { config, getAllParentPresets } from '../../config'
 import { isIOS, supportsPassive } from '../../util/env'
 import { removeFromArray } from '../../util/lang'
+import { resolvePresetName } from '../../util/preset'
 import type { PopperApi, PopperEvent } from './types'
 
 const shownPoppers: PopperApi[] = []
 const shownPoppersByPreset: Record<string, PopperApi[]> = {}
+const registeredPresetBuckets = new WeakMap<PopperApi, string[]>()
 let globalHandlersInstalled = false
 let hidingPopper: PopperApi | null = null
 
@@ -36,10 +38,9 @@ export function registerShownPopper (popper: PopperApi) {
   shownPoppers.push(popper)
   document.body.classList.add('v-popper--some-open')
 
-  for (const preset of getAllParentPresets(popper.props.preset)) {
-    getShownPoppersByPreset(preset).push(popper)
-    document.body.classList.add(`v-popper--some-open--${preset}`)
-  }
+  const presets = getAllParentPresets(resolvePresetName(popper.props, 'dropdown'))
+  registeredPresetBuckets.set(popper, presets)
+  registerPresetBuckets(popper, presets)
 }
 
 /**
@@ -51,13 +52,24 @@ export function unregisterShownPopper (popper: PopperApi) {
     document.body.classList.remove('v-popper--some-open')
   }
 
-  for (const preset of getAllParentPresets(popper.props.preset)) {
-    const list = getShownPoppersByPreset(preset)
-    removeFromArray(list, popper)
-    if (list.length === 0) {
-      document.body.classList.remove(`v-popper--some-open--${preset}`)
-    }
-  }
+  const presets = registeredPresetBuckets.get(popper) ?? getAllParentPresets(resolvePresetName(popper.props, 'dropdown'))
+  unregisterPresetBuckets(popper, presets)
+  registeredPresetBuckets.delete(popper)
+}
+
+/**
+ * Moves a shown popper to buckets for its current reactive preset.
+ */
+export function refreshShownPopperPreset (popper: PopperApi) {
+  if (!shownPoppers.includes(popper)) return
+
+  const previousPresets = registeredPresetBuckets.get(popper) ?? []
+  const nextPresets = getAllParentPresets(resolvePresetName(popper.props, 'dropdown'))
+  if (previousPresets.length === nextPresets.length && previousPresets.every((preset, index) => preset === nextPresets[index])) return
+
+  unregisterPresetBuckets(popper, previousPresets)
+  registeredPresetBuckets.set(popper, nextPresets)
+  registerPresetBuckets(popper, nextPresets)
 }
 
 /**
@@ -225,6 +237,29 @@ function getShownPoppersByPreset (preset: string) {
     list = shownPoppersByPreset[preset] = []
   }
   return list
+}
+
+/**
+ * Adds a shown popper to its exact preset buckets and body classes.
+ */
+function registerPresetBuckets (popper: PopperApi, presets: string[]) {
+  for (const preset of presets) {
+    getShownPoppersByPreset(preset).push(popper)
+    document.body.classList.add(`v-popper--some-open--${preset}`)
+  }
+}
+
+/**
+ * Removes a shown popper from previously registered preset buckets.
+ */
+function unregisterPresetBuckets (popper: PopperApi, presets: string[]) {
+  for (const preset of presets) {
+    const list = getShownPoppersByPreset(preset)
+    removeFromArray(list, popper)
+    if (list.length === 0) {
+      document.body.classList.remove(`v-popper--some-open--${preset}`)
+    }
+  }
 }
 
 /**

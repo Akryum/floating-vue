@@ -24,7 +24,7 @@ export function createPopperComponent (name: string, preset: string) {
         ...attrs,
         ...props,
         ref: popper,
-        preset: props.preset ?? preset,
+        preset: props.preset ?? props.theme ?? preset,
         onShow: () => emit('show'),
         onHide: () => emit('hide'),
         'onUpdate:shown': (shown: boolean) => emit('update:shown', shown),

@@ -155,7 +155,7 @@ export interface PopperRuntime {
  * Core props consumed by the popper composable.
  */
 export interface PopperProps {
-  preset: string
+  preset: string | null
   /**
    * @deprecated Use `preset` instead.
    */

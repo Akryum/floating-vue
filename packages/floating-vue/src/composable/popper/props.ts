@@ -28,7 +28,9 @@ function defaultPropFactory<K extends keyof PopperConfig> (prop: K) {
 export const popperProps = {
   preset: {
     type: String,
-    default: (props: PresetPropsLike) => resolvePresetName(props, 'dropdown'),
+    // Keep this neutral. `resolvePresetName` is called by consumers whenever
+    // they need the active value, so reactive theme changes remain visible.
+    default: null,
   },
 
   /**

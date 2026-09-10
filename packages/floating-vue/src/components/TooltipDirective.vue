@@ -15,7 +15,7 @@
       arrowSize,
     }"
     v-bind="$attrs"
-    :preset="preset"
+    :preset="finalPreset"
     :target-nodes="targetNodes"
     :popper-node="getPopperNode"
     @apply-show="onShow"
@@ -27,7 +27,7 @@
         'v-popper--tooltip-loading': loading,
       }"
       :popper-id="popperId"
-      :preset="preset"
+      :preset="finalPreset"
       :shown="isShown"
       :mounted="shouldMountContent"
       :skip-transition="skipTransition"
@@ -68,7 +68,9 @@ defineOptions({
 const props = defineProps({
   preset: {
     type: String,
-    default: (props: PresetPropsLike) => resolvePresetName(props, 'tooltip'),
+    // Keep this neutral so a reactive `theme` compatibility alias is not
+    // captured as a mount-time prop default.
+    default: null,
   },
 
   /**
@@ -106,7 +108,8 @@ const methods = usePopperMethods(popper)
 let fetchId = 0
 let fetchLoading = false
 
-const tooltipAriaRole = computed(() => getDefaultConfig(props.preset, 'ariaRole') ?? null)
+const finalPreset = computed(() => props.preset ?? props.theme ?? 'tooltip')
+const tooltipAriaRole = computed(() => getDefaultConfig(finalPreset.value, 'ariaRole') ?? null)
 const isContentAsync = computed(() => typeof props.content === 'function')
 const loading = computed(() => isContentAsync.value && asyncContent.value == null)
 const finalContent = computed(() => {

@@ -21,8 +21,9 @@ import {
   refreshPopperContainer,
   resizePopper,
 } from './popper/lifecycle'
-import { ensureGlobalPopperHandlers } from './popper/registry'
+import { ensureGlobalPopperHandlers, refreshShownPopperPreset } from './popper/registry'
 import { hidePopper, showPopper } from './popper/visibility'
+import { resolvePresetName } from '../util/preset'
 import type { PopperApi, PopperProps, UsePopperOptions } from './popper/types'
 
 /**
@@ -126,6 +127,7 @@ function setupLifecycle (api: PopperApi, options: UsePopperOptions) {
  */
 function setupWatchers (api: PopperApi) {
   watch(() => api.props.shown, () => autoShowHidePopper(api))
+  watch(() => resolvePresetName(api.props, 'dropdown'), () => refreshShownPopperPreset(api))
   watch(() => api.props.disabled, value => {
     value ? api.dispose() : initPopper(api, api.instance?.proxy?.$el ?? null)
   })

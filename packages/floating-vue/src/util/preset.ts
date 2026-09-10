@@ -26,12 +26,9 @@ export function resolvePresetName (props: PresetPropsLike, fallback: string): st
  * Vue prop definition for the deprecated `theme` alias, shared by every
  * component that accepts a preset name.
  *
- * Deliberately has no `default`. Vue only defers a prop to its second
- * resolution pass when the prop declares a default (or is a Boolean); props
- * without one are assigned straight from the raw props in the first pass. Since
- * `preset` resolves its own default by reading `theme`, giving `theme` a default
- * would make it resolve *after* `preset` and the alias would always read as
- * undefined.
+ * Deliberately has no `default`, keeping this compatibility input separate
+ * from `preset`. Consumers resolve both values reactively, while behavioral
+ * prop defaults can still read the raw alias during their mount-time lookup.
  */
 export const deprecatedThemeProp = {
   type: String,

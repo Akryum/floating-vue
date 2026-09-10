@@ -86,8 +86,9 @@ const popperContent = ref<ComponentPublicInstance | null>(null)
 // `vPopperTheme` is the deprecated spelling of the preset baked into a wrapper
 // component definition. The final fallback matches Popper and PopperContent, so
 // a bare <PopperWrapper> gets consistent classes instead of `preset-undefined`.
-const componentPreset = instance?.type as { vPopperPreset?: string, vPopperTheme?: string } | undefined
-const finalPreset = computed(() => props.preset ?? componentPreset?.vPopperPreset ?? componentPreset?.vPopperTheme ?? 'dropdown')
+const componentOptions = instance?.type as { vPopperPreset?: string, vPopperTheme?: string } | undefined
+const componentPreset = componentOptions?.vPopperPreset ?? componentOptions?.vPopperTheme
+const finalPreset = computed(() => props.preset ?? props.theme ?? componentPreset ?? 'dropdown')
 const presetClass = usePresetClass(finalPreset)
 const methods = usePopperMethods(popper)
 

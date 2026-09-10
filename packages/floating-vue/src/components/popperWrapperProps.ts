@@ -2,7 +2,7 @@ import type { PropType } from 'vue'
 import type { Placement } from '../util/popper'
 import type { Trigger } from '../types/trigger'
 import type { PopperProps } from '../composable/popper/types'
-import { deprecatedThemeProp, type PresetPropsLike } from '../util/preset'
+import { deprecatedThemeProp } from '../util/preset'
 
 const ElementType = typeof window !== 'undefined'
   ? window.Element
@@ -19,11 +19,9 @@ export type TriggerEvent = Trigger
 export const popperWrapperProps = {
   preset: {
     type: String,
-    // Only reads the deprecated alias: Vue calls this factory exactly when the
-    // raw `preset` was undefined, so reading `props.preset` here is always a
-    // no-op. Left null when neither is set, so PopperWrapper can fall back to
-    // the preset baked into the wrapper component (VDropdown, VMenu, VTooltip).
-    default: (props: PresetPropsLike) => props.theme ?? null,
+    // Keep this neutral. Resolving `theme` here would cache its mount-time
+    // value and stop the deprecated alias from updating reactively.
+    default: null,
   },
 
   /**
