@@ -44,7 +44,7 @@ export { PopperWrapper } from './components/PopperWrapper'
 export { ThemeClass } from './mixins/ThemeClass'
 export { TooltipDirective } from './components/TooltipDirective'
 // Utils
-export { hideAllPoppers, recomputeAllPoppers } from './factories/Popper'
+export { hideAllPoppers, recomputeAllPoppers } from './popper/context'
 export * from './util/events'
 export { placements } from './util/popper'
 export type { Placement } from './util/popper'
