@@ -1,7 +1,7 @@
+import { version } from '../package.json'
 import { assign } from './util/assign-deep'
 import type { FloatingVueConfig } from './config'
 import { config } from './config'
-import './style.css'
 // Components
 import { Dropdown } from './components/Dropdown'
 import { Menu } from './components/Menu'
@@ -59,7 +59,7 @@ export function install (app, options: FloatingVueConfig = {}) {
 
 const plugin = {
 
-  version: VERSION,
+  version,
   install,
   options: config,
 }

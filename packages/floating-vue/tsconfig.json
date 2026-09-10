@@ -9,6 +9,7 @@
     ],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "strict": false,
     "declaration": true,
     "outDir": "dist",
