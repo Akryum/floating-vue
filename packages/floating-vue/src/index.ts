@@ -1,7 +1,6 @@
 import { assign } from './util/assign-deep'
 import type { FloatingVueConfig } from './config'
 import { config } from './config'
-import 'vue-resize/dist/vue-resize.css'
 import './style.css'
 // Components
 import PrivateDropdown from './components/Dropdown'

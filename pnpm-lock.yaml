@@ -213,9 +213,6 @@ importers:
       '@floating-ui/dom':
         specifier: ~1.1.1
         version: 1.1.1
-      vue-resize:
-        specifier: ^2.0.0-alpha.1
-        version: 2.0.0-alpha.1(vue@3.5.42(typescript@5.9.3))
     devDependencies:
       '@nuxt/kit':
         specifier: ^3.21.11
@@ -3333,11 +3330,6 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-
-  vue-resize@2.0.0-alpha.1:
-    resolution: {integrity: sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==}
-    peerDependencies:
-      vue: ^3.0.0
 
   vue-router@4.6.4:
     resolution: {integrity: sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==}
@@ -6767,10 +6759,6 @@ snapshots:
       semver: 7.8.5
     transitivePeerDependencies:
       - supports-color
-
-  vue-resize@2.0.0-alpha.1(vue@3.5.42(typescript@5.9.3)):
-    dependencies:
-      vue: 3.5.42(typescript@5.9.3)
 
   vue-router@4.6.4(vue@3.5.42(typescript@5.9.3)):
     dependencies:
