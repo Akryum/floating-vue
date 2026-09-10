@@ -39,13 +39,10 @@ export interface PopperContext {
   hidingPopper: PopperController | null
   markShown: (popper: PopperController) => void
   markHidden: (popper: PopperController) => void
-}
-
-interface ActiveContext extends PopperContext {
   dispose: () => void
 }
 
-let context: ActiveContext | null = null
+let context: PopperContext | null = null
 let popperCount = 0
 
 /**
@@ -85,17 +82,9 @@ export function recomputeAllPoppers () {
   }
 }
 
-function createPopperContext (): ActiveContext {
+function createPopperContext (): PopperContext {
   const shownPoppers: PopperController[] = []
   const shownPoppersByTheme: Record<string, PopperController[]> = {}
-
-  function getShownPoppersByTheme (theme: string) {
-    let list = shownPoppersByTheme[theme]
-    if (!list) {
-      list = shownPoppersByTheme[theme] = []
-    }
-    return list
-  }
 
   function handleGlobalPointerDown (event: PopperEvent, touch: boolean) {
     if (config.autoHideOnMousedown) {
@@ -187,7 +176,7 @@ function createPopperContext (): ActiveContext {
   }
   window.addEventListener('resize', recomputeAllPoppers)
 
-  const ctx: ActiveContext = {
+  const ctx: PopperContext = {
     shownPoppers,
     hidingPopper: null,
 
@@ -206,7 +195,7 @@ function createPopperContext (): ActiveContext {
       shownPoppers.push(popper)
       document.body.classList.add('v-popper--some-open')
       for (const theme of getAllParentThemes(popper.theme)) {
-        getShownPoppersByTheme(theme).push(popper)
+        (shownPoppersByTheme[theme] ??= []).push(popper)
         document.body.classList.add(`v-popper--some-open--${theme}`)
       }
     },
@@ -217,7 +206,7 @@ function createPopperContext (): ActiveContext {
         document.body.classList.remove('v-popper--some-open')
       }
       for (const theme of getAllParentThemes(popper.theme)) {
-        const list = getShownPoppersByTheme(theme)
+        const list = shownPoppersByTheme[theme] ??= []
         removeFromArray(list, popper)
         if (list.length === 0) {
           document.body.classList.remove(`v-popper--some-open--${theme}`)

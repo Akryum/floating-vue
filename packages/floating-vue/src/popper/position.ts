@@ -153,4 +153,3 @@ export function buildPositionOptions (settings: PositionSettings, arrowNode: HTM
 
   return options
 }
-
