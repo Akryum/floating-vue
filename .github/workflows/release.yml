@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    uses: sxzz/workflows/.github/workflows/release.yml@main
+    with:
+      publish: true
+    permissions:
+      contents: write
+      id-token: write
+
+  # release-jsr:
+  #   uses: sxzz/workflows/.github/workflows/release-jsr.yml@main
+  #   permissions:
+  #     contents: read
+  #     id-token: write

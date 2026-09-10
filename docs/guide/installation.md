@@ -71,7 +71,7 @@ Include `dist/floating-vue.min.js` in the page:
 Also include the default CSS:
 
 ```html
-<link rel="stylsheet" href="https://unpkg.com/floating-vue@^2.0.0-beta.1/dist/style.css" />
+<link rel="stylesheet" href="https://unpkg.com/floating-vue@^2.0.0-beta.1/dist/style.css" />
 ```
 
 Install the plugin into your app:
