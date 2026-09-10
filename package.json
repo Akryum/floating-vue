@@ -10,6 +10,7 @@
     "dev": "pnpm -C docs run dev",
     "test": "pnpm -r --filter=\"./packages/*\" run test",
     "lint": "eslint --ext .js,.ts,.vue .",
+    "typecheck": "pnpm -r run typecheck",
     "release": "pnpm run lint && pnpm run build && sheep release -b main"
   },
   "devDependencies": {
