@@ -1,7 +1,9 @@
+import type {
+  computePosition,
+} from '@floating-ui/dom'
 import {
   arrow,
   autoPlacement,
-  computePosition,
   flip,
   offset,
   shift,

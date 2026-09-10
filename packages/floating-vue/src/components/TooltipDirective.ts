@@ -1,6 +1,7 @@
 import { computed, defineComponent, h, nextTick, ref, watch } from 'vue'
-import type { PropType } from 'vue'
+import type { ComponentPublicInstance, PropType } from 'vue'
 import { createPopper } from '../factories/Popper'
+import type { PopperExposed } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getDefaultConfig } from '../config'
 
@@ -50,7 +51,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
       return props.content as string
     })
 
-    let popperRef: InstanceType<typeof Popper> | undefined
+    let popperRef: (ComponentPublicInstance & PopperExposed) | undefined
     let popperContentRef: InstanceType<typeof PopperContent> | undefined
 
     let isPopperShown = false

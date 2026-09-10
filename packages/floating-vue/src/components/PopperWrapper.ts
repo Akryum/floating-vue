@@ -1,16 +1,12 @@
 import { computed, defineComponent, getCurrentInstance, h } from 'vue'
-import type { PropType } from 'vue'
+import type { ComponentPublicInstance, PropType } from 'vue'
 import { PopperRoot } from './internals/PopperRoot'
+import type { PopperExposed } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getThemeClasses } from '../config'
 import type { Placement } from '../util/popper.js'
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
-
-let Element: any = function () {}
-if (typeof window !== 'undefined') {
-  Element = window.Element
-}
 
 const PopperWrapper = /** @__PURE__ */ defineComponent({
   name: 'VPopperWrapper',
@@ -101,12 +97,12 @@ const PopperWrapper = /** @__PURE__ */ defineComponent({
     },
 
     container: {
-      type: [String, Object, Element, Boolean],
+      type: [String, Object, Boolean] as PropType<string | HTMLElement | boolean>,
       default: undefined,
     },
 
     boundary: {
-      type: [String, Element],
+      type: [String, Object] as PropType<string | Element>,
       default: undefined,
     },
 
@@ -236,11 +232,11 @@ const PopperWrapper = /** @__PURE__ */ defineComponent({
     const finalTheme = computed(() => props.theme ?? vPopperTheme)
     const themeClass = computed(() => getThemeClasses(finalTheme.value))
 
-    let popperRef: InstanceType<typeof PopperRoot> | undefined
+    let popperRef: (ComponentPublicInstance & PopperExposed) | undefined
     let popperContentRef: InstanceType<typeof PopperContent> | undefined
 
-    function getTargetNodes () {
-      return Array.from(popperRef!.$el.children)
+    function getTargetNodes (): Element[] {
+      return Array.from((popperRef!.$el as HTMLElement).children)
         .filter(node => node !== popperContentRef!.$el)
     }
 
