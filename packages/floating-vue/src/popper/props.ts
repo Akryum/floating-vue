@@ -11,6 +11,54 @@ function defaultPropFactory (prop: string) {
 
 export type TriggerEvent = 'hover' | 'click' | 'focus' | 'touch'
 
+type CustomTriggers = TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])
+
+// Props whose default comes from the theme config (default: getDefaultConfig(theme, name))
+const themedPropTypes = {
+  disabled: Boolean,
+  positioningDisabled: Boolean,
+  delay: [String, Number, Object] as PropType<string | number | { show?: string | number, hide?: string | number }>,
+  distance: [Number, String],
+  skidding: [Number, String],
+  triggers: Array as PropType<TriggerEvent[]>,
+  showTriggers: [Array, Function] as PropType<CustomTriggers>,
+  hideTriggers: [Array, Function] as PropType<CustomTriggers>,
+  popperTriggers: Array as PropType<TriggerEvent[]>,
+  popperShowTriggers: [Array, Function] as PropType<CustomTriggers>,
+  popperHideTriggers: [Array, Function] as PropType<CustomTriggers>,
+  container: [String, Object, Boolean] as PropType<string | HTMLElement | boolean>,
+  boundary: [String, Object] as PropType<string | Element>,
+  autoHide: [Boolean, Function] as PropType<boolean | ((event: Event) => boolean)>,
+  handleResize: Boolean,
+  instantMove: Boolean,
+  eagerMount: Boolean,
+  popperClass: [String, Array, Object],
+  computeTransformOrigin: Boolean,
+  autoSize: [Boolean, String] as PropType<boolean | 'min' | 'max'>,
+  autoBoundaryMaxSize: Boolean,
+  preventOverflow: Boolean,
+  overflowPadding: [Number, String],
+  arrowPadding: [Number, String],
+  arrowOverflow: Boolean,
+  flip: Boolean,
+  shift: Boolean,
+  shiftCrossAxis: Boolean,
+  noAutoFocus: Boolean,
+  disposeTimeout: Number,
+}
+
+type ThemedProps = {
+  [K in keyof typeof themedPropTypes]: {
+    type: (typeof themedPropTypes)[K]
+    default: ReturnType<typeof defaultPropFactory>
+  }
+}
+
+const themedProps = Object.fromEntries(
+  Object.entries(themedPropTypes)
+    .map(([key, type]) => [key, { type, default: defaultPropFactory(key) }]),
+) as ThemedProps // Object.fromEntries erases per-key types
+
 export const popperProps = {
   theme: {
     type: String,
@@ -46,75 +94,10 @@ export const popperProps = {
     default: null,
   },
 
-  disabled: {
-    type: Boolean,
-    default: defaultPropFactory('disabled'),
-  },
-
-  positioningDisabled: {
-    type: Boolean,
-    default: defaultPropFactory('positioningDisabled'),
-  },
-
   placement: {
     type: String as PropType<Placement>,
     default: defaultPropFactory('placement'),
     validator: (value: Placement) => placements.includes(value),
-  },
-
-  delay: {
-    type: [String, Number, Object] as PropType<string | number | { show?: string | number, hide?: string | number }>,
-    default: defaultPropFactory('delay'),
-  },
-
-  distance: {
-    type: [Number, String],
-    default: defaultPropFactory('distance'),
-  },
-
-  skidding: {
-    type: [Number, String],
-    default: defaultPropFactory('skidding'),
-  },
-
-  triggers: {
-    type: Array as PropType<TriggerEvent[]>,
-    default: defaultPropFactory('triggers'),
-  },
-
-  showTriggers: {
-    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
-    default: defaultPropFactory('showTriggers'),
-  },
-
-  hideTriggers: {
-    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
-    default: defaultPropFactory('hideTriggers'),
-  },
-
-  popperTriggers: {
-    type: Array as PropType<TriggerEvent[]>,
-    default: defaultPropFactory('popperTriggers'),
-  },
-
-  popperShowTriggers: {
-    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
-    default: defaultPropFactory('popperShowTriggers'),
-  },
-
-  popperHideTriggers: {
-    type: [Array, Function] as PropType<TriggerEvent[] | ((triggers: TriggerEvent[]) => TriggerEvent[])>,
-    default: defaultPropFactory('popperHideTriggers'),
-  },
-
-  container: {
-    type: [String, Object, Boolean] as PropType<string | HTMLElement | boolean>,
-    default: defaultPropFactory('container'),
-  },
-
-  boundary: {
-    type: [String, Object] as PropType<string | Element>,
-    default: defaultPropFactory('boundary'),
   },
 
   strategy: {
@@ -123,106 +106,23 @@ export const popperProps = {
     default: defaultPropFactory('strategy'),
   },
 
-  autoHide: {
-    type: [Boolean, Function] as PropType<boolean | ((event: Event) => boolean)>,
-    default: defaultPropFactory('autoHide'),
-  },
-
-  handleResize: {
-    type: Boolean,
-    default: defaultPropFactory('handleResize'),
-  },
-
-  instantMove: {
-    type: Boolean,
-    default: defaultPropFactory('instantMove'),
-  },
-
-  eagerMount: {
-    type: Boolean,
-    default: defaultPropFactory('eagerMount'),
-  },
-
-  popperClass: {
-    type: [String, Array, Object],
-    default: defaultPropFactory('popperClass'),
-  },
-
-  computeTransformOrigin: {
-    type: Boolean,
-    default: defaultPropFactory('computeTransformOrigin'),
-  },
-
   /**
-   * @deprecated
+   * @deprecated Use `autoSize="min"` instead.
    */
   autoMinSize: {
     type: Boolean,
     default: defaultPropFactory('autoMinSize'),
   },
 
-  autoSize: {
-    type: [Boolean, String] as PropType<boolean | 'min' | 'max'>,
-    default: defaultPropFactory('autoSize'),
-  },
-
   /**
-   * @deprecated
+   * @deprecated Use `autoBoundaryMaxSize` instead.
    */
   autoMaxSize: {
     type: Boolean,
     default: defaultPropFactory('autoMaxSize'),
   },
 
-  autoBoundaryMaxSize: {
-    type: Boolean,
-    default: defaultPropFactory('autoBoundaryMaxSize'),
-  },
-
-  preventOverflow: {
-    type: Boolean,
-    default: defaultPropFactory('preventOverflow'),
-  },
-
-  overflowPadding: {
-    type: [Number, String],
-    default: defaultPropFactory('overflowPadding'),
-  },
-
-  arrowPadding: {
-    type: [Number, String],
-    default: defaultPropFactory('arrowPadding'),
-  },
-
-  arrowOverflow: {
-    type: Boolean,
-    default: defaultPropFactory('arrowOverflow'),
-  },
-
-  flip: {
-    type: Boolean,
-    default: defaultPropFactory('flip'),
-  },
-
-  shift: {
-    type: Boolean,
-    default: defaultPropFactory('shift'),
-  },
-
-  shiftCrossAxis: {
-    type: Boolean,
-    default: defaultPropFactory('shiftCrossAxis'),
-  },
-
-  noAutoFocus: {
-    type: Boolean,
-    default: defaultPropFactory('noAutoFocus'),
-  },
-
-  disposeTimeout: {
-    type: Number,
-    default: defaultPropFactory('disposeTimeout'),
-  },
+  ...themedProps,
 }
 
 export const popperEmits = {
