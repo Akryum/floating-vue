@@ -1,5 +1,5 @@
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "24"
 
 [build]
   publish = "docs/.vitepress/dist"
