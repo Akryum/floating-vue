@@ -71,9 +71,6 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   // Internal state
 
   let isDisposed = true
-  let pendingHide = false
-  let containsGlobalTarget = false
-  let mouseDownContains = false
   let preventShow = false
   let showFrameLocked = false
   let hideInProgress = false
@@ -107,12 +104,9 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     lockedChild: null,
     lockedChildTimer: null,
     shownChildren,
-    get pendingHide () { return pendingHide },
-    set pendingHide (value) { pendingHide = value },
-    get mouseDownContains () { return mouseDownContains },
-    set mouseDownContains (value) { mouseDownContains = value },
-    get containsGlobalTarget () { return containsGlobalTarget },
-    set containsGlobalTarget (value) { containsGlobalTarget = value },
+    pendingHide: false,
+    mouseDownContains: false,
+    containsGlobalTarget: false,
     get lastAutoHide () { return lastAutoHide.value },
     set lastAutoHide (value) { lastAutoHide.value = value },
     popperNode: () => props.popperNode(),
@@ -161,7 +155,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   function show ({ skipDelay = false, force = false }: { event?: Event, skipDelay?: boolean, force?: boolean } = {}) {
     if (parentPopper?.lockedChild && parentPopper.lockedChild !== controller) { return }
 
-    pendingHide = false
+    controller.pendingHide = false
     if (force || !props.disabled) {
       if (parentPopper?.lockedChild === controller) {
         parentPopper.lockedChild = null
@@ -184,7 +178,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
     // Abort if child is shown
     if (shownChildren.size > 0) {
-      pendingHide = true
+      controller.pendingHide = true
       return
     }
 
@@ -208,7 +202,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
       parentPopper.lockedChild = null
     }
 
-    pendingHide = false
+    controller.pendingHide = false
     scheduleHide(skipDelay)
 
     emit('hide')
@@ -334,7 +328,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   function scheduleHide (skipDelay = false) {
     if (shownChildren.size > 0) {
-      pendingHide = true
+      controller.pendingHide = true
       return
     }
     updateParentShownChildren(false)
@@ -421,7 +415,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   async function applyHide (skipTransitionValue = false) {
     if (shownChildren.size > 0) {
-      pendingHide = true
+      controller.pendingHide = true
       hideInProgress = false
       return
     }
