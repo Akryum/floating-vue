@@ -1,6 +1,6 @@
 {
   "name": "floating-vue-monorepo",
-  "packageManager": "pnpm@8.15.9",
+  "packageManager": "pnpm@12.3.4",
   "version": "5.2.2",
   "private": true,
   "scripts": {
