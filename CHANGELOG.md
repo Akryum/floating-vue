@@ -1,5 +1,12 @@
 # Changelog
 
+> [!NOTE]
+> Changelogs are now in GitHub Releases only, check https://github.com/Akryum/floating-vue/releases instead.
+
+<details>
+<summary>Past Changelog</summary>
+
+
 ## v5.2.2
 
 
@@ -666,3 +673,5 @@ Included changes from `v1.0.0-beta.6`:
 
 - Renamed from `v-tooltip` to `floating-vue`
 - Switched to floating-ui
+
+</details>

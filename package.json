@@ -11,7 +11,7 @@
     "dev": "pnpm -C docs run dev",
     "test": "pnpm -r --filter=\"./packages/*\" run test",
     "lint": "eslint --cache",
-    "typecheck": "pnpm -r run typecheck",
+    "typecheck": "tsc",
     "release": "pnpm run lint && pnpm run build && bumpp -r"
   },
   "devDependencies": {
