@@ -7,7 +7,6 @@ export default {
   extends: DefaultTheme,
   enhanceApp ({ app }) {
     app.use(FloatingVue, {
-      boundary: 'body',
       themes: {
         '_editor-tooltip': {
           $extend: 'tooltip',
