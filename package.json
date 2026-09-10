@@ -9,7 +9,7 @@
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm run build && pnpm -C docs run build",
     "dev": "pnpm -C docs run dev",
-    "test": "pnpm -r --filter=\"./packages/*\" run test",
+    "test": "pnpm run build && vitest run",
     "lint": "eslint --cache",
     "typecheck": "pnpm -r run typecheck",
     "release": "pnpm run lint && pnpm run build && bumpp -r"
@@ -19,6 +19,10 @@
     "bumpp": "^12.3.0",
     "eslint": "^10.10.0",
     "floating-vue": "workspace:*",
-    "typescript": "^5.9.3"
+    "jsdom": "^25.0.1",
+    "tsnapi": "^1.4.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
   }
 }

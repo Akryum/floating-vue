@@ -1,9 +1,9 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
     environment: 'jsdom',
-    include: ['src/**/*.spec.ts'],
+    include: ['packages/*/src/**/*.spec.ts', 'test/**/*.test.ts'],
   },
 })
