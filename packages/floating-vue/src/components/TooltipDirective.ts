@@ -83,7 +83,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
 
     watch(finalContent, async () => {
       await nextTick()
-      popperRef!.onResize()
+      popperRef?.onResize()
     })
 
     function onShow () {
