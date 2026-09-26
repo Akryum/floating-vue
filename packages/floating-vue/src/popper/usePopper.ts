@@ -348,7 +348,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   function computeDelay (type: 'show' | 'hide') {
     const delay = props.delay as any // legacy loose delay parsing
-    return parseInt((delay && delay[type]) || delay || 0)
+    return parseInt(delay?.[type] ?? delay ?? 0) || 0
   }
 
   async function applyShow (skipTransitionValue = false) {
