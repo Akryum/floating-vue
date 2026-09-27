@@ -322,7 +322,11 @@ Padding of the arrow relative to the popper bounds to prevent it from overflowin
 
 ### `container`
 
-Selector: Container where the popper will be appended (e.g. `'body'`).
+Container where the popper will be appended. By default, this is `'body'`.
+Pass a CSS selector such as `'#myButton'` or a DOM element to append it
+there instead. Pass `false` to append it to the reference element's parent.
+The selector must match an element when the popper mounts; otherwise showing
+the popper throws an error.
 
 ### `boundary`
 
