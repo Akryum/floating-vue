@@ -1,5 +1,5 @@
 import type { App, Ref } from 'vue'
-import { createApp, h, ref } from 'vue'
+import { createApp, h, nextTick, ref } from 'vue'
 import { TooltipDirective } from '../components/TooltipDirective'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
@@ -76,9 +76,15 @@ function ensureDirectiveApp () {
     },
   })
 
-  const mountTarget = document.createElement('div')
-  document.body.appendChild(mountTarget)
-  directiveApp.mount(mountTarget)
+  // A directive hook creates the first tooltip, in the middle of the host app's patch.
+  // Mounting there flushes Vue's shared post-flush queue, so the host's pending mounted hooks
+  // run before the host inserts their elements. Mount after the current flush instead:
+  // `directives` is reactive, so every tooltip created in the meantime still renders.
+  nextTick(() => {
+    const mountTarget = document.createElement('div')
+    document.body.appendChild(mountTarget)
+    directiveApp.mount(mountTarget)
+  })
 }
 
 export function createTooltip (el, value, modifiers) {
