@@ -29,3 +29,26 @@ describe('getPlacement', () => {
     expect(result).toBe('top')
   })
 })
+
+describe('createTooltip', () => {
+  it('uses the default placement when modifiers are omitted', () => {
+    const el = document.createElement('button')
+    try {
+      const tooltip = VTooltip.createTooltip(el, 'Tooltip')
+      expect(tooltip.options.value.placement).toBe('top')
+      expect(el.classList.contains('v-popper--has-tooltip')).toBe(true)
+    } finally {
+      VTooltip.destroyTooltip(el)
+    }
+  })
+
+  it('still accepts placement modifiers', () => {
+    const el = document.createElement('button')
+    try {
+      const tooltip = VTooltip.createTooltip(el, 'Tooltip', { bottom: true })
+      expect(tooltip.options.value.placement).toBe('bottom')
+    } finally {
+      VTooltip.destroyTooltip(el)
+    }
+  })
+})
