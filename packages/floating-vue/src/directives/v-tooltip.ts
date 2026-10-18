@@ -81,7 +81,7 @@ function ensureDirectiveApp () {
   directiveApp.mount(mountTarget)
 }
 
-export function createTooltip (el, value, modifiers) {
+export function createTooltip (el, value, modifiers?: any) {
   ensureDirectiveApp()
   const options = ref(getOptions(el, value, modifiers))
   const shown = ref(false)
