@@ -182,20 +182,19 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
       return
     }
 
-    // Abort if aiming for the popper
-    if (hasPopperShowTriggerHover.value && isAimingPopper(referenceNode, popperNode)) {
-      if (parentPopper) {
-        parentPopper.lockedChild = controller
-        if (parentPopper.lockedChildTimer) {
-          clearTimeout(parentPopper.lockedChildTimer)
-        }
-        parentPopper.lockedChildTimer = setTimeout(() => {
-          if (parentPopper.lockedChild === controller) {
-            parentPopper.lockedChild.hide({ skipDelay })
-            parentPopper.lockedChild = null
-          }
-        }, 1000)
+    // Abort if a child is aiming for its popper; the parent's timer hides it if it never arrives.
+    // A root popper has no such timer, so it falls through to the hide delay instead (#1081).
+    if (parentPopper && hasPopperShowTriggerHover.value && isAimingPopper(referenceNode, popperNode)) {
+      parentPopper.lockedChild = controller
+      if (parentPopper.lockedChildTimer) {
+        clearTimeout(parentPopper.lockedChildTimer)
       }
+      parentPopper.lockedChildTimer = setTimeout(() => {
+        if (parentPopper.lockedChild === controller) {
+          parentPopper.lockedChild.hide({ skipDelay })
+          parentPopper.lockedChild = null
+        }
+      }, 1000)
       return
     }
     if (parentPopper?.lockedChild === controller) {
