@@ -4,28 +4,34 @@
 
 ## Run the project
 
-Install deps:
+Install dependencies from the repository root:
 
 ```
-yarn
+pnpm install
 ```
 
-Run the tests:
+Run the full test suite (builds the packages, then runs Vitest):
 
 ```
-pnpm run test:unit --watch
+pnpm run test
+```
+
+Run Vitest in watch mode:
+
+```
+pnpm exec vitest --watch
 ```
 
 Build the library in dev mode:
 
 ```
-pnpm run dev
+pnpm --filter floating-vue run dev
 ```
 
 Build the library for production:
 
 ```
-pnpm run build
+pnpm --filter floating-vue run build
 ```
 
 ### Demo
