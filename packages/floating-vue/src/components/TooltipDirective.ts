@@ -1,9 +1,10 @@
-import { computed, defineComponent, h, nextTick, ref, watch } from 'vue'
+import { computed, defineComponent, h, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import type { ComponentPublicInstance, PropType } from 'vue'
 import { createPopper } from '../factories/Popper'
 import type { PopperExposed } from '../popper/usePopper'
 import { PopperContent } from './PopperContent'
 import { getDefaultConfig } from '../config'
+import { subscribeToPromise } from '../util/async'
 
 const Popper = /** @__PURE__ */ createPopper()
 
@@ -57,16 +58,38 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
     let isPopperShown = false
     let isLoading = false
     let fetchId = 0
+    let isDisposed = false
+    let cancelContentRequest: (() => void) | undefined
+
+    function cancelContent () {
+      cancelContentRequest?.()
+      cancelContentRequest = undefined
+      fetchId++
+      isLoading = false
+    }
+
+    onBeforeUnmount(() => {
+      isDisposed = true
+      isPopperShown = false
+      cancelContent()
+    })
 
     function fetchContent (force = false) {
+      if (force) { cancelContent() }
+
       if (typeof props.content === 'function' && isPopperShown &&
         (force || (!isLoading && asyncContent.value == null))) {
         asyncContent.value = null
         isLoading = true
+
         const currentFetchId = ++fetchId
         const result = props.content(props)
-        if (result.then) {
-          result.then((res: string) => onResult(currentFetchId, res))
+
+        if (result && typeof result.then === 'function') {
+          cancelContentRequest = subscribeToPromise<string>(
+            result,
+            res => onResult(currentFetchId, res),
+          )
         } else {
           onResult(currentFetchId, result)
         }
@@ -74,7 +97,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
     }
 
     function onResult (resultFetchId: number, result: string) {
-      if (resultFetchId !== fetchId) { return }
+      if (isDisposed || resultFetchId !== fetchId) { return }
       isLoading = false
       asyncContent.value = result
     }
@@ -83,7 +106,7 @@ export const TooltipDirective = /** @__PURE__ */ defineComponent({
 
     watch(finalContent, async () => {
       await nextTick()
-      popperRef!.onResize()
+      if (!isDisposed) { popperRef?.onResize() }
     })
 
     function onShow () {

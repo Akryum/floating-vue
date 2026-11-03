@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { acquirePopperContext, hideAllPoppers, recomputeAllPoppers, releasePopperContext } from './context'
 import type { PopperController } from './context'
 
@@ -41,8 +41,20 @@ function release () {
 
 afterEach(() => {
   while (held > 0) { release() }
+  vi.unstubAllGlobals()
   document.body.className = ''
 })
+
+function queuedFrames () {
+  const frames = new Map<number, FrameRequestCallback>()
+  let id = 0
+  vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+    frames.set(++id, callback)
+    return id
+  })
+  vi.stubGlobal('cancelAnimationFrame', (frame: number) => { frames.delete(frame) })
+  return frames
+}
 
 describe('popper context', () => {
   it('reuses the same context while at least one popper holds it', () => {
@@ -93,6 +105,62 @@ describe('popper context', () => {
     context.markHidden(b)
     expect(document.body.classList.contains('v-popper--some-open')).toBe(false)
     expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(false)
+  })
+
+  it('registers the same controller only once', () => {
+    const context = acquire()
+    const controller = fakeController()
+    context.markShown(controller)
+    context.markShown(controller)
+    expect(context.shownPoppers).toEqual([controller])
+    context.markHidden(controller)
+    expect(context.shownPoppers).toEqual([])
+    expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(false)
+  })
+
+  it('cleans the original theme when a shown popper changes theme', () => {
+    const context = acquire()
+    let theme = 'tooltip'
+    const controller = fakeController({ get theme () { return theme } })
+    // Object spread in fakeController reads getters, so keep this one live.
+    Object.defineProperty(controller, 'theme', { get: () => theme })
+    context.markShown(controller)
+    theme = 'dropdown'
+    context.markHidden(controller)
+    expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(false)
+  })
+
+  it('releases controller references and body classes on final teardown', () => {
+    const context = acquire()
+    const controller = fakeController()
+    context.markShown(controller)
+    context.hidingPopper = controller
+    release()
+    expect(context.shownPoppers).toEqual([])
+    expect(context.hidingPopper).toBe(null)
+    expect(document.body.classList.contains('v-popper--some-open')).toBe(false)
+    expect(document.body.classList.contains('v-popper--some-open--tooltip')).toBe(false)
+  })
+
+  it('cancels a global-close frame that still captures a hidden popper and its event', () => {
+    const frames = queuedFrames()
+    const context = acquire()
+    const controller = fakeController()
+    context.markShown(controller)
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(frames.size).toBe(1)
+    context.markHidden(controller)
+    expect(frames.size).toBe(0)
+  })
+
+  it('cancels all queued global-close frames on final teardown', () => {
+    const frames = queuedFrames()
+    const context = acquire()
+    context.markShown(fakeController())
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(frames.size).toBe(1)
+    release()
+    expect(frames.size).toBe(0)
   })
 
   it('clears the hiding popper when it is marked hidden', () => {

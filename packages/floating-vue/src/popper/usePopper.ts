@@ -76,6 +76,11 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   let hideInProgress = false
   let scheduleTimer: ReturnType<typeof setTimeout>
   let disposeTimer: ReturnType<typeof setTimeout>
+  let preventShowTimer: ReturnType<typeof setTimeout>
+  let showFrame: number | undefined
+  let frameAbortController: AbortController | undefined
+  let operationId = 0
+  let transitionId = 0
 
   // DOM nodes (resolved in init)
 
@@ -153,6 +158,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   // Show / hide
 
   function show ({ skipDelay = false, force = false }: { event?: Event, skipDelay?: boolean, force?: boolean } = {}) {
+    if (isDisposed) { return }
     if (parentPopper?.lockedChild && parentPopper.lockedChild !== controller) { return }
 
     controller.pendingHide = false
@@ -166,7 +172,9 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
       // Prevent hiding with global handler
       showFrameLocked = true
-      requestAnimationFrame(() => {
+      if (showFrame != null) { cancelAnimationFrame(showFrame) }
+      showFrame = requestAnimationFrame(() => {
+        showFrame = undefined
         showFrameLocked = false
       })
     }
@@ -174,7 +182,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   }
 
   function hide ({ skipDelay = false }: { event?: Event, skipDelay?: boolean } = {}) {
-    if (hideInProgress) { return }
+    if (isDisposed || hideInProgress) { return }
 
     // Abort if child is shown
     if (shownChildren.size > 0) {
@@ -214,8 +222,12 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   function init () {
     if (!isDisposed) { return }
     isDisposed = false
+    operationId++
+    transitionId++
+    frameAbortController = new AbortController()
     isMounted.value = false
     preventShow = false
+    hideInProgress = false
 
     // Nodes
     referenceNode = props.referenceNode?.() ?? vm.proxy.$el
@@ -243,28 +255,68 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   function dispose () {
     if (isDisposed) { return }
     isDisposed = true
+    const wasHiding = hideInProgress
+    operationId++
+    transitionId++
+    frameAbortController?.abort()
+    frameAbortController = undefined
+    clearTimeout(scheduleTimer)
+    clearTimeout(disposeTimer)
+    clearTimeout(preventShowTimer)
+    if (showFrame != null) { cancelAnimationFrame(showFrame) }
+    showFrame = undefined
+    showFrameLocked = false
+
+    if (controller.lockedChildTimer != null) { clearTimeout(controller.lockedChildTimer) }
+    controller.lockedChildTimer = null
+    controller.lockedChild = null
+    controller.pendingHide = false
+    shownChildren.clear()
+    if (parentPopper?.lockedChild === controller) {
+      if (parentPopper.lockedChildTimer != null) { clearTimeout(parentPopper.lockedChildTimer) }
+      parentPopper.lockedChildTimer = null
+      parentPopper.lockedChild = null
+    }
+
+    // Disposal must not go through hide(), which can defer or refuse hiding.
     events.remove()
-    hide({ skipDelay: true })
+    context?.markHidden(controller)
     detachPopperNode()
 
+    const wasShown = isShown.value
     isMounted.value = false
     isShown.value = false
+    applyAttrsToTarget({
+      'aria-describedby': undefined,
+      'data-popper-shown': undefined,
+    })
 
     updateParentShownChildren(false)
 
     swapTargetAttrs('data-original-title', 'title')
+
+    if (wasShown) { emit('apply-hide') }
+    if (!wasHiding) {
+      emit('hide')
+      emit('update:shown', false)
+    }
 
     updateMouseTrackingInterest()
     if (context) {
       releasePopperContext()
       context = null
     }
+
+    targetNodes = []
+    referenceNode = popperNode = innerNode = arrowNode = undefined
   }
 
   async function onResize () {
     if (isShown.value) {
       await computePos()
-      emit('resize')
+      if (!isDisposed && isShown.value) {
+        emit('resize')
+      }
     }
   }
 
@@ -272,6 +324,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
   async function computePos () {
     if (isDisposed || props.positioningDisabled) { return }
+    const signal = frameAbortController?.signal
 
     const options = buildPositionOptions({
       strategy: props.strategy,
@@ -292,7 +345,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     }, arrowNode, innerNode)
 
     const data = await computePosition(referenceNode, popperNode, options)
-
+    if (isDisposed || signal?.aborted) { return }
     Object.assign(result, {
       x: data.x,
       y: data.y,
@@ -306,23 +359,28 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   }
 
   // Scheduling
+  function isCurrentOperation (requestId: number) {
+    return !isDisposed && requestId === operationId
+  }
 
   function scheduleShow (skipDelay = false) {
+    const requestId = ++operationId
     updateParentShownChildren(true)
     hideInProgress = false
     clearTimeout(scheduleTimer)
+    if (context?.hidingPopper === controller) { context.hidingPopper = null }
 
     const hidingPopper = context?.hidingPopper
     if (hidingPopper && props.instantMove && hidingPopper.instantMove && hidingPopper !== parentPopper) {
       hidingPopper.applyHide(true)
-      applyShow(true)
+      applyShow(true, requestId)
       return
     }
 
     if (skipDelay) {
-      applyShow()
+      applyShow(false, requestId)
     } else {
-      scheduleTimer = setTimeout(applyShow, computeDelay('show'))
+      scheduleTimer = setTimeout(applyShow, computeDelay('show'), false, requestId)
     }
   }
 
@@ -331,6 +389,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
       controller.pendingHide = true
       return
     }
+    operationId++
     updateParentShownChildren(false)
     hideInProgress = true
     clearTimeout(scheduleTimer)
@@ -351,20 +410,31 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     return parseInt((delay && delay[type]) || delay || 0)
   }
 
-  async function applyShow (skipTransitionValue = false) {
+  async function applyShow (skipTransitionValue = false, requestId = operationId) {
+    if (!isCurrentOperation(requestId) || hideInProgress) { return }
     clearTimeout(disposeTimer)
     clearTimeout(scheduleTimer)
     skipTransition.value = skipTransitionValue
 
     // Already shown
     if (isShown.value) {
+      addScrollListeners()
       return
     }
 
     ensureTeleport()
-    await nextFrame()
+    await nextFrame(frameAbortController?.signal)
+    if (!isCurrentOperation(requestId) || hideInProgress) { return }
     await computePos()
-    await applyShowEffect()
+    if (!isCurrentOperation(requestId) || hideInProgress) { return }
+    await applyShowEffect(requestId)
+    if (!isCurrentOperation(requestId) || !isShown.value || hideInProgress) { return }
+
+    addScrollListeners()
+  }
+
+  function addScrollListeners () {
+    events.remove('scroll')
 
     // Scroll
     if (!props.positioningDisabled) {
@@ -377,8 +447,8 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     }
   }
 
-  async function applyShowEffect () {
-    if (hideInProgress) { return }
+  async function applyShowEffect (requestId: number) {
+    if (!isCurrentOperation(requestId) || hideInProgress || isShown.value) { return }
 
     // Advanced animations
     if (props.computeTransformOrigin) {
@@ -391,6 +461,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
       result.transformOrigin = `${x}px ${y}px`
     }
 
+    const effectId = ++transitionId
     isShown.value = true
 
     applyAttrsToTarget({
@@ -398,27 +469,34 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
       'data-popper-shown': '',
     })
 
-    context?.markShown(controller)
+    const isCurrentTransition = () => !isDisposed && effectId === transitionId && isShown.value
+    context?.markShown(controller, isCurrentTransition)
+    if (!isCurrentTransition()) { return }
 
     emit('apply-show')
+    if (!isCurrentTransition()) { return }
 
     // Advanced classes
     classes.showFrom = true
     classes.showTo = false
     classes.hideFrom = false
     classes.hideTo = false
-    await nextFrame()
+    await nextFrame(frameAbortController?.signal)
+    if (!isCurrentTransition()) { return }
     classes.showFrom = false
     classes.showTo = true
     if (!props.noAutoFocus) { popperNode.focus() }
   }
 
   async function applyHide (skipTransitionValue = false) {
+    if (isDisposed) { return }
     if (shownChildren.size > 0) {
       controller.pendingHide = true
       hideInProgress = false
       return
     }
+    operationId++
+    hideInProgress = true
     clearTimeout(scheduleTimer)
 
     // Already hidden
@@ -429,6 +507,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     skipTransition.value = skipTransitionValue
     context?.markHidden(controller)
 
+    const effectId = ++transitionId
     isShown.value = false
 
     applyAttrsToTarget({
@@ -451,13 +530,15 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
     events.remove('scroll')
 
     emit('apply-hide')
+    if (isDisposed || effectId !== transitionId || isShown.value) { return }
 
     // Advanced classes
     classes.showFrom = false
     classes.showTo = false
     classes.hideFrom = true
     classes.hideTo = false
-    await nextFrame()
+    await nextFrame(frameAbortController?.signal)
+    if (isDisposed || effectId !== transitionId || isShown.value) { return }
     classes.hideFrom = false
     classes.hideTo = true
   }
@@ -555,7 +636,8 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
 
     if (touch) {
       preventShow = true
-      setTimeout(() => {
+      clearTimeout(preventShowTimer)
+      preventShowTimer = setTimeout(() => {
         preventShow = false
       }, 300)
     }
@@ -564,7 +646,7 @@ export function usePopper (props: PopperProps, emit: PopperEmit) {
   // Target nodes attributes
 
   function detachPopperNode () {
-    popperNode.parentNode && popperNode.parentNode.removeChild(popperNode)
+    popperNode?.parentNode && popperNode.parentNode.removeChild(popperNode)
   }
 
   function swapTargetAttrs (attrFrom: string, attrTo: string) {

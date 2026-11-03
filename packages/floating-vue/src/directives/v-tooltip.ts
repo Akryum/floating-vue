@@ -1,5 +1,5 @@
 import type { App, Ref } from 'vue'
-import { createApp, h, ref } from 'vue'
+import { createApp, h, ref, toRaw } from 'vue'
 import { TooltipDirective } from '../components/TooltipDirective'
 import { getDefaultConfig } from '../config'
 import { placements } from '../util/popper'
@@ -24,7 +24,7 @@ export function getPlacement (options, modifiers) {
   return result
 }
 
-export function getOptions (el, value, modifiers) {
+export function getOptions (_el, value, modifiers) {
   let options
   const type = typeof value
   if (type === 'string') {
@@ -35,8 +35,6 @@ export function getOptions (el, value, modifiers) {
     options = { content: false }
   }
   options.placement = getPlacement(options, modifiers)
-  options.targetNodes = () => [el]
-  options.referenceNode = () => el
   return options
 }
 
@@ -44,6 +42,20 @@ interface Directive {
   id: number
   options: Ref<any>
   shown: Ref<boolean>
+}
+
+// Keep target closures out of caller-owned options and out of the returned API scope.
+function createNodeBindings (el) {
+  return {
+    targetNodes: () => [el],
+    referenceNode: () => el,
+  }
+}
+
+const nodeBindings = new WeakMap<Directive, ReturnType<typeof createNodeBindings>>()
+const emptyNodeBindings = {
+  targetNodes: () => [],
+  referenceNode: () => null,
 }
 
 let directiveApp: App
@@ -66,6 +78,7 @@ function ensureDirectiveApp () {
       return this.directives.map((directive) => {
         return h(TooltipDirective, {
           ...directive.options,
+          ...(nodeBindings.get(toRaw(directive)) ?? emptyNodeBindings),
           shown: directive.shown || directive.options.shown,
           key: directive.id,
         })
@@ -91,6 +104,7 @@ export function createTooltip (el, value, modifiers) {
     options,
     shown,
   }
+  nodeBindings.set(item, createNodeBindings(el))
   directives.value.push(item)
 
   // Class on target
@@ -117,7 +131,10 @@ export function destroyTooltip (el) {
     const index = directives.value.indexOf(el.$_popper.item)
     if (index !== -1) { directives.value.splice(index, 1) }
 
+    nodeBindings.delete(toRaw(el.$_popper.item))
     delete el.$_popper
+    delete el.$_popperOldShown
+    delete el.$_popperMountTarget
     delete el.$_popperOldShown
     delete el.$_popperMountTarget
   }
