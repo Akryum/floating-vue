@@ -37,7 +37,7 @@ export interface PopperController {
 export interface PopperContext {
   readonly shownPoppers: PopperController[]
   hidingPopper: PopperController | null
-  markShown: (popper: PopperController) => void
+  markShown: (popper: PopperController, isActive?: () => boolean) => void
   markHidden: (popper: PopperController) => void
   dispose: () => void
 }
@@ -85,6 +85,16 @@ export function recomputeAllPoppers () {
 function createPopperContext (): PopperContext {
   const shownPoppers: PopperController[] = []
   const shownPoppersByTheme: Record<string, PopperController[]> = {}
+  const pendingFrames = new Map<number, PopperController>()
+
+  function cancelPendingFrames (popper?: PopperController) {
+    for (const [frame, owner] of pendingFrames) {
+      if (!popper || owner === popper) {
+        cancelAnimationFrame(frame)
+        pendingFrames.delete(frame)
+      }
+    }
+  }
 
   function handleGlobalPointerDown (event: PopperEvent, touch: boolean) {
     if (config.autoHideOnMousedown) {
@@ -123,7 +133,9 @@ function createPopperContext (): PopperContext {
         popper.pendingHide = false
 
         // Delay so that close directive has time to set values (closeAllPopover, closePopover)
-        requestAnimationFrame(() => {
+        const frame = requestAnimationFrame(() => {
+          pendingFrames.delete(frame)
+          if (!shownPoppers.includes(popper)) { return }
           popper.pendingHide = false
           if (preventClose[popper.randomId]) { return }
 
@@ -152,6 +164,7 @@ function createPopperContext (): PopperContext {
             }
           }
         })
+        pendingFrames.set(frame, popper)
       } catch {
         // noop
       }
@@ -180,11 +193,11 @@ function createPopperContext (): PopperContext {
     shownPoppers,
     hidingPopper: null,
 
-    markShown (popper) {
+    markShown (popper, isActive = () => true) {
+      if (!isActive() || shownPoppers.includes(popper)) { return }
       const showGroup = popper.showGroup
       if (showGroup) {
-        for (let i = 0; i < shownPoppers.length; i++) {
-          const popover = shownPoppers[i]
+        for (const popover of [...shownPoppers]) {
           if (popover.showGroup !== showGroup) {
             popover.hide()
             popover.emitCloseGroup()
@@ -192,6 +205,7 @@ function createPopperContext (): PopperContext {
         }
       }
 
+      if (!isActive()) { return }
       shownPoppers.push(popper)
       document.body.classList.add('v-popper--some-open')
       for (const theme of getAllParentThemes(popper.theme)) {
@@ -201,14 +215,15 @@ function createPopperContext (): PopperContext {
     },
 
     markHidden (popper) {
+      cancelPendingFrames(popper)
       removeFromArray(shownPoppers, popper)
       if (shownPoppers.length === 0) {
         document.body.classList.remove('v-popper--some-open')
       }
-      for (const theme of getAllParentThemes(popper.theme)) {
-        const list = shownPoppersByTheme[theme] ??= []
+      for (const [theme, list] of Object.entries(shownPoppersByTheme)) {
         removeFromArray(list, popper)
         if (list.length === 0) {
+          delete shownPoppersByTheme[theme]
           document.body.classList.remove(`v-popper--some-open--${theme}`)
         }
       }
@@ -219,6 +234,15 @@ function createPopperContext (): PopperContext {
     },
 
     dispose () {
+      cancelPendingFrames()
+      shownPoppers.length = 0
+      ctx.hidingPopper = null
+      document.body.classList.remove('v-popper--some-open')
+      for (const theme of Object.keys(shownPoppersByTheme)) {
+        delete shownPoppersByTheme[theme]
+        document.body.classList.remove(`v-popper--some-open--${theme}`)
+      }
+
       if (isIOS) {
         document.removeEventListener('touchstart', onTouchStart, { capture: true })
         document.removeEventListener('touchend', onTouchEnd, { capture: true })
